@@ -3,8 +3,8 @@
 # -------------------------------------------------------------------------------------
 # Metadata:
 #   Version     : 2.1
-#   Build       : 2626711
-#   Checksum    : 88b9076342bf9db3afafd32aec03a07dc90261e709610f290d5a73c691c9d3eb
+#   Build       : 2627322
+#   Checksum    : 7d1e8b764491c3ea8d171489d551c2a95a60897b95468049a5fc1a7ae5cd392f
 #   Source      : ui.sh
 #   Type        : library
 #   Group       : UI
@@ -735,15 +735,17 @@ set -uo pipefail
         (( FLAG_DRYRUN )) && printf '%s' "$SGND_UI_DRYRUN" || printf '%s' "$SGND_UI_COMMIT"
     }
 
- # -- Rendering primitives --------------------------------------------------------
-    # fn: sgnd_terminal_width - Return the current terminal width
+    # -- Rendering primitives --------------------------------------------------------
+        # fn: sgnd_terminal_width - Return the current terminal width
         # . Purpose
         #   Return the number of columns available to console rendering.
         #
         # . Behavior
-        #   - Uses tput cols when stdout is attached to a terminal and tput is available.
+        #   - Uses tput cols against the controlling terminal when one is available.
+        #   - Does not read from application stdin, which may contain piped data.
+        #   - Falls back to tput cols on stdout when stdout is attached to a terminal.
         #   - Falls back to the COLUMNS environment variable.
-        #   - Falls back to SGND_CONSOLE_WIDTH, then 80, when no terminal width is available.
+        #   - Falls back to 80 when no terminal width is available.
         #
         # . Output
         #   Writes one positive integer to stdout.
@@ -752,29 +754,24 @@ set -uo pipefail
         #   0 always.
         #
         # . Usage
-        #   sgnd_terminal_width "example"
+        #   sgnd_terminal_width
     sgnd_terminal_width() {
         local width=""
         local tty_fd=""
 
-        # Prefer the controlling terminal when one is actually available.
-        # Opening /dev/tty is the reliable test; merely testing whether the path
-        # exists/readable is insufficient for non-interactive processes.
+        # Prefer the controlling terminal without consuming application stdin.
         if { exec {tty_fd}</dev/tty; } 2>/dev/null; then
-            if command -v stty >/dev/null 2>&1; then
-                width="$(stty size <&"$tty_fd" 2>/dev/null | awk '{ print $2 }')"
-            fi
-
-            if [[ ! "$width" =~ ^[1-9][0-9]*$ ]] && command -v tput >/dev/null 2>&1; then
+            if command -v tput >/dev/null 2>&1; then
                 width="$(tput cols <&"$tty_fd" 2>/dev/null || true)"
             fi
 
             exec {tty_fd}<&-
         fi
 
-        # When no controlling terminal exists (for example receiver/non-interactive
-        # execution), fall back without touching /dev/tty.
-        if [[ ! "$width" =~ ^[1-9][0-9]*$ ]] && [[ -t 1 ]] && command -v tput >/dev/null 2>&1; then
+        # Fall back to stdout when it is attached to a terminal.
+        if [[ ! "$width" =~ ^[1-9][0-9]*$ ]] \
+            && [[ -t 1 ]] \
+            && command -v tput >/dev/null 2>&1; then
             width="$(tput cols 2>/dev/null || true)"
         fi
 

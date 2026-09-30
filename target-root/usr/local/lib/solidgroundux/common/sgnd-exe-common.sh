@@ -3,8 +3,8 @@
 # ----------------------------------------------------------------------------------
 # Metadata:
 #   Version     : 2.1
-#   Build       : 2626711
-#   Checksum    : f20b9da39cf69dfb3eb56ca87522d6565348aab37630552c4372388bcb581756
+#   Build       : 2627322
+#   Checksum    : 88f89bc43636396d1f7ebc76af70c173e6724284fd571edcf6a1ebfe6b0e3957
 #   Source      : sgnd-exe-common.sh
 #   Type        : library
 #   Group       : Bootstrap
@@ -466,13 +466,12 @@ set -uo pipefail
 
         saydebug "After bootstrap: $rc"
         (( rc != 0 )) && exit "$rc"
-
         sgnd_builtinarg_handler
-
         sgnd_update_runmode
 
 
         [[ -t 0 && -t 1 ]] && (( clear_on_start )) && sgnd_clear
+
         (( show_title )) && sgnd_print_titlebar
 
         return 0
