@@ -3,7 +3,7 @@
 # -------------------------------------------------------------------------------------
 # Metadata:
 #   Version     : 2.1
-#   Build       : 2626711
+#   Build       : 2627412
 #   Checksum    : 18f7338a803837baa0c50af99ed7068276c6ca5969da06de0999c7d22185231d
 #   Source      : 31-style-mono-amber.sh
 #   Type        : library

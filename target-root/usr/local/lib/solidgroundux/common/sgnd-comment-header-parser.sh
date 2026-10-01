@@ -3,8 +3,8 @@
 # -------------------------------------------------------------------------------------
 # Metadata:
 #   Version     : 2.1
-#   Build       : 2626711
-#   Checksum    : 931784c5d9c9e5b8d828b977bc110d5edaf8bb6076582b3dce708e505300a097
+#   Build       : 2627412
+#   Checksum    : 1277f415e6707a9281d5a01fe0197f7645dc56cc261ea7e1f0da64c8fc718948
 #   Source      : sgnd-comment-header-parser.sh
 #   Type        : library
 #   Group       : Common Core
@@ -479,7 +479,8 @@ set -uo pipefail
         #   Extract a named header section from supplied header text.
         #
         # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
+        #   - Extracts the requested comment-header section from buffered header text.
+        #   - Stops at the next section header, blank line, or closing header separator.
         #
         # . Arguments
         #   $1  TEXT - Text value.
@@ -509,6 +510,10 @@ set -uo pipefail
                 found=1
                 in_section=1
                 continue
+            fi
+
+            if (( in_section )) && [[ "$line" =~ ^\#[[:space:]]*[=-]+[[:space:]]*$ ]]; then
+                break
             fi
 
             if (( in_section )) && sgnd_header_is_section_header "$line"; then
@@ -557,8 +562,8 @@ set -uo pipefail
         local line=""
         local banner_line=""
         local found_sep=0
-        local product=""
-        local title=""
+        local parsed_product=""
+        local parsed_title=""
 
         while IFS= read -r line; do
             if (( ! found_sep )); then
@@ -573,15 +578,15 @@ set -uo pipefail
         done <<< "$text"
 
         if [[ "$banner_line" =~ ^\#[[:space:]]*(.+)[[:space:]]-[[:space:]](.+)[[:space:]]*$ ]]; then
-            product="${BASH_REMATCH[1]}"
-            title="${BASH_REMATCH[2]}"
+            parsed_product="${BASH_REMATCH[1]}"
+            parsed_title="${BASH_REMATCH[2]}"
 
-            product="${product%"${product##*[![:space:]]}"}"
-            title="${title#"${title%%[![:space:]]*}"}"
-            title="${title%"${title##*[![:space:]]}"}"
+            parsed_product="${parsed_product%"${parsed_product##*[![:space:]]}"}"
+            parsed_title="${parsed_title#"${parsed_title%%[![:space:]]*}"}"
+            parsed_title="${parsed_title%"${parsed_title##*[![:space:]]}"}"
 
-            printf -v "$_product_var" '%s' "$product"
-            printf -v "$_title_var" '%s' "$title"
+            printf -v "$_product_var" '%s' "$parsed_product"
+            printf -v "$_title_var" '%s' "$parsed_title"
             return 0
         fi
 
@@ -615,19 +620,19 @@ set -uo pipefail
         local _product_var="${2:?missing product var}"
         local _title_var="${3:?missing title var}"
 
-        local product=""
-        local title=""
+        local parsed_product=""
+        local parsed_title=""
 
         if [[ "$line" =~ ^\#[[:space:]]*(.+)[[:space:]]-[[:space:]](.+)[[:space:]]*$ ]]; then
-            product="${BASH_REMATCH[1]}"
-            title="${BASH_REMATCH[2]}"
+            parsed_product="${BASH_REMATCH[1]}"
+            parsed_title="${BASH_REMATCH[2]}"
 
-            product="${product%"${product##*[![:space:]]}"}"
-            title="${title#"${title%%[![:space:]]*}"}"
-            title="${title%"${title##*[![:space:]]}"}"
+            parsed_product="${parsed_product%"${parsed_product##*[![:space:]]}"}"
+            parsed_title="${parsed_title#"${parsed_title%%[![:space:]]*}"}"
+            parsed_title="${parsed_title%"${parsed_title##*[![:space:]]}"}"
 
-            printf -v "$_product_var" '%s' "$product"
-            printf -v "$_title_var" '%s' "$title"
+            printf -v "$_product_var" '%s' "$parsed_product"
+            printf -v "$_title_var" '%s' "$parsed_title"
             return 0
         fi
 
@@ -759,8 +764,8 @@ set -uo pipefail
         local line=""
         local banner_line=""
         local found_sep=0
-        local product=""
-        local title=""
+        local parsed_product=""
+        local parsed_title=""
 
         while IFS= read -r line; do
             if (( ! found_sep )); then
@@ -775,15 +780,15 @@ set -uo pipefail
         done < "$file"
 
         if [[ "$banner_line" =~ ^\#[[:space:]]*(.+)[[:space:]]-[[:space:]](.+)[[:space:]]*$ ]]; then
-            product="${BASH_REMATCH[1]}"
-            title="${BASH_REMATCH[2]}"
+            parsed_product="${BASH_REMATCH[1]}"
+            parsed_title="${BASH_REMATCH[2]}"
 
-            product="${product%"${product##*[![:space:]]}"}"
-            title="${title#"${title%%[![:space:]]*}"}"
-            title="${title%"${title##*[![:space:]]}"}"
+            parsed_product="${parsed_product%"${parsed_product##*[![:space:]]}"}"
+            parsed_title="${parsed_title#"${parsed_title%%[![:space:]]*}"}"
+            parsed_title="${parsed_title%"${parsed_title##*[![:space:]]}"}"
 
-            printf -v "$_product_var" '%s' "$product"
-            printf -v "$_title_var" '%s' "$title"
+            printf -v "$_product_var" '%s' "$parsed_product"
+            printf -v "$_title_var" '%s' "$parsed_title"
             return 0
         fi
 

@@ -7,10 +7,24 @@ practical framework development.
 
 ## Backlog
 
-- Metadata reconciliation: review metadata consumed or initialized at runtime against canonical comment-header metadata. Remove duplicate literals only where both represent the same identity; retain separate runtime/application metadata where it serves a distinct purpose.
-- Make Management Console lazy module loading transactional so registrations made by a module are rolled back when metadata validation or module loading fails, preventing duplicate registrations on a later retry.
+- No open Framework backlog items are currently recorded here. Management Console-specific backlog items are tracked in the Management Console Modules changelog.
 
 ## Unreleased
+
+### Added
+- Added canonical `Shortname` support to comment-header metadata. `sgnd_module_init_metadata` now uses the header Shortname when present and falls back to the normalized source filename when it is absent.
+- Added metadata-driven current-script aliases so executable metadata such as Title, Description, Version and Build can be derived from canonical parsed header metadata instead of being repeated as hard-coded runtime literals.
+- Added configurable `SGND_MENU_Q_EXIT` behavior to the reusable menu layer so applications can disable `Q/q` exit handling while preserving the historical default for other menu consumers.
+
+### Changed
+- Consolidated runtime metadata initialization around the existing comment-header parser and `sgnd_module_init_metadata`, retaining structural `SGND_SCRIPT_FILE`, `SGND_SCRIPT_DIR`, `SGND_SCRIPT_BASE`, and `SGND_SCRIPT_NAME` as executable-context identity while removing redundant duplicated metadata literals.
+- Kept early bootstrap metadata initialization explicit for bootstrap/header-parser/definitions/environment files, while later framework libraries continue to self-initialize metadata once the parser is available.
+- Changed the first-install Release Manager completion flow to offer **Release Manager**, **Management Console**, or **Exit**, with Exit as the default and `Esc` treated as Exit.
+- Kept the first-install completion selector framework-independent so bootstrap/recovery operation does not depend on SolidGroundUX UI helpers before the framework is available.
+
+### Fixed
+- Fixed comment-header parsing variable shadowing that could prevent parsed banner Product/Title values from propagating correctly into module metadata.
+
 
 ## Release 2.1.2626712
 

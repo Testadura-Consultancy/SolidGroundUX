@@ -3,7 +3,7 @@
 # -------------------------------------------------------------------------------------
 # Metadata:
 #   Version     : 2.1
-#   Build       : 2626711
+#   Build       : 2627412
 #   Checksum    : a212b901f6d2a1992def323e4a64ba0bff9d1a293ebee2af78e741a5ca789839
 #   Source      : 32-style-mono-blue.sh
 #   Type        : library

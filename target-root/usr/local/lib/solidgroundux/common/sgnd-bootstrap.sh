@@ -3,8 +3,8 @@
 # -------------------------------------------------------------------------------------
 # Metadata:
 #   Version     : 2.1
-#   Build       : 2626711
-#   Checksum    : d7378750c490e4e9016536bd4594165fab4027799d990e1dec3f01c941d61e6d
+#   Build       : 2627412
+#   Checksum    : 1780f5dfeb149a56313cc136e0bbe24f2580db36d4642367a57aa0592d90141e
 #   Source      : sgnd-bootstrap.sh
 #   Type        : library
 #   Group       : Bootstrap
@@ -391,11 +391,18 @@ set -uo pipefail
         #   Initialize script metadata globals from a script comment header.
         #
         # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
-        #   - Reads or updates SolidGroundUX runtime, metadata, configuration, or UI globals as needed.
+        #   - Parses the active executable comment header into SGND_SCRIPT_* runtime metadata aliases.
+        #   - Uses Metadata/Shortname when present, otherwise the normalized script filename.
+        #   - Leaves already populated SGND_SCRIPT_* values unchanged.
         #
         # Outputs (globals):
-        #   May update SGND_* globals shown in the function body.
+        #   SGND_SCRIPT_PRODUCT
+        #   SGND_SCRIPT_TITLE
+        #   SGND_SCRIPT_DESCRIPTION
+        #   SGND_SCRIPT_DESC
+        #   SGND_SCRIPT_SHORTNAME
+        #   SGND_SCRIPT_VERSION / BUILD / CHECKSUM / SOURCE / TYPE / PURPOSE
+        #   SGND_SCRIPT_DEVELOPERS / COMPANY / CLIENT / COPYRIGHT / LICENSE
         #
         # . Returns
         #   0 on success.
@@ -407,6 +414,7 @@ set -uo pipefail
         local metadata=""
         local attribution=""
         local value=""
+        local shortname=""
 
         [[ -n "${SGND_SCRIPT_FILE:-}" && -r "$SGND_SCRIPT_FILE" ]] || return 1
 
@@ -423,6 +431,15 @@ set -uo pipefail
         sgnd_header_get_section "$SGND_SCRIPT_FILE" "Attribution" attribution
 
         # --- Metadata fields ---------------------------------------------------------
+        if [[ -z "${SGND_SCRIPT_SHORTNAME:-}" ]]; then
+            shortname="$(sgnd_section_get_field_value "$metadata" "Shortname")"
+            [[ -n "$shortname" ]] || shortname="${SGND_SCRIPT_NAME:-$(basename -- "$SGND_SCRIPT_FILE" .sh)}"
+            shortname="${shortname//-/_}"
+            shortname="${shortname// /_}"
+            shortname="${shortname^^}"
+            SGND_SCRIPT_SHORTNAME="$shortname"
+        fi
+
         [[ -n "${SGND_SCRIPT_VERSION:-}" ]]   || SGND_SCRIPT_VERSION="$(sgnd_section_get_field_value "$metadata" "Version")"
         [[ -n "${SGND_SCRIPT_BUILD:-}" ]]     || SGND_SCRIPT_BUILD="$(sgnd_section_get_field_value "$metadata" "Build")"
         [[ -n "${SGND_SCRIPT_CHECKSUM:-}" ]]  || SGND_SCRIPT_CHECKSUM="$(sgnd_section_get_field_value "$metadata" "Checksum")"
@@ -452,8 +469,9 @@ set -uo pipefail
         #   Initialize module metadata globals from a sourced library or module comment header.
         #
         # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
-        #   - Reads or updates SolidGroundUX runtime, metadata, configuration, or UI globals as needed.
+        #   - Parses the canonical comment header once and exposes module-scoped metadata globals.
+        #   - Uses Metadata/Shortname as the variable prefix when present.
+        #   - Falls back to the normalized filename when Shortname is omitted.
         #
         # . Arguments
         #   $1  FILE - File path.
@@ -473,6 +491,7 @@ set -uo pipefail
         local dir=""
         local base=""
         local name=""
+        local shortname=""
         local key=""
         local prefix=""
         local var_name=""
@@ -490,18 +509,28 @@ set -uo pipefail
         dir="$(cd -- "$(dirname -- "$abs_file")" && pwd)" || return 1
         base="$(basename -- "$abs_file")"
         name="${base%.sh}"
-        key="${name//-/_}"
-        prefix="SGND_${key^^}"
+
+        # --- Load header buffer and sections once ------------------------------------
+        sgnd_header_buffer_load "$abs_file" || return 1
+        sgnd_header_buffer_get_section "Description" desc || desc=""
+        sgnd_header_buffer_get_section "Metadata" metadata || metadata=""
+        sgnd_header_buffer_get_section "Attribution" attribution || attribution=""
+
+        # --- Metadata identity -------------------------------------------------------
+        shortname="$(sgnd_section_get_field_value "$metadata" "Shortname")"
+        [[ -n "$shortname" ]] || shortname="$name"
+        key="${shortname//-/_}"
+        key="${key// /_}"
+        key="${key^^}"
+        prefix="SGND_${key}"
 
         # --- Structural variables ----------------------------------------------------
-        var_name="${prefix}_FILE"; [[ -n "${!var_name-}" ]] || printf -v "$var_name" '%s' "$abs_file"
-        var_name="${prefix}_DIR";  [[ -n "${!var_name-}" ]] || printf -v "$var_name" '%s' "$dir"
-        var_name="${prefix}_BASE"; [[ -n "${!var_name-}" ]] || printf -v "$var_name" '%s' "$base"
-        var_name="${prefix}_NAME"; [[ -n "${!var_name-}" ]] || printf -v "$var_name" '%s' "$name"
-        var_name="${prefix}_KEY";  [[ -n "${!var_name-}" ]] || printf -v "$var_name" '%s' "$prefix"
-
-        # --- Load header buffer once -------------------------------------------------
-        sgnd_header_buffer_load "$abs_file" || return 1
+        var_name="${prefix}_FILE";      [[ -n "${!var_name-}" ]] || printf -v "$var_name" '%s' "$abs_file"
+        var_name="${prefix}_DIR";       [[ -n "${!var_name-}" ]] || printf -v "$var_name" '%s' "$dir"
+        var_name="${prefix}_BASE";      [[ -n "${!var_name-}" ]] || printf -v "$var_name" '%s' "$base"
+        var_name="${prefix}_NAME";      [[ -n "${!var_name-}" ]] || printf -v "$var_name" '%s' "$name"
+        var_name="${prefix}_KEY";       [[ -n "${!var_name-}" ]] || printf -v "$var_name" '%s' "$prefix"
+        var_name="${prefix}_SHORTNAME"; [[ -n "${!var_name-}" ]] || printf -v "$var_name" '%s' "$key"
 
         # --- Banner (Product / Title) ------------------------------------------------
         if sgnd_header_get_banner_parts_from_text "$SGND_HEADER_BUFFER_TEXT" product title; then
@@ -511,11 +540,6 @@ set -uo pipefail
             var_name="${prefix}_PRODUCT"; [[ -n "${!var_name-}" ]] || printf -v "$var_name" '%s' ""
             var_name="${prefix}_TITLE";   [[ -n "${!var_name-}" ]] || printf -v "$var_name" '%s' ""
         fi
-
-        # --- Load sections once ------------------------------------------------------
-        sgnd_header_buffer_get_section "Description" desc || desc=""
-        sgnd_header_buffer_get_section "Metadata" metadata || metadata=""
-        sgnd_header_buffer_get_section "Attribution" attribution || attribution=""
 
         # --- Description (multiline section) -----------------------------------------
         var_name="${prefix}_DESC"
@@ -560,6 +584,7 @@ set -uo pipefail
 
         return 0
     }
+
     # fn: sgnd_on_exit_install - On exit install
         # . Purpose
         #   Install the SolidGroundUX exit trap dispatcher once for the current shell.

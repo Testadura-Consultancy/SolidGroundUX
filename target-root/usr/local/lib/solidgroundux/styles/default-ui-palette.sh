@@ -3,7 +3,7 @@
 # -------------------------------------------------------------------------------------
 # Metadata:
 #   Version     : 2.1
-#   Build       : 2626711
+#   Build       : 2627412
 #   Checksum    : d97fd529b9b7ed1588810c9347b69286dedf69a9b93a7e9752be3a00bf33191f
 #   Source      : default-ui-palette.sh
 #   Type        : library

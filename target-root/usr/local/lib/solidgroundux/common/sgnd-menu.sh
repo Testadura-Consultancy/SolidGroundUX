@@ -3,8 +3,8 @@
 # -------------------------------------------------------------------------------------
 # Metadata:
 #   Version     : 2.1
-#   Build       : 2626711
-#   Checksum    : d53dfe459b13e86cfaac9c50059d26143a3ea8fb15ea7f6ad347379227b54723
+#   Build       : 2627412
+#   Checksum    : e0b271f75db3b35a454693399403a2fa6531dc860b7b518d9d3f4c4d08778872
 #   Source      : sgnd-menu.sh
 #   Group       : Common Core
 #   Type        : library
@@ -1702,6 +1702,8 @@ set -uo pipefail
         # . Behavior
         #   - Centers the status and legend within the active render width.
         #   - Reflects dry-run/commit and standard/root state through the configured UI colors.
+        #   - Omits the Q/q Exit legend when SGND_MENU_Q_EXIT is disabled.
+        #   - Uses SGND_MENU_ESC_LABEL for the context-specific Esc action label.
         #
         # . Returns
         #   0 after rendering.
@@ -1721,6 +1723,8 @@ set -uo pipefail
         local theme_value=""
         local status_text=""
         local legend_text=""
+        local exit_legend=""
+        local esc_label="${SGND_MENU_ESC_LABEL:-Previous menu}"
         local visible_len=0
         local left_pad=0
         local legend_len=0
@@ -1770,7 +1774,10 @@ set -uo pipefail
         printf '%*s%s\n' "$left_pad" "" "$status_text"
 
         # Legend text
-        legend_text="$(sgnd_sgr "$SGND_UI_FAINT" "" "$FX_ITALIC")Shift+S Shell    Q/q Exit    Esc Previous menu    L Lines/page   R Reset    Ctrl+R Redraw    $KY_LEFT Previous page    $KY_RIGHT Next page${RESET}"
+        if _sgnd_flag_is_on "${SGND_MENU_Q_EXIT:-1}"; then
+            exit_legend="Q/q Exit    "
+        fi
+        legend_text="$(sgnd_sgr "$SGND_UI_FAINT" "" "$FX_ITALIC")Shift+S Shell    ${exit_legend}Esc ${esc_label}    L Lines/page   R Reset    Ctrl+R Redraw    $KY_LEFT Previous page    $KY_RIGHT Next page${RESET}"
         legend_len="$(sgnd_visible_length "$legend_text")"
         legend_pad=$(( (render_width - legend_len) / 2 ))
         (( legend_pad < pad )) && legend_pad="$pad"
@@ -2056,7 +2063,9 @@ set -uo pipefail
         #   Read menu input directly from /dev/tty and normalize navigation/control keys.
         #
         # . Behavior
-        #   - Q, q, and Ctrl+Q return EXIT.
+        #   - Q/q return EXIT only when SGND_MENU_Q_EXIT is enabled (default).
+        #   - When SGND_MENU_Q_EXIT is disabled, Q/q are returned as literal choices and
+        #     Ctrl+Q is ignored.
         #   - R/r return RESET.
         #   - Ctrl+R returns REDRAW.
         #   - Esc returns ESC unless followed by a recognized arrow sequence.
@@ -2084,8 +2093,22 @@ set -uo pipefail
             case "$key" in
                 $'\x12') printf -v "$output_var" '%s' 'REDRAW'; printf '\n' >/dev/tty; return 0 ;;
                 r|R) printf '%s%s%s\n' "$(sgnd_sgr "$SGND_UI_VALUE")" "$key" "$RESET" >/dev/tty; printf -v "$output_var" '%s' 'RESET'; return 0 ;;
-                $'\x11') printf -v "$output_var" '%s' 'EXIT'; printf '\n' >/dev/tty; return 0 ;;
-                q|Q) printf '%s%s%s\n' "$(sgnd_sgr "$SGND_UI_VALUE")" "$key" "$RESET" >/dev/tty; printf -v "$output_var" '%s' 'EXIT'; return 0 ;;
+                $'\x11')
+                    if _sgnd_flag_is_on "${SGND_MENU_Q_EXIT:-1}"; then
+                        printf -v "$output_var" '%s' 'EXIT'
+                        printf '\n' >/dev/tty
+                        return 0
+                    fi
+                    ;;
+                q|Q)
+                    printf '%s%s%s\n' "$(sgnd_sgr "$SGND_UI_VALUE")" "$key" "$RESET" >/dev/tty
+                    if _sgnd_flag_is_on "${SGND_MENU_Q_EXIT:-1}"; then
+                        printf -v "$output_var" '%s' 'EXIT'
+                    else
+                        printf -v "$output_var" '%s' "$key"
+                    fi
+                    return 0
+                    ;;
                 $'\e')
                     seq=""
                     IFS= read -r -s -n 2 -t 0.05 seq </dev/tty || true

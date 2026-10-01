@@ -4,8 +4,8 @@
 # -------------------------------------------------------------------------------------
 # Metadata:
 #   Version     : 2.1
-#   Build       : 2626711
-#   Checksum    : 6468a997e2e5d43262a9e6f3b404f5f7f2ac00dbfa0ad3911e0f0a8eff16d202
+#   Build       : 2627412
+#   Checksum    : 5e8024e73799e90e79630e2af345158881867cc724af68559879dec7efda5ddf
 #   Source      : release-manager.sh
 #   Wrapper     : sgnd-release
 #   Type        : script
@@ -29,6 +29,7 @@
 #     - Uses a small self-contained UI before SolidGroundUX is available
 #     - Reuses the normal SolidGroundUX UI primitives/theme when a healthy framework is available
 #     - Persists release-manager parameter values as standalone state
+#     - Offers Release Manager, Management Console, or shell exit after first install
 #
 # Design principles:
 #   - Standalone operation even when SolidGroundUX is absent or damaged
@@ -99,6 +100,7 @@ set -uo pipefail
 
     BOOTSTRAP_RELEASE_BASE=""
     BOOTSTRAP_SOURCE_DIR=""
+    BOOTSTRAP_POST_INSTALL_ACTION="release-manager"
 
 # --- Standalone UI ------------------------------------------------------------------
     # Default-theme-compatible standalone palette.
@@ -1539,12 +1541,51 @@ EOF
         return 0
     }
 
+    # fn: _release_choose_post_install_action - Select what to do after a successful first install
+        # . Purpose
+        #   Let an interactive first-install session continue into Release Manager, open the
+        #   Management Console, or return to the shell.
+        # . Behavior
+        #   - R continues into the Release Manager.
+        #   - C opens the installed Management Console.
+        #   - E, Esc, or Enter exits to the shell.
+        #   - Exit is the default.
+        # . Outputs (globals)
+        #   BOOTSTRAP_POST_INSTALL_ACTION
+        # . Returns
+        #   0 after recording the selected action.
+        # . Usage
+        #   _release_choose_post_install_action
+    _release_choose_post_install_action() {
+        local choice=""
+
+        BOOTSTRAP_POST_INSTALL_ACTION="exit"
+        (( FLAG_AUTO )) && return 0
+        [[ -t 0 && -t 1 ]] || return 0
+
+        printf '\n' > /dev/tty
+        printf '    %sR)%s %sRelease Manager%s\n' "$_RL_UI_PROMPT" "$_RL_RESET" "$_RL_UI_TEXT" "$_RL_RESET" > /dev/tty
+        printf '    %sC)%s %sManagement Console%s\n' "$_RL_UI_PROMPT" "$_RL_RESET" "$_RL_UI_TEXT" "$_RL_RESET" > /dev/tty
+        printf '    %sE)%s %sExit%s\n' "$_RL_UI_PROMPT" "$_RL_RESET" "$_RL_UI_TEXT" "$_RL_RESET" > /dev/tty
+        printf '\n%sSelect next action [Exit]: %s' "$_RL_UI_PROMPT" "$_RL_UI_INPUT" > /dev/tty
+        IFS= read -r -s -n 1 choice < /dev/tty || true
+        printf '%s\n' "$_RL_RESET" > /dev/tty
+
+        case "$choice" in
+            [Rr]) BOOTSTRAP_POST_INSTALL_ACTION="release-manager" ;;
+            [Cc]) BOOTSTRAP_POST_INSTALL_ACTION="management-console" ;;
+            [Ee]|$'\e'|"") BOOTSTRAP_POST_INSTALL_ACTION="exit" ;;
+            *) BOOTSTRAP_POST_INSTALL_ACTION="exit" ;;
+        esac
+        return 0
+    }
+
     # fn: _bootstrap_first_install - Bootstrap and install an adjacent release on a clean machine
         # . Purpose
         #   Complete the zero-framework first-install path when release-manager.sh is
         #   executed from a GitHub bootstrap bundle: ensure directories, admit the bundled
-        #   release, install it when no version is installed, persist the manager, and clean
-        #   the temporary bundle.
+        #   release, install it when no version is installed, persist the manager, clean
+        #   the temporary bundle, and select the next interactive action.
         # . Returns
         #   0 when no first-install bootstrap is required or when it completes successfully;
         #   non-zero on admission, verification, installation, or persistence failure.
@@ -1577,11 +1618,7 @@ EOF
         printf '    %sRun %ssgnd-console%s to manage this system.%s\n' "$_RL_UI_TEXT" "$_RL_UI_VALUE" "$_RL_UI_TEXT" "$_RL_RESET"
         printf '    %sRun %ssgnd-release-manager%s to manage releases.%s\n' "$_RL_UI_TEXT" "$_RL_UI_VALUE" "$_RL_UI_TEXT" "$_RL_RESET"
 
-        if (( ! FLAG_AUTO )) && [[ -t 0 && -t 1 ]]; then
-            printf '\n%sPress Enter to open the Release Manager...%s' "$_RL_UI_PROMPT" "$_RL_UI_INPUT" > /dev/tty
-            read -r _ < /dev/tty
-            printf '%s' "$_RL_RESET" > /dev/tty
-        fi
+        _release_choose_post_install_action
         return 0
     }
 
@@ -3219,9 +3256,10 @@ EOF
         _acquire_release "$latest" "" >/dev/null
     }
 
-    # fn: _action_update - Acquire if needed and install the latest published build
+    # fn: _action_update - Acquire if needed and install the selected update source
         # . Purpose
-        #   Acquire if needed and install the latest available release.
+        #   In interactive mode, select the configured GitHub source or a package ZIP/URL,
+        #   then acquire if needed and install the latest applicable release.
         # . Returns
         #   0 on success; 2 on cancellation; non-zero on failure.
         # . Usage
@@ -3230,6 +3268,20 @@ EOF
         local latest=""
         local current=""
         local archive=""
+        local update_source=""
+
+        if (( ! FLAG_AUTO )) && [[ -t 0 && -t 1 ]]; then
+            update_source="${VAL_SOURCE:-G}"
+            _release_ask \
+                "Update source (G = configured GitHub, or package ZIP/URL)" \
+                update_source \
+                "$update_source" || return 1
+
+            case "${update_source^^}" in
+                G|GITHUB) VAL_SOURCE="" ;;
+                *) VAL_SOURCE="$update_source" ;;
+            esac
+        fi
 
         current="$(_current_release 2>/dev/null || true)"
 
@@ -3414,6 +3466,32 @@ EOF
             _bootstrap_first_install || return $?
             # The tar has now installed the canonical manager; verify it and its wrapper.
             _install_release_manager || return 1
+
+            case "${BOOTSTRAP_POST_INSTALL_ACTION:-release-manager}" in
+                exit)
+                    _release_save_state || true
+                    return 0
+                    ;;
+                management-console)
+                    _release_save_state || true
+                    if [[ "$VAL_TARGET_ROOT" == "/" ]]; then
+                        [[ -x /usr/local/bin/sgnd-console ]] || {
+                            _release_fail "Management Console command not found: /usr/local/bin/sgnd-console"
+                            return 1
+                        }
+                        exec /usr/local/bin/sgnd-console
+                    fi
+
+                    _release_fail "Management Console handoff is only available for the live target root (/)"
+                    return 1
+                    ;;
+                release-manager)
+                    ;;
+                *)
+                    _release_fail "Unknown post-install action: $BOOTSTRAP_POST_INSTALL_ACTION"
+                    return 1
+                    ;;
+            esac
         elif [[ -f "$CANONICAL_MANAGER_PATH" ]]; then
             # Normal installed operation: only ensure the wrapper; never self-copy.
             _install_release_manager || return 1

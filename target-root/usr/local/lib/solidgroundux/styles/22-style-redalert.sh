@@ -3,7 +3,7 @@
 # -------------------------------------------------------------------------------------
 # Metadata:
 #   Version     : 2.1
-#   Build       : 2626711
+#   Build       : 2627412
 #   Checksum    : a81ad5f721856e537f1d170d2894c207544453706371bcf78fe2dcb5da67220b
 #   Source      : 22-style-redalert.sh
 #   Type        : library
