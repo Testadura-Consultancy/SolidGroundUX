@@ -20,6 +20,11 @@
 <p class="ct-functionbody">Outputs (globals):</p>
 <div class="ct-functionbody">  SGND_CURRENT_MODULE</div>
 <div class="ct-functionbody">  SGND_CURRENT_MODULE_DIR</div>
+<div class="ct-functionbody">  SGND_MODULE_ROWS - Adds one loaded-module registry row with load timestamp.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Behavior</div>
+<div class="ct-functionbody">  - Group/item/module registrations are transactional for each load attempt.</div>
+<div class="ct-functionbody">  - Failed sourcing or metadata validation restores the pre-load registration model.</div>
 <div class="ct-functionbody"></div>
 <div class="ct-functionbody sh-highlight">Returns</div>
 <div class="ct-functionbody">  0 on success.</div>

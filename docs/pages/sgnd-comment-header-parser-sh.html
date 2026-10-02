@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>SolidGroundUX - Header Parser</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></div>
+<header class="doc-page-header">
+  <div class="doc-title">SolidGroundUX - Header Parser</div>
+  <div class="doc-breadcrumb">SolidGroundUX Codex / sgnd-comment-header-parser.sh</div>
+</header>
+<div class="ct-modulebody sh-label">Description</div>
+<div class="ct-modulebody">  Provides parsing, lookup, and update utilities for canonical script header comments</div>
+<div class="ct-modulebody">  used throughout the SolidGroundUX framework.</div>
+<div class="ct-modulebody"></div>
+<div class="ct-modulebody sh-label">The library</div>
+<div class="ct-modulebody">    - Detects top-level canonical header sections</div>
+<div class="ct-modulebody">    - Loads header section fields into sgnd-datatable structures</div>
+<div class="ct-modulebody">    - Extracts banner information such as product and title</div>
+<div class="ct-modulebody">    - Reads individual header field values from structured sections</div>
+<div class="ct-modulebody">    - Updates existing header fields while preserving formatting</div>
+<div class="ct-modulebody">    - Adds missing fields where required</div>
+<div class="ct-modulebody">    - Supports checksum, build, and semantic version metadata workflows</div>
+<div class="ct-modulebody"></div>
+<div class="ct-modulebody sh-label">Design principles</div>
+<div class="ct-modulebody">  - Header comments are treated as structured, machine-readable data</div>
+<div class="ct-modulebody">  - Header parsing and header mutation are kept predictable and convention-based</div>
+<div class="ct-modulebody">  - Existing field formatting is preserved wherever possible</div>
+<div class="ct-modulebody">  - Metadata workflows remain independent from higher-level UI logic</div>
+<div class="ct-modulebody"></div>
+<div class="ct-modulebody sh-label">Role in framework</div>
+<div class="ct-modulebody">  - Core header metadata parsing and update layer for script tooling</div>
+<div class="ct-modulebody">  - Supports release preparation and other header-aware development utilities</div>
+<div class="ct-modulebody">  - Provides the canonical API for header field inspection and mutation</div>
+<div class="ct-modulebody"></div>
+<div class="ct-modulebody sh-label">Non-goals</div>
+<div class="ct-modulebody">  - Parsing arbitrary inline documentation blocks in source bodies</div>
+<div class="ct-modulebody">  - Rendering documentation output</div>
+<div class="ct-modulebody">  - Acting as a general-purpose text processing library</div>
+<div class="ct-modulebody"></div>
+</main>
+</body>
+</html>

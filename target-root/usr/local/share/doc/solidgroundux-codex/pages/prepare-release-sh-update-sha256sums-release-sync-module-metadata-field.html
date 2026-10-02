@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Synchronize module runtime release metadata</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></div>
+<header class="doc-page-header">
+  <div class="doc-title">Synchronize module runtime release metadata</div>
+  <div class="doc-breadcrumb">SolidGroundUX Codex / prepare-release.sh / Update SHA256SUMS / _release_sync_module_metadata_field</div>
+</header>
+<div class="ct-functionbody sh-highlight">Purpose</div>
+<div class="ct-functionbody">  Keep conventional SGND_*_MODULE_VERSION / SGND_*_MODULE_BUILD assignments</div>
+<div class="ct-functionbody">  synchronized with the canonical header value when prepare-release updates it.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Arguments</div>
+<div class="ct-functionbody">  $1  File to update.</div>
+<div class="ct-functionbody">  $2  Field name: Version or Build.</div>
+<div class="ct-functionbody">  $3  Value to write.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Behavior</div>
+<div class="ct-functionbody">  - Updates every matching conventional module assignment in the file.</div>
+<div class="ct-functionbody">  - Leaves files without such assignments untouched.</div>
+<div class="ct-functionbody">  - Preserves leading indentation and the variable name.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Returns</div>
+<div class="ct-functionbody">  0 on success (including no matching assignment); non-zero on update failure.</div>
+</main>
+</body>
+</html>

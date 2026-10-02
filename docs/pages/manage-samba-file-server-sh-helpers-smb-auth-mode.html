@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Return the configured Samba authentication mode</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></div>
+<header class="doc-page-header">
+  <div class="doc-title">Return the configured Samba authentication mode</div>
+  <div class="doc-breadcrumb">SolidGroundUX Codex / manage-samba-file-server.sh / Helpers / _smb_auth_mode</div>
+</header>
+<div class="ct-functionbody sh-highlight">Purpose</div>
+<div class="ct-functionbody">  Report Samba&#x27;s active authentication mode independently of the Linux host&#x27;s</div>
+<div class="ct-functionbody">  realm membership so a domain-joined host can legitimately run Samba standalone.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Output</div>
+<div class="ct-functionbody">  Writes &quot;ad&quot; when Samba security is ADS, otherwise &quot;standalone&quot;.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Returns</div>
+<div class="ct-functionbody">  0 always.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Usage</div>
+<div class="ct-functionbody">  mode=&quot;$(_smb_auth_mode)&quot;</div>
+</main>
+</body>
+</html>

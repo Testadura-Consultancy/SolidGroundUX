@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Establish Samba machine trust for an existing AD member host</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></div>
+<header class="doc-page-header">
+  <div class="doc-title">Establish Samba machine trust for an existing AD member host</div>
+  <div class="doc-breadcrumb">SolidGroundUX Codex / manage-samba-file-server.sh / Helpers / _smb_establish_ads_trust</div>
+</header>
+<div class="ct-functionbody sh-highlight">Purpose</div>
+<div class="ct-functionbody">  Populate or repair Samba&#x27;s own machine-account trust after the AD-client module has</div>
+<div class="ct-functionbody">  already joined the Linux host to Active Directory.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Behavior</div>
+<div class="ct-functionbody">  - Requires the host realm membership to remain valid; this function does not own the</div>
+<div class="ct-functionbody">    Linux realm join or leave lifecycle.</div>
+<div class="ct-functionbody">  - Prompts for an authorized AD account and uses Samba&#x27;s net ads join to establish the</div>
+<div class="ct-functionbody">    Samba machine secret in secrets.tdb.</div>
+<div class="ct-functionbody">  - Runs net ads join directly against the controlling terminal so Samba can collect</div>
+<div class="ct-functionbody">    the account password using the same interactive path as a successful shell join.</div>
+<div class="ct-functionbody">  - Treats net ads testjoin as the authoritative success check; ancillary DNS-update</div>
+<div class="ct-functionbody">    warnings from net ads join do not invalidate an established Samba trust.</div>
+<div class="ct-functionbody">  - Leaves hostname DNS registration to the AD-client module.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Arguments</div>
+<div class="ct-functionbody">  $1  Joined Active Directory realm.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Returns</div>
+<div class="ct-functionbody">  0 when Samba validates its ADS machine trust; non-zero otherwise.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Usage</div>
+<div class="ct-functionbody">  _smb_establish_ads_trust TESTADURA.HQ</div>
+</main>
+</body>
+</html>

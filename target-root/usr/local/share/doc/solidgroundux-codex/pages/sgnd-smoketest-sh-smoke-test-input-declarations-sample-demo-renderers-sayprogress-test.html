@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Run transient progress line tests</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></div>
+<header class="doc-page-header">
+  <div class="doc-title">Run transient progress line tests</div>
+  <div class="doc-breadcrumb">SolidGroundUX Codex / sgnd-smoketest.sh / Smoke-test input declarations / Sample/demo renderers / sayprogress_test</div>
+</header>
+<div class="ct-functionbody sh-highlight">Purpose</div>
+<div class="ct-functionbody">  Exercise sayprogress with one, two, and three reserved progress slots.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Behavior</div>
+<div class="ct-functionbody">  - Runs three visual progress scenarios after each other.</div>
+<div class="ct-functionbody">  - Stage 1 uses one progress level: 1..15.</div>
+<div class="ct-functionbody">  - Stage 2 uses true nested progress: outer 1..15, inner 1..70.</div>
+<div class="ct-functionbody">  - Stage 3 uses true nested progress: outer 1..15, middle 1..70,</div>
+<div class="ct-functionbody">    inner 1..125.</div>
+<div class="ct-functionbody">  - Lower levels complete and restart before their parent advances.</div>
+<div class="ct-functionbody">  - Uses explicit slots so stacked progress rendering can be inspected.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Returns</div>
+<div class="ct-functionbody">  0 when the visual test sequence completes.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Usage</div>
+<div class="ct-functionbody">  sayprogress_test</div>
+</main>
+</body>
+</html>

@@ -23,22 +23,25 @@
 <tr><td>_action_headerend</td><td>Emit module-level header data</td><td>Store collected file header metadata in module-level data tables.</td><td>doc-processor.sh</td></tr>
 <tr><td>_add_selected_file</td><td>Add one deployable file to the normalized selection</td><td></td><td>deploy-workspace.sh</td></tr>
 <tr><td>_apply_version_bump</td><td>Apply release metadata policy to managed source files</td><td>Apply Version and Build according to A/C/N policy and always refresh Checksum for files whose source or metadata changed.</td><td>prepare-release.sh</td></tr>
-<tr><td>_archive_release_manifest</td><td>Persist the current manifest for future removal baselines</td><td>Store the successfully packaged release manifest in persistent manifest history.</td><td>prepare-release.sh</td></tr>
+<tr><td>_archive_release_manifest</td><td>Persist the current manifest for future removal baselines</td><td>Store the successfully packaged release manifest in persistent manifest history. Dry-run reports the destination without requiring a generated manifest.</td><td>prepare-release.sh</td></tr>
 <tr><td>_build_content_ref</td><td>Build a stable documentation content reference</td><td>Create the canonical reference key used to link content to a module, section, and item context.</td><td>doc-processor.sh</td></tr>
 <tr><td>_capture_cli_parameters</td><td>Record which deployment settings were supplied explicitly</td><td>Distinguish command-line values from state/default values so explicit settings are not prompted again.</td><td>deploy-workspace.sh</td></tr>
 <tr><td>_cleanup_archive</td><td>Remove the temporary received archive</td><td></td><td>receive-files.sh</td></tr>
 <tr><td>_cleanup_old_render_exports</td><td>Clean old renderer export folders</td><td>Remove stale temporary documentation renderer export folders from /tmp.</td><td>doc-renderer.sh</td></tr>
+<tr><td>_cleanup_packaged_release_artifacts</td><td>Remove loose packaged release internals</td><td>Remove loose product-release internals after the distributable ZIP has been exported and the manifest has been preserved in manifest history. The ZIP is the release unit; tar, manifest, removal, and checksum files are staging data.</td><td>prepare-release.sh</td></tr>
 <tr><td>_cleanup_staging</td><td>Remove gathered staging data</td><td>Remove the release-specific staging directory if cleanup is enabled.</td><td>prepare-release.sh</td></tr>
 <tr><td>_clear_render_cache</td><td>Remove cached renderer input data</td><td>Delete the persistent renderer cache when explicitly requested.</td><td>doc-renderer.sh</td></tr>
 <tr><td>_collect_license_lines</td><td>Collect active license text for appendix rendering</td><td>Load the active framework license file into the renderer license table.</td><td>doc-renderer.sh</td></tr>
 <tr><td>_copy_docs_to_git</td><td>Copy generated documentation into the repository docs directory</td><td>Publish the generated documentation tree into the Git repository&#x27;s top-level docs directory without relying on symbolic links.</td><td>doc-generator.sh</td></tr>
+<tr><td>_copy_release_output</td><td>Copy one completed product ZIP into the output directory</td><td>Export only the distributable product ZIP. Loose tar, manifest, removal, and checksum files remain in staging until manifest-history processing completes, then are removed by _cleanup_packaged_release_artifacts.</td><td>prepare-release.sh</td></tr>
 <tr><td>_copy_template_file</td><td>Copy one template file into the workspace</td><td>Copy a single template file to a target location.</td><td>create-workspace.sh</td></tr>
 <tr><td>_copy_workspace_templates</td><td>Copy shared convenience templates into the workspace</td><td>Seed the repository-shaped workspace with the installed SolidGroundUX templates.</td><td>create-workspace.sh</td></tr>
 <tr><td>_create_empty_directory_placeholders</td><td>Preserve the canonical workspace tree in Git</td><td></td><td>create-workspace.sh</td></tr>
+<tr><td>_create_first_install_package</td><td>Create the bootstrap transport ZIP</td><td>Create a first-install ZIP containing sgnd-setup.sh and the already-created product release ZIPs for the selected products.</td><td>prepare-release.sh</td></tr>
 <tr><td>_create_gitignore_file</td><td>Create the workspace .gitignore file</td><td>Create the workspace .gitignore file.</td><td>create-workspace.sh</td></tr>
 <tr><td>_create_project_definitions</td><td>Create project-wide definition globals</td><td>Create &lt;project&gt;-definitions.sh in the deployable SolidGroundUX globals folder. Usage _create_project_definitions</td><td>create-workspace.sh</td></tr>
 <tr><td>_create_project_motd</td><td>Create a minimal project MOTD identity entry</td><td></td><td>create-workspace.sh</td></tr>
-<tr><td>_create_release_package</td><td>Create the complete distributable release ZIP</td><td>Package the standalone release manager and release payload into one ZIP.</td><td>prepare-release.sh</td></tr>
+<tr><td>_create_release_package</td><td>Create one distributable product release ZIP</td><td>Package one product&#x27;s canonical tar/release artifacts into the release unit consumed by sgnd-setup.</td><td>prepare-release.sh</td></tr>
 <tr><td>_create_releaseignore_file</td><td>Create the workspace .release-ignore file</td><td></td><td>create-workspace.sh</td></tr>
 <tr><td>_create_repository</td><td>Create the repository directory structure</td><td>Create the project repository structure and copy template files.</td><td>create-workspace.sh</td></tr>
 <tr><td>_create_starter_scripts</td><td>Instantiate configured starter files from workspace templates</td><td></td><td>create-workspace.sh</td></tr>
@@ -92,11 +95,11 @@
 <tr><td>_export_render_config</td><td>Export renderer configuration to a PSV file</td><td>Write document-level render settings in the same table format used by exported parser data.</td><td>doc-renderer.sh</td></tr>
 <tr><td>_export_render_tables</td><td>Export parser tables for the Python renderer</td><td>Persist normalized documentation tables into a renderer hand-off directory.</td><td>doc-renderer.sh</td></tr>
 <tr><td>_extract_archive</td><td>Extract the validated archive beneath DEST_ROOT</td><td></td><td>receive-files.sh</td></tr>
-<tr><td>_find_release_manager_source</td><td>Resolve the release-manager source file</td><td>Locate release-manager.sh in the managed source tree.</td><td>prepare-release.sh</td></tr>
+<tr><td>_find_setup_source</td><td>Resolve the standalone sgnd-setup source file</td><td>Locate the canonical sgnd-setup.sh source in the selected framework product.</td><td>prepare-release.sh</td></tr>
 <tr><td>_framework_path</td><td>Resolve a path beneath a framework root</td><td>Convert a framework-relative path to an absolute path beneath the supplied framework root. Defaults to the active SGND_FRAMEWORK_ROOT. Arguments $1 Relative path. $2 Framework root (optional). Returns 0 always. Usage path=&quot;$(_framework_path &quot;usr/local/bin&quot; &quot;$root&quot;)&quot;</td><td>create-wrappers.sh</td></tr>
 <tr><td>_framework_root_from_path</td><td>Resolve the framework root owning a selected path</td><td>Derive the canonical SolidGroundUX framework root from an absolute source path, using the same last usr/etc/var component rule as _framework_locator(). Returns 0 with the resolved root on stdout; 1 when the path cannot be resolved. Usage _framework_root_from_path &quot;&lt;path&gt;&quot; &quot;&lt;framework_root&gt;&quot;</td><td>create-wrappers.sh</td></tr>
 <tr><td>_get_parameters</td><td>Collect wrapper-generation parameters</td><td>Resolve source selection and wrapper target directory. Returns 0 on success; 1 on cancellation/invalid input. Usage _get_parameters</td><td>create-wrappers.sh</td></tr>
-<tr><td>_get_parameters</td><td>Collect prepare-release parameters</td><td>Collect prepare-release parameters.</td><td>prepare-release.sh</td></tr>
+<tr><td>_get_parameters</td><td>Collect prepare-release parameters</td><td>Resolve and confirm release locations, identities, metadata policy, and switches.</td><td>prepare-release.sh</td></tr>
 <tr><td>_get_project_directories</td><td>Resolve the standard project directory layout</td><td></td><td>create-workspace.sh</td></tr>
 <tr><td>_get_section_comments</td><td>Get section comments</td><td>Internal helper for get section comments.</td><td>doc-processor.sh</td></tr>
 <tr><td>_get_userinput</td><td>Collect documentation generator input</td><td>Interactively collect and confirm documentation generator parameters.</td><td>doc-generator.sh</td></tr>
@@ -117,29 +120,37 @@
 <tr><td>_parse_module_file</td><td>Parse one module source file</td><td>Parse a source file and collect normalized documentation tables.</td><td>doc-processor.sh</td></tr>
 <tr><td>_persist_render_cache</td><td>Persist a complete renderer export set</td><td>Replace the persistent renderer cache with a validated export directory.</td><td>doc-renderer.sh</td></tr>
 <tr><td>_prepare_output_directory</td><td>Create and optionally clean the documentation output directory</td><td>Ensure the configured output directory exists and is ready for rendering.</td><td>doc-renderer.sh</td></tr>
+<tr><td>_prepare_release_output</td><td>Validate and prepare the final output directory</td><td>Reject unsafe destinations before source preparation or staging can modify files.</td><td>prepare-release.sh</td></tr>
 <tr><td>_print_deployment_summary</td><td>Display the completed deployment details</td><td>Show which workspace files were selected and where they were sent.</td><td>deploy-workspace.sh</td></tr>
 <tr><td>_project_key</td><td>Return the variable-safe project key</td><td></td><td>create-workspace.sh</td></tr>
 <tr><td>_project_slug</td><td>Return the filesystem-safe project slug</td><td></td><td>create-workspace.sh</td></tr>
 <tr><td>_quote_remote_arg</td><td>Shell-quote one argument for the remote receive command</td><td></td><td>deploy-workspace.sh</td></tr>
 <tr><td>_receive_stream</td><td>Store the incoming tar stream in a temporary archive</td><td>Capture standard input so the archive can be validated before extraction.</td><td>receive-files.sh</td></tr>
 <tr><td>_relative_to_framework_root</td><td>Convert an absolute source path to framework-relative</td><td>Ensure a selected source belongs to the supplied framework root and return its normalized path relative to that root. Returns 0 when source is beneath the framework root; 1 otherwise. Usage rel=&quot;$(_relative_to_framework_root &quot;$file&quot;)&quot;</td><td>create-wrappers.sh</td></tr>
+<tr><td>_release_framework_source_root</td><td>Resolve the selected SolidGroundUX source root</td><td></td><td>prepare-release.sh</td></tr>
+<tr><td>_release_has_framework_product</td><td>Report whether SolidGroundUX is selected</td><td></td><td>prepare-release.sh</td></tr>
+<tr><td>_release_resolve_locations</td><td>Resolve staging and final output paths</td><td>Keep staging, output, and derived manifest-history paths consistent.</td><td>prepare-release.sh</td></tr>
+<tr><td>_release_sync_module_metadata_field</td><td>Synchronize module runtime release metadata</td><td>Keep conventional SGND_*_MODULE_VERSION / SGND_*_MODULE_BUILD assignments synchronized with the canonical header value when prepare-release updates it.</td><td>prepare-release.sh</td></tr>
 <tr><td>_render_cached_site</td><td>Render HTML from the persistent renderer cache</td><td>Rebuild the generated site without rescanning or reparsing source files.</td><td>doc-renderer.sh</td></tr>
 <tr><td>_render_site</td><td>Render collected documentation data</td><td>Provide the renderer hand-off point for collected documentation tables.</td><td>doc-renderer.sh</td></tr>
+<tr><td>_report_release_output</td><td>Show final package paths for this run</td><td></td><td>prepare-release.sh</td></tr>
 <tr><td>_resolve_convenience_template_selection</td><td>Select convenience templates for the workspace</td><td>Discover installed convenience templates and let the user choose which copies should be placed in the new workspace.</td><td>create-workspace.sh</td></tr>
 <tr><td>_resolve_starter_scripts</td><td>Configure optional starter files for selected templates</td><td></td><td>create-workspace.sh</td></tr>
 <tr><td>_sample_internal_function</td><td>Internal function documentation</td><td>Demonstrate an internal function.</td><td>doc-sample.sh</td></tr>
 <tr><td>_select_files</td><td>Resolve the combined workspace filters into a concrete file list</td><td>Select deployable files by optional directory, filename or mask, and modification time.</td><td>deploy-workspace.sh</td></tr>
 <tr><td>_set_script_header_version</td><td>Set an explicit version in a managed script header</td><td></td><td>prepare-release.sh</td></tr>
+<tr><td>_setup_metadata_value</td><td>Read one canonical metadata value from sgnd-setup.sh</td><td></td><td>prepare-release.sh</td></tr>
 <tr><td>_sgnd_doc_is_valid_stylehint</td><td>Validate documentation style hint</td><td>Check whether a style hint is part of the supported documentation style registry.</td><td>doc-processor.sh</td></tr>
 <tr><td>_sgnd_doc_list_contains</td><td>Test whether a value exists in a named array</td><td>Provide a small membership helper for semantic registries.</td><td>doc-processor.sh</td></tr>
 <tr><td>_sgnd_release_list_manifest_history</td><td>List removal-baseline manifests for an artifact</td><td>List persistent manifest-history files for one explicit release artifact identity, newest build first.</td><td>prepare-release.sh</td></tr>
 <tr><td>_sgnd_release_select_baseline_for_artifact</td><td>Select one artifact removal baseline</td><td>Resolve the manifest against which removed paths are calculated for one release artifact rather than for the prepare-release run as a whole.</td><td>prepare-release.sh</td></tr>
-<tr><td>_sgnd_release_select_bundle_baseline</td><td>Select baseline for the assembled bundle</td><td></td><td>prepare-release.sh</td></tr>
 <tr><td>_sgnd_release_select_product_baseline</td><td>Select baseline for one product release</td><td></td><td>prepare-release.sh</td></tr>
 <tr><td>_sgnd_release_write_removed_manifest</td><td>Write removed-path delta</td><td>Create the release removal manifest by comparing the selected baseline and current package manifests.</td><td>prepare-release.sh</td></tr>
 <tr><td>_specialize_generated_file</td><td>Apply selected metadata to a generated starter file</td><td></td><td>create-workspace.sh</td></tr>
 <tr><td>_specialize_workspace_template</td><td>Make a copied canonical template product-aware</td><td></td><td>create-workspace.sh</td></tr>
+<tr><td>_start_remote_session</td><td>Open one shared SSH connection for the deployment</td><td>Authenticate to the remote destination once and keep a ControlMaster connection available for receiver setup and all selected product transfers.</td><td>deploy-workspace.sh</td></tr>
 <tr><td>_starter_target_path</td><td>Resolve conventional target path for a starter template</td><td></td><td>create-workspace.sh</td></tr>
+<tr><td>_stop_remote_session</td><td>Close the shared SSH deployment connection</td><td></td><td>deploy-workspace.sh</td></tr>
 <tr><td>_stream_local</td><td>Stream selected workspace files to the local receiver</td><td></td><td>deploy-workspace.sh</td></tr>
 <tr><td>_stream_remote</td><td>Stream selected workspace files to the remote receiver over SSH</td><td></td><td>deploy-workspace.sh</td></tr>
 <tr><td>_summary</td><td>Print documentation generation summary</td><td>Generate a summary of the documentation data collected.</td><td>doc-generator.sh</td></tr>
@@ -162,7 +173,7 @@
 <tr><td>branding_asset_exists</td><td>Branding asset exists</td><td>Branding asset exists for the documentation rendering workflow.</td><td>sgnd_doc_renderer.py</td></tr>
 <tr><td>breadcrumb_from_contentref</td><td>Breadcrumb from contentref</td><td>Breadcrumb from contentref for the documentation rendering workflow.</td><td>sgnd_doc_renderer.py</td></tr>
 <tr><td>build_content_index</td><td>Build content index</td><td>Build content index for the documentation rendering workflow. Usage self.build_content_index()</td><td>sgnd_doc_renderer.py</td></tr>
-<tr><td>build_doc_hierarchy</td><td>Build doc hierarchy</td><td>Build doc hierarchy for the documentation rendering workflow. Usage self.build_doc_hierarchy()</td><td>sgnd_doc_renderer.py</td></tr>
+<tr><td>build_doc_hierarchy</td><td>Build doc hierarchy</td><td>Build the documentation navigation hierarchy, promoting each product, group, or subgroup preface into the content of its parent node while keeping epilogues as explicit trailing child pages. Usage self.build_doc_hierarchy()</td><td>sgnd_doc_renderer.py</td></tr>
 <tr><td>canonical_ref</td><td>Build canonical ref</td><td>Build canonical ref for the documentation rendering workflow.</td><td>sgnd_doc_renderer.py</td></tr>
 <tr><td>changelog_ref</td><td>Build changelog ref</td><td>Build changelog ref for the documentation rendering workflow.</td><td>sgnd_doc_renderer.py</td></tr>
 <tr><td>close_list</td><td>Close list</td><td>Close list for the documentation rendering workflow. Usage self.close_list()</td><td>sgnd_doc_renderer.py</td></tr>
@@ -253,7 +264,7 @@
 <tr><td>render_markdown_document</td><td>Render markdown document</td><td>Render markdown document for the documentation rendering workflow.</td><td>sgnd_doc_renderer.py</td></tr>
 <tr><td>render_module_content</td><td>Render module content</td><td>Render module content for the documentation rendering workflow.</td><td>sgnd_doc_renderer.py</td></tr>
 <tr><td>render_nav_branding</td><td>Render nav branding</td><td>Render the Testadura publisher identity above the navigation index. Usage self.render_nav_branding()</td><td>sgnd_doc_renderer.py</td></tr>
-<tr><td>render_navigation</td><td>Render navigation</td><td>Render navigation for the documentation rendering workflow. Usage self.render_navigation()</td><td>sgnd_doc_renderer.py</td></tr>
+<tr><td>render_navigation</td><td>Render navigation</td><td>Render the documentation navigation tree, linking container headings to their promoted preface content when available. Usage self.render_navigation()</td><td>sgnd_doc_renderer.py</td></tr>
 <tr><td>render_page_branding</td><td>Render page branding</td><td>Render the compact SolidGroundUX identity used on documentation pages. Usage self.render_page_branding()</td><td>sgnd_doc_renderer.py</td></tr>
 <tr><td>render_project_document_page</td><td>Render project document page</td><td>Render project document page for the documentation rendering workflow.</td><td>sgnd_doc_renderer.py</td></tr>
 <tr><td>render_rows</td><td>Render rows</td><td>Render rows for the documentation rendering workflow.</td><td>sgnd_doc_renderer.py</td></tr>

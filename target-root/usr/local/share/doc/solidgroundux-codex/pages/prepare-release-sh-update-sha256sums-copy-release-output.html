@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Copy one completed product ZIP into the output directory</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></div>
+<header class="doc-page-header">
+  <div class="doc-title">Copy one completed product ZIP into the output directory</div>
+  <div class="doc-breadcrumb">SolidGroundUX Codex / prepare-release.sh / Update SHA256SUMS / _copy_release_output</div>
+</header>
+<div class="ct-functionbody sh-highlight">Purpose</div>
+<div class="ct-functionbody">  Export only the distributable product ZIP. Loose tar, manifest, removal, and</div>
+<div class="ct-functionbody">  checksum files remain in staging until manifest-history processing completes,</div>
+<div class="ct-functionbody">  then are removed by _cleanup_packaged_release_artifacts.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Behavior</div>
+<div class="ct-functionbody">  - Copies only the distributable product ZIP into the selected output directory.</div>
+<div class="ct-functionbody">  - Replaces an existing product ZIP with the same filename.</div>
+<div class="ct-functionbody">  - Appends the product ZIP path for the final summary only after successful export.</div>
+<div class="ct-functionbody">  - Dry-run records the planned ZIP path without modifying files.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Inputs (globals)</div>
+<div class="ct-functionbody">  STAGING_ROOT, OUTPUT_DIR, RELEASE, FLAG_DRYRUN</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Outputs (globals)</div>
+<div class="ct-functionbody">  RELEASE_OUTPUT_ARCHIVES</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Returns</div>
+<div class="ct-functionbody">  0 on success; 1 on missing artifacts or copy failure. Staged originals are retained.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Usage</div>
+</main>
+</body>
+</html>

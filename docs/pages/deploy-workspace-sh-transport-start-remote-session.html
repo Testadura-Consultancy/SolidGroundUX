@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Open one shared SSH connection for the deployment</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></div>
+<header class="doc-page-header">
+  <div class="doc-title">Open one shared SSH connection for the deployment</div>
+  <div class="doc-breadcrumb">SolidGroundUX Codex / deploy-workspace.sh / Transport / _start_remote_session</div>
+</header>
+<div class="ct-functionbody sh-highlight">Purpose</div>
+<div class="ct-functionbody">  Authenticate to the remote destination once and keep a ControlMaster connection</div>
+<div class="ct-functionbody">  available for receiver setup and all selected product transfers.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Returns</div>
+<div class="ct-functionbody">  0 when the shared SSH session is available.</div>
+<div class="ct-functionbody">  Non-zero when SSH authentication or session creation fails.</div>
+</main>
+</body>
+</html>

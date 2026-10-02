@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>List direct child directories of one storage root</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></div>
+<header class="doc-page-header">
+  <div class="doc-title">List direct child directories of one storage root</div>
+  <div class="doc-breadcrumb">SolidGroundUX Codex / manage-storage.sh / Internal helpers / _storage_list_child_directories</div>
+</header>
+<div class="ct-functionbody sh-highlight">Purpose</div>
+<div class="ct-functionbody">  Return only the first-level directories below a mounted SolidGroundUX storage root.</div>
+<div class="ct-functionbody"></div>
+<p class="ct-functionbody">Arguments:</p>
+<div class="ct-functionbody">  $1 - Mounted managed storage root.</div>
+<div class="ct-functionbody"></div>
+<p class="ct-functionbody">Output:</p>
+<div class="ct-functionbody">  One directory basename per line, sorted alphabetically.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Returns</div>
+<div class="ct-functionbody">  0 after scanning the root; non-zero when the root cannot be scanned.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Usage</div>
+<div class="ct-functionbody">  _storage_list_child_directories &quot;/srv/storage&quot;</div>
+</main>
+</body>
+</html>

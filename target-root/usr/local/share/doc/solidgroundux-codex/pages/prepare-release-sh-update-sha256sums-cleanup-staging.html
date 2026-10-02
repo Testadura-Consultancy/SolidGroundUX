@@ -20,6 +20,7 @@
 <div class="ct-functionbody">  - Checks FLAG_CLEANUP to determine whether to remove the staging directory.</div>
 <div class="ct-functionbody">  - If FLAG_CLEANUP is 1, deletes the directory at STAGING_ROOT/RELEASE.</div>
 <div class="ct-functionbody">  - If FLAG_CLEANUP is 0, logs that cleanup is skipped.</div>
+<div class="ct-functionbody">  - In dry-run mode, reports planned cleanup without deleting anything.</div>
 <div class="ct-functionbody"></div>
 <p class="ct-functionbody">Inputs (globals):</p>
 <div class="ct-functionbody">  STAGING_ROOT</div>
@@ -31,7 +32,7 @@
 <div class="ct-functionbody"></div>
 <div class="ct-functionbody sh-highlight">Returns</div>
 <div class="ct-functionbody">  0 on success (or if cleanup is skipped)</div>
-<div class="ct-functionbody">  1 if deletion fails</div>
+<div class="ct-functionbody">  Logs a warning when deletion fails; returns the logging command status.</div>
 <div class="ct-functionbody"></div>
 <div class="ct-functionbody sh-highlight">Usage</div>
 <div class="ct-functionbody">  _cleanup_staging</div>

@@ -13,7 +13,27 @@
   <div class="doc-title">storage_reconcile_persistence</div>
   <div class="doc-breadcrumb">manage-storage.sh:::Public module actions:storage_reconcile_persistence</div>
 </header>
-
+<div class="ct-functionbody sh-highlight">Purpose</div>
+<div class="ct-functionbody">  Repair or clean stale SolidGroundUX-managed /etc/fstab storage entries.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Behavior</div>
+<div class="ct-functionbody">  - Detects stale managed entries whose configured source no longer resolves.</div>
+<div class="ct-functionbody">  - Detects filesystems labelled SGND_STORAGE that are present but not referenced by</div>
+<div class="ct-functionbody">    a valid managed /etc/fstab entry.</div>
+<div class="ct-functionbody">  - When exactly one stale entry and one replacement SGND_STORAGE filesystem exist,</div>
+<div class="ct-functionbody">    offers to replace the stale UUID/source while preserving mount point and options.</div>
+<div class="ct-functionbody">  - Validates the resulting /etc/fstab before activation and restores the backup on failure.</div>
+<div class="ct-functionbody">  - Mounts the repaired filesystem when its target is currently unmounted.</div>
+<div class="ct-functionbody">  - Falls back to the previous explicit stale-entry removal workflow when repair is ambiguous.</div>
+<div class="ct-functionbody">  - Never formats, repartitions, or otherwise modifies filesystem contents.</div>
+<div class="ct-functionbody">  - Honors console dry-run mode.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Returns</div>
+<div class="ct-functionbody">  0 when persistence is already valid, repaired, removed by explicit confirmation, or cancelled.</div>
+<div class="ct-functionbody">  Non-zero when a requested repair/removal cannot be completed safely.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Usage</div>
+<div class="ct-functionbody">  storage_reconcile_persistence</div>
 </main>
 </body>
 </html>

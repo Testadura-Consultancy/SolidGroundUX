@@ -13,6 +13,18 @@
   <div class="doc-title">Create a managed share and backing directory</div>
   <div class="doc-breadcrumb">SolidGroundUX Codex / manage-samba-shares.sh / Helpers / _create_share</div>
 </header>
+<div class="ct-functionbody sh-highlight">Purpose</div>
+<div class="ct-functionbody">  Create a Samba share and optionally apply a stateful default access group/access level.</div>
+<div class="ct-functionbody sh-highlight">Behavior</div>
+<div class="ct-functionbody">  - Requires the managed share root to satisfy the 0711 traversal contract.</div>
+<div class="ct-functionbody">  - Defaults the backing-directory path to the share name but allows another relative path.</div>
+<div class="ct-functionbody">  - Reuses an existing backing directory or creates it with mode 0770.</div>
+<div class="ct-functionbody">  - Rejects backing paths already used by another managed Samba share.</div>
+<div class="ct-functionbody">  - Prompts for a persisted default access group; empty means no access is assigned.</div>
+<div class="ct-functionbody">  - Persists the default access group and access level through SolidGroundUX state.</div>
+<div class="ct-functionbody">  - Validates the resulting Samba configuration and reloads smbd.</div>
+<div class="ct-functionbody sh-highlight">Returns</div>
+<div class="ct-functionbody">  0 after returning to the manager; non-zero on creation/access failure.</div>
 <div class="ct-functionbody sh-highlight">Usage</div>
 <div class="ct-functionbody">  _create_share</div>
 </main>

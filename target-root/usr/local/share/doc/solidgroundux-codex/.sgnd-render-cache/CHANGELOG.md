@@ -7,7 +7,48 @@ practical framework development.
 
 ## Backlog
 
+- No open Framework backlog items are currently recorded here. Management Console-specific backlog items are tracked in the Management Console Modules changelog.
+
 ## Unreleased
+
+### Added
+- Added standalone `sgnd-setup` as the product lifecycle entry point for first installation, local/GitHub updates, rollback, removal, and package management; `sgnd-release-manager` remains available as a compatibility alias.
+- Added a product-centric Setup dashboard showing installed, newest local, and newest GitHub releases per known product, with newer availability highlighted.
+- Added local package discovery beside the running Setup script and in the canonical releases directory, plus action-scoped selection of another package directory.
+- Added canonical `Shortname` support to comment-header metadata. `sgnd_module_init_metadata` now uses the header Shortname when present and falls back to the normalized source filename when it is absent.
+- Added metadata-driven current-script aliases so executable metadata such as Title, Description, Version and Build can be derived from canonical parsed header metadata instead of being repeated as hard-coded runtime literals.
+- Added configurable `SGND_MENU_Q_EXIT` behavior to the reusable menu layer so applications can disable `Q/q` exit handling while preserving the historical default for other menu consumers.
+
+### Changed
+- Standardized product ZIPs as the release unit: acquisition may come from GitHub, the canonical local package store, or another directory, but all selected packages enter the same validation/install pipeline.
+- Replaced the former bundled-release concept with a first-install transport package containing `sgnd-setup.sh` and normal product release ZIPs; the first-install package has its own Setup Version/Build identity.
+- Rebalanced the Setup dashboard columns so full product names fit more naturally and Installed/Local/GitHub values display compact Version.Build identities instead of long release basenames.
+- First install now discovers adjacent product ZIPs, admits them to the canonical package store, lets the operator select one or more products, installs through the normal package pipeline, and cleans temporary bootstrap files afterward.
+- Successful product installs archive the original ZIP beneath the canonical releases archive while retaining extracted internal release history for rollback/removal.
+- Package source paths are transient operation input and are no longer restored or persisted as product/repository state.
+- Consolidated runtime metadata initialization around the existing comment-header parser and `sgnd_module_init_metadata`, retaining structural `SGND_SCRIPT_FILE`, `SGND_SCRIPT_DIR`, `SGND_SCRIPT_BASE`, and `SGND_SCRIPT_NAME` as executable-context identity while removing redundant duplicated metadata literals.
+- Kept early bootstrap metadata initialization explicit for bootstrap/header-parser/definitions/environment files, while later framework libraries continue to self-initialize metadata once the parser is available.
+- Changed first-install completion to offer **Setup**, **Management Console**, or **Exit**, with Exit as the default and `Esc` treated as Exit.
+- Kept the first-install completion selector framework-independent so bootstrap/recovery operation does not depend on SolidGroundUX UI helpers before the framework is available.
+- Management Console applications can now treat `Esc` as the canonical return/exit control while leaving reusable framework menu behavior configurable for other consumers.
+
+### Fixed
+- Fixed comment-header parsing variable shadowing that could prevent parsed banner Product/Title values from propagating correctly into module metadata.
+- Fixed non-interactive execution paths that could hang while rendering a title bar through `/dev/tty`; receiver-side execution can now suppress title rendering explicitly with `--no-title`.
+- Fixed terminal-width detection fallbacks so framework UI code remains usable when no controlling terminal is available.
+- Fixed repeated/non-interactive bootstrap behavior used by deployment receivers so framework startup no longer depends on terminal-only rendering paths.
+
+
+## Release 2.1.2626712
+
+### Added
+- Added configurable warning and error message delays to the Framework globals, with `saywarning` and `sayfail` consuming the configured defaults while allowing an explicit `--delay` override.
+
+### Changed
+- Standardized the warning/error delay policy at 0.5 seconds by default; `--delay 0` remains immediate and `--delay -1` waits for a keypress.
+
+### Fixed
+- Restored the canonical `sgnd-smoketest` implementation and completed Framework ownership of the public smoke-test command after the product split.
 
 ## Release 2.1.2626612
 

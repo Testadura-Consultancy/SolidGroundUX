@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Provision and validate persistent SolidGroundUX storage</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></div>
+<header class="doc-page-header">
+  <div class="doc-title">Provision and validate persistent SolidGroundUX storage</div>
+  <div class="doc-breadcrumb">SolidGroundUX Codex / 15-storage.sh / Management dispatch / storage_prepare</div>
+</header>
+<div class="ct-functionbody sh-highlight">Purpose</div>
+<div class="ct-functionbody">  Execute the registered happy-path storage actions as one compound workflow while</div>
+<div class="ct-functionbody">  keeping the individual console action statuses synchronized.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Behavior</div>
+<div class="ct-functionbody">  - Runs Provision storage first; provisioning performs the destructive disk setup,</div>
+<div class="ct-functionbody">    persistence configuration, initial mount, and SolidGroundUX configuration save.</div>
+<div class="ct-functionbody">  - Runs Validate storage provisioning after provisioning succeeds.</div>
+<div class="ct-functionbody">  - Uses management-console action tracking when available so each child receives</div>
+<div class="ct-functionbody">    the same persisted checkmark/cross status as an individually selected action.</div>
+<div class="ct-functionbody">  - Suppresses each child script&#x27;s normal end-of-action auto-continue dialog while</div>
+<div class="ct-functionbody">    it is running as part of this compound workflow.</div>
+<div class="ct-functionbody">  - Does not mark Mount storage or reconciliation actions as completed merely because</div>
+<div class="ct-functionbody">    provisioning performed equivalent internal work.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Returns</div>
+<div class="ct-functionbody">  0 when provisioning and validation both succeed; otherwise the first failing child code.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Usage</div>
+<div class="ct-functionbody">  storage_prepare</div>
+</main>
+</body>
+</html>

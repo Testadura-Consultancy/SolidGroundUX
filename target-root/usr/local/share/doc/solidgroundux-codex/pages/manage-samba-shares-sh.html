@@ -15,8 +15,10 @@
 </header>
 <div class="ct-modulebody sh-label">Description</div>
 <div class="ct-modulebody">  Provides interactive management of SolidGroundUX Samba shares, including share</div>
-<div class="ct-modulebody">  lifecycle, directory structure, validation, and AD/NSS access control synchronized</div>
-<div class="ct-modulebody">  through POSIX ACLs and Samba valid-users/write-list settings.</div>
+<div class="ct-modulebody">  lifecycle, validation, and AD/NSS or standalone group access synchronized through</div>
+<div class="ct-modulebody">  POSIX ACLs and Samba valid-users/write-list settings. Standalone Samba user/group</div>
+<div class="ct-modulebody">  lifecycle is implemented by manage-samba-users.sh; directory lifecycle and</div>
+<div class="ct-modulebody">  directory-level ACL management are implemented by manage-samba-directories.sh.</div>
 <div class="ct-modulebody"></div>
 <div class="ct-modulebody sh-label">Design principles</div>
 <div class="ct-modulebody">  - Executables are explicit: resolve, bootstrap, then run</div>

@@ -17,9 +17,11 @@
 <div class="ct-functionbody">  Return the number of columns available to console rendering.</div>
 <div class="ct-functionbody"></div>
 <div class="ct-functionbody sh-highlight">Behavior</div>
-<div class="ct-functionbody">  - Uses tput cols when stdout is attached to a terminal and tput is available.</div>
+<div class="ct-functionbody">  - Uses tput cols against the controlling terminal when one is available.</div>
+<div class="ct-functionbody">  - Does not read from application stdin, which may contain piped data.</div>
+<div class="ct-functionbody">  - Falls back to tput cols on stdout when stdout is attached to a terminal.</div>
 <div class="ct-functionbody">  - Falls back to the COLUMNS environment variable.</div>
-<div class="ct-functionbody">  - Falls back to SGND_CONSOLE_WIDTH, then 80, when no terminal width is available.</div>
+<div class="ct-functionbody">  - Falls back to 80 when no terminal width is available.</div>
 <div class="ct-functionbody"></div>
 <div class="ct-functionbody sh-highlight">Output</div>
 <div class="ct-functionbody">  Writes one positive integer to stdout.</div>
@@ -28,7 +30,7 @@
 <div class="ct-functionbody">  0 always.</div>
 <div class="ct-functionbody"></div>
 <div class="ct-functionbody sh-highlight">Usage</div>
-<div class="ct-functionbody">  sgnd_terminal_width &quot;example&quot;</div>
+<div class="ct-functionbody">  sgnd_terminal_width</div>
 </main>
 </body>
 </html>

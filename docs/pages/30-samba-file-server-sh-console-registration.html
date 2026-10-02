@@ -24,6 +24,10 @@
 <div class="ct-L1Sectionbody">  &gt; Install Samba file-server packages and command-line utilities.</div>
 <div class="ct-L1Sectionbody">  &gt; Handler: _smb_step_install_packages</div>
 <div class="ct-L1Sectionbody"></div>
+<div class="ct-L1Sectionbody sh-emphasis">Configure Samba authentication</div>
+<div class="ct-L1Sectionbody">  &gt; Detect host AD membership and configure Samba authentication to match.</div>
+<div class="ct-L1Sectionbody">  &gt; Handler: _smb_step_configure_authentication</div>
+<div class="ct-L1Sectionbody"></div>
 <div class="ct-L1Sectionbody sh-emphasis">Validate storage</div>
 <div class="ct-L1Sectionbody">  &gt; Require the configured SolidGroundUX storage mount.</div>
 <div class="ct-L1Sectionbody">  &gt; Handler: _smb_step_validate_storage</div>
@@ -46,9 +50,19 @@
 <div class="ct-L1Sectionbody"></div>
 <div class="ct-L1Sectionbody sh-highlight">Samba Shares</div>
 <div class="ct-L1Sectionbody sh-emphasis">Manage shares</div>
-<div class="ct-L1Sectionbody">  &gt; Create, remove, structure, validate, and manage access to Samba shares.</div>
+<div class="ct-L1Sectionbody">  &gt; Create, remove, validate, and manage share-level access.</div>
 <div class="ct-L1Sectionbody">  &gt; Handler: _smb_manage_shares</div>
 <div class="ct-L1Sectionbody">  &gt; Script: /usr/local/libexec/solidgroundux/manage-samba-shares.sh</div>
+<div class="ct-L1Sectionbody"></div>
+<div class="ct-L1Sectionbody sh-emphasis">Manage directories</div>
+<div class="ct-L1Sectionbody">  &gt; Create, remove, inspect, and manage directory-level user/group access.</div>
+<div class="ct-L1Sectionbody">  &gt; Handler: _smb_manage_directories</div>
+<div class="ct-L1Sectionbody">  &gt; Script: /usr/local/libexec/solidgroundux/manage-samba-directories.sh</div>
+<div class="ct-L1Sectionbody"></div>
+<div class="ct-L1Sectionbody sh-emphasis">Manage users and groups</div>
+<div class="ct-L1Sectionbody">  &gt; Manage standalone Samba users, local access groups, and group memberships.</div>
+<div class="ct-L1Sectionbody">  &gt; Handler: _smb_manage_users</div>
+<div class="ct-L1Sectionbody">  &gt; Script: /usr/local/libexec/solidgroundux/manage-samba-users.sh</div>
 </main>
 </body>
 </html>

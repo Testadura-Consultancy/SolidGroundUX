@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Return the Samba share name exported from one exact directory path</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></div>
+<header class="doc-page-header">
+  <div class="doc-title">Return the Samba share name exported from one exact directory path</div>
+  <div class="doc-breadcrumb">SolidGroundUX Codex / manage-samba-directories.sh / Storage and Samba discovery / _share_name_for_path</div>
+</header>
+<div class="ct-functionbody sh-highlight">Arguments</div>
+<div class="ct-functionbody">  $1  Absolute directory path.</div>
+<div class="ct-functionbody sh-highlight">Output</div>
+<div class="ct-functionbody">  Writes the share name when the path is an effective Samba share root.</div>
+<div class="ct-functionbody sh-highlight">Returns</div>
+<div class="ct-functionbody">  0 when a matching share exists; 1 otherwise.</div>
+<div class="ct-functionbody sh-highlight">Usage</div>
+<div class="ct-functionbody">  share=&quot;$(_share_name_for_path &quot;$path&quot;)&quot;</div>
+</main>
+</body>
+</html>

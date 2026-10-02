@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Verify the server FQDN resolves to its primary IPv4 address</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></div>
+<header class="doc-page-header">
+  <div class="doc-title">Verify the server FQDN resolves to its primary IPv4 address</div>
+  <div class="doc-breadcrumb">SolidGroundUX Codex / manage-samba-file-server.sh / Helpers / _smb_validate_hostname_dns</div>
+</header>
+<div class="ct-functionbody sh-highlight">Purpose</div>
+<div class="ct-functionbody">  Confirm the DNS state required for clients to reach the Samba server by hostname.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Behavior</div>
+<div class="ct-functionbody">  - Uses the shared Active Directory network/DNS APIs.</div>
+<div class="ct-functionbody">  - Verifies the local FQDN resolves to the host&#x27;s primary IPv4 address.</div>
+<div class="ct-functionbody">  - Does not create or modify DNS records; AD-client provisioning owns DNS registration.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Returns</div>
+<div class="ct-functionbody">  0 when the FQDN resolves to the primary IPv4 address; non-zero otherwise.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Usage</div>
+</main>
+</body>
+</html>

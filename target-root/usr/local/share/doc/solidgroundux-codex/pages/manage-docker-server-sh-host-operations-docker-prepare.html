@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Run the complete Docker host preparation workflow</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></div>
+<header class="doc-page-header">
+  <div class="doc-title">Run the complete Docker host preparation workflow</div>
+  <div class="doc-breadcrumb">SolidGroundUX Codex / manage-docker-server.sh / Host operations / _docker_prepare</div>
+</header>
+<div class="ct-functionbody sh-highlight">Purpose</div>
+<div class="ct-functionbody">  Execute the same host preparation steps exposed by the management-console</div>
+<div class="ct-functionbody">  module when this manager is invoked directly.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Behavior</div>
+<div class="ct-functionbody">  - Installs Docker Engine packages.</div>
+<div class="ct-functionbody">  - Configures the Docker data root using SolidGroundUX storage.</div>
+<div class="ct-functionbody">  - Enables and starts docker.service.</div>
+<div class="ct-functionbody">  - Validates the resulting Docker host.</div>
+<div class="ct-functionbody">  - Stops at the first failing step.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Returns</div>
+<div class="ct-functionbody">  0 when all preparation steps succeed; otherwise the first failing return code.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Usage</div>
+<div class="ct-functionbody">  _docker_prepare</div>
+</main>
+</body>
+</html>

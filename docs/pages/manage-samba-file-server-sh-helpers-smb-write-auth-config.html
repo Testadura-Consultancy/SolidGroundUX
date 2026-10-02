@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Normalize Samba global authentication settings</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></div>
+<header class="doc-page-header">
+  <div class="doc-title">Normalize Samba global authentication settings</div>
+  <div class="doc-breadcrumb">SolidGroundUX Codex / manage-samba-file-server.sh / Helpers / _smb_write_auth_config</div>
+</header>
+<div class="ct-functionbody sh-highlight">Purpose</div>
+<div class="ct-functionbody">  Keep share definitions intact while replacing only SolidGroundUX-owned global</div>
+<div class="ct-functionbody">  authentication and identity-mapping settings.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Arguments</div>
+<div class="ct-functionbody">  $1  Authentication mode: ad or standalone.</div>
+<div class="ct-functionbody">  $2  AD realm when mode is ad.</div>
+<div class="ct-functionbody">  $3  AD short/NetBIOS domain when mode is ad.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Returns</div>
+<div class="ct-functionbody">  0 when smb.conf is updated; non-zero on rewrite/install failure.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Usage</div>
+<div class="ct-functionbody">  _smb_write_auth_config ad TESTADURA.HQ TESTADURA</div>
+</main>
+</body>
+</html>

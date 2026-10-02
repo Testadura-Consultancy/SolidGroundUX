@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Apply one access level to explicit groups on selected shares</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></div>
+<header class="doc-page-header">
+  <div class="doc-title">Apply one access level to explicit groups on selected shares</div>
+  <div class="doc-breadcrumb">SolidGroundUX Codex / manage-samba-shares.sh / Helpers / _apply_group_access_to_groups</div>
+</header>
+<div class="ct-functionbody sh-highlight">Purpose</div>
+<div class="ct-functionbody">  Share the ACL/Samba synchronization implementation between interactive access changes</div>
+<div class="ct-functionbody">  and stateful default access applied during share creation.</div>
+<div class="ct-functionbody sh-highlight">Arguments</div>
+<div class="ct-functionbody">  $1  MODE - read or write.</div>
+<div class="ct-functionbody">  $@  One or more resolved group names.</div>
+<div class="ct-functionbody sh-highlight">Returns</div>
+<div class="ct-functionbody">  0 after all selected shares are updated; non-zero on failure.</div>
+<div class="ct-functionbody sh-highlight">Usage</div>
+<div class="ct-functionbody">  _apply_group_access_to_groups write &quot;domain users@testadura.hq&quot;</div>
+</main>
+</body>
+</html>

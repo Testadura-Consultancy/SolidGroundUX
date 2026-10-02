@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>SolidGroundUX - Console Module Template</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></div>
+<header class="doc-page-header">
+  <div class="doc-title">SolidGroundUX - Console Module Template</div>
+  <div class="doc-breadcrumb">SolidGroundUX Codex / mod-template.sh</div>
+</header>
+<div class="ct-modulebody sh-label">Description</div>
+<div class="ct-modulebody sh-label">Provides the standard structure for modules that extend sgnd-console with</div>
+<div class="ct-modulebody">    - one or more menu groups</div>
+<div class="ct-modulebody">    - one or more registered menu actions</div>
+<div class="ct-modulebody">    - optional internal helper functions</div>
+<div class="ct-modulebody"></div>
+<div class="ct-modulebody">  Console modules are source-only plugin libraries. Their only intended</div>
+<div class="ct-modulebody">  load-time side effect is self-registration with sgnd-console.</div>
+<div class="ct-modulebody"></div>
+<div class="ct-modulebody sh-label">Design principles</div>
+<div class="ct-modulebody">  - Modules define functions first, then register themselves explicitly</div>
+<div class="ct-modulebody">  - Registration is data-driven through the public sgnd_menu_register_group/item API</div>
+<div class="ct-modulebody">  - Keep module logic local and menu-facing</div>
+<div class="ct-modulebody">  - Avoid framework-wide policy decisions inside modules</div>
+<div class="ct-modulebody"></div>
+<div class="ct-modulebody sh-label">Role in framework</div>
+<div class="ct-modulebody">  - Extends sgnd-console with domain-specific actions and menu entries</div>
+<div class="ct-modulebody">  - Acts as a lazy-loaded page/plugin layer on top of the console host</div>
+<div class="ct-modulebody">  - May depend on framework and console common libraries declared by the host, but not on another page module having been opened</div>
+<div class="ct-modulebody"></div>
+<div class="ct-modulebody sh-label">Assumptions</div>
+<div class="ct-modulebody">  - Lazy-loaded by sgnd-console when the module page is first opened</div>
+<div class="ct-modulebody">  - sgnd_menu_register_group and sgnd_menu_register_item are available</div>
+<div class="ct-modulebody">  - Framework helpers such as say* and sgnd_print_* may be used</div>
+<div class="ct-modulebody"></div>
+<div class="ct-modulebody sh-label">Non-goals</div>
+<div class="ct-modulebody">  - Standalone execution</div>
+<div class="ct-modulebody">  - Bootstrap, path resolution, or framework initialization</div>
+<div class="ct-modulebody">  - Full-screen UI behavior outside the sgnd-console host</div>
+<div class="ct-modulebody"></div>
+</main>
+</body>
+</html>

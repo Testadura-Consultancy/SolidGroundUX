@@ -24,9 +24,11 @@
 <div class="ct-modulebody">    - Ensures release metadata is consistent across processed scripts</div>
 <div class="ct-modulebody">    - Verifies public command wrappers for executable top-level libexec scripts</div>
 <div class="ct-modulebody">    - Creates release tar/manifests/checksums and a complete distributable release ZIP</div>
+<div class="ct-modulebody">    - Copies completed release artifacts directly into a separately selected output directory</div>
+<div class="ct-modulebody">    - Reports the full output paths of product release ZIPs and the optional first-install ZIP</div>
 <div class="ct-modulebody">    - Writes release-package.info at ZIP root so the package identifies its project/release</div>
 <div class="ct-modulebody">    - Uses an explicit removal-baseline manifest from persistent manifest history</div>
-<div class="ct-modulebody">    - Ships release-manager.sh only with the SolidGroundUX framework bootstrap package</div>
+<div class="ct-modulebody">    - Builds a first-install ZIP containing sgnd-setup.sh plus selected product release ZIPs</div>
 <div class="ct-modulebody"></div>
 <div class="ct-modulebody sh-label">Design principles</div>
 <div class="ct-modulebody">  - Release preparation is deterministic and repeatable</div>

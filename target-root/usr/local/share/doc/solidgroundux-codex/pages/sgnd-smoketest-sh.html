@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>SolidGroundUX Framework - Smoke Test and Validation</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></div>
+<header class="doc-page-header">
+  <div class="doc-title">SolidGroundUX Framework - Smoke Test and Validation</div>
+  <div class="doc-breadcrumb">SolidGroundUX Codex / sgnd-smoketest.sh</div>
+</header>
+<div class="ct-modulebody sh-label">Description</div>
+<div class="ct-modulebody">  Framework-owned smoke-test and validation implementation for SolidGroundUX. Supports individual validation suites, a complete Run All</div>
+<div class="ct-modulebody">  pass, and the original interactive UI smoke-test menu.</div>
+<div class="ct-modulebody"></div>
+<div class="ct-modulebody sh-label">Design principles</div>
+<div class="ct-modulebody">  - Validation suites are non-destructive.</div>
+<div class="ct-modulebody">  - Console registration is tested after explicitly loading all discovered modules,</div>
+<div class="ct-modulebody">    avoiding false failures caused by the Management Console&#x27;s lazy-loading model.</div>
+<div class="ct-modulebody">  - Existing module validators remain owned by their respective modules and are</div>
+<div class="ct-modulebody">    invoked rather than duplicated here.</div>
+<div class="ct-modulebody">  - Test sections use one consistent finish and summary pattern.</div>
+<div class="ct-modulebody"></div>
+</main>
+</body>
+</html>

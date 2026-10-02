@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Repair a missing or invalid Active Directory host keytab</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></div>
+<header class="doc-page-header">
+  <div class="doc-title">Repair a missing or invalid Active Directory host keytab</div>
+  <div class="doc-breadcrumb">SolidGroundUX Codex / manage-active-directory-client.sh / Internal helpers / _adc_ensure_host_keytab</div>
+</header>
+<div class="ct-functionbody sh-highlight">Purpose</div>
+<div class="ct-functionbody">  Restore the machine keytab required by SSSD without changing the configured realm,</div>
+<div class="ct-functionbody">  DNS, or host identity.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Behavior</div>
+<div class="ct-functionbody">  - Returns immediately when /etc/krb5.keytab already validates.</div>
+<div class="ct-functionbody">  - Requires an existing realmd domain membership before attempting repair.</div>
+<div class="ct-functionbody">  - Uses adcli join with the existing machine identity to refresh the computer-account</div>
+<div class="ct-functionbody">    password and recreate /etc/krb5.keytab.</div>
+<div class="ct-functionbody">  - Prompts for an authorized AD account only when repair is actually required.</div>
+<div class="ct-functionbody">  - Validates the recreated keytab with klist and adcli testjoin before returning.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Returns</div>
+<div class="ct-functionbody">  0 when the keytab is already valid or repaired successfully; non-zero otherwise.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Usage</div>
+<div class="ct-functionbody">  _adc_ensure_host_keytab</div>
+</main>
+</body>
+</html>

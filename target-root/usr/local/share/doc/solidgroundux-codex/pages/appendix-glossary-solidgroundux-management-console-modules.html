@@ -21,9 +21,13 @@
 <tbody>
 <tr><td>_acl_groups_for_share</td><td>Return named group ACL entries for one share</td><td></td><td>manage-samba-shares.sh</td></tr>
 <tr><td>_adc_collect_context</td><td>Collect Active Directory client join context</td><td></td><td>manage-active-directory-client.sh</td></tr>
-<tr><td>_adc_join_domain</td><td></td><td>Run the complete tracked Active Directory client join sequence.</td><td>manage-active-directory-client.sh</td></tr>
+<tr><td>_adc_ensure_host_keytab</td><td>Repair a missing or invalid Active Directory host keytab</td><td>Restore the machine keytab required by SSSD without changing the configured realm, DNS, or host identity.</td><td>manage-active-directory-client.sh</td></tr>
+<tr><td>_adc_host_keytab_valid</td><td>Validate the local Active Directory host keytab</td><td>Confirm that /etc/krb5.keytab exists, contains usable principals, and authenticates the machine account against the joined Active Directory realm.</td><td>manage-active-directory-client.sh</td></tr>
+<tr><td>_adc_join_domain</td><td>Run the composite join and synchronize child menu statuses</td><td>Keep the stateful join workflow inside the management executable while mapping its distinct workflow return codes back onto the registered console child actions.</td><td>25-active-directory-client.sh</td></tr>
+<tr><td>_adc_join_domain</td><td>Run the complete Active Directory client join sequence</td><td>Execute the complete join workflow in one process so collected join context is preserved while exposing the failing child step to the console module.</td><td>manage-active-directory-client.sh</td></tr>
 <tr><td>_adc_leave</td><td></td><td>Leave the currently joined Active Directory realm after confirmation.</td><td>manage-active-directory-client.sh</td></tr>
 <tr><td>_adc_reconcile</td><td>Repair safe local Active Directory client drift</td><td></td><td>manage-active-directory-client.sh</td></tr>
+<tr><td>_adc_record_join_step</td><td>Persist one child-step result in the console action tracker</td><td></td><td>25-active-directory-client.sh</td></tr>
 <tr><td>_adc_require_context</td><td></td><td>Ensure Active Directory client join context is available.</td><td>manage-active-directory-client.sh</td></tr>
 <tr><td>_adc_status</td><td></td><td>Display client FQDN, realm membership, SSSD state, and realm details.</td><td>manage-active-directory-client.sh</td></tr>
 <tr><td>_adc_step_discover</td><td></td><td>Validate realm, Kerberos, and LDAP service discovery before joining.</td><td>manage-active-directory-client.sh</td></tr>
@@ -33,8 +37,9 @@
 <tr><td>_adc_step_join</td><td></td><td>Join the machine to the selected Active Directory realm.</td><td>manage-active-directory-client.sh</td></tr>
 <tr><td>_adc_step_preflight</td><td></td><td>Collect join inputs and reject a machine that is already joined to a realm.</td><td>manage-active-directory-client.sh</td></tr>
 <tr><td>_adc_step_register_dns</td><td></td><td>Create and verify the client Active Directory DNS A record when needed.</td><td>manage-active-directory-client.sh</td></tr>
-<tr><td>_adc_step_sssd</td><td></td><td>Enable, restart, and validate the SSSD client service.</td><td>manage-active-directory-client.sh</td></tr>
-<tr><td>_adc_validate</td><td>Validate Active Directory client membership and local integration</td><td></td><td>manage-active-directory-client.sh</td></tr>
+<tr><td>_adc_step_sssd</td><td></td><td>Normalize, enable, restart, and validate the SSSD client service.</td><td>manage-active-directory-client.sh</td></tr>
+<tr><td>_adc_validate</td><td>Validate Active Directory client membership, DNS/search-domain configuration, and local integration</td><td></td><td>manage-active-directory-client.sh</td></tr>
+<tr><td>_add_users_to_group</td><td>Add selected Samba users to one selected local group</td><td></td><td>manage-samba-users.sh</td></tr>
 <tr><td>_admg_add_member_to_group</td><td>Add one member to one AD group</td><td>Provide the shared implementation used by user- and group-oriented workflows.</td><td>manage-active-directory.sh</td></tr>
 <tr><td>_admg_ask_selection</td><td>Render AD selections with manager-owned presentation</td><td></td><td>manage-active-directory.sh</td></tr>
 <tr><td>_admg_create_group</td><td>Create an Active Directory group</td><td>Create a new AD group after confirmation.</td><td>manage-active-directory.sh</td></tr>
@@ -71,7 +76,9 @@
 <tr><td>_adsvr_collect_context</td><td></td><td>Collect and validate the realm, NetBIOS, DNS forwarder, host, and server-address provisioning context.</td><td>manage-active-directory-server.sh</td></tr>
 <tr><td>_adsvr_load_context</td><td></td><td>Load Active Directory context from the current Samba configuration.</td><td>manage-active-directory-server.sh</td></tr>
 <tr><td>_adsvr_prepare_hosts</td><td></td><td>Rewrite /etc/hosts so the domain controller short name resolves to its canonical FQDN and IPv4 address.</td><td>manage-active-directory-server.sh</td></tr>
+<tr><td>_adsvr_provision_domain</td><td>Run the composite provision and synchronize child menu statuses</td><td>Keep the stateful provisioning workflow inside the management executable while mapping its workflow return codes back onto the registered console child actions.</td><td>20-active-directory-server.sh</td></tr>
 <tr><td>_adsvr_provision_domain</td><td></td><td>Run the complete tracked Active Directory server provisioning sequence.</td><td>manage-active-directory-server.sh</td></tr>
+<tr><td>_adsvr_record_provision_step</td><td>Persist one child-step result in the console tracker</td><td></td><td>20-active-directory-server.sh</td></tr>
 <tr><td>_adsvr_require_context</td><td></td><td>Ensure Active Directory provisioning context is available.</td><td>manage-active-directory-server.sh</td></tr>
 <tr><td>_adsvr_set_dns_forwarder</td><td></td><td>Set the Samba global dns forwarder value while preserving the rest of smb.conf.</td><td>manage-active-directory-server.sh</td></tr>
 <tr><td>_adsvr_status</td><td></td><td>Display the configured Samba server role, realm, workgroup, DNS forwarder, and service state.</td><td>manage-active-directory-server.sh</td></tr>
@@ -87,7 +94,13 @@
 <tr><td>_adsvr_validate</td><td></td><td>Run active validation checks for the Samba AD/DC service, DNS, directory, and Kerberos discovery.</td><td>manage-active-directory-server.sh</td></tr>
 <tr><td>_adsvr_wait_configured</td><td></td><td>Wait for Samba is-configured to report the service ready.</td><td>manage-active-directory-server.sh</td></tr>
 <tr><td>_adsvr_wait_dns</td><td></td><td>Wait until Samba owns IPv4 TCP and UDP port 53 on the domain controller.</td><td>manage-active-directory-server.sh</td></tr>
+<tr><td>_adsvr_wait_dns_port_free</td><td></td><td>Wait until IPv4 TCP and UDP port 53 are free for Samba DNS.</td><td>manage-active-directory-server.sh</td></tr>
 <tr><td>_apply_group_access</td><td>Apply read or write ACLs to selected shares</td><td></td><td>manage-samba-shares.sh</td></tr>
+<tr><td>_apply_group_access_to_groups</td><td>Apply one access level to explicit groups on selected shares</td><td>Share the ACL/Samba synchronization implementation between interactive access changes and stateful default access applied during share creation. Arguments $1  MODE - read or write. $@  One or more resolved group names. Returns 0 after all selected shares are updated; non-zero on failure. Usage _apply_group_access_to_groups write &quot;domain users@testadura.hq&quot;</td><td>manage-samba-shares.sh</td></tr>
+<tr><td>_assigned_identities</td><td>Return named ACL identities across selected directories</td><td></td><td>manage-samba-directories.sh</td></tr>
+<tr><td>_build_menu</td><td>Build the directory-management menu for the current selection state</td><td></td><td>manage-samba-directories.sh</td></tr>
+<tr><td>_build_menu</td><td>Build the standalone Samba identity-management menu</td><td></td><td>manage-samba-users.sh</td></tr>
+<tr><td>_change_samba_password</td><td>Change the password for one local Samba user</td><td></td><td>manage-samba-users.sh</td></tr>
 <tr><td>_computer_configure_ssh_service</td><td></td><td>Enable or disable SSH and keep its runtime state aligned.</td><td>10-computer-setup.sh</td></tr>
 <tr><td>_computer_configure_sudoers</td><td></td><td>Grant the selected administrator passwordless access to trusted SolidGroundUX administration executables.</td><td>10-computer-setup.sh</td></tr>
 <tr><td>_computer_generate_ssh_keys</td><td></td><td>Generate missing SSH host keys, validate sshd, and restart SSH.</td><td>10-computer-setup.sh</td></tr>
@@ -95,19 +108,28 @@
 <tr><td>_computer_set_identity</td><td></td><td>Run the canonical SolidGroundUX identity workflow.</td><td>10-computer-setup.sh</td></tr>
 <tr><td>_computer_status</td><td></td><td>Display the current Computer Setup state without changing the machine.</td><td>10-computer-setup.sh</td></tr>
 <tr><td>_computer_validate</td><td></td><td>Validate the principal Computer Setup outcomes without changing the machine.</td><td>10-computer-setup.sh</td></tr>
-<tr><td>_create_inherited_directory_tree</td><td>Create a relative directory tree with inherited access</td><td></td><td>manage-samba-shares.sh</td></tr>
-<tr><td>_create_share</td><td>Create a managed share and backing directory</td><td></td><td>manage-samba-shares.sh</td></tr>
-<tr><td>_create_subdirectory</td><td>Create subdirectories beneath the currently selected shares</td><td>Create one relative path in every selected share. If no share is currently selected, prompt for a share selection first. Newly created directory components inherit the parent share&#x27;s ownership, mode, and ACL model.</td><td>manage-samba-shares.sh</td></tr>
+<tr><td>_create_directory</td><td>Create one directory tree beneath a selected parent</td><td></td><td>manage-samba-directories.sh</td></tr>
+<tr><td>_create_directory_tree</td><td>Create a relative tree beneath one parent with inherited ACLs</td><td></td><td>manage-samba-directories.sh</td></tr>
+<tr><td>_create_local_group</td><td>Create a local standalone access group</td><td></td><td>manage-samba-users.sh</td></tr>
+<tr><td>_create_samba_user</td><td>Create/enable a local Samba user</td><td></td><td>manage-samba-users.sh</td></tr>
+<tr><td>_create_share</td><td>Create a managed share and backing directory</td><td>Create a Samba share and optionally apply a stateful default access group/access level. Behavior - Requires the managed share root to satisfy the 0711 traversal contract. - Defaults the backing-directory path to the share name but allows another relative path. - Reuses an existing backing directory or creates it with mode 0770. - Rejects backing paths already used by another managed Samba share. - Prompts for a persisted default access group; empty means no access is assigned. - Persists the default access group and access level through SolidGroundUX state. - Validates the resulting Samba configuration and reloads smbd. Returns 0 after returning to the manager; non-zero on creation/access failure. Usage _create_share</td><td>manage-samba-shares.sh</td></tr>
 <tr><td>_detect_primary_iface</td><td>Detect primary iface</td><td>Detect primary iface.</td><td>manage-identity.sh</td></tr>
 <tr><td>_dev_create_workspace</td><td></td><td>Launch the canonical SolidGroundUX workspace-creation tool.</td><td>90-development.sh</td></tr>
 <tr><td>_dev_create_wrappers</td><td></td><td>Launch the canonical SolidGroundUX wrapper-creation tool.</td><td>90-development.sh</td></tr>
 <tr><td>_dev_deploy_workspace</td><td></td><td>Launch the canonical SolidGroundUX workspace-deployment tool.</td><td>90-development.sh</td></tr>
 <tr><td>_dev_generate_docs</td><td></td><td>Launch the canonical SolidGroundUX documentation generator.</td><td>90-development.sh</td></tr>
 <tr><td>_dev_prepare_release</td><td></td><td>Launch the canonical SolidGroundUX release-preparation tool.</td><td>90-development.sh</td></tr>
+<tr><td>_directory_is_share_root</td><td>Test whether a directory is itself exported as a Samba share</td><td></td><td>manage-samba-directories.sh</td></tr>
 <tr><td>_discover_ad_groups</td><td>Discover domain groups visible through NSS</td><td>Query Active Directory directly for group names and include groups already present on selected share ACLs. NSS is used only to resolve the selected group to the local fully-qualified identity required for ACL operations.</td><td>manage-samba-shares.sh</td></tr>
+<tr><td>_discover_ad_identities</td><td>Discover AD users or groups through LDAP/GSSAPI</td><td></td><td>manage-samba-directories.sh</td></tr>
+<tr><td>_docker_action_again</td><td>Offer to repeat a completed interactive Docker action</td><td>Give repeatable Docker management actions the standard SolidGroundUX do-another/return interaction instead of ending at the generic executable pause.</td><td>manage-docker-containers.sh</td></tr>
+<tr><td>_docker_open_container_shell</td><td>Open an interactive shell in a running container</td><td>Let an operator enter a running container without having to remember docker exec syntax.</td><td>manage-docker-containers.sh</td></tr>
+<tr><td>_docker_prepare</td><td>Run the complete Docker host preparation workflow</td><td>Execute the same host preparation steps exposed by the management-console module when this manager is invoked directly.</td><td>manage-docker-server.sh</td></tr>
+<tr><td>_docker_return_to_menu</td><td>Offer the standard automatic return for read-only actions</td><td>Let read-only Docker actions end naturally without offering a redundant repeat option.</td><td>manage-docker-containers.sh</td></tr>
 <tr><td>_dryrun_complete</td><td>Report completion of a dry-run preview</td><td>Confirm explicitly that the preview completed without persistent changes.</td><td>manage-identity.sh</td></tr>
+<tr><td>_ensure_kerberos_ticket</td><td>Ensure a TGT is available for direct AD discovery</td><td></td><td>manage-samba-directories.sh</td></tr>
 <tr><td>_ensure_kerberos_ticket</td><td>Ensure an authenticated Kerberos ticket is available</td><td>Require an existing Kerberos TGT before querying Active Directory through LDAP/GSSAPI.</td><td>manage-samba-shares.sh</td></tr>
-<tr><td>_ensure_selected_shares</td><td>Ensure one or more managed shares are selected</td><td>Reuse the current share selection and only prompt when nothing is selected.</td><td>manage-samba-shares.sh</td></tr>
+<tr><td>_format_directory_permissions</td><td>Format an ACL permission mask for display</td><td></td><td>manage-samba-directories.sh</td></tr>
 <tr><td>_framework_config_edit_system</td><td>Edit the system configuration externally</td><td></td><td>40-solidgroundux.sh</td></tr>
 <tr><td>_framework_config_edit_user</td><td>Edit the user configuration externally</td><td></td><td>40-solidgroundux.sh</td></tr>
 <tr><td>_framework_config_view_file</td><td>Open a framework configuration file read-only</td><td></td><td>40-solidgroundux.sh</td></tr>
@@ -117,26 +139,54 @@
 <tr><td>_framework_show_environment</td><td></td><td></td><td>40-solidgroundux.sh</td></tr>
 <tr><td>_framework_smoketest</td><td></td><td></td><td>40-solidgroundux.sh</td></tr>
 <tr><td>_get_usr_input</td><td>Get usr input</td><td>Get usr input.</td><td>manage-identity.sh</td></tr>
-<tr><td>_inherit_directory_access</td><td>Copy a parent directory&#x27;s ownership and ACL model</td><td>Make a newly created subdirectory follow the selected share&#x27;s existing Unix ownership, mode, and POSIX ACL/default-ACL model instead of inventing per-user ownership from the directory name.</td><td>manage-samba-shares.sh</td></tr>
+<tr><td>_grant_directory_access</td><td>Grant selected users/groups ACL access to selected directories</td><td></td><td>manage-samba-directories.sh</td></tr>
+<tr><td>_inherit_directory_access</td><td>Copy ownership, mode, and ACL model from parent to child</td><td></td><td>manage-samba-directories.sh</td></tr>
+<tr><td>_list_local_access_groups_raw</td><td>List deliberate local access groups</td><td>Return local groups suitable for explicit directory ACL management without cluttering selectors with automatic user-private primary groups. Behavior - Uses only the local files NSS source. - Includes groups with GID &gt;= 1000. - Excludes nogroup. - Excludes a group when a same-named local user has that group as its primary GID. Output Writes one local access-group name per line. Returns 0 after enumeration. Usage mapfile -t groups &lt; &lt;(_list_local_access_groups_raw)</td><td>manage-samba-directories.sh</td></tr>
+<tr><td>_list_local_groups_raw</td><td>List deliberate local access groups</td><td>Return local groups suitable for explicit Samba access management without cluttering selectors with automatic user-private primary groups. Behavior - Uses only the local files NSS source. - Includes groups with GID &gt;= 1000. - Excludes nogroup. - Excludes a group when a same-named local user has that group as its primary GID. Output Writes one local access-group name per line. Returns 0 after enumeration. Usage mapfile -t groups &lt; &lt;(_list_local_groups_raw)</td><td>manage-samba-shares.sh</td></tr>
+<tr><td>_list_local_groups_raw</td><td>List deliberate local access groups</td><td></td><td>manage-samba-users.sh</td></tr>
+<tr><td>_list_local_samba_users_raw</td><td>List enabled local Samba users</td><td></td><td>manage-samba-users.sh</td></tr>
 <tr><td>_list_managed_shares</td><td>Discover shares beneath the SolidGroundUX share root</td><td></td><td>manage-samba-shares.sh</td></tr>
-<tr><td>_list_share_subdirectories_raw</td><td>Return relative subdirectory paths for one share</td><td></td><td>manage-samba-shares.sh</td></tr>
-<tr><td>_list_subdirectories</td><td>List subdirectories beneath the currently selected shares</td><td></td><td>manage-samba-shares.sh</td></tr>
 <tr><td>_load_current_values</td><td>Load current values</td><td>Load current values.</td><td>manage-identity.sh</td></tr>
+<tr><td>_local_group_display</td><td>Format one local access group for selection/display</td><td>Label deliberate standalone access groups consistently in selectors. Arguments $1  Local group name. Output Writes a display label. Returns 0 always. Usage label=&quot;$(_local_group_display SambaUsers)&quot;</td><td>manage-samba-shares.sh</td></tr>
+<tr><td>_pause_return</td><td>Keep terminal action results visible</td><td></td><td>manage-samba-users.sh</td></tr>
+<tr><td>_pause_return_to_share_manager</td><td>Keep terminal action results visible</td><td></td><td>manage-samba-shares.sh</td></tr>
 <tr><td>_prepare-template.sh</td><td></td><td>Prepare a template computer for cloning.</td><td>10-computer-setup.sh</td></tr>
+<tr><td>_reconcile_access_group</td><td>Replace one assigned group identity with another</td><td>Reconcile share ACL identities after changing Samba authentication mode without guessing mappings. Returns 0 after replacement; non-zero on failure or cancellation. Usage _reconcile_access_group</td><td>manage-samba-shares.sh</td></tr>
+<tr><td>_refresh_directory_catalog</td><td>Enumerate directories beneath the Samba share root</td><td>Build selectable directory paths and labels, marking effective Samba share roots. Outputs (globals) DIRECTORY_PATHS, DIRECTORY_LABELS Returns 0 when one or more directories exist; 1 otherwise. Usage</td><td>manage-samba-directories.sh</td></tr>
+<tr><td>_refresh_storage_paths</td><td>Resolve the configured SolidGroundUX share root</td><td></td><td>manage-samba-directories.sh</td></tr>
 <tr><td>_refresh_storage_paths</td><td>Resolve the configured SolidGroundUX share root</td><td></td><td>manage-samba-shares.sh</td></tr>
-<tr><td>_release_manager</td><td>Open the standalone SolidGroundUX release manager</td><td>Start the self-sufficient release manager for installation, update, rollback, reinstallation, and removal operations.</td><td>40-solidgroundux.sh</td></tr>
 <tr><td>_reload_samba</td><td>Validate and reload Samba configuration</td><td></td><td>manage-samba-shares.sh</td></tr>
+<tr><td>_remove_directories</td><td>Remove selected non-share-root directories</td><td></td><td>manage-samba-directories.sh</td></tr>
+<tr><td>_remove_directory_access</td><td>Remove selected named user/group ACL entries</td><td></td><td>manage-samba-directories.sh</td></tr>
 <tr><td>_remove_group_access</td><td>Remove one AD/NSS group&#x27;s access from selected shares</td><td></td><td>manage-samba-shares.sh</td></tr>
+<tr><td>_remove_local_groups</td><td>Remove one or more selected local access groups</td><td></td><td>manage-samba-users.sh</td></tr>
 <tr><td>_remove_other_netplan_files</td><td>Remove other netplan files</td><td>Remove other netplan files.</td><td>manage-identity.sh</td></tr>
+<tr><td>_remove_samba_users</td><td>Remove one or more Samba identities while preserving Linux users</td><td></td><td>manage-samba-users.sh</td></tr>
 <tr><td>_remove_share</td><td>Remove a managed share and optionally its directory</td><td></td><td>manage-samba-shares.sh</td></tr>
-<tr><td>_remove_subdirectory</td><td>Remove a selected subdirectory from a selected share</td><td>Select a concrete relative directory beneath the current share selection and remove it. The share root itself is never presented or accepted as a target.</td><td>manage-samba-shares.sh</td></tr>
+<tr><td>_remove_users_from_group</td><td>Remove selected supplementary members from one local group</td><td></td><td>manage-samba-users.sh</td></tr>
+<tr><td>_require_directory_selection</td><td>Require one or more selected directories</td><td></td><td>manage-samba-directories.sh</td></tr>
+<tr><td>_resolve_access_group_input</td><td>Resolve a typed default access group for the active authentication mode</td><td>Normalize and validate a persisted/default group without guessing across authentication modes. Arguments $1  User-entered group name; empty means no default access group. $2  Output variable name. Returns 0 with an empty or resolvable group; 1 when the group cannot be resolved. Usage</td><td>manage-samba-shares.sh</td></tr>
+<tr><td>_runtime_auth_mode</td><td>Return Samba&#x27;s configured authentication mode</td><td></td><td>manage-samba-directories.sh</td></tr>
 <tr><td>_samba_principal</td><td>Format an NSS group for a Samba user-list parameter</td><td></td><td>manage-samba-shares.sh</td></tr>
+<tr><td>_select_access_group</td><td>Select exactly one access group for identity reconciliation</td><td>Reuse the authentication-aware access-group selector while enforcing the single replacement target required by access-identity reconciliation. Arguments $1 OUTPUT_VAR Returns 0 with exactly one resolvable group; non-zero on cancellation or lookup failure. Usage</td><td>manage-samba-shares.sh</td></tr>
+<tr><td>_select_access_groups</td><td>Select one or more access groups appropriate to the active Samba mode</td><td>Return multiple AD groups in AD mode while retaining single-group selection for standalone local groups. Copies the selected identities into the caller-provided array explicitly so Bash dynamic scoping cannot redirect the result into a helper-local array with the same name. Arguments $1 OUTPUT_ARRAY_VAR Returns 0 with one or more resolvable groups; 1 on cancellation or lookup failure. Usage</td><td>manage-samba-shares.sh</td></tr>
 <tr><td>_select_assigned_group</td><td>Select a group currently assigned to the selected shares</td><td></td><td>manage-samba-shares.sh</td></tr>
-<tr><td>_select_group</td><td>Select or enter an AD/NSS group</td><td></td><td>manage-samba-shares.sh</td></tr>
+<tr><td>_select_directories</td><td>Select one or more directories from the current catalog</td><td></td><td>manage-samba-directories.sh</td></tr>
+<tr><td>_select_groups</td><td>Select or enter one or more AD/NSS groups</td><td>Allow one or more Active Directory groups to be selected in a single operation. A manual group entry remains available as a single additional identity.</td><td>manage-samba-shares.sh</td></tr>
+<tr><td>_select_identities</td><td>Select one or more users/groups appropriate to the active Samba mode</td><td></td><td>manage-samba-directories.sh</td></tr>
+<tr><td>_select_local_group</td><td>Select exactly one local access group</td><td></td><td>manage-samba-users.sh</td></tr>
+<tr><td>_select_local_groups</td><td>Select one or more local groups</td><td></td><td>manage-samba-shares.sh</td></tr>
+<tr><td>_select_local_groups</td><td>Select one or more local access groups</td><td></td><td>manage-samba-users.sh</td></tr>
+<tr><td>_select_local_samba_user</td><td>Select one enabled local Samba user</td><td></td><td>manage-samba-users.sh</td></tr>
+<tr><td>_select_parent_directory</td><td>Select the share root or one existing directory as parent</td><td></td><td>manage-samba-directories.sh</td></tr>
+<tr><td>_select_permissions</td><td>Select directory ACL permissions and return an rwx mask</td><td></td><td>manage-samba-directories.sh</td></tr>
 <tr><td>_select_shares</td><td>Select one or more managed shares</td><td></td><td>manage-samba-shares.sh</td></tr>
+<tr><td>_selected_directory_text</td><td>Format current directory selection for the menu subtitle</td><td></td><td>manage-samba-directories.sh</td></tr>
 <tr><td>_set_defaults</td><td>Set defaults</td><td>Set defaults.</td><td>manage-identity.sh</td></tr>
 <tr><td>_set_hostname</td><td>Set hostname</td><td>Set hostname.</td><td>manage-identity.sh</td></tr>
+<tr><td>_setup</td><td>Open the standalone SolidGroundUX setup tool</td><td>Start the self-sufficient setup tool for installation, update, rollback, reinstallation, and removal operations.</td><td>40-solidgroundux.sh</td></tr>
 <tr><td>_sgnd_build_command_args</td><td>Build arguments for a public SolidGroundUX command</td><td>Copy caller arguments into a target array and prepend --dryrun when the console is currently in dry-run mode.</td><td>management-console.sh</td></tr>
+<tr><td>_sgnd_console_confirm_exit</td><td>Confirm exit from the console index</td><td>Require explicit confirmation when Esc is pressed on the top-level console index.</td><td>management-console.sh</td></tr>
 <tr><td>_sgnd_console_cycle_console_loglevel</td><td>Cycle and persist console log level</td><td>Select the adjacent console log level, persist it, and redraw immediately.</td><td>management-console.sh</td></tr>
 <tr><td>_sgnd_console_cycle_file_loglevel</td><td>Cycle and persist file log level</td><td>Select the adjacent file log level, persist it, and redraw immediately.</td><td>management-console.sh</td></tr>
 <tr><td>_sgnd_console_cycle_loglevel_value</td><td>Resolve the adjacent framework log level</td><td></td><td>management-console.sh</td></tr>
@@ -158,6 +208,7 @@
 <tr><td>_sgnd_console_register_fallback_group</td><td>Register fallback console group</td><td>Register a fallback group for an item that references an unknown group key.</td><td>management-console.sh</td></tr>
 <tr><td>_sgnd_console_register_pages</td><td>Build the lightweight startup page index</td><td>Discover enabled module files and register page metadata without sourcing them.</td><td>management-console.sh</td></tr>
 <tr><td>_sgnd_console_reset_page_results</td><td>Clear tracked action results for the active management page</td><td>Reset the persisted last-run status for every non-builtin action belonging to the currently active management page.</td><td>management-console.sh</td></tr>
+<tr><td>_sgnd_console_rollback_module_registration</td><td>Roll back rows added by a failed module load</td><td>Restore the console registration model to its pre-load state when a module fails while sourcing or fails metadata validation after registering rows.</td><td>management-console.sh</td></tr>
 <tr><td>_sgnd_console_run</td><td>Run the console interaction loop</td><td>Run the interactive console event loop.</td><td>management-console.sh</td></tr>
 <tr><td>_sgnd_console_set_app_context</td><td>Initialize application-owned executable paths</td><td>Establish the management-application root and executable locations from the active console module source without changing SGND_FRAMEWORK_ROOT.</td><td>management-console.sh</td></tr>
 <tr><td>_sgnd_console_show_index</td><td>Render the lightweight module index page</td><td>Show all enabled console pages without loading their implementation modules.</td><td>management-console.sh</td></tr>
@@ -168,10 +219,27 @@
 <tr><td>_sgnd_console_toggle_dryrun</td><td>Toggle dry-run/commit mode</td><td>Switch FLAG_DRYRUN between dry-run and commit mode and redraw immediately.</td><td>management-console.sh</td></tr>
 <tr><td>_sgnd_run_public_command</td><td>Resolve and run a SolidGroundUX public command</td><td>Resolve a command from the console bin/sbin roots or PATH, propagate console dry-run state, and execute it with the supplied arguments.</td><td>management-console.sh</td></tr>
 <tr><td>_share_exists</td><td>Test whether a Samba share exists</td><td></td><td>manage-samba-shares.sh</td></tr>
+<tr><td>_share_name_for_path</td><td>Return the Samba share name exported from one exact directory path</td><td></td><td>manage-samba-directories.sh</td></tr>
 <tr><td>_share_path</td><td>Resolve the configured path for a Samba share</td><td></td><td>manage-samba-shares.sh</td></tr>
-<tr><td>_show_access</td><td>Display current share paths and named group ACLs</td><td></td><td>manage-samba-shares.sh</td></tr>
+<tr><td>_share_path_in_use</td><td>Test whether a backing directory is already used by a managed share</td><td></td><td>manage-samba-shares.sh</td></tr>
+<tr><td>_share_root_traversable</td><td>Verify the managed share container traversal contract</td><td>Ensure authenticated share users can traverse the SolidGroundUX share container without granting filesystem-level directory listing access to that container.</td><td>manage-samba-shares.sh</td></tr>
+<tr><td>_show_directories</td><td>Display all directories and share-root markers</td><td></td><td>manage-samba-directories.sh</td></tr>
+<tr><td>_show_directory_access</td><td>Display ownership and explicit ACL access for selected directories</td><td></td><td>manage-samba-directories.sh</td></tr>
+<tr><td>_show_identity_overview</td><td>Show Samba users and their local group memberships</td><td></td><td>manage-samba-users.sh</td></tr>
+<tr><td>_show_shares_overview</td><td>Display comprehensive managed-share access information</td><td></td><td>manage-samba-shares.sh</td></tr>
 <tr><td>_smb_ask_selection</td><td>Render a Samba selection menu and return the selected value(s)</td><td>Keep selection mechanics local while the manager owns the surrounding UI layout. The menu uses the standard section header and leaves a blank line between the final option and the Selection prompt.</td><td>manage-samba-file-server.sh</td></tr>
 <tr><td>_smb_ask_selection</td><td>Render a Samba selection menu and return the selected value(s)</td><td>Keep selection mechanics local while the manager owns the surrounding UI layout. The menu uses the standard section header and leaves a blank line between the final option and the Selection prompt.</td><td>manage-samba-shares.sh</td></tr>
+<tr><td>_smb_ask_selection</td><td>Render a numbered single/multi-select prompt</td><td></td><td>manage-samba-users.sh</td></tr>
+<tr><td>_smb_auth_mode</td><td>Return the configured Samba authentication mode</td><td>Report Samba&#x27;s active authentication mode independently of the Linux host&#x27;s realm membership so a domain-joined host can legitimately run Samba standalone.</td><td>manage-samba-file-server.sh</td></tr>
+<tr><td>_smb_configure_authentication</td><td>Configure Samba from the host identity state</td><td>Configure Samba for the authentication model already established on the host. Active Directory membership is owned by the AD-client module; Samba adapts to it.</td><td>manage-samba-file-server.sh</td></tr>
+<tr><td>_smb_enable_sssd_samba_password_sync</td><td>Keep Samba machine credentials synchronized by SSSD</td><td>Enable SSSD&#x27;s Samba machine-account password synchronization for the joined domain.</td><td>manage-samba-file-server.sh</td></tr>
+<tr><td>_smb_establish_ads_trust</td><td>Establish Samba machine trust for an existing AD member host</td><td>Populate or repair Samba&#x27;s own machine-account trust after the AD-client module has already joined the Linux host to Active Directory.</td><td>manage-samba-file-server.sh</td></tr>
+<tr><td>_smb_prepare_file_server</td><td>Run and track the complete Samba preparation sequence</td><td>Execute the same registered child actions used by menu items 2-6 so composite preparation leaves each child menu status synchronized with its actual result.</td><td>30-samba-file-server.sh</td></tr>
+<tr><td>_smb_runtime_auth_mode</td><td>Return the configured Samba authentication mode</td><td></td><td>manage-samba-shares.sh</td></tr>
+<tr><td>_smb_runtime_auth_mode</td><td>Return the configured Samba authentication mode</td><td></td><td>manage-samba-users.sh</td></tr>
+<tr><td>_smb_validate</td><td>Validate Samba file-server configuration and runtime state</td><td></td><td>manage-samba-file-server.sh</td></tr>
+<tr><td>_smb_validate_hostname_dns</td><td>Verify the server FQDN resolves to its primary IPv4 address</td><td>Confirm the DNS state required for clients to reach the Samba server by hostname.</td><td>manage-samba-file-server.sh</td></tr>
+<tr><td>_smb_write_auth_config</td><td>Normalize Samba global authentication settings</td><td>Keep share definitions intact while replacing only SolidGroundUX-owned global authentication and identity-mapping settings.</td><td>manage-samba-file-server.sh</td></tr>
 <tr><td>_sqlserver_apply_conf</td><td>Set one mssql-conf value</td><td></td><td>manage-sqlserver.sh</td></tr>
 <tr><td>_sqlserver_conf_get</td><td>Read one persisted SQL Server setting</td><td></td><td>manage-sqlserver.sh</td></tr>
 <tr><td>_sqlserver_configure_firewall</td><td>Allow the configured SQL Server port through UFW</td><td></td><td>manage-sqlserver.sh</td></tr>
@@ -181,7 +249,8 @@
 <tr><td>_sqlserver_engine_installed</td><td>Test whether SQL Server is installed</td><td></td><td>manage-sqlserver.sh</td></tr>
 <tr><td>_sqlserver_ensure_directory</td><td>Create and prepare a SQL Server storage directory</td><td></td><td>manage-sqlserver.sh</td></tr>
 <tr><td>_sqlserver_manage_service</td><td>Manage SQL Server service state and startup behavior</td><td></td><td>manage-sqlserver.sh</td></tr>
-<tr><td>_sqlserver_prepare</td><td>Run the tracked SQL Server preparation workflow</td><td></td><td>manage-sqlserver.sh</td></tr>
+<tr><td>_sqlserver_prepare</td><td>Run the tracked SQL Server preparation workflow</td><td>Run the complete SQL Server preparation sequence while returning a distinct workflow code for the child action that failed.</td><td>manage-sqlserver.sh</td></tr>
+<tr><td>_sqlserver_record_prepare_step</td><td>Persist one child-step result in the console tracker</td><td></td><td>60-sqlserver.sh</td></tr>
 <tr><td>_sqlserver_restart_if_active</td><td>Restart SQL Server when it is currently active</td><td></td><td>manage-sqlserver.sh</td></tr>
 <tr><td>_sqlserver_select_directory</td><td>Select or enter a SQL Server storage directory</td><td></td><td>manage-sqlserver.sh</td></tr>
 <tr><td>_sqlserver_status</td><td>Show SQL Server status and effective configuration</td><td></td><td>manage-sqlserver.sh</td></tr>
@@ -198,6 +267,7 @@
 <tr><td>_static_ip_conflict_check</td><td>Static ip conflict check</td><td>Static ip conflict check.</td><td>manage-identity.sh</td></tr>
 <tr><td>_storage_action_again</td><td>Offer to repeat the completed storage action</td><td></td><td>manage-storage.sh</td></tr>
 <tr><td>_storage_get_configured_mountpoints</td><td>Read persisted managed mount points</td><td></td><td>manage-storage.sh</td></tr>
+<tr><td>_storage_list_child_directories</td><td>List direct child directories of one storage root</td><td>Return only the first-level directories below a mounted SolidGroundUX storage root.</td><td>manage-storage.sh</td></tr>
 <tr><td>_storage_list_labeled_volumes</td><td>List every filesystem labelled SGND_STORAGE</td><td></td><td>manage-storage.sh</td></tr>
 <tr><td>_storage_list_managed_fstab_entries</td><td>List SolidGroundUX-managed storage entries</td><td>Return fstab entries that are explicitly owned by SolidGroundUX storage.</td><td>manage-storage.sh</td></tr>
 <tr><td>_storage_list_mountpoints</td><td>List all SolidGroundUX-managed storage mount points</td><td></td><td>manage-storage.sh</td></tr>
@@ -207,17 +277,25 @@
 <tr><td>_storage_partition_path</td><td></td><td>Return the first partition belonging to a disk after partitioning.</td><td>manage-storage.sh</td></tr>
 <tr><td>_storage_save_configuration</td><td>Persist the complete managed mount-point set</td><td></td><td>manage-storage.sh</td></tr>
 <tr><td>_storage_select_access_targets</td><td>Select one, several, or all managed storage roots</td><td></td><td>manage-storage.sh</td></tr>
+<tr><td>_storage_select_child_directory</td><td>Select one direct child directory</td><td>Present the first-level directories below a managed storage root and return the selected name.</td><td>manage-storage.sh</td></tr>
 <tr><td>_storage_select_mountpoint</td><td>Select one managed storage volume</td><td></td><td>manage-storage.sh</td></tr>
 <tr><td>_storage_validate_account</td><td></td><td>Validate that a local or directory-backed user account can be resolved.</td><td>manage-storage.sh</td></tr>
 <tr><td>_storage_validate_device</td><td></td><td>Validate that a selected path is an unused whole block device.</td><td>manage-storage.sh</td></tr>
+<tr><td>_storage_validate_directory_name</td><td>Validate one direct child directory name</td><td>Accept a simple directory name that can safely be joined below a managed storage root.</td><td>manage-storage.sh</td></tr>
 <tr><td>_storage_validate_group</td><td></td><td>Validate that a local or directory-backed group can be resolved.</td><td>manage-storage.sh</td></tr>
 <tr><td>_storage_validate_mode</td><td></td><td>Validate a three- or four-digit octal filesystem mode.</td><td>manage-storage.sh</td></tr>
 <tr><td>_storage_validate_mountpoint</td><td></td><td>Validate an absolute mount-point path.</td><td>manage-storage.sh</td></tr>
 <tr><td>_sync_share_samba_access</td><td>Synchronize Samba access lists from POSIX ACLs</td><td></td><td>manage-samba-shares.sh</td></tr>
-<tr><td>_validate_relative_path</td><td>Validate a relative path beneath a share root</td><td></td><td>manage-samba-shares.sh</td></tr>
-<tr><td>_validate_selected</td><td>Validate selected share paths, ACLs, and Samba configuration</td><td></td><td>manage-samba-shares.sh</td></tr>
+<tr><td>_user_group_memberships</td><td>Return local group memberships for one user</td><td></td><td>manage-samba-users.sh</td></tr>
+<tr><td>_validate_identity_name</td><td>Validate a local Samba user/group name</td><td></td><td>manage-samba-users.sh</td></tr>
+<tr><td>_validate_relative_path</td><td>Validate a safe relative directory path</td><td></td><td>manage-samba-directories.sh</td></tr>
+<tr><td>_validate_relative_path</td><td>Validate a relative path beneath the share root</td><td></td><td>manage-samba-shares.sh</td></tr>
+<tr><td>_validate_selected</td><td>Validate selected share paths, traversal, ACLs, and Samba configuration</td><td></td><td>manage-samba-shares.sh</td></tr>
+<tr><td>_validate_selected_directories</td><td>Validate selected directory paths and ACL readability</td><td></td><td>manage-samba-directories.sh</td></tr>
 <tr><td>_validate_share_name</td><td>Validate a managed Samba share name</td><td></td><td>manage-samba-shares.sh</td></tr>
+<tr><td>_web_record_prepare_step</td><td>Persist one child-step result in the console tracker</td><td></td><td>50-web-server.sh</td></tr>
 <tr><td>_web_server_available_sites</td><td>List available Nginx sites</td><td></td><td>manage-web-server.sh</td></tr>
+<tr><td>_web_server_change_document_root</td><td>Change the document root for an Nginx site</td><td></td><td>manage-web-server.sh</td></tr>
 <tr><td>_web_server_configure_documentation_site</td><td>Configure the documentation web site</td><td>Create or select the Nginx site used to publish SolidGroundUX documentation. Usage _web_server_configure_documentation_site &quot;&lt;existing_address&gt;&quot; &quot;&lt;existing_address&gt;&quot;</td><td>manage-web-server.sh</td></tr>
 <tr><td>_web_server_configure_firewall</td><td>Allow HTTP and HTTPS through UFW</td><td></td><td>manage-web-server.sh</td></tr>
 <tr><td>_web_server_configure_root</td><td>Select or create the web content root</td><td></td><td>manage-web-server.sh</td></tr>
@@ -238,7 +316,7 @@
 <tr><td>_web_server_manage_sites</td><td>Open the site-management workflow</td><td></td><td>manage-web-server.sh</td></tr>
 <tr><td>_web_server_offer_dns_record</td><td>Optionally register an internal AD DNS A record</td><td></td><td>manage-web-server.sh</td></tr>
 <tr><td>_web_server_package_installed</td><td>Test whether Nginx is installed</td><td></td><td>manage-web-server.sh</td></tr>
-<tr><td>_web_server_prepare</td><td>Run the tracked web-server preparation workflow</td><td></td><td>manage-web-server.sh</td></tr>
+<tr><td>_web_server_prepare</td><td>Run the tracked web-server preparation workflow</td><td>Run the complete Web Server preparation sequence in one management process.</td><td>manage-web-server.sh</td></tr>
 <tr><td>_web_server_publish_documentation</td><td>Publish SolidGroundUX documentation</td><td>Publish documentation from the installed tree, a local/remote directory, or a GitHub repository into the configured documentation site. Usage _web_server_publish_documentation</td><td>publish-web-content.sh</td></tr>
 <tr><td>_web_server_publish_key</td><td>Return the dedicated SolidGroundUX publishing key path</td><td></td><td>publish-web-content.sh</td></tr>
 <tr><td>_web_server_publish_site</td><td>Publish local or remote content into a site document root</td><td></td><td>publish-web-content.sh</td></tr>
@@ -261,16 +339,25 @@
 <tr><td>_web_server_storage_root</td><td>Resolve the configured SolidGroundUX storage root</td><td></td><td>publish-web-content.sh</td></tr>
 <tr><td>_web_server_validate</td><td>Validate the web-server role</td><td></td><td>manage-web-server.sh</td></tr>
 <tr><td>_web_server_validate_site_name</td><td>Validate an Nginx site name</td><td></td><td>manage-web-server.sh</td></tr>
+<tr><td>docker_prepare</td><td>Run and track the complete Docker host preparation sequence</td><td>Execute the same registered child actions used by the individual Docker host menu items so compound preparation keeps every child status synchronized.</td><td>70-docker-server.sh</td></tr>
 <tr><td>framework_configure_file</td><td>Configure validated framework settings externally</td><td></td><td>40-solidgroundux.sh</td></tr>
 <tr><td>main</td><td>Run the executable main sequence</td><td>Run the standard executable startup sequence and then execute script-specific logic.</td><td>manage-framework-logging.sh</td></tr>
 <tr><td>main</td><td>Run the executable main sequence</td><td>Run the standard executable startup sequence and then execute script-specific logic.</td><td>manage-framework-state.sh</td></tr>
 <tr><td>main</td><td>Run the executable main sequence</td><td>Run the standard executable startup sequence and then execute script-specific logic.</td><td>manage-identity.sh</td></tr>
+<tr><td>main</td><td>Run interactive Samba directory management</td><td></td><td>manage-samba-directories.sh</td></tr>
 <tr><td>main</td><td>Run interactive Samba share management</td><td></td><td>manage-samba-shares.sh</td></tr>
+<tr><td>main</td><td>Run interactive standalone Samba identity management</td><td></td><td>manage-samba-users.sh</td></tr>
 <tr><td>main</td><td>Run the SolidGround management console</td><td>Initialize the framework, discover console pages, and run the interactive host.</td><td>management-console.sh</td></tr>
+<tr><td>sgnd_ad_current_netbios_domain</td><td>Return the joined AD domain short name</td><td>Resolve the NetBIOS/short domain name for the currently joined Active Directory realm.</td><td>active-directory-management.sh</td></tr>
+<tr><td>sgnd_ad_normalize_sssd_config</td><td>Normalize and validate SolidGroundUX-managed SSSD configuration</td><td>Remove obsolete SSSD settings created by earlier SolidGroundUX AD-client releases and verify the resulting configuration before activation.</td><td>active-directory-management.sh</td></tr>
 <tr><td>sgnd_console_action_status</td><td>Read persisted status for a menu action</td><td></td><td>management-console.sh</td></tr>
 <tr><td>sgnd_console_record_action_result</td><td>Persist and display an action result</td><td></td><td>management-console.sh</td></tr>
 <tr><td>sgnd_console_run_tracked</td><td>Execute one registered action and track its result</td><td></td><td>management-console.sh</td></tr>
 <tr><td>sgnd_console_set_dns_server</td><td>Update DNS through the canonical identity tool</td><td>Update only the configured DNS server through the canonical identity tool.</td><td>active-directory-management.sh</td></tr>
+<tr><td>sqlserver_prepare</td><td>Run SQL Server preparation and synchronize child menu statuses</td><td>Keep the compound SQL Server preparation workflow inside the management executable while mapping its workflow return code onto the registered child actions in the Management Console.</td><td>60-sqlserver.sh</td></tr>
+<tr><td>storage_manage_directories</td><td>Manage directories below a SolidGroundUX storage root</td><td>Open the Storage-owned directory manager for simple filesystem directory lifecycle operations beneath a configured SolidGroundUX storage mount point.</td><td>15-storage.sh</td></tr>
+<tr><td>storage_prepare</td><td>Provision and validate persistent SolidGroundUX storage</td><td>Execute the registered happy-path storage actions as one compound workflow while keeping the individual console action statuses synchronized.</td><td>15-storage.sh</td></tr>
+<tr><td>web_prepare</td><td>Run Web Server preparation and synchronize child menu statuses</td><td>Keep the compound preparation workflow inside the management executable while mapping its workflow return code onto the registered child actions.</td><td>50-web-server.sh</td></tr>
 </tbody>
 </table>
 </section>

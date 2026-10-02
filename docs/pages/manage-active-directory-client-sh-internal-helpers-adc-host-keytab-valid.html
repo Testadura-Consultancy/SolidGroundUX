@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Validate the local Active Directory host keytab</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></div>
+<header class="doc-page-header">
+  <div class="doc-title">Validate the local Active Directory host keytab</div>
+  <div class="doc-breadcrumb">SolidGroundUX Codex / manage-active-directory-client.sh / Internal helpers / _adc_host_keytab_valid</div>
+</header>
+<div class="ct-functionbody sh-highlight">Purpose</div>
+<div class="ct-functionbody">  Confirm that /etc/krb5.keytab exists, contains usable principals, and authenticates</div>
+<div class="ct-functionbody">  the machine account against the joined Active Directory realm.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Returns</div>
+<div class="ct-functionbody">  0 when the host keytab is readable by root and adcli validates the machine trust;</div>
+<div class="ct-functionbody">  1 otherwise.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Usage</div>
+<div class="ct-functionbody">  _adc_host_keytab_valid</div>
+</main>
+</body>
+</html>

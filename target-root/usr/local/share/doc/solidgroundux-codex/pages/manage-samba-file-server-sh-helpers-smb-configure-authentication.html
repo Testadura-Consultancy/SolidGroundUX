@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Configure Samba from the host identity state</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></div>
+<header class="doc-page-header">
+  <div class="doc-title">Configure Samba from the host identity state</div>
+  <div class="doc-breadcrumb">SolidGroundUX Codex / manage-samba-file-server.sh / Helpers / _smb_configure_authentication</div>
+</header>
+<div class="ct-functionbody sh-highlight">Purpose</div>
+<div class="ct-functionbody">  Configure Samba for the authentication model already established on the host.</div>
+<div class="ct-functionbody">  Active Directory membership is owned by the AD-client module; Samba adapts to it.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Behavior</div>
+<div class="ct-functionbody">  - Detects existing realm/SSSD membership without asking the administrator to choose a mode.</div>
+<div class="ct-functionbody">  - Configures standalone USER security when the host is not joined to Active Directory.</div>
+<div class="ct-functionbody">  - Configures ADS security, Winbind, and SSSD-backed ID mapping when the host is an AD member.</div>
+<div class="ct-functionbody">  - Never joins or leaves the Linux host realm; AD-client provisioning owns that lifecycle.</div>
+<div class="ct-functionbody">  - Normalizes SSSD and enables synchronization of future Samba machine-account password changes.</div>
+<div class="ct-functionbody">  - Starts Winbind and validates both the Samba ADS join and Winbind workstation secret.</div>
+<div class="ct-functionbody">  - When Samba trust is missing or stale, establishes Samba&#x27;s own ADS machine trust with</div>
+<div class="ct-functionbody">    net ads join while leaving Linux realm membership under AD-client ownership.</div>
+<div class="ct-functionbody">  - Prompts for an authorized AD account only when Samba trust must be established.</div>
+<div class="ct-functionbody">  - Restarts SSSD, Winbind, and smbd after Samba trust establishment.</div>
+<div class="ct-functionbody">  - Validates the Samba trust, Winbind trust secret, own domain, NETLOGON, and hostname DNS.</div>
+<div class="ct-functionbody">  - Leaves host DNS registration under AD-client ownership and validates the resulting</div>
+<div class="ct-functionbody">    hostname A record separately after Samba trust is established.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Returns</div>
+<div class="ct-functionbody">  0 when Samba matches the detected host identity state and validates successfully.</div>
+<div class="ct-functionbody">  Non-zero when configuration, trust establishment, or validation fails.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Usage</div>
+<div class="ct-functionbody">  _smb_configure_authentication</div>
+</main>
+</body>
+</html>

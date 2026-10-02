@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Select one direct child directory</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></div>
+<header class="doc-page-header">
+  <div class="doc-title">Select one direct child directory</div>
+  <div class="doc-breadcrumb">SolidGroundUX Codex / manage-storage.sh / Internal helpers / _storage_select_child_directory</div>
+</header>
+<div class="ct-functionbody sh-highlight">Purpose</div>
+<div class="ct-functionbody">  Present the first-level directories below a managed storage root and return the selected name.</div>
+<div class="ct-functionbody"></div>
+<p class="ct-functionbody">Arguments:</p>
+<div class="ct-functionbody">  $1 - Output variable name.</div>
+<div class="ct-functionbody">  $2 - Mounted managed storage root.</div>
+<div class="ct-functionbody">  $3 - Optional selector label.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Returns</div>
+<div class="ct-functionbody">  0 when a directory is selected; non-zero when none exist or selection is cancelled.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Usage</div>
+<div class="ct-functionbody">  _storage_select_child_directory selected_name &quot;/srv/storage&quot; &quot;Directory&quot;</div>
+</main>
+</body>
+</html>

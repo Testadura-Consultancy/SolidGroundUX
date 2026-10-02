@@ -17,7 +17,9 @@
 <div class="ct-functionbody">  Read menu input directly from /dev/tty and normalize navigation/control keys.</div>
 <div class="ct-functionbody"></div>
 <div class="ct-functionbody sh-highlight">Behavior</div>
-<div class="ct-functionbody">  - Q, q, and Ctrl+Q return EXIT.</div>
+<div class="ct-functionbody">  - Q/q return EXIT only when SGND_MENU_Q_EXIT is enabled (default).</div>
+<div class="ct-functionbody">  - When SGND_MENU_Q_EXIT is disabled, Q/q are returned as literal choices and</div>
+<div class="ct-functionbody">    Ctrl+Q is ignored.</div>
 <div class="ct-functionbody">  - R/r return RESET.</div>
 <div class="ct-functionbody">  - Ctrl+R returns REDRAW.</div>
 <div class="ct-functionbody">  - Esc returns ESC unless followed by a recognized arrow sequence.</div>

@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Select one or more access groups appropriate to the active Samba mode</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></div>
+<header class="doc-page-header">
+  <div class="doc-title">Select one or more access groups appropriate to the active Samba mode</div>
+  <div class="doc-breadcrumb">SolidGroundUX Codex / manage-samba-shares.sh / Authentication-aware access-group selection / _select_access_groups</div>
+</header>
+<div class="ct-functionbody sh-highlight">Purpose</div>
+<div class="ct-functionbody">  Return multiple AD groups in AD mode while retaining single-group selection for</div>
+<div class="ct-functionbody">  standalone local groups. Copies the selected identities into the caller-provided</div>
+<div class="ct-functionbody">  array explicitly so Bash dynamic scoping cannot redirect the result into a helper-local</div>
+<div class="ct-functionbody">  array with the same name.</div>
+<div class="ct-functionbody sh-highlight">Arguments</div>
+<div class="ct-functionbody">  $1 OUTPUT_ARRAY_VAR</div>
+<div class="ct-functionbody sh-highlight">Returns</div>
+<div class="ct-functionbody">  0 with one or more resolvable groups; 1 on cancellation or lookup failure.</div>
+<div class="ct-functionbody sh-highlight">Usage</div>
+</main>
+</body>
+</html>

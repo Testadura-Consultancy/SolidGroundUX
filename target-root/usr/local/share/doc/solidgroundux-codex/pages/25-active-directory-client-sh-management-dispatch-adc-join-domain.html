@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Run the composite join and synchronize child menu statuses</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></div>
+<header class="doc-page-header">
+  <div class="doc-title">Run the composite join and synchronize child menu statuses</div>
+  <div class="doc-breadcrumb">SolidGroundUX Codex / 25-active-directory-client.sh / Management dispatch / _adc_join_domain</div>
+</header>
+<div class="ct-functionbody sh-highlight">Purpose</div>
+<div class="ct-functionbody">  Keep the stateful join workflow inside the management executable while mapping its</div>
+<div class="ct-functionbody">  distinct workflow return codes back onto the registered console child actions.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Behavior</div>
+<div class="ct-functionbody">  - Preserves the management executable&#x27;s single-process join context.</div>
+<div class="ct-functionbody">  - Marks every completed child action successful.</div>
+<div class="ct-functionbody">  - Marks the failing child action failed.</div>
+<div class="ct-functionbody">  - Leaves steps after a failure untouched.</div>
+<div class="ct-functionbody">  - Treats administrator cancellation after preflight as a successful parent action.</div>
+<div class="ct-functionbody">  - Treats an already joined machine as a warning, not as a failed or successful join.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Returns</div>
+<div class="ct-functionbody">  0 when the join succeeds or is cancelled after preflight.</div>
+<div class="ct-functionbody">  2 when the machine is already joined and no join is required.</div>
+<div class="ct-functionbody">  Otherwise the workflow failure code.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Usage</div>
+<div class="ct-functionbody">  _adc_join_domain</div>
+</main>
+</body>
+</html>

@@ -13,8 +13,23 @@
   <div class="doc-title">Run the tracked SQL Server preparation workflow</div>
   <div class="doc-breadcrumb">SolidGroundUX Codex / manage-sqlserver.sh / Role preparation / _sqlserver_prepare</div>
 </header>
+<div class="ct-functionbody sh-highlight">Purpose</div>
+<div class="ct-functionbody">  Run the complete SQL Server preparation sequence while returning a distinct</div>
+<div class="ct-functionbody">  workflow code for the child action that failed.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Behavior</div>
+<div class="ct-functionbody">  - Configures the Microsoft repositories.</div>
+<div class="ct-functionbody">  - Installs the SQL Server engine.</div>
+<div class="ct-functionbody">  - Runs the canonical SQL Server configuration workflow.</div>
+<div class="ct-functionbody">  - Installs the SQL Server command-line tools.</div>
+<div class="ct-functionbody"></div>
 <div class="ct-functionbody sh-highlight">Returns</div>
-<div class="ct-functionbody">  0 on success; non-zero when the operation cannot be completed.</div>
+<div class="ct-functionbody">  0 when all preparation steps succeed.</div>
+<div class="ct-functionbody">  51 when repository configuration fails.</div>
+<div class="ct-functionbody">  52 when engine installation fails.</div>
+<div class="ct-functionbody">  53 when SQL Server configuration fails.</div>
+<div class="ct-functionbody">  54 when tools installation fails.</div>
+<div class="ct-functionbody"></div>
 <div class="ct-functionbody sh-highlight">Usage</div>
 <div class="ct-functionbody">  _sqlserver_prepare</div>
 </main>

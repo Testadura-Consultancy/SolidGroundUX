@@ -17,8 +17,9 @@
 <div class="ct-functionbody">  Initialize module metadata globals from a sourced library or module comment header.</div>
 <div class="ct-functionbody"></div>
 <div class="ct-functionbody sh-highlight">Behavior</div>
-<div class="ct-functionbody">  - Provides a public SolidGroundUX helper or command entry point.</div>
-<div class="ct-functionbody">  - Reads or updates SolidGroundUX runtime, metadata, configuration, or UI globals as needed.</div>
+<div class="ct-functionbody">  - Parses the canonical comment header once and exposes module-scoped metadata globals.</div>
+<div class="ct-functionbody">  - Uses Metadata/Shortname as the variable prefix when present.</div>
+<div class="ct-functionbody">  - Falls back to the normalized filename when Shortname is omitted.</div>
 <div class="ct-functionbody"></div>
 <div class="ct-functionbody sh-highlight">Arguments</div>
 <div class="ct-functionbody">  $1  FILE - File path.</div>

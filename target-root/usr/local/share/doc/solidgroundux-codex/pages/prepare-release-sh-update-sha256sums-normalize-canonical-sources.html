@@ -19,7 +19,10 @@
 <div class="ct-functionbody"></div>
 <div class="ct-functionbody sh-highlight">Behavior</div>
 <div class="ct-functionbody">  - Honors FLAG_NORMALIZE_CANON; disabled runs are skipped.</div>
-<div class="ct-functionbody">  - Uses normalize-canon.sh from the active framework libexec directory.</div>
+<div class="ct-functionbody">  - Prefers normalize-canon.sh from the active development framework root.</div>
+<div class="ct-functionbody">  - Falls back to the installed production normalizer when the development copy</div>
+<div class="ct-functionbody">    is missing or not executable.</div>
+<div class="ct-functionbody">  - Uses the installed production normalizer directly when running from root (/).</div>
 <div class="ct-functionbody">  - Passes the same recursive shell-file mask represented by SOURCE_DIR.</div>
 <div class="ct-functionbody">  - Runs the normalizer in --auto mode so prepare-release remains non-interactive.</div>
 <div class="ct-functionbody">  - Propagates dry-run mode when prepare-release is running dry.</div>

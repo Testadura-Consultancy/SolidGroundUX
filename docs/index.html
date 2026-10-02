@@ -11,11 +11,12 @@
 <nav class="doc-nav">
 <div class="doc-nav-branding"><img src="assets/branding/doc-index-logo.png" alt="Documentation publisher"></div>
   <div class="doc-nav-title">Index</div>
-<a class="doc-nav-section type-product doc-nav-special" style="padding-left:0px" href="pages/title.html" target="docframe">SolidGroundUX</a>
-<a class="doc-nav-section type-preface doc-nav-special" style="padding-left:10px" href="pages/sux-preface-sh.html" target="docframe">Framework Introduction</a>
+<a class="doc-nav-section type-product doc-nav-special" style="padding-left:0px" href="pages/sux-preface-sh.html" target="docframe">SolidGroundUX</a>
 <details class="doc-nav-node level-1 type-group doc-nav-special">
-<summary style="padding-left:10px">Bootstrap</summary>
-<a class="doc-nav-section type-preface doc-nav-special" style="padding-left:20px" href="pages/sux-bootstrap-preface-sh.html" target="docframe">Bootstrap Sequence</a>
+<summary style="padding-left:10px"><a class="doc-nav-module" href="pages/sux-bootstrap-preface-sh.html" target="docframe">Bootstrap</a></summary>
+<details class="doc-nav-node level-2 type-module">
+<summary style="padding-left:20px"><a class="doc-nav-module" href="pages/normalize-canon-sh.html" target="docframe">normalize-canon.sh</a></summary>
+</details>
 <details class="doc-nav-node level-2 type-module">
 <summary style="padding-left:20px"><a class="doc-nav-module" href="pages/sgnd-bootstrap-env-sh.html" target="docframe">sgnd-bootstrap-env.sh</a></summary>
 <a class="doc-nav-section type-section" style="padding-left:30px" href="pages/sgnd-bootstrap-env-sh-runtime-directory-metadata.html" target="docframe">Runtime directory metadata</a>
@@ -83,8 +84,7 @@
 </details>
 </details>
 <details class="doc-nav-node level-1 type-group doc-nav-special">
-<summary style="padding-left:10px">Common Core</summary>
-<a class="doc-nav-section type-preface doc-nav-special" style="padding-left:20px" href="pages/sux-common-core-preface-sh.html" target="docframe">Framework Services Overview</a>
+<summary style="padding-left:10px"><a class="doc-nav-module" href="pages/sux-common-core-preface-sh.html" target="docframe">Common Core</a></summary>
 <details class="doc-nav-node level-2 type-module">
 <summary style="padding-left:20px"><a class="doc-nav-module" href="pages/sgnd-args-sh.html" target="docframe">sgnd-args.sh</a></summary>
 <a class="doc-nav-section type-section" style="padding-left:30px" href="pages/sgnd-args-sh-helper-functions.html" target="docframe">Helper functions</a>
@@ -125,6 +125,29 @@
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/sgnd-cfg-sh-public-api-cfg-sgnd-cfg-create-missing-domain-files.html" target="docframe">sgnd_cfg_create_missing_domain_files</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/sgnd-cfg-sh-public-api-cfg-sgnd-cfg-domain-apply.html" target="docframe">sgnd_cfg_domain_apply</a>
 <a class="doc-nav-section type-section" style="padding-left:30px" href="pages/sgnd-cfg-sh-public-api-state.html" target="docframe">Public API (STATE)</a>
+</details>
+<details class="doc-nav-node level-2 type-module">
+<summary style="padding-left:20px"><a class="doc-nav-module" href="pages/sgnd-comment-header-parser-sh.html" target="docframe">sgnd-comment-header-parser.sh</a></summary>
+<a class="doc-nav-section type-section" style="padding-left:30px" href="pages/sgnd-comment-header-parser-sh-public-api.html" target="docframe">Public API</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/sgnd-comment-header-parser-sh-public-api-sgnd-header-read.html" target="docframe">sgnd_header_read</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/sgnd-comment-header-parser-sh-public-api-sgnd-header-load-section-to-dt.html" target="docframe">sgnd_header_load_section_to_dt</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/sgnd-comment-header-parser-sh-public-api-sgnd-header-is-section-header.html" target="docframe">sgnd_header_is_section_header</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/sgnd-comment-header-parser-sh-public-api-sgnd-header-buffer-load.html" target="docframe">sgnd_header_buffer_load</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/sgnd-comment-header-parser-sh-public-api-sgnd-header-buffer-get-section.html" target="docframe">sgnd_header_buffer_get_section</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/sgnd-comment-header-parser-sh-public-api-sgnd-header-calc-checksum.html" target="docframe">sgnd_header_calc_checksum</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/sgnd-comment-header-parser-sh-public-api-sgnd-header-bump-version.html" target="docframe">sgnd_header_bump_version</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/sgnd-comment-header-parser-sh-public-api-sgnd-header-get-section.html" target="docframe">sgnd_header_get_section</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/sgnd-comment-header-parser-sh-public-api-sgnd-header-get-section-from-text.html" target="docframe">sgnd_header_get_section_from_text</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/sgnd-comment-header-parser-sh-public-api-sgnd-header-get-banner-parts-from-text.html" target="docframe">sgnd_header_get_banner_parts_from_text</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/sgnd-comment-header-parser-sh-public-api-sgnd-header-parse-banner-line.html" target="docframe">sgnd_header_parse_banner_line</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/sgnd-comment-header-parser-sh-public-api-sgnd-header-get-field.html" target="docframe">sgnd_header_get_field</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/sgnd-comment-header-parser-sh-public-api-sgnd-header-get-field-value.html" target="docframe">sgnd_header_get_field_value</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/sgnd-comment-header-parser-sh-public-api-sgnd-header-get-banner-parts.html" target="docframe">sgnd_header_get_banner_parts</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/sgnd-comment-header-parser-sh-public-api-sgnd-section-get-field-value.html" target="docframe">sgnd_section_get_field_value</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/sgnd-comment-header-parser-sh-public-api-sgnd-header-add-field.html" target="docframe">sgnd_header_add_field</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/sgnd-comment-header-parser-sh-public-api-sgnd-header-upsert-field.html" target="docframe">sgnd_header_upsert_field</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/sgnd-comment-header-parser-sh-public-api-sgnd-header-set-field.html" target="docframe">sgnd_header_set_field</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/sgnd-comment-header-parser-sh-public-api-sgnd-framework-set-version.html" target="docframe">sgnd_framework_set_version</a>
 </details>
 <details class="doc-nav-node level-2 type-module">
 <summary style="padding-left:20px"><a class="doc-nav-module" href="pages/sgnd-core-sh.html" target="docframe">sgnd-core.sh</a></summary>
@@ -369,8 +392,26 @@
 </details>
 </details>
 <details class="doc-nav-node level-1 type-group doc-nav-special">
-<summary style="padding-left:10px">Deployment</summary>
-<a class="doc-nav-section type-preface doc-nav-special" style="padding-left:20px" href="pages/sux-deployment-preface-sh.html" target="docframe">Deployment and Release Management</a>
+<summary style="padding-left:10px">Console Actions</summary>
+<details class="doc-nav-node level-2 type-module">
+<summary style="padding-left:20px"><a class="doc-nav-module" href="pages/sgnd-smoketest-sh.html" target="docframe">sgnd-smoketest.sh</a></summary>
+<a class="doc-nav-section type-section" style="padding-left:30px" href="pages/sgnd-smoketest-sh-smoke-test-input-declarations.html" target="docframe">Smoke-test input declarations</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/sgnd-smoketest-sh-smoke-test-input-declarations-input-test.html" target="docframe">input_test</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/sgnd-smoketest-sh-smoke-test-input-declarations-ask-selection-test.html" target="docframe">ask_selection_test</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/sgnd-smoketest-sh-smoke-test-input-declarations-ask-test.html" target="docframe">ask_test</a>
+<a class="doc-nav-section type-section" style="padding-left:40px" href="pages/sgnd-smoketest-sh-smoke-test-input-declarations-sample-demo-renderers.html" target="docframe">Sample/demo renderers</a>
+<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/sgnd-smoketest-sh-smoke-test-input-declarations-sample-demo-renderers-say-test.html" target="docframe">say_test</a>
+<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/sgnd-smoketest-sh-smoke-test-input-declarations-sample-demo-renderers-loglevel-test.html" target="docframe">loglevel_test</a>
+<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/sgnd-smoketest-sh-smoke-test-input-declarations-sample-demo-renderers-file-loglevel-test.html" target="docframe">file_loglevel_test</a>
+<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/sgnd-smoketest-sh-smoke-test-input-declarations-sample-demo-renderers-view-log.html" target="docframe">view_log</a>
+<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/sgnd-smoketest-sh-smoke-test-input-declarations-sample-demo-renderers-motd-test.html" target="docframe">motd_test</a>
+<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/sgnd-smoketest-sh-smoke-test-input-declarations-sample-demo-renderers-sayprogress-test.html" target="docframe">sayprogress_test</a>
+<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/sgnd-smoketest-sh-smoke-test-input-declarations-sample-demo-renderers-show-colorchart.html" target="docframe">show_colorchart</a>
+<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/sgnd-smoketest-sh-smoke-test-input-declarations-sample-demo-renderers-show-theme.html" target="docframe">show_theme</a>
+</details>
+</details>
+<details class="doc-nav-node level-1 type-group doc-nav-special">
+<summary style="padding-left:10px"><a class="doc-nav-module" href="pages/sux-deployment-preface-sh.html" target="docframe">Deployment</a></summary>
 <details class="doc-nav-node level-2 type-module">
 <summary style="padding-left:20px"><a class="doc-nav-module" href="pages/release-manager-sh.html" target="docframe">release-manager.sh</a></summary>
 <a class="doc-nav-section type-section" style="padding-left:50px" href="pages/release-manager-sh-standalone-ui.html" target="docframe">Standalone UI</a>
@@ -429,6 +470,7 @@
 <a class="doc-nav-item type-function" style="padding-left:60px" href="pages/release-manager-sh-bootstrap-housekeeping-detect-bootstrap-release.html" target="docframe">_detect_bootstrap_release</a>
 <a class="doc-nav-item type-function" style="padding-left:60px" href="pages/release-manager-sh-bootstrap-housekeeping-admit-bootstrap-release.html" target="docframe">_admit_bootstrap_release</a>
 <a class="doc-nav-item type-function" style="padding-left:60px" href="pages/release-manager-sh-bootstrap-housekeeping-cleanup-bootstrap-files.html" target="docframe">_cleanup_bootstrap_files</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/release-manager-sh-bootstrap-housekeeping-release-choose-post-install-action.html" target="docframe">_release_choose_post_install_action</a>
 <a class="doc-nav-item type-function" style="padding-left:60px" href="pages/release-manager-sh-bootstrap-housekeeping-bootstrap-first-install.html" target="docframe">_bootstrap_first_install</a>
 <a class="doc-nav-section type-section" style="padding-left:50px" href="pages/release-manager-sh-release-identity-and-discovery.html" target="docframe">Release identity and discovery</a>
 <a class="doc-nav-item type-function" style="padding-left:60px" href="pages/release-manager-sh-release-identity-and-discovery-release-product-artifact-name.html" target="docframe">_release_product_artifact_name</a>
@@ -503,10 +545,175 @@
 <a class="doc-nav-section type-section" style="padding-left:50px" href="pages/release-manager-sh-main.html" target="docframe">Main</a>
 <a class="doc-nav-item type-function" style="padding-left:60px" href="pages/release-manager-sh-main-main.html" target="docframe">main</a>
 </details>
+<details class="doc-nav-node level-2 type-module">
+<summary style="padding-left:20px"><a class="doc-nav-module" href="pages/sgnd-setup-sh.html" target="docframe">sgnd-setup.sh</a></summary>
+<a class="doc-nav-section type-section" style="padding-left:50px" href="pages/sgnd-setup-sh-standalone-ui.html" target="docframe">Standalone UI</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-standalone-ui-release-framework-root-for-target.html" target="docframe">_release_framework_root_for_target</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-standalone-ui-release-try-framework-ui.html" target="docframe">_release_try_framework_ui</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-standalone-ui-release-print.html" target="docframe">_release_print</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-standalone-ui-release-section-header.html" target="docframe">_release_section_header</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-standalone-ui-release-ask.html" target="docframe">_release_ask</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-standalone-ui-release-ask-yesno.html" target="docframe">_release_ask_yesno</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-standalone-ui-release-terminal-width.html" target="docframe">_release_terminal_width</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-standalone-ui-release-clear.html" target="docframe">_release_clear</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-standalone-ui-release-line.html" target="docframe">_release_line</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-standalone-ui-release-metadata-field.html" target="docframe">_release_metadata_field</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-standalone-ui-release-title.html" target="docframe">_release_title</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-standalone-ui-release-labeled-value.html" target="docframe">_release_labeled_value</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-standalone-ui-release-info.html" target="docframe">_release_info</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-standalone-ui-release-ok.html" target="docframe">_release_ok</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-standalone-ui-release-warn.html" target="docframe">_release_warn</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-standalone-ui-release-fail.html" target="docframe">_release_fail</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-standalone-ui-release-run.html" target="docframe">_release_run</a>
+<a class="doc-nav-section type-section" style="padding-left:50px" href="pages/sgnd-setup-sh-arguments-and-paths.html" target="docframe">Arguments and paths</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-arguments-and-paths-ensure-root.html" target="docframe">_ensure_root</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-arguments-and-paths-print-usage.html" target="docframe">print_usage</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-arguments-and-paths-set-action.html" target="docframe">_set_action</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-arguments-and-paths-parse-args.html" target="docframe">parse_args</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-arguments-and-paths-normalize-root.html" target="docframe">_normalize_root</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-arguments-and-paths-init-paths.html" target="docframe">init_paths</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-arguments-and-paths-release-default-target-root.html" target="docframe">_release_default_target_root</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-arguments-and-paths-release-load-state.html" target="docframe">_release_load_state</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-arguments-and-paths-release-save-state.html" target="docframe">_release_save_state</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-arguments-and-paths-release-definition-value.html" target="docframe">_release_definition_value</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-arguments-and-paths-release-normalize-github-url.html" target="docframe">_release_normalize_github_url</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-arguments-and-paths-release-project-repo-state-file.html" target="docframe">_release_project_repo_state_file</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-arguments-and-paths-release-load-project-repo.html" target="docframe">_release_load_project_repo</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-arguments-and-paths-release-save-project-repo.html" target="docframe">_release_save_project_repo</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-arguments-and-paths-release-repo-from-url.html" target="docframe">_release_repo_from_url</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-arguments-and-paths-release-package-catalog.html" target="docframe">_release_package_catalog</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-arguments-and-paths-release-select-package-interactive.html" target="docframe">_release_select_package_interactive</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-arguments-and-paths-release-prompt-manual-settings.html" target="docframe">_release_prompt_manual_settings</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-arguments-and-paths-release-prompt-settings.html" target="docframe">_release_prompt_settings</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-arguments-and-paths-package-info-value.html" target="docframe">_package_info_value</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-arguments-and-paths-project-slug-safe.html" target="docframe">_project_slug_safe</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-arguments-and-paths-load-project-info.html" target="docframe">_load_project_info</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-arguments-and-paths-set-project-context.html" target="docframe">_set_project_context</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-arguments-and-paths-persist-project-info.html" target="docframe">_persist_project_info</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-arguments-and-paths-list-known-projects.html" target="docframe">_list_known_projects</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-arguments-and-paths-select-project-interactive.html" target="docframe">_select_project_interactive</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-arguments-and-paths-require-command.html" target="docframe">_require_command</a>
+<a class="doc-nav-section type-section" style="padding-left:50px" href="pages/sgnd-setup-sh-standalone-configuration.html" target="docframe">Standalone configuration</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-standalone-configuration-load-release-manager-config.html" target="docframe">_load_release_manager_config</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-standalone-configuration-ensure-release-manager-config.html" target="docframe">_ensure_release_manager_config</a>
+<a class="doc-nav-section type-section" style="padding-left:50px" href="pages/sgnd-setup-sh-bootstrap-housekeeping.html" target="docframe">Bootstrap housekeeping</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-bootstrap-housekeeping-ensure-manager-directories.html" target="docframe">_ensure_manager_directories</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-bootstrap-housekeeping-install-setup-wrappers.html" target="docframe">_install_setup_wrappers</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-bootstrap-housekeeping-install-setup-self.html" target="docframe">_install_setup_self</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-bootstrap-housekeeping-install-release-manager.html" target="docframe">_install_release_manager</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-bootstrap-housekeeping-cleanup-bootstrap-files.html" target="docframe">_cleanup_bootstrap_files</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-bootstrap-housekeeping-release-choose-post-install-action.html" target="docframe">_release_choose_post_install_action</a>
+<a class="doc-nav-section type-section" style="padding-left:50px" href="pages/sgnd-setup-sh-release-identity-and-discovery.html" target="docframe">Release identity and discovery</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-release-identity-and-discovery-release-product-artifact-name.html" target="docframe">_release_product_artifact_name</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-release-identity-and-discovery-release-base-from-archive.html" target="docframe">_release_base_from_archive</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-release-identity-and-discovery-release-matches.html" target="docframe">_release_matches</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-release-identity-and-discovery-release-sort.html" target="docframe">_release_sort</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-release-identity-and-discovery-current-release.html" target="docframe">_current_release</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-release-identity-and-discovery-previous-release.html" target="docframe">_previous_release</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-release-identity-and-discovery-list-archived-releases.html" target="docframe">_list_archived_releases</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-release-identity-and-discovery-find-pending-archives.html" target="docframe">_find_pending_archives</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-release-identity-and-discovery-newest-pending-archive.html" target="docframe">_newest_pending_archive</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-release-identity-and-discovery-find-archived-archive.html" target="docframe">_find_archived_archive</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-release-identity-and-discovery-release-location.html" target="docframe">_release_location</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-release-identity-and-discovery-pending-release-base-exists.html" target="docframe">_pending_release_base_exists</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-release-identity-and-discovery-archived-release-base-exists.html" target="docframe">_archived_release_base_exists</a>
+<a class="doc-nav-section type-section" style="padding-left:50px" href="pages/sgnd-setup-sh-release-verification.html" target="docframe">Release verification</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-release-verification-verify-sha256-sidecar.html" target="docframe">_verify_sha256_sidecar</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-release-verification-safe-relative-path.html" target="docframe">_safe_relative_path</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-release-verification-validate-tar-paths.html" target="docframe">_validate_tar_paths</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-release-verification-validate-manifest-paths.html" target="docframe">_validate_manifest_paths</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-release-verification-verify-release-set.html" target="docframe">_verify_release_set</a>
+<a class="doc-nav-section type-section" style="padding-left:50px" href="pages/sgnd-setup-sh-manifest-operations.html" target="docframe">Manifest operations</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-manifest-operations-manifest-paths.html" target="docframe">_manifest_paths</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-manifest-operations-target-path.html" target="docframe">_target_path</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-manifest-operations-remove-paths-from-stream.html" target="docframe">_remove_paths_from_stream</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-manifest-operations-apply-removed-manifest.html" target="docframe">_apply_removed_manifest</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-manifest-operations-remove-release-difference.html" target="docframe">_remove_release_difference</a>
+<a class="doc-nav-section type-section" style="padding-left:50px" href="pages/sgnd-setup-sh-archive-release-movement.html" target="docframe">Archive/release movement</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-archive-release-movement-archive-release-set.html" target="docframe">_archive_release_set</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-archive-release-movement-move-archive-dir-to-releases.html" target="docframe">_move_archive_dir_to_releases</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-archive-release-movement-move-newer-archives-to-releases.html" target="docframe">_move_newer_archives_to_releases</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-archive-release-movement-move-all-archives-to-releases.html" target="docframe">_move_all_archives_to_releases</a>
+<a class="doc-nav-section type-section" style="padding-left:50px" href="pages/sgnd-setup-sh-release-channel.html" target="docframe">Release channel</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-release-channel-remember-release-channel.html" target="docframe">_remember_release_channel</a>
+<a class="doc-nav-section type-section" style="padding-left:50px" href="pages/sgnd-setup-sh-installation-engine.html" target="docframe">Installation engine</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-installation-engine-extract-release.html" target="docframe">_extract_release</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-installation-engine-install-pending-archive.html" target="docframe">_install_pending_archive</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-installation-engine-rollback-to-archived-release.html" target="docframe">_rollback_to_archived_release</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-installation-engine-remove-by-manifest.html" target="docframe">_remove_by_manifest</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-installation-engine-file-belongs-to-product.html" target="docframe">_file_belongs_to_product</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-installation-engine-scan-product-owned-paths.html" target="docframe">_scan_product_owned_paths</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-installation-engine-remove-by-product-scan.html" target="docframe">_remove_by_product_scan</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-installation-engine-remove-bundle-products-by-scan.html" target="docframe">_remove_bundle_products_by_scan</a>
+<a class="doc-nav-section type-section" style="padding-left:50px" href="pages/sgnd-setup-sh-github-source-acquisition.html" target="docframe">GitHub/source acquisition</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-github-source-acquisition-download-to.html" target="docframe">_download_to</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-github-source-acquisition-github-release-json.html" target="docframe">_github_release_json</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-github-source-acquisition-github-latest-asset.html" target="docframe">_github_latest_asset</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-github-source-acquisition-latest-online-release.html" target="docframe">_latest_online_release</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-github-source-acquisition-github-release-asset-url.html" target="docframe">_github_release_asset_url</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-github-source-acquisition-release-is-local-or-installed.html" target="docframe">_release_is_local_or_installed</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-github-source-acquisition-admit-extracted-release.html" target="docframe">_admit_extracted_release</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-github-source-acquisition-acquire-release.html" target="docframe">_acquire_release</a>
+<a class="doc-nav-section type-section" style="padding-left:50px" href="pages/sgnd-setup-sh-product-package-zip-workflow.html" target="docframe">Product package ZIP workflow</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-product-package-zip-workflow-package-zip-info-value.html" target="docframe">_package_zip_info_value</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-product-package-zip-workflow-package-zip-record.html" target="docframe">_package_zip_record</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-product-package-zip-workflow-package-store-dir.html" target="docframe">_package_store_dir</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-product-package-zip-workflow-package-archive-dir.html" target="docframe">_package_archive_dir</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-product-package-zip-workflow-scan-product-packages.html" target="docframe">_scan_product_packages</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-product-package-zip-workflow-local-package-catalog.html" target="docframe">_local_package_catalog</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-product-package-zip-workflow-newest-local-package-for-project.html" target="docframe">_newest_local_package_for_project</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-product-package-zip-workflow-admit-product-package-zip.html" target="docframe">_admit_product_package_zip</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-product-package-zip-workflow-archive-product-package-zip.html" target="docframe">_archive_product_package_zip</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-product-package-zip-workflow-install-product-package-zip.html" target="docframe">_install_product_package_zip</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-product-package-zip-workflow-select-package-records.html" target="docframe">_select_package_records</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-product-package-zip-workflow-product-catalog.html" target="docframe">_product_catalog</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-product-package-zip-workflow-select-product-records.html" target="docframe">_select_product_records</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-product-package-zip-workflow-install-explicit-package-source.html" target="docframe">_install_explicit_package_source</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-product-package-zip-workflow-action-install-latest-local-packages.html" target="docframe">_action_install_latest_local_packages</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-product-package-zip-workflow-action-install-other-packages.html" target="docframe">_action_install_other_packages</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-product-package-zip-workflow-action-install-latest-github-products.html" target="docframe">_action_install_latest_github_products</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-product-package-zip-workflow-release-display-identity.html" target="docframe">_release_display_identity</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-product-package-zip-workflow-dashboard-product-rows.html" target="docframe">_dashboard_product_rows</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-product-package-zip-workflow-bootstrap-first-install-packages.html" target="docframe">_bootstrap_first_install_packages</a>
+<a class="doc-nav-section type-section" style="padding-left:50px" href="pages/sgnd-setup-sh-interactive-helpers.html" target="docframe">Interactive helpers</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-interactive-helpers-confirm.html" target="docframe">_confirm</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-interactive-helpers-bundle-products-file.html" target="docframe">_bundle_products_file</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-interactive-helpers-bundle-product-names.html" target="docframe">_bundle_product_names</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-interactive-helpers-select-bundle-removal-scope.html" target="docframe">_select_bundle_removal_scope</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-interactive-helpers-list-product-manifests.html" target="docframe">_list_product_manifests</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-interactive-helpers-select-removal-manifest-for.html" target="docframe">_select_removal_manifest_for</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-interactive-helpers-select-removal-manifest.html" target="docframe">_select_removal_manifest</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-interactive-helpers-select-archived-release.html" target="docframe">_select_archived_release</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-interactive-helpers-print-status.html" target="docframe">_print_status</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-interactive-helpers-interactive-menu.html" target="docframe">_interactive_menu</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-interactive-helpers-pause.html" target="docframe">_pause</a>
+<a class="doc-nav-section type-section" style="padding-left:50px" href="pages/sgnd-setup-sh-action-dispatch.html" target="docframe">Action dispatch</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-action-dispatch-action-check.html" target="docframe">_action_check</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-action-dispatch-action-download.html" target="docframe">_action_download</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-action-dispatch-action-update.html" target="docframe">_action_update</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-action-dispatch-action-install.html" target="docframe">_action_install</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-action-dispatch-action-rollback.html" target="docframe">_action_rollback</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-action-dispatch-action-remove.html" target="docframe">_action_remove</a>
+<a class="doc-nav-section type-section" style="padding-left:50px" href="pages/sgnd-setup-sh-main.html" target="docframe">Main</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-setup-sh-main-main.html" target="docframe">main</a>
+</details>
 </details>
 <details class="doc-nav-node level-1 type-group doc-nav-special">
-<summary style="padding-left:10px">UI</summary>
-<a class="doc-nav-section type-preface doc-nav-special" style="padding-left:20px" href="pages/sux-ui-preface-sh.html" target="docframe">UI Framework</a>
+<summary style="padding-left:10px">Framework Utilities</summary>
+<details class="doc-nav-node level-2 type-module">
+<summary style="padding-left:20px"><a class="doc-nav-module" href="pages/sgnd-sh.html" target="docframe">sgnd.sh</a></summary>
+<a class="doc-nav-section type-section" style="padding-left:50px" href="pages/sgnd-sh-helpers.html" target="docframe">Helpers</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-sh-helpers-sgnd-preference-valid-loglevel.html" target="docframe">_sgnd_preference_valid_loglevel</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-sh-helpers-sgnd-preference-theme-name.html" target="docframe">_sgnd_preference_theme_name</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-sh-helpers-sgnd-preference-show.html" target="docframe">_sgnd_preference_show</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-sh-helpers-sgnd-preference-set-loglevel.html" target="docframe">_sgnd_preference_set_loglevel</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-sh-helpers-sgnd-preference-set-theme.html" target="docframe">_sgnd_preference_set_theme</a>
+<a class="doc-nav-section type-section" style="padding-left:50px" href="pages/sgnd-sh-main.html" target="docframe">Main</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/sgnd-sh-main-main.html" target="docframe">main</a>
+</details>
+</details>
+<details class="doc-nav-node level-1 type-group doc-nav-special">
+<summary style="padding-left:10px"><a class="doc-nav-module" href="pages/sux-ui-preface-sh.html" target="docframe">UI</a></summary>
 <details class="doc-nav-node level-2 type-subgroup doc-nav-special">
 <summary style="padding-left:20px">Styles</summary>
 <details class="doc-nav-node level-3 type-module">
@@ -656,22 +863,22 @@
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/ui-say-sh-helpers-sgnd-logfile.html" target="docframe">_sgnd_logfile</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/ui-say-sh-helpers-sayprogress-write-slot.html" target="docframe">_sayprogress_write_slot</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/ui-say-sh-helpers-sgnd-ensure-linebreak.html" target="docframe">_sgnd_ensure_linebreak</a>
-<a class="doc-nav-section type-section" style="padding-left:30px" href="pages/ui-say-sh-public-api.html" target="docframe">Public API</a>
-<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/ui-say-sh-public-api-say.html" target="docframe">say</a>
-<a class="doc-nav-section type-section" style="padding-left:40px" href="pages/ui-say-sh-public-api-build-final-output-line-and-print.html" target="docframe">Build final output line and print</a>
-<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/ui-say-sh-public-api-build-final-output-line-and-print-sayprogress-begin.html" target="docframe">sayprogress_begin</a>
-<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/ui-say-sh-public-api-build-final-output-line-and-print-sayprogress.html" target="docframe">sayprogress</a>
-<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/ui-say-sh-public-api-build-final-output-line-and-print-sayprogress-done.html" target="docframe">sayprogress_done</a>
-<a class="doc-nav-section type-section" style="padding-left:40px" href="pages/ui-say-sh-public-api-convenience-wrappers-for-say-with-a-fixed-type.html" target="docframe">Convenience wrappers for say() with a fixed TYPE.</a>
-<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/ui-say-sh-public-api-convenience-wrappers-for-say-with-a-fixed-type-sayinfo.html" target="docframe">sayinfo</a>
-<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/ui-say-sh-public-api-convenience-wrappers-for-say-with-a-fixed-type-saystart.html" target="docframe">saystart</a>
-<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/ui-say-sh-public-api-convenience-wrappers-for-say-with-a-fixed-type-saywarning.html" target="docframe">saywarning</a>
-<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/ui-say-sh-public-api-convenience-wrappers-for-say-with-a-fixed-type-sayfail.html" target="docframe">sayfail</a>
-<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/ui-say-sh-public-api-convenience-wrappers-for-say-with-a-fixed-type-saycancel.html" target="docframe">saycancel</a>
-<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/ui-say-sh-public-api-convenience-wrappers-for-say-with-a-fixed-type-sayok.html" target="docframe">sayok</a>
-<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/ui-say-sh-public-api-convenience-wrappers-for-say-with-a-fixed-type-sayend.html" target="docframe">sayend</a>
-<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/ui-say-sh-public-api-convenience-wrappers-for-say-with-a-fixed-type-justsay.html" target="docframe">justsay</a>
-<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/ui-say-sh-public-api-convenience-wrappers-for-say-with-a-fixed-type-saydebug.html" target="docframe">saydebug</a>
+<a class="doc-nav-section type-section" style="padding-left:30px" href="pages/ui-say-sh-public-api-q.html" target="docframe">Public API ---------------------------------------------------------------------q</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/ui-say-sh-public-api-q-say.html" target="docframe">say</a>
+<a class="doc-nav-section type-section" style="padding-left:40px" href="pages/ui-say-sh-public-api-q-build-final-output-line-and-print.html" target="docframe">Build final output line and print</a>
+<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/ui-say-sh-public-api-q-build-final-output-line-and-print-sayprogress-begin.html" target="docframe">sayprogress_begin</a>
+<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/ui-say-sh-public-api-q-build-final-output-line-and-print-sayprogress.html" target="docframe">sayprogress</a>
+<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/ui-say-sh-public-api-q-build-final-output-line-and-print-sayprogress-done.html" target="docframe">sayprogress_done</a>
+<a class="doc-nav-section type-section" style="padding-left:40px" href="pages/ui-say-sh-public-api-q-convenience-wrappers-for-say-with-a-fixed-type.html" target="docframe">Convenience wrappers for say() with a fixed TYPE.</a>
+<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/ui-say-sh-public-api-q-convenience-wrappers-for-say-with-a-fixed-type-sayinfo.html" target="docframe">sayinfo</a>
+<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/ui-say-sh-public-api-q-convenience-wrappers-for-say-with-a-fixed-type-saystart.html" target="docframe">saystart</a>
+<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/ui-say-sh-public-api-q-convenience-wrappers-for-say-with-a-fixed-type-saywarning.html" target="docframe">saywarning</a>
+<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/ui-say-sh-public-api-q-convenience-wrappers-for-say-with-a-fixed-type-sayfail.html" target="docframe">sayfail</a>
+<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/ui-say-sh-public-api-q-convenience-wrappers-for-say-with-a-fixed-type-saycancel.html" target="docframe">saycancel</a>
+<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/ui-say-sh-public-api-q-convenience-wrappers-for-say-with-a-fixed-type-sayok.html" target="docframe">sayok</a>
+<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/ui-say-sh-public-api-q-convenience-wrappers-for-say-with-a-fixed-type-sayend.html" target="docframe">sayend</a>
+<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/ui-say-sh-public-api-q-convenience-wrappers-for-say-with-a-fixed-type-justsay.html" target="docframe">justsay</a>
+<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/ui-say-sh-public-api-q-convenience-wrappers-for-say-with-a-fixed-type-saydebug.html" target="docframe">saydebug</a>
 </details>
 <details class="doc-nav-node level-2 type-module">
 <summary style="padding-left:20px"><a class="doc-nav-module" href="pages/ui-sh.html" target="docframe">ui.sh</a></summary>
@@ -727,19 +934,20 @@
 <a class="doc-nav-section type-appendix doc-nav-special" style="padding-left:20px" href="pages/appendix-changelog-solidgroundux.html" target="docframe">Appendix Y: Change Log</a>
 <a class="doc-nav-section type-appendix doc-nav-special" style="padding-left:20px" href="pages/appendix-install-solidgroundux.html" target="docframe">Appendix Z: First Installation</a>
 </details>
-<a class="doc-nav-section type-product doc-nav-special" style="padding-left:0px" href="pages/title.html" target="docframe">SolidGroundUX Management Console Modules</a>
-<a class="doc-nav-section type-preface doc-nav-special" style="padding-left:10px" href="pages/mcm-preface-sh.html" target="docframe">Console Modules Introduction</a>
+<a class="doc-nav-section type-product doc-nav-special" style="padding-left:0px" href="pages/mcm-preface-sh.html" target="docframe">SolidGroundUX Management Console Modules</a>
 <details class="doc-nav-node level-1 type-group doc-nav-special">
 <summary style="padding-left:10px">Common Core</summary>
 <details class="doc-nav-node level-2 type-module">
 <summary style="padding-left:20px"><a class="doc-nav-module" href="pages/active-directory-management-sh.html" target="docframe">active-directory-management.sh</a></summary>
 <a class="doc-nav-section type-section" style="padding-left:30px" href="pages/active-directory-management-sh-shared-dns-configuration.html" target="docframe">Shared DNS configuration</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/active-directory-management-sh-shared-dns-configuration-sgnd-console-set-dns-server.html" target="docframe">sgnd_console_set_dns_server</a>
+<a class="doc-nav-section type-section" style="padding-left:30px" href="pages/active-directory-management-sh-shared-ad-state.html" target="docframe">Shared AD state</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/active-directory-management-sh-shared-ad-state-sgnd-ad-current-netbios-domain.html" target="docframe">sgnd_ad_current_netbios_domain</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/active-directory-management-sh-shared-ad-state-sgnd-ad-normalize-sssd-config.html" target="docframe">sgnd_ad_normalize_sssd_config</a>
 </details>
 </details>
 <details class="doc-nav-node level-1 type-group doc-nav-special">
-<summary style="padding-left:10px">Console</summary>
-<a class="doc-nav-section type-preface doc-nav-special" style="padding-left:20px" href="pages/mcm-console-preface-sh.html" target="docframe">SolidGround Management Console</a>
+<summary style="padding-left:10px"><a class="doc-nav-module" href="pages/mcm-console-preface-sh.html" target="docframe">Console</a></summary>
 <details class="doc-nav-node level-2 type-module">
 <summary style="padding-left:20px"><a class="doc-nav-module" href="pages/management-console-sh.html" target="docframe">management-console.sh</a></summary>
 <a class="doc-nav-section type-section" style="padding-left:50px" href="pages/management-console-sh-script-metadata-framework-integration.html" target="docframe">Script metadata (framework integration)</a>
@@ -773,12 +981,15 @@
 <a class="doc-nav-item type-function" style="padding-left:60px" href="pages/management-console-sh-module-visibility-sgnd-console-open-page.html" target="docframe">_sgnd_console_open_page</a>
 <a class="doc-nav-item type-function" style="padding-left:60px" href="pages/management-console-sh-module-visibility-sgnd-console-show-index.html" target="docframe">_sgnd_console_show_index</a>
 <a class="doc-nav-section type-section" style="padding-left:50px" href="pages/management-console-sh-module-loading.html" target="docframe">Module loading</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/management-console-sh-module-loading-sgnd-console-rollback-module-registration.html" target="docframe">_sgnd_console_rollback_module_registration</a>
 <a class="doc-nav-item type-function" style="padding-left:60px" href="pages/management-console-sh-module-loading-sgnd-console-source-module.html" target="docframe">_sgnd_console_source_module</a>
 <a class="doc-nav-section type-section" style="padding-left:50px" href="pages/management-console-sh-script-execution.html" target="docframe">Script execution</a>
 <a class="doc-nav-item type-function" style="padding-left:60px" href="pages/management-console-sh-script-execution-sgnd-build-command-args.html" target="docframe">_sgnd_build_command_args</a>
 <a class="doc-nav-item type-function" style="padding-left:60px" href="pages/management-console-sh-script-execution-sgnd-run-public-command.html" target="docframe">_sgnd_run_public_command</a>
 <a class="doc-nav-item type-function" style="padding-left:60px" href="pages/management-console-sh-script-execution-sgnd-console-open-shell.html" target="docframe">_sgnd_console_open_shell</a>
 <a class="doc-nav-item type-function" style="padding-left:60px" href="pages/management-console-sh-script-execution-sgnd-console-toggle-access.html" target="docframe">_sgnd_console_toggle_access</a>
+<a class="doc-nav-section type-section" style="padding-left:50px" href="pages/management-console-sh-console-loop.html" target="docframe">Console loop</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/management-console-sh-console-loop-sgnd-console-confirm-exit.html" target="docframe">_sgnd_console_confirm_exit</a>
 <a class="doc-nav-section type-section" style="padding-left:50px" href="pages/management-console-sh-console-execution-context-controls.html" target="docframe">Console execution-context controls</a>
 <a class="doc-nav-item type-function" style="padding-left:60px" href="pages/management-console-sh-console-execution-context-controls-sgnd-console-toggle-dryrun.html" target="docframe">_sgnd_console_toggle_dryrun</a>
 <a class="doc-nav-item type-function" style="padding-left:60px" href="pages/management-console-sh-console-execution-context-controls-sgnd-console-cycle-loglevel-value.html" target="docframe">_sgnd_console_cycle_loglevel_value</a>
@@ -817,16 +1028,25 @@
 </details>
 <details class="doc-nav-node level-2 type-module">
 <summary style="padding-left:20px"><a class="doc-nav-module" href="pages/15-storage-sh.html" target="docframe">15-storage.sh</a></summary>
+<a class="doc-nav-section type-section" style="padding-left:30px" href="pages/15-storage-sh-management-dispatch.html" target="docframe">Management dispatch</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/15-storage-sh-management-dispatch-storage-prepare.html" target="docframe">storage_prepare</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/15-storage-sh-management-dispatch-storage-manage-directories.html" target="docframe">storage_manage_directories</a>
 <a class="doc-nav-section type-section" style="padding-left:30px" href="pages/15-storage-sh-module-validation-contract.html" target="docframe">Module validation contract</a>
 <a class="doc-nav-section type-section" style="padding-left:30px" href="pages/15-storage-sh-console-registration.html" target="docframe">Console registration</a>
 </details>
 <details class="doc-nav-node level-2 type-module">
 <summary style="padding-left:20px"><a class="doc-nav-module" href="pages/20-active-directory-server-sh.html" target="docframe">20-active-directory-server.sh</a></summary>
+<a class="doc-nav-section type-section" style="padding-left:30px" href="pages/20-active-directory-server-sh-management-dispatch.html" target="docframe">Management dispatch</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/20-active-directory-server-sh-management-dispatch-adsvr-record-provision-step.html" target="docframe">_adsvr_record_provision_step</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/20-active-directory-server-sh-management-dispatch-adsvr-provision-domain.html" target="docframe">_adsvr_provision_domain</a>
 <a class="doc-nav-section type-section" style="padding-left:30px" href="pages/20-active-directory-server-sh-module-validation-contract.html" target="docframe">Module validation contract</a>
 <a class="doc-nav-section type-section" style="padding-left:30px" href="pages/20-active-directory-server-sh-console-registration.html" target="docframe">Console registration</a>
 </details>
 <details class="doc-nav-node level-2 type-module">
 <summary style="padding-left:20px"><a class="doc-nav-module" href="pages/25-active-directory-client-sh.html" target="docframe">25-active-directory-client.sh</a></summary>
+<a class="doc-nav-section type-section" style="padding-left:30px" href="pages/25-active-directory-client-sh-management-dispatch.html" target="docframe">Management dispatch</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/25-active-directory-client-sh-management-dispatch-adc-record-join-step.html" target="docframe">_adc_record_join_step</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/25-active-directory-client-sh-management-dispatch-adc-join-domain.html" target="docframe">_adc_join_domain</a>
 <a class="doc-nav-section type-section" style="padding-left:30px" href="pages/25-active-directory-client-sh-module-validation-contract.html" target="docframe">Module validation contract</a>
 <a class="doc-nav-section type-section" style="padding-left:30px" href="pages/25-active-directory-client-sh-console-registration.html" target="docframe">Console registration</a>
 </details>
@@ -837,13 +1057,15 @@
 </details>
 <details class="doc-nav-node level-2 type-module">
 <summary style="padding-left:20px"><a class="doc-nav-module" href="pages/30-samba-file-server-sh.html" target="docframe">30-samba-file-server.sh</a></summary>
+<a class="doc-nav-section type-section" style="padding-left:30px" href="pages/30-samba-file-server-sh-server-management-dispatchers.html" target="docframe">Server management dispatchers</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/30-samba-file-server-sh-server-management-dispatchers-smb-prepare-file-server.html" target="docframe">_smb_prepare_file_server</a>
 <a class="doc-nav-section type-section" style="padding-left:30px" href="pages/30-samba-file-server-sh-module-validation-contract.html" target="docframe">Module validation contract</a>
 <a class="doc-nav-section type-section" style="padding-left:30px" href="pages/30-samba-file-server-sh-console-registration.html" target="docframe">Console registration</a>
 </details>
 <details class="doc-nav-node level-2 type-module">
 <summary style="padding-left:20px"><a class="doc-nav-module" href="pages/40-solidgroundux-sh.html" target="docframe">40-solidgroundux.sh</a></summary>
 <a class="doc-nav-section type-section" style="padding-left:30px" href="pages/40-solidgroundux-sh-solidgroundux-installation-actions.html" target="docframe">SolidGroundUX installation actions</a>
-<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/40-solidgroundux-sh-solidgroundux-installation-actions-release-manager.html" target="docframe">_release_manager</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/40-solidgroundux-sh-solidgroundux-installation-actions-setup.html" target="docframe">_setup</a>
 <a class="doc-nav-section type-section" style="padding-left:30px" href="pages/40-solidgroundux-sh-framework-diagnostics.html" target="docframe">Framework diagnostics</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/40-solidgroundux-sh-framework-diagnostics-framework-smoketest.html" target="docframe">_framework_smoketest</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/40-solidgroundux-sh-framework-diagnostics-framework-show-environment.html" target="docframe">_framework_show_environment</a>
@@ -863,14 +1085,22 @@
 </details>
 <details class="doc-nav-node level-2 type-module">
 <summary style="padding-left:20px"><a class="doc-nav-module" href="pages/50-web-server-sh.html" target="docframe">50-web-server.sh</a></summary>
+<a class="doc-nav-section type-section" style="padding-left:30px" href="pages/50-web-server-sh-management-dispatch.html" target="docframe">Management dispatch</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/50-web-server-sh-management-dispatch-web-record-prepare-step.html" target="docframe">_web_record_prepare_step</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/50-web-server-sh-management-dispatch-web-prepare.html" target="docframe">web_prepare</a>
 <a class="doc-nav-section type-section" style="padding-left:30px" href="pages/50-web-server-sh-module-validation-contract.html" target="docframe">Module validation contract</a>
 </details>
 <details class="doc-nav-node level-2 type-module">
 <summary style="padding-left:20px"><a class="doc-nav-module" href="pages/60-sqlserver-sh.html" target="docframe">60-sqlserver.sh</a></summary>
+<a class="doc-nav-section type-section" style="padding-left:30px" href="pages/60-sqlserver-sh-management-dispatch.html" target="docframe">Management dispatch</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/60-sqlserver-sh-management-dispatch-sqlserver-record-prepare-step.html" target="docframe">_sqlserver_record_prepare_step</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/60-sqlserver-sh-management-dispatch-sqlserver-prepare.html" target="docframe">sqlserver_prepare</a>
 <a class="doc-nav-section type-section" style="padding-left:30px" href="pages/60-sqlserver-sh-module-validation-contract.html" target="docframe">Module validation contract</a>
 </details>
 <details class="doc-nav-node level-2 type-module">
 <summary style="padding-left:20px"><a class="doc-nav-module" href="pages/70-docker-server-sh.html" target="docframe">70-docker-server.sh</a></summary>
+<a class="doc-nav-section type-section" style="padding-left:30px" href="pages/70-docker-server-sh-management-dispatch.html" target="docframe">Management dispatch</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/70-docker-server-sh-management-dispatch-docker-prepare.html" target="docframe">docker_prepare</a>
 <a class="doc-nav-section type-section" style="padding-left:30px" href="pages/70-docker-server-sh-module-validation-contract.html" target="docframe">Module validation contract</a>
 </details>
 <details class="doc-nav-node level-2 type-module">
@@ -897,6 +1127,8 @@
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-active-directory-client-sh-internal-helpers-adc-step-dns.html" target="docframe">_adc_step_dns</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-active-directory-client-sh-internal-helpers-adc-step-identity.html" target="docframe">_adc_step_identity</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-active-directory-client-sh-internal-helpers-adc-step-discover.html" target="docframe">_adc_step_discover</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-active-directory-client-sh-internal-helpers-adc-host-keytab-valid.html" target="docframe">_adc_host_keytab_valid</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-active-directory-client-sh-internal-helpers-adc-ensure-host-keytab.html" target="docframe">_adc_ensure_host_keytab</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-active-directory-client-sh-internal-helpers-adc-step-join.html" target="docframe">_adc_step_join</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-active-directory-client-sh-internal-helpers-adc-step-sssd.html" target="docframe">_adc_step_sssd</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-active-directory-client-sh-internal-helpers-adc-step-register-dns.html" target="docframe">_adc_step_register_dns</a>
@@ -916,6 +1148,7 @@
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-active-directory-server-sh-helpers-adsvr-prepare-hosts.html" target="docframe">_adsvr_prepare_hosts</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-active-directory-server-sh-helpers-adsvr-set-dns-forwarder.html" target="docframe">_adsvr_set_dns_forwarder</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-active-directory-server-sh-helpers-adsvr-wait-configured.html" target="docframe">_adsvr_wait_configured</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-active-directory-server-sh-helpers-adsvr-wait-dns-port-free.html" target="docframe">_adsvr_wait_dns_port_free</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-active-directory-server-sh-helpers-adsvr-wait-dns.html" target="docframe">_adsvr_wait_dns</a>
 <a class="doc-nav-section type-section" style="padding-left:30px" href="pages/manage-active-directory-server-sh-provisioning-steps.html" target="docframe">Provisioning steps</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-active-directory-server-sh-provisioning-steps-adsvr-step-install-packages.html" target="docframe">_adsvr_step_install_packages</a>
@@ -975,9 +1208,15 @@
 </details>
 <details class="doc-nav-node level-2 type-module">
 <summary style="padding-left:20px"><a class="doc-nav-module" href="pages/manage-docker-containers-sh.html" target="docframe">manage-docker-containers.sh</a></summary>
+<a class="doc-nav-section type-section" style="padding-left:30px" href="pages/manage-docker-containers-sh-mutating-actions.html" target="docframe">Mutating actions</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-docker-containers-sh-mutating-actions-docker-open-container-shell.html" target="docframe">_docker_open_container_shell</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-docker-containers-sh-mutating-actions-docker-action-again.html" target="docframe">_docker_action_again</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-docker-containers-sh-mutating-actions-docker-return-to-menu.html" target="docframe">_docker_return_to_menu</a>
 </details>
 <details class="doc-nav-node level-2 type-module">
 <summary style="padding-left:20px"><a class="doc-nav-module" href="pages/manage-docker-server-sh.html" target="docframe">manage-docker-server.sh</a></summary>
+<a class="doc-nav-section type-section" style="padding-left:30px" href="pages/manage-docker-server-sh-host-operations.html" target="docframe">Host operations</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-docker-server-sh-host-operations-docker-prepare.html" target="docframe">_docker_prepare</a>
 </details>
 <details class="doc-nav-node level-2 type-module">
 <summary style="padding-left:20px"><a class="doc-nav-module" href="pages/manage-framework-logging-sh.html" target="docframe">manage-framework-logging.sh</a></summary>
@@ -1048,9 +1287,54 @@
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-identity-sh-main-main.html" target="docframe">main</a>
 </details>
 <details class="doc-nav-node level-2 type-module">
+<summary style="padding-left:20px"><a class="doc-nav-module" href="pages/manage-samba-directories-sh.html" target="docframe">manage-samba-directories.sh</a></summary>
+<a class="doc-nav-section type-section" style="padding-left:30px" href="pages/manage-samba-directories-sh-storage-and-samba-discovery.html" target="docframe">Storage and Samba discovery</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-directories-sh-storage-and-samba-discovery-refresh-storage-paths.html" target="docframe">_refresh_storage_paths</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-directories-sh-storage-and-samba-discovery-share-name-for-path.html" target="docframe">_share_name_for_path</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-directories-sh-storage-and-samba-discovery-refresh-directory-catalog.html" target="docframe">_refresh_directory_catalog</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-directories-sh-storage-and-samba-discovery-selected-directory-text.html" target="docframe">_selected_directory_text</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-directories-sh-storage-and-samba-discovery-select-directories.html" target="docframe">_select_directories</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-directories-sh-storage-and-samba-discovery-require-directory-selection.html" target="docframe">_require_directory_selection</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-directories-sh-storage-and-samba-discovery-directory-is-share-root.html" target="docframe">_directory_is_share_root</a>
+<a class="doc-nav-section type-section" style="padding-left:30px" href="pages/manage-samba-directories-sh-identity-discovery.html" target="docframe">Identity discovery</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-directories-sh-identity-discovery-runtime-auth-mode.html" target="docframe">_runtime_auth_mode</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-directories-sh-identity-discovery-ensure-kerberos-ticket.html" target="docframe">_ensure_kerberos_ticket</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-directories-sh-identity-discovery-discover-ad-identities.html" target="docframe">_discover_ad_identities</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-directories-sh-identity-discovery-list-local-access-groups-raw.html" target="docframe">_list_local_access_groups_raw</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-directories-sh-identity-discovery-select-identities.html" target="docframe">_select_identities</a>
+<a class="doc-nav-section type-section" style="padding-left:30px" href="pages/manage-samba-directories-sh-directory-acl-helpers.html" target="docframe">Directory ACL helpers</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-directories-sh-directory-acl-helpers-select-permissions.html" target="docframe">_select_permissions</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-directories-sh-directory-acl-helpers-grant-directory-access.html" target="docframe">_grant_directory_access</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-directories-sh-directory-acl-helpers-assigned-identities.html" target="docframe">_assigned_identities</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-directories-sh-directory-acl-helpers-remove-directory-access.html" target="docframe">_remove_directory_access</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-directories-sh-directory-acl-helpers-format-directory-permissions.html" target="docframe">_format_directory_permissions</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-directories-sh-directory-acl-helpers-show-directory-access.html" target="docframe">_show_directory_access</a>
+<a class="doc-nav-section type-section" style="padding-left:30px" href="pages/manage-samba-directories-sh-directory-lifecycle.html" target="docframe">Directory lifecycle</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-directories-sh-directory-lifecycle-inherit-directory-access.html" target="docframe">_inherit_directory_access</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-directories-sh-directory-lifecycle-validate-relative-path.html" target="docframe">_validate_relative_path</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-directories-sh-directory-lifecycle-create-directory-tree.html" target="docframe">_create_directory_tree</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-directories-sh-directory-lifecycle-select-parent-directory.html" target="docframe">_select_parent_directory</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-directories-sh-directory-lifecycle-create-directory.html" target="docframe">_create_directory</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-directories-sh-directory-lifecycle-remove-directories.html" target="docframe">_remove_directories</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-directories-sh-directory-lifecycle-show-directories.html" target="docframe">_show_directories</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-directories-sh-directory-lifecycle-validate-selected-directories.html" target="docframe">_validate_selected_directories</a>
+<a class="doc-nav-section type-section" style="padding-left:30px" href="pages/manage-samba-directories-sh-menu.html" target="docframe">Menu</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-directories-sh-menu-build-menu.html" target="docframe">_build_menu</a>
+<a class="doc-nav-section type-section" style="padding-left:30px" href="pages/manage-samba-directories-sh-main.html" target="docframe">Main</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-directories-sh-main-main.html" target="docframe">main</a>
+</details>
+<details class="doc-nav-node level-2 type-module">
 <summary style="padding-left:20px"><a class="doc-nav-module" href="pages/manage-samba-file-server-sh.html" target="docframe">manage-samba-file-server.sh</a></summary>
 <a class="doc-nav-section type-section" style="padding-left:30px" href="pages/manage-samba-file-server-sh-helpers.html" target="docframe">Helpers</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-file-server-sh-helpers-smb-ask-selection.html" target="docframe">_smb_ask_selection</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-file-server-sh-helpers-smb-auth-mode.html" target="docframe">_smb_auth_mode</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-file-server-sh-helpers-smb-validate-hostname-dns.html" target="docframe">_smb_validate_hostname_dns</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-file-server-sh-helpers-smb-write-auth-config.html" target="docframe">_smb_write_auth_config</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-file-server-sh-helpers-smb-enable-sssd-samba-password-sync.html" target="docframe">_smb_enable_sssd_samba_password_sync</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-file-server-sh-helpers-smb-establish-ads-trust.html" target="docframe">_smb_establish_ads_trust</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-file-server-sh-helpers-smb-configure-authentication.html" target="docframe">_smb_configure_authentication</a>
+<a class="doc-nav-section type-section" style="padding-left:30px" href="pages/manage-samba-file-server-sh-actions.html" target="docframe">Actions</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-file-server-sh-actions-smb-validate.html" target="docframe">_smb_validate</a>
 </details>
 <details class="doc-nav-node level-2 type-module">
 <summary style="padding-left:20px"><a class="doc-nav-module" href="pages/manage-samba-shares-sh.html" target="docframe">manage-samba-shares.sh</a></summary>
@@ -1071,34 +1355,69 @@
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-helpers-refresh-storage-paths.html" target="docframe">_refresh_storage_paths</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-helpers-smb-ask-selection.html" target="docframe">_smb_ask_selection</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-helpers-share-path.html" target="docframe">_share_path</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-helpers-share-root-traversable.html" target="docframe">_share_root_traversable</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-helpers-list-managed-shares.html" target="docframe">_list_managed_shares</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-helpers-select-shares.html" target="docframe">_select_shares</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-helpers-acl-groups-for-share.html" target="docframe">_acl_groups_for_share</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-helpers-validate-share-name.html" target="docframe">_validate_share_name</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-helpers-validate-relative-path.html" target="docframe">_validate_relative_path</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-helpers-share-exists.html" target="docframe">_share_exists</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-helpers-share-path-in-use.html" target="docframe">_share_path_in_use</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-helpers-reload-samba.html" target="docframe">_reload_samba</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-helpers-resolve-access-group-input.html" target="docframe">_resolve_access_group_input</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-helpers-apply-group-access-to-groups.html" target="docframe">_apply_group_access_to_groups</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-helpers-create-share.html" target="docframe">_create_share</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-helpers-remove-share.html" target="docframe">_remove_share</a>
-<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-helpers-ensure-selected-shares.html" target="docframe">_ensure_selected_shares</a>
-<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-helpers-inherit-directory-access.html" target="docframe">_inherit_directory_access</a>
-<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-helpers-create-inherited-directory-tree.html" target="docframe">_create_inherited_directory_tree</a>
-<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-helpers-list-share-subdirectories-raw.html" target="docframe">_list_share_subdirectories_raw</a>
-<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-helpers-create-subdirectory.html" target="docframe">_create_subdirectory</a>
-<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-helpers-list-subdirectories.html" target="docframe">_list_subdirectories</a>
-<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-helpers-remove-subdirectory.html" target="docframe">_remove_subdirectory</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-helpers-ensure-kerberos-ticket.html" target="docframe">_ensure_kerberos_ticket</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-helpers-discover-ad-groups.html" target="docframe">_discover_ad_groups</a>
-<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-helpers-select-group.html" target="docframe">_select_group</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-helpers-select-groups.html" target="docframe">_select_groups</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-helpers-samba-principal.html" target="docframe">_samba_principal</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-helpers-sync-share-samba-access.html" target="docframe">_sync_share_samba_access</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-helpers-apply-group-access.html" target="docframe">_apply_group_access</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-helpers-select-assigned-group.html" target="docframe">_select_assigned_group</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-helpers-remove-group-access.html" target="docframe">_remove_group_access</a>
-<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-helpers-show-access.html" target="docframe">_show_access</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-helpers-validate-selected.html" target="docframe">_validate_selected</a>
+<a class="doc-nav-section type-section" style="padding-left:30px" href="pages/manage-samba-shares-sh-authentication-aware-access-group-selection.html" target="docframe">Authentication-aware access-group selection</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-authentication-aware-access-group-selection-smb-runtime-auth-mode.html" target="docframe">_smb_runtime_auth_mode</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-authentication-aware-access-group-selection-list-local-groups-raw.html" target="docframe">_list_local_groups_raw</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-authentication-aware-access-group-selection-local-group-display.html" target="docframe">_local_group_display</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-authentication-aware-access-group-selection-select-local-groups.html" target="docframe">_select_local_groups</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-authentication-aware-access-group-selection-pause-return-to-share-manager.html" target="docframe">_pause_return_to_share_manager</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-authentication-aware-access-group-selection-select-access-groups.html" target="docframe">_select_access_groups</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-authentication-aware-access-group-selection-select-access-group.html" target="docframe">_select_access_group</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-authentication-aware-access-group-selection-show-shares-overview.html" target="docframe">_show_shares_overview</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-authentication-aware-access-group-selection-reconcile-access-group.html" target="docframe">_reconcile_access_group</a>
 <a class="doc-nav-section type-section" style="padding-left:30px" href="pages/manage-samba-shares-sh-main.html" target="docframe">Main</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-shares-sh-main-main.html" target="docframe">main</a>
+</details>
+<details class="doc-nav-node level-2 type-module">
+<summary style="padding-left:20px"><a class="doc-nav-module" href="pages/manage-samba-users-sh.html" target="docframe">manage-samba-users.sh</a></summary>
+<a class="doc-nav-section type-section" style="padding-left:30px" href="pages/manage-samba-users-sh-helpers.html" target="docframe">Helpers</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-users-sh-helpers-smb-runtime-auth-mode.html" target="docframe">_smb_runtime_auth_mode</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-users-sh-helpers-validate-identity-name.html" target="docframe">_validate_identity_name</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-users-sh-helpers-smb-ask-selection.html" target="docframe">_smb_ask_selection</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-users-sh-helpers-list-local-samba-users-raw.html" target="docframe">_list_local_samba_users_raw</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-users-sh-helpers-list-local-groups-raw.html" target="docframe">_list_local_groups_raw</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-users-sh-helpers-user-group-memberships.html" target="docframe">_user_group_memberships</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-users-sh-helpers-select-local-samba-user.html" target="docframe">_select_local_samba_user</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-users-sh-helpers-select-local-groups.html" target="docframe">_select_local_groups</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-users-sh-helpers-select-local-group.html" target="docframe">_select_local_group</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-users-sh-helpers-pause-return.html" target="docframe">_pause_return</a>
+<a class="doc-nav-section type-section" style="padding-left:30px" href="pages/manage-samba-users-sh-overview.html" target="docframe">Overview</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-users-sh-overview-show-identity-overview.html" target="docframe">_show_identity_overview</a>
+<a class="doc-nav-section type-section" style="padding-left:30px" href="pages/manage-samba-users-sh-samba-users.html" target="docframe">Samba users</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-users-sh-samba-users-create-samba-user.html" target="docframe">_create_samba_user</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-users-sh-samba-users-change-samba-password.html" target="docframe">_change_samba_password</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-users-sh-samba-users-remove-samba-users.html" target="docframe">_remove_samba_users</a>
+<a class="doc-nav-section type-section" style="padding-left:30px" href="pages/manage-samba-users-sh-local-groups.html" target="docframe">Local groups</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-users-sh-local-groups-create-local-group.html" target="docframe">_create_local_group</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-users-sh-local-groups-add-users-to-group.html" target="docframe">_add_users_to_group</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-users-sh-local-groups-remove-users-from-group.html" target="docframe">_remove_users_from_group</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-users-sh-local-groups-remove-local-groups.html" target="docframe">_remove_local_groups</a>
+<a class="doc-nav-section type-section" style="padding-left:30px" href="pages/manage-samba-users-sh-menu.html" target="docframe">Menu</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-users-sh-menu-build-menu.html" target="docframe">_build_menu</a>
+<a class="doc-nav-section type-section" style="padding-left:30px" href="pages/manage-samba-users-sh-main.html" target="docframe">Main</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-samba-users-sh-main-main.html" target="docframe">main</a>
 </details>
 <details class="doc-nav-node level-2 type-module">
 <summary style="padding-left:20px"><a class="doc-nav-module" href="pages/manage-solidgroundux-sh.html" target="docframe">manage-solidgroundux.sh</a></summary>
@@ -1152,6 +1471,9 @@
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-storage-sh-internal-helpers-storage-validate-group.html" target="docframe">_storage_validate_group</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-storage-sh-internal-helpers-storage-validate-mode.html" target="docframe">_storage_validate_mode</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-storage-sh-internal-helpers-storage-select-access-targets.html" target="docframe">_storage_select_access_targets</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-storage-sh-internal-helpers-storage-validate-directory-name.html" target="docframe">_storage_validate_directory_name</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-storage-sh-internal-helpers-storage-list-child-directories.html" target="docframe">_storage_list_child_directories</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-storage-sh-internal-helpers-storage-select-child-directory.html" target="docframe">_storage_select_child_directory</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-storage-sh-internal-helpers-storage-action-again.html" target="docframe">_storage_action_again</a>
 </details>
 <details class="doc-nav-node level-2 type-module">
@@ -1184,6 +1506,7 @@
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-web-server-sh-site-management-web-server-create-site.html" target="docframe">_web_server_create_site</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-web-server-sh-site-management-web-server-enable-site.html" target="docframe">_web_server_enable_site</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-web-server-sh-site-management-web-server-disable-site.html" target="docframe">_web_server_disable_site</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-web-server-sh-site-management-web-server-change-document-root.html" target="docframe">_web_server_change_document_root</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-web-server-sh-site-management-web-server-remove-site.html" target="docframe">_web_server_remove_site</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-web-server-sh-site-management-web-server-remove-site-content.html" target="docframe">_web_server_remove_site_content</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/manage-web-server-sh-site-management-web-server-list-sites.html" target="docframe">_web_server_list_sites</a>
@@ -1212,6 +1535,59 @@
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/publish-web-content-sh-local-declarations-web-server-publish-documentation.html" target="docframe">_web_server_publish_documentation</a>
 </details>
 </details>
+<details class="doc-nav-node level-1 type-group doc-nav-special">
+<summary style="padding-left:10px">SDK</summary>
+<details class="doc-nav-node level-2 type-subgroup doc-nav-special">
+<summary style="padding-left:20px">Templates</summary>
+<details class="doc-nav-node level-3 type-module">
+<summary style="padding-left:30px"><a class="doc-nav-module" href="pages/exe-template-sh.html" target="docframe">exe-template.sh</a></summary>
+<a class="doc-nav-section type-section" style="padding-left:40px" href="pages/exe-template-sh-bootstrap.html" target="docframe">Bootstrap</a>
+<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/exe-template-sh-bootstrap-framework-locator.html" target="docframe">_framework_locator</a>
+<a class="doc-nav-section type-section" style="padding-left:40px" href="pages/exe-template-sh-script-identity.html" target="docframe">Script identity</a>
+<a class="doc-nav-item type-variable" style="padding-left:50px" href="pages/exe-template-sh-script-identity-sgnd-script-file.html" target="docframe">SGND_SCRIPT_FILE</a>
+<a class="doc-nav-item type-variable" style="padding-left:50px" href="pages/exe-template-sh-script-identity-sgnd-script-dir.html" target="docframe">SGND_SCRIPT_DIR</a>
+<a class="doc-nav-item type-variable" style="padding-left:50px" href="pages/exe-template-sh-script-identity-sgnd-script-base.html" target="docframe">SGND_SCRIPT_BASE</a>
+<a class="doc-nav-item type-variable" style="padding-left:50px" href="pages/exe-template-sh-script-identity-sgnd-script-name.html" target="docframe">SGND_SCRIPT_NAME</a>
+<a class="doc-nav-item type-variable" style="padding-left:50px" href="pages/exe-template-sh-script-identity-sgnd-script-file.html" target="docframe">SGND_SCRIPT_FILE</a>
+<a class="doc-nav-item type-variable" style="padding-left:50px" href="pages/exe-template-sh-script-identity-sgnd-script-dir.html" target="docframe">SGND_SCRIPT_DIR</a>
+<a class="doc-nav-item type-variable" style="padding-left:50px" href="pages/exe-template-sh-script-identity-sgnd-script-base.html" target="docframe">SGND_SCRIPT_BASE</a>
+<a class="doc-nav-item type-variable" style="padding-left:50px" href="pages/exe-template-sh-script-identity-sgnd-script-name.html" target="docframe">SGND_SCRIPT_NAME</a>
+<a class="doc-nav-section type-section" style="padding-left:40px" href="pages/exe-template-sh-framework-integration.html" target="docframe">Framework integration</a>
+<a class="doc-nav-item type-variable" style="padding-left:50px" href="pages/exe-template-sh-framework-integration-sgnd-using.html" target="docframe">SGND_USING</a>
+<a class="doc-nav-item type-variable" style="padding-left:50px" href="pages/exe-template-sh-framework-integration-sgnd-args-spec.html" target="docframe">SGND_ARGS_SPEC</a>
+<a class="doc-nav-section type-section" style="padding-left:60px" href="pages/exe-template-sh-example.html" target="docframe">Example</a>
+<a class="doc-nav-item type-variable" style="padding-left:70px" href="pages/exe-template-sh-example-sgnd-script-examples.html" target="docframe">SGND_SCRIPT_EXAMPLES</a>
+<a class="doc-nav-item type-variable" style="padding-left:70px" href="pages/exe-template-sh-example-sgnd-script-globals.html" target="docframe">SGND_SCRIPT_GLOBALS</a>
+<a class="doc-nav-item type-variable" style="padding-left:70px" href="pages/exe-template-sh-example-sgnd-state-variables.html" target="docframe">SGND_STATE_VARIABLES</a>
+<a class="doc-nav-item type-variable" style="padding-left:70px" href="pages/exe-template-sh-example-sgnd-on-exit-handlers.html" target="docframe">SGND_ON_EXIT_HANDLERS</a>
+<a class="doc-nav-item type-variable" style="padding-left:70px" href="pages/exe-template-sh-example-sgnd-state-save.html" target="docframe">SGND_STATE_SAVE</a>
+<a class="doc-nav-section type-section" style="padding-left:40px" href="pages/exe-template-sh-local-script-declarations.html" target="docframe">Local script declarations</a>
+<a class="doc-nav-section type-section" style="padding-left:40px" href="pages/exe-template-sh-local-script-functions.html" target="docframe">Local script functions</a>
+<a class="doc-nav-section type-section" style="padding-left:40px" href="pages/exe-template-sh-main.html" target="docframe">Main</a>
+<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/exe-template-sh-main-main.html" target="docframe">main</a>
+</details>
+<details class="doc-nav-node level-3 type-module">
+<summary style="padding-left:30px"><a class="doc-nav-module" href="pages/lib-template-sh.html" target="docframe">lib-template.sh</a></summary>
+<a class="doc-nav-section type-section" style="padding-left:40px" href="pages/lib-template-sh-library-guard.html" target="docframe">Library guard</a>
+<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/lib-template-sh-library-guard-sgnd-lib-guard.html" target="docframe">_sgnd_lib_guard</a>
+<a class="doc-nav-section type-section" style="padding-left:40px" href="pages/lib-template-sh-internal-helpers.html" target="docframe">Internal helpers</a>
+<a class="doc-nav-section type-section" style="padding-left:40px" href="pages/lib-template-sh-public-api.html" target="docframe">Public API</a>
+</details>
+<details class="doc-nav-node level-3 type-module">
+<summary style="padding-left:30px"><a class="doc-nav-module" href="pages/mod-template-sh.html" target="docframe">mod-template.sh</a></summary>
+<a class="doc-nav-section type-section" style="padding-left:40px" href="pages/mod-template-sh-library-guard.html" target="docframe">Library guard</a>
+<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/mod-template-sh-library-guard-sgnd-lib-guard.html" target="docframe">_sgnd_lib_guard</a>
+<a class="doc-nav-section type-section" style="padding-left:40px" href="pages/mod-template-sh-module-metadata.html" target="docframe">Module metadata</a>
+<a class="doc-nav-section type-section" style="padding-left:40px" href="pages/mod-template-sh-internal-helpers.html" target="docframe">Internal helpers</a>
+<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/mod-template-sh-internal-helpers-sample-format-status.html" target="docframe">_sample_format_status</a>
+<a class="doc-nav-section type-section" style="padding-left:40px" href="pages/mod-template-sh-public-module-actions.html" target="docframe">Public module actions</a>
+<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/mod-template-sh-public-module-actions-sample-show-status.html" target="docframe">sample_show_status</a>
+<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/mod-template-sh-public-module-actions-sample-run-action.html" target="docframe">sample_run_action</a>
+<a class="doc-nav-section type-section" style="padding-left:40px" href="pages/mod-template-sh-module-validation-contract.html" target="docframe">Module validation contract</a>
+<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/mod-template-sh-module-validation-contract-validate-module-sample-module.html" target="docframe">validate_module_sample_module</a>
+</details>
+</details>
+</details>
 <details class="doc-nav-node level-1 type-appendices doc-nav-special">
 <summary style="padding-left:10px">Appendices</summary>
 <a class="doc-nav-section type-appendix doc-nav-special" style="padding-left:20px" href="pages/appendix-attribution-solidgroundux-management-console-modules.html" target="docframe">Appendix A: Attribution</a>
@@ -1220,8 +1596,7 @@
 </details>
 <a class="doc-nav-section type-product doc-nav-special" style="padding-left:0px" href="pages/title.html" target="docframe">SolidGroundUX SDK</a>
 <details class="doc-nav-node level-1 type-group doc-nav-special">
-<summary style="padding-left:10px">SDK</summary>
-<a class="doc-nav-section type-preface doc-nav-special" style="padding-left:20px" href="pages/sdk-tools-preface-sh.html" target="docframe">SDK Overview</a>
+<summary style="padding-left:10px"><a class="doc-nav-module" href="pages/sdk-tools-preface-sh.html" target="docframe">SDK</a></summary>
 <details class="doc-nav-node level-2 type-subgroup doc-nav-special">
 <summary style="padding-left:20px">Definitions</summary>
 <details class="doc-nav-node level-3 type-module">
@@ -1229,14 +1604,7 @@
 </details>
 </details>
 <details class="doc-nav-node level-2 type-subgroup doc-nav-special">
-<summary style="padding-left:20px">Development</summary>
-<details class="doc-nav-node level-3 type-module">
-<summary style="padding-left:30px"><a class="doc-nav-module" href="pages/normalize-canon-sh.html" target="docframe">normalize-canon.sh</a></summary>
-</details>
-</details>
-<details class="doc-nav-node level-2 type-subgroup doc-nav-special">
-<summary style="padding-left:20px">Documentation Generator</summary>
-<a class="doc-nav-section type-preface doc-nav-special" style="padding-left:30px" href="pages/sdk-documentation-preface-sh.html" target="docframe">Documentation Generator Overview</a>
+<summary style="padding-left:20px"><a class="doc-nav-module" href="pages/sdk-documentation-preface-sh.html" target="docframe">Documentation Generator</a></summary>
 <details class="doc-nav-node level-3 type-module">
 <summary style="padding-left:30px"><a class="doc-nav-module" href="pages/doc-generator-sh.html" target="docframe">doc-generator.sh</a></summary>
 <a class="doc-nav-section type-section" style="padding-left:40px" href="pages/doc-generator-sh-local-script-functions.html" target="docframe">Local script functions</a>
@@ -1466,44 +1834,9 @@
 </details>
 </details>
 <details class="doc-nav-node level-2 type-subgroup doc-nav-special">
-<summary style="padding-left:20px">Templates</summary>
-<a class="doc-nav-section type-preface doc-nav-special" style="padding-left:30px" href="pages/templates-preface-sh.html" target="docframe">Script templates </a>
+<summary style="padding-left:20px"><a class="doc-nav-module" href="pages/templates-preface-sh.html" target="docframe">Templates</a></summary>
 <details class="doc-nav-node level-3 type-module">
 <summary style="padding-left:30px"><a class="doc-nav-module" href="pages/doc-template-sh.html" target="docframe">doc-template.sh</a></summary>
-</details>
-<details class="doc-nav-node level-3 type-module">
-<summary style="padding-left:30px"><a class="doc-nav-module" href="pages/exe-template-sh.html" target="docframe">exe-template.sh</a></summary>
-<a class="doc-nav-section type-section" style="padding-left:40px" href="pages/exe-template-sh-bootstrap.html" target="docframe">Bootstrap</a>
-<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/exe-template-sh-bootstrap-framework-locator.html" target="docframe">_framework_locator</a>
-<a class="doc-nav-section type-section" style="padding-left:40px" href="pages/exe-template-sh-script-identity.html" target="docframe">Script identity</a>
-<a class="doc-nav-item type-variable" style="padding-left:50px" href="pages/exe-template-sh-script-identity-sgnd-script-file.html" target="docframe">SGND_SCRIPT_FILE</a>
-<a class="doc-nav-item type-variable" style="padding-left:50px" href="pages/exe-template-sh-script-identity-sgnd-script-dir.html" target="docframe">SGND_SCRIPT_DIR</a>
-<a class="doc-nav-item type-variable" style="padding-left:50px" href="pages/exe-template-sh-script-identity-sgnd-script-base.html" target="docframe">SGND_SCRIPT_BASE</a>
-<a class="doc-nav-item type-variable" style="padding-left:50px" href="pages/exe-template-sh-script-identity-sgnd-script-name.html" target="docframe">SGND_SCRIPT_NAME</a>
-<a class="doc-nav-item type-variable" style="padding-left:50px" href="pages/exe-template-sh-script-identity-sgnd-script-file.html" target="docframe">SGND_SCRIPT_FILE</a>
-<a class="doc-nav-item type-variable" style="padding-left:50px" href="pages/exe-template-sh-script-identity-sgnd-script-dir.html" target="docframe">SGND_SCRIPT_DIR</a>
-<a class="doc-nav-item type-variable" style="padding-left:50px" href="pages/exe-template-sh-script-identity-sgnd-script-base.html" target="docframe">SGND_SCRIPT_BASE</a>
-<a class="doc-nav-item type-variable" style="padding-left:50px" href="pages/exe-template-sh-script-identity-sgnd-script-name.html" target="docframe">SGND_SCRIPT_NAME</a>
-<a class="doc-nav-section type-section" style="padding-left:40px" href="pages/exe-template-sh-framework-integration.html" target="docframe">Framework integration</a>
-<a class="doc-nav-item type-variable" style="padding-left:50px" href="pages/exe-template-sh-framework-integration-sgnd-using.html" target="docframe">SGND_USING</a>
-<a class="doc-nav-item type-variable" style="padding-left:50px" href="pages/exe-template-sh-framework-integration-sgnd-args-spec.html" target="docframe">SGND_ARGS_SPEC</a>
-<a class="doc-nav-section type-section" style="padding-left:60px" href="pages/exe-template-sh-example.html" target="docframe">Example</a>
-<a class="doc-nav-item type-variable" style="padding-left:70px" href="pages/exe-template-sh-example-sgnd-script-examples.html" target="docframe">SGND_SCRIPT_EXAMPLES</a>
-<a class="doc-nav-item type-variable" style="padding-left:70px" href="pages/exe-template-sh-example-sgnd-script-globals.html" target="docframe">SGND_SCRIPT_GLOBALS</a>
-<a class="doc-nav-item type-variable" style="padding-left:70px" href="pages/exe-template-sh-example-sgnd-state-variables.html" target="docframe">SGND_STATE_VARIABLES</a>
-<a class="doc-nav-item type-variable" style="padding-left:70px" href="pages/exe-template-sh-example-sgnd-on-exit-handlers.html" target="docframe">SGND_ON_EXIT_HANDLERS</a>
-<a class="doc-nav-item type-variable" style="padding-left:70px" href="pages/exe-template-sh-example-sgnd-state-save.html" target="docframe">SGND_STATE_SAVE</a>
-<a class="doc-nav-section type-section" style="padding-left:40px" href="pages/exe-template-sh-local-script-declarations.html" target="docframe">Local script declarations</a>
-<a class="doc-nav-section type-section" style="padding-left:40px" href="pages/exe-template-sh-local-script-functions.html" target="docframe">Local script functions</a>
-<a class="doc-nav-section type-section" style="padding-left:40px" href="pages/exe-template-sh-main.html" target="docframe">Main</a>
-<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/exe-template-sh-main-main.html" target="docframe">main</a>
-</details>
-<details class="doc-nav-node level-3 type-module">
-<summary style="padding-left:30px"><a class="doc-nav-module" href="pages/lib-template-sh.html" target="docframe">lib-template.sh</a></summary>
-<a class="doc-nav-section type-section" style="padding-left:40px" href="pages/lib-template-sh-library-guard.html" target="docframe">Library guard</a>
-<a class="doc-nav-item type-function" style="padding-left:50px" href="pages/lib-template-sh-library-guard-sgnd-lib-guard.html" target="docframe">_sgnd_lib_guard</a>
-<a class="doc-nav-section type-section" style="padding-left:40px" href="pages/lib-template-sh-internal-helpers.html" target="docframe">Internal helpers</a>
-<a class="doc-nav-section type-section" style="padding-left:40px" href="pages/lib-template-sh-public-api.html" target="docframe">Public API</a>
 </details>
 </details>
 <details class="doc-nav-node level-2 type-module">
@@ -1579,6 +1912,8 @@
 <a class="doc-nav-section type-section" style="padding-left:50px" href="pages/deploy-workspace-sh-transport.html" target="docframe">Transport</a>
 <a class="doc-nav-item type-function" style="padding-left:60px" href="pages/deploy-workspace-sh-transport-quote-remote-arg.html" target="docframe">_quote_remote_arg</a>
 <a class="doc-nav-item type-function" style="padding-left:60px" href="pages/deploy-workspace-sh-transport-stream-local.html" target="docframe">_stream_local</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/deploy-workspace-sh-transport-start-remote-session.html" target="docframe">_start_remote_session</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/deploy-workspace-sh-transport-stop-remote-session.html" target="docframe">_stop_remote_session</a>
 <a class="doc-nav-item type-function" style="padding-left:60px" href="pages/deploy-workspace-sh-transport-ensure-remote-receiver-sudo.html" target="docframe">_ensure_remote_receiver_sudo</a>
 <a class="doc-nav-item type-function" style="padding-left:60px" href="pages/deploy-workspace-sh-transport-stream-remote.html" target="docframe">_stream_remote</a>
 <a class="doc-nav-item type-function" style="padding-left:60px" href="pages/deploy-workspace-sh-transport-deploy.html" target="docframe">_deploy</a>
@@ -1590,19 +1925,28 @@
 <a class="doc-nav-section type-section" style="padding-left:30px" href="pages/prepare-release-sh-script-metadata-framework-integration.html" target="docframe">Script metadata (framework integration)</a>
 <a class="doc-nav-section type-section" style="padding-left:30px" href="pages/prepare-release-sh-local-script-declarations.html" target="docframe">Local script Declarations</a>
 <a class="doc-nav-section type-section" style="padding-left:30px" href="pages/prepare-release-sh-local-script-functions.html" target="docframe">Local script functions</a>
+<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/prepare-release-sh-local-script-functions-release-resolve-locations.html" target="docframe">_release_resolve_locations</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/prepare-release-sh-local-script-functions-get-parameters.html" target="docframe">_get_parameters</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/prepare-release-sh-local-script-functions-sgnd-release-list-manifest-history.html" target="docframe">_sgnd_release_list_manifest_history</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/prepare-release-sh-local-script-functions-sgnd-release-select-baseline-for-artifact.html" target="docframe">_sgnd_release_select_baseline_for_artifact</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/prepare-release-sh-local-script-functions-sgnd-release-select-product-baseline.html" target="docframe">_sgnd_release_select_product_baseline</a>
-<a class="doc-nav-item type-function" style="padding-left:40px" href="pages/prepare-release-sh-local-script-functions-sgnd-release-select-bundle-baseline.html" target="docframe">_sgnd_release_select_bundle_baseline</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/prepare-release-sh-local-script-functions-sgnd-release-write-removed-manifest.html" target="docframe">_sgnd_release_write_removed_manifest</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/prepare-release-sh-local-script-functions-create-tar.html" target="docframe">_create_tar</a>
 <a class="doc-nav-section type-section" style="padding-left:50px" href="pages/prepare-release-sh-update-sha256sums.html" target="docframe">Update SHA256SUMS</a>
-<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/prepare-release-sh-update-sha256sums-find-release-manager-source.html" target="docframe">_find_release_manager_source</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/prepare-release-sh-update-sha256sums-release-has-framework-product.html" target="docframe">_release_has_framework_product</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/prepare-release-sh-update-sha256sums-release-framework-source-root.html" target="docframe">_release_framework_source_root</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/prepare-release-sh-update-sha256sums-setup-metadata-value.html" target="docframe">_setup_metadata_value</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/prepare-release-sh-update-sha256sums-find-setup-source.html" target="docframe">_find_setup_source</a>
 <a class="doc-nav-item type-function" style="padding-left:60px" href="pages/prepare-release-sh-update-sha256sums-create-release-package.html" target="docframe">_create_release_package</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/prepare-release-sh-update-sha256sums-create-first-install-package.html" target="docframe">_create_first_install_package</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/prepare-release-sh-update-sha256sums-prepare-release-output.html" target="docframe">_prepare_release_output</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/prepare-release-sh-update-sha256sums-cleanup-packaged-release-artifacts.html" target="docframe">_cleanup_packaged_release_artifacts</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/prepare-release-sh-update-sha256sums-copy-release-output.html" target="docframe">_copy_release_output</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/prepare-release-sh-update-sha256sums-report-release-output.html" target="docframe">_report_release_output</a>
 <a class="doc-nav-item type-function" style="padding-left:60px" href="pages/prepare-release-sh-update-sha256sums-archive-release-manifest.html" target="docframe">_archive_release_manifest</a>
 <a class="doc-nav-item type-function" style="padding-left:60px" href="pages/prepare-release-sh-update-sha256sums-cleanup-staging.html" target="docframe">_cleanup_staging</a>
 <a class="doc-nav-item type-function" style="padding-left:60px" href="pages/prepare-release-sh-update-sha256sums-set-script-header-version.html" target="docframe">_set_script_header_version</a>
+<a class="doc-nav-item type-function" style="padding-left:60px" href="pages/prepare-release-sh-update-sha256sums-release-sync-module-metadata-field.html" target="docframe">_release_sync_module_metadata_field</a>
 <a class="doc-nav-item type-function" style="padding-left:60px" href="pages/prepare-release-sh-update-sha256sums-apply-version-bump.html" target="docframe">_apply_version_bump</a>
 <a class="doc-nav-item type-function" style="padding-left:60px" href="pages/prepare-release-sh-update-sha256sums-ensure-public-command-wrappers.html" target="docframe">_ensure_public_command_wrappers</a>
 <a class="doc-nav-section type-section" style="padding-left:30px" href="pages/prepare-release-sh-main-sequence.html" target="docframe">Main Sequence</a>
@@ -1648,6 +1992,12 @@
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/receive-files-sh-receive-helpers-extract-archive.html" target="docframe">_extract_archive</a>
 <a class="doc-nav-section type-section" style="padding-left:30px" href="pages/receive-files-sh-main.html" target="docframe">Main</a>
 <a class="doc-nav-item type-function" style="padding-left:40px" href="pages/receive-files-sh-main-main.html" target="docframe">main</a>
+</details>
+</details>
+<details class="doc-nav-node level-1 type-group doc-nav-special">
+<summary style="padding-left:10px">Ungrouped</summary>
+<details class="doc-nav-node level-2 type-module">
+<summary style="padding-left:20px"><a class="doc-nav-module" href="pages/sgnd-armageddon-sh.html" target="docframe">sgnd-armageddon.sh</a></summary>
 </details>
 </details>
 <details class="doc-nav-node level-1 type-appendices doc-nav-special">

@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Open an interactive shell in a running container</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></div>
+<header class="doc-page-header">
+  <div class="doc-title">Open an interactive shell in a running container</div>
+  <div class="doc-breadcrumb">SolidGroundUX Codex / manage-docker-containers.sh / Mutating actions / _docker_open_container_shell</div>
+</header>
+<div class="ct-functionbody sh-highlight">Purpose</div>
+<div class="ct-functionbody">  Let an operator enter a running container without having to remember docker exec syntax.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Behavior</div>
+<div class="ct-functionbody">  - Selects only running containers.</div>
+<div class="ct-functionbody">  - Prefers /bin/bash when present and falls back to /bin/sh.</div>
+<div class="ct-functionbody">  - Reports a clear failure when the container image provides neither shell.</div>
+<div class="ct-functionbody">  - Honors console dry-run mode.</div>
+</main>
+</body>
+</html>

@@ -25,7 +25,10 @@
 <div class="ct-functionbody">  - Resolves production scripts beneath /usr, /etc, or /var to root (/).</div>
 <div class="ct-functionbody">  - Resolves staged/development trees to the path prefix preceding the detected</div>
 <div class="ct-functionbody">    usr, etc, or var component.</div>
-<div class="ct-functionbody">  - Loads sgnd-exe-common.sh from the resolved framework root.</div>
+<div class="ct-functionbody">  - Loads sgnd-exe-common.sh from the resolved framework root when available.</div>
+<div class="ct-functionbody">  - For staged/development trees where the executable common library is not</div>
+<div class="ct-functionbody">    present, falls back to the installed framework copy without changing</div>
+<div class="ct-functionbody">    SGND_FRAMEWORK_ROOT.</div>
 <div class="ct-functionbody"></div>
 <div class="ct-functionbody sh-highlight">Globals (write)</div>
 <div class="ct-functionbody">  SGND_FRAMEWORK_ROOT</div>
