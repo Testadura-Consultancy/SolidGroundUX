@@ -1297,7 +1297,8 @@ sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|esc|Esc
 sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|slugify|Create slug for
 sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|normalize_key|Normalize key
 sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|content_ref|Build content ref
-sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|canonical_ref|Build canonical ref
+sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|readme_ref|Build README appendix ref
+sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|constitution_ref|Build Constitution front-matter ref
 sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|attribution_ref|Build attribution ref
 sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|glossary_ref|Build glossary ref
 sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|integrity_ref|Build integrity ref
@@ -1317,13 +1318,20 @@ sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|run|Run
 sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|load_input|Load input
 sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|prepare_output|Prepare output
 sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|init_metadata|Initialize metadata
-sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|product_has_appendices|Determine whether generated appendices belong to a product
+sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|product_has_document|Determine whether a project-level source document exists
+sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|product_has_constitution|Determine whether a product Constitution exists
+sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|product_appendix_keys|Resolve enabled appendices for a product
+sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|enabled_appendices|Resolve ordered appendices for a product
+sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|product_has_appendices|Determine whether a product has rendered appendices
+sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|appendix_number|Resolve reader-facing appendix number
+sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|appendix_label|Build reader-facing appendix label
 sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|build_doc_hierarchy|Build doc hierarchy
 sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|modules_by_product|Modules by product
 sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|split_special_comment_modules|Split special comment modules
 sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|product_comment_role|Product comment role
 sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|group_comment_role|Group comment role
 sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|subgroup_comment_role|Subgroup comment role
+sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|register_parent_prefaces|Register prefaces as parent-node content
 sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|add_standalone_doc_node|Add standalone doc node
 sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|is_template_module|Determine whether template module
 sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|should_render_item|Determine whether render item
@@ -1363,6 +1371,8 @@ sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|render_l
 sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|render_title_page|Render title page
 sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|render_index_page|Render index page
 sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|is_appendix_ref|Determine whether appendix ref
+sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|is_constitution_ref|Determine whether Constitution front-matter ref
+sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|is_generated_document_ref|Determine whether generated document ref
 sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|has_renderable_page|Determine whether renderable page
 sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|render_navigation|Render navigation
 sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|get_first_item_page|Get first item page
@@ -1387,13 +1397,15 @@ sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|read_opt
 sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|render_markdown_document|Render markdown document
 sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|flush_paragraph|Flush paragraph
 sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|close_list|Close list
-sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|render_project_document_page|Render project document page
-sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|render_canonical_page|Render canonical page
+sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|render_project_document_page|Render project-document appendix page
+sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|render_readme_page|Render repository README appendix
+sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|render_constitution_page|Render optional product Constitution
 sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|render_changelog_page|Render changelog page
 sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|render_install_page|Render install page
 sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|render_content_page|Render content page
 sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|render_content_page_for_ref|Render content page for ref
 sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|breadcrumb_from_contentref|Breadcrumb from contentref
+sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|is_parent_preface_page|Determine whether a parent node owns preface content
 sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|is_module_level_special_page|Determine whether module level special page
 sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|render_module_content|Render module content
 sgnd_doc_renderer.py|Python Renderer Backend||fn|function|public|normal|is_images_marker|Determine whether images marker

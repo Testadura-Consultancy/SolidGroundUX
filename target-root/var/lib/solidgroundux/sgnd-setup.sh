@@ -4,8 +4,8 @@
 # -------------------------------------------------------------------------------------
 # Metadata:
 #   Version     : 2.1
-#   Build       : 2627501
-#   Checksum    : c9746e7369195671242749f73f7dcb35c0fab93fa9660a2693d42028161cf787
+#   Build       : 2627700
+#   Checksum    : 2aec2d14e3383d1ccfd82d32617a2977d0ab902cbf2b7cef3a129cbdaace22ef
 #   Source      : sgnd-setup.sh
 #   Wrapper     : sgnd-setup
 #   Type        : script
@@ -23,6 +23,8 @@
 #     - Updates an existing installation and applies the incoming .removed manifest
 #     - Rolls back by making the installed filesystem match a selected archived release
 #     - Removes the selected project while preserving release packages for later reinstall
+#     - Provides root-scoped nuclear cleanup yields for state/log cleanup, code removal,
+#       or complete SolidGroundUX eradication without requiring a working framework
 #     - Queries GitHub for the latest published release and downloads it only when needed
 #     - Bootstraps a clean machine from sgnd-setup.sh plus adjacent product release ZIPs
 #     - Installs a canonical setup copy under /var/lib/solidgroundux for future recovery
@@ -38,6 +40,7 @@
 #   - Conservative removal: files/symlinks are removed, directories only when empty
 #   - Product ZIP acquisition is transactional; successful installs archive the original ZIP
 #   - Bootstrap cleanup is limited to known setup/package files under /tmp
+#   - Nuclear cleanup derives its deletion root from the canonical framework-locator algorithm
 #
 # Attribution:
 #   Developers  : Mark Fieten
@@ -75,6 +78,7 @@ set -uo pipefail
     VAL_GITHUB_URL=""
     VAL_PROJECT=""
     VAL_VARIANT=""
+    VAL_NUKE_YIELD=""
 
     PROJECT_STATE_ROOT=""
     PROJECT_INFO_FILE=""
@@ -97,6 +101,7 @@ set -uo pipefail
     SCRIPT_BASE="$(basename -- "$SCRIPT_FILE")"
     SCRIPT_NAME="${SCRIPT_BASE%.sh}"
     CANONICAL_MANAGER_PATH=""
+    SGND_FRAMEWORK_ROOT=""
 
     BOOTSTRAP_RELEASE_BASE=""
     BOOTSTRAP_SOURCE_DIR=""
@@ -569,6 +574,14 @@ set -uo pipefail
             '  --install              Install newest local product package (selected --project in --auto mode)' \
             '  --rollback             Install the previous archived release, or --release NAME' \
             '  --remove               Remove the active selected project installation' \
+            '  --nuke YIELD           Destructively remove SolidGroundUX scope (1kt, 1mt, tsar)' \
+            '' \
+            'Nuclear yields:' \
+            '  1kt                    Remove state and logs; preserve code and configuration' \
+            '  1mt                    Remove installed code; preserve configuration, state, and logs' \
+            '  tsar                   Remove all SolidGroundUX code, configuration, state, and logs' \
+            '                         The deletion root is derived from this script physical path' \
+            '                         using the canonical framework-locator root rules' \
             '' \
             'Options:' \
             '  --release NAME         Operate on a specific release base or version' \
@@ -627,6 +640,16 @@ set -uo pipefail
                 --install) _set_action install || return 1 ;;
                 --rollback) _set_action rollback || return 1 ;;
                 --remove) _set_action remove || return 1 ;;
+                --nuke)
+                    _set_action nuke || return 1
+                    shift
+                    VAL_NUKE_YIELD="${1:-}"
+                    VAL_NUKE_YIELD="${VAL_NUKE_YIELD,,}"
+                    case "$VAL_NUKE_YIELD" in
+                        1kt|1mt|tsar) ;;
+                        *) _release_fail "--nuke requires one of: 1kt, 1mt, tsar"; return 1 ;;
+                    esac
+                    ;;
                 --release)
                     shift
                     VAL_RELEASE="${1:-}"
@@ -704,6 +727,396 @@ set -uo pipefail
         root="${root%/}"
         [[ -n "$root" ]] || root="/"
         printf '%s\n' "$root"
+    }
+
+    # fn: _release_locate_framework_root - Resolve the active SolidGroundUX filesystem root
+        # . Purpose
+        #   Resolve the filesystem root containing the currently executing sgnd-setup copy
+        #   without loading any SolidGroundUX framework code.
+        #
+        # . Behavior
+        #   - Mirrors the canonical framework-locator root algorithm.
+        #   - Resolves the physical path of the executing script.
+        #   - Treats usr, etc, and var as canonical top-level SolidGroundUX tree roots.
+        #   - Uses the last occurrence of one of those path components as the root marker.
+        #   - Resolves production copies beneath /usr, /etc, or /var to root (/).
+        #   - Resolves staged/development copies to the prefix preceding that component.
+        #   - Does not source sgnd-exe-common.sh or any other framework file.
+        #
+        # . Outputs (globals)
+        #   SGND_FRAMEWORK_ROOT
+        #
+        # . Returns
+        #   0 when the framework root can be resolved; 126 otherwise.
+        #
+        # . Usage
+        #   _release_locate_framework_root
+    _release_locate_framework_root() {
+        local script_file=""
+        local path_without_root=""
+        local component=""
+        local framework_root=""
+        local index=0
+        local root_index=-1
+        local -a path_parts=()
+
+        script_file="$(readlink -f "${BASH_SOURCE[0]}")" || {
+            _release_fail "Cannot resolve Setup path: ${BASH_SOURCE[0]}"
+            return 126
+        }
+
+        path_without_root="${script_file#/}"
+        IFS='/' read -r -a path_parts <<< "$path_without_root"
+
+        for index in "${!path_parts[@]}"; do
+            component="${path_parts[$index]}"
+            case "$component" in
+                usr|etc|var)
+                    root_index=$index
+                    ;;
+            esac
+        done
+
+        if (( root_index < 0 )); then
+            _release_fail "Cannot determine SolidGroundUX framework root from: $script_file"
+            return 126
+        fi
+
+        if (( root_index == 0 )); then
+            framework_root="/"
+        else
+            framework_root=""
+            for (( index=0; index<root_index; index++ )); do
+                framework_root+="/${path_parts[$index]}"
+            done
+        fi
+
+        SGND_FRAMEWORK_ROOT="$framework_root"
+        return 0
+    }
+
+    # fn: _nuke_root_path - Resolve one absolute path beneath the located framework root
+        # Returns:
+        #   0 with the root-relative absolute path on stdout.
+        #
+        # Usage:
+        #   path="$(_nuke_root_path "/var/lib/solidgroundux")"
+    _nuke_root_path() {
+        local path="${1:?missing path}"
+        path="/${path#/}"
+
+        if [[ "$SGND_FRAMEWORK_ROOT" == "/" ]]; then
+            printf '%s\n' "$path"
+        else
+            printf '%s%s\n' "${SGND_FRAMEWORK_ROOT%/}" "$path"
+        fi
+    }
+
+    # fn: _nuke_remove_path - Remove one SolidGroundUX-owned path when present
+        # Purpose:
+        #   Remove one already-scoped SolidGroundUX path while honoring --dryrun.
+        #
+        # Arguments:
+        #   $1  Absolute path to remove.
+        #
+        # Returns:
+        #   0 when absent or removed successfully; non-zero on removal failure.
+        #
+        # Usage:
+        #   _nuke_remove_path "$path"
+    _nuke_remove_path() {
+        local path="${1:?missing path}"
+
+        [[ -e "$path" || -L "$path" ]] || return 0
+        _release_print "Removing: $path"
+        _release_run rm -rf -- "$path"
+    }
+
+    # fn: _nuke_remove_code - Remove installed SolidGroundUX code beneath the located root
+        # Purpose:
+        #   Remove framework/application trees, documentation, Setup copies, and public wrappers.
+        #
+        # Behavior:
+        #   - Keeps removal paths explicit; unrelated files are never wildcard-deleted recursively.
+        #   - Removes the canonical sgnd-setup/release-manager copies from /var/lib/solidgroundux.
+        #   - May unlink the currently executing sgnd-setup file; Bash continues from the open script.
+        #
+        # Returns:
+        #   0 on success; non-zero on the first removal failure.
+        #
+        # Usage:
+        #   _nuke_remove_code
+    _nuke_remove_code() {
+        local path=""
+        local dir=""
+        local file=""
+        local base=""
+        local -a relative_paths=(
+            "/usr/local/lib/solidgroundux"
+            "/usr/local/libexec/solidgroundux"
+            "/usr/local/share/testadura/solidgroundux"
+            "/usr/local/share/doc/solidgroundux-codex"
+            "/var/lib/solidgroundux/sgnd-setup.sh"
+            "/var/lib/solidgroundux/release-manager.sh"
+        )
+
+        for path in "${relative_paths[@]}"; do
+            _nuke_remove_path "$(_nuke_root_path "$path")" || return 1
+        done
+
+        for dir in "/usr/local/bin" "/usr/local/sbin"; do
+            dir="$(_nuke_root_path "$dir")"
+            [[ -d "$dir" ]] || continue
+
+            while IFS= read -r -d '' file; do
+                base="$(basename -- "$file")"
+                case "$base" in
+                    sgnd-*|sgnd|solidgroundux*|release-manager*)
+                        _nuke_remove_path "$file" || return 1
+                        ;;
+                esac
+            done < <(find "$dir" -maxdepth 1 \( -type f -o -type l \) -print0 2>/dev/null)
+        done
+
+        return 0
+    }
+
+    # fn: _nuke_remove_state_and_logs - Remove generated SolidGroundUX state and logs
+        # Purpose:
+        #   Clear operational state, caches, and logs without removing installed code,
+        #   release packages, or persistent configuration.
+        #
+        # Behavior:
+        #   - Removes Setup runtime state but preserves release-manager.cfg and package archives.
+        #   - Removes current and legacy system log locations.
+        #   - Removes per-user state/cache/log data beneath homes belonging to the selected root.
+        #   - Removes framework.state because it is runtime state stored under the user cfg tree.
+        #   - Never reads host /etc/passwd for a staged/development root.
+        #
+        # Returns:
+        #   0 on success; non-zero on the first removal failure.
+        #
+        # Usage:
+        #   _nuke_remove_state_and_logs
+    _nuke_remove_state_and_logs() {
+        local passwd_file=""
+        local user=""
+        local uid=""
+        local home=""
+        local scoped_home=""
+        local path=""
+        local -a system_paths=(
+            "/var/lib/solidgroundux/release-manager.state"
+            "/var/log/solidgroundux"
+            "/var/log/solidgroundux.log"
+        )
+        local -a user_paths=()
+
+        for path in "${system_paths[@]}"; do
+            _nuke_remove_path "$(_nuke_root_path "$path")" || return 1
+        done
+
+        passwd_file="$(_nuke_root_path "/etc/passwd")"
+        [[ -r "$passwd_file" ]] || return 0
+
+        while IFS=: read -r user _ uid _ _ home _; do
+            [[ -n "$home" && "$home" == /* ]] || continue
+            if [[ "$user" != "root" && "$uid" -lt 1000 ]]; then
+                continue
+            fi
+
+            if [[ "$SGND_FRAMEWORK_ROOT" == "/" ]]; then
+                scoped_home="$home"
+            else
+                scoped_home="${SGND_FRAMEWORK_ROOT%/}$home"
+            fi
+            [[ -d "$scoped_home" ]] || continue
+
+            user_paths=(
+                "$scoped_home/.state/solidgroundux"
+                "$scoped_home/.local/state/solidgroundux"
+                "$scoped_home/.cache/solidgroundux"
+                "$scoped_home/.log/solidgroundux.log"
+                "$scoped_home/.config/solidgroundux/framework.state"
+            )
+            for path in "${user_paths[@]}"; do
+                _nuke_remove_path "$path" || return 1
+            done
+        done < "$passwd_file"
+
+        return 0
+    }
+
+    # fn: _nuke_remove_config - Remove SolidGroundUX system and per-user configuration
+        # Purpose:
+        #   Remove persistent SolidGroundUX configuration beneath the located root.
+        #
+        # Behavior:
+        #   - Removes only configuration paths already owned by the Armageddon cleanup contract.
+        #   - For staged/development roots, resolves user homes beneath that same root.
+        #
+        # Returns:
+        #   0 on success; non-zero on the first removal failure.
+        #
+        # Usage:
+        #   _nuke_remove_config
+    _nuke_remove_config() {
+        local passwd_file=""
+        local user=""
+        local uid=""
+        local home=""
+        local scoped_home=""
+        local path=""
+        local -a system_paths=(
+            "/etc/solidgroundux"
+            "/etc/testadura/solidgroundux.cfg"
+        )
+        local -a user_paths=()
+
+        for path in "${system_paths[@]}"; do
+            _nuke_remove_path "$(_nuke_root_path "$path")" || return 1
+        done
+
+        passwd_file="$(_nuke_root_path "/etc/passwd")"
+        [[ -r "$passwd_file" ]] || return 0
+
+        while IFS=: read -r user _ uid _ _ home _; do
+            [[ -n "$home" && "$home" == /* ]] || continue
+            if [[ "$user" != "root" && "$uid" -lt 1000 ]]; then
+                continue
+            fi
+
+            if [[ "$SGND_FRAMEWORK_ROOT" == "/" ]]; then
+                scoped_home="$home"
+            else
+                scoped_home="${SGND_FRAMEWORK_ROOT%/}$home"
+            fi
+            [[ -d "$scoped_home" ]] || continue
+
+            user_paths=(
+                "$scoped_home/.config/testadura/solidgroundux.cfg"
+                "$scoped_home/.config/solidgroundux"
+            )
+            for path in "${user_paths[@]}"; do
+                _nuke_remove_path "$path" || return 1
+            done
+        done < "$passwd_file"
+
+        return 0
+    }
+
+    # fn: _nuke_confirm - Require deliberate confirmation for a nuclear removal yield
+        # Purpose:
+        #   Prevent an interactive nuclear removal from proceeding on an accidental invocation.
+        #
+        # Behavior:
+        #   - --auto is the explicit non-interactive confirmation contract.
+        #   - Interactive calls must type the selected yield token exactly (case-insensitive).
+        #
+        # Returns:
+        #   0 when confirmed; 2 when cancelled; 1 when confirmation cannot be collected.
+        #
+        # Usage:
+        #   _nuke_confirm "tsar"
+    _nuke_confirm() {
+        local yield="${1:?missing yield}"
+        local expected="${yield^^}"
+        local reply=""
+
+        (( FLAG_AUTO )) && return 0
+        [[ -t 0 && -t 1 ]] || {
+            _release_fail "Nuclear removal requires interactive confirmation or --auto."
+            return 1
+        }
+
+        printf '%sType %s to continue: %s' "$_RL_UI_PROMPT" "$expected" "$_RL_UI_INPUT" > /dev/tty
+        read -r reply < /dev/tty
+        printf '%s' "$_RL_RESET" > /dev/tty
+
+        if [[ "${reply^^}" != "$expected" ]]; then
+            _release_warn "Nuclear removal cancelled."
+            return 2
+        fi
+        return 0
+    }
+
+    # fn: _action_nuke - Execute a scoped destructive SolidGroundUX cleanup
+        # Purpose:
+        #   Remove SolidGroundUX code and/or persistent data according to the requested yield.
+        #
+        # Behavior:
+        #   - Derives the deletion root from the physical sgnd-setup path using the same root
+        #     algorithm as the canonical framework locator.
+        #   - 1kt removes state and logs only.
+        #   - 1mt removes installed code only.
+        #   - tsar removes code, configuration, state, and logs.
+        #   - Never attempts to undo host configuration previously managed by SolidGroundUX.
+        #
+        # Inputs (globals):
+        #   VAL_NUKE_YIELD, FLAG_AUTO, FLAG_DRYRUN
+        #
+        # Returns:
+        #   0 on success; 2 on cancellation; non-zero on failure.
+        #
+        # Usage:
+        #   _action_nuke
+    _action_nuke() {
+        local description=""
+        local rc=0
+
+        if (( FLAG_TARGET_ROOT_OVERRIDE || FLAG_STATE_ROOT_OVERRIDE || FLAG_RELEASES_DIR_OVERRIDE || FLAG_ARCHIVE_ROOT_OVERRIDE )); then
+            _release_fail "Path overrides are not valid with --nuke; the deletion scope is derived from sgnd-setup itself."
+            return 1
+        fi
+
+        _release_locate_framework_root || return $?
+
+        case "$VAL_NUKE_YIELD" in
+            1kt)
+                description="Remove state and logs; preserve code and configuration"
+                ;;
+            1mt)
+                description="Remove installed code; preserve configuration, state, and logs"
+                ;;
+            tsar)
+                description="Remove all SolidGroundUX code, configuration, state, and logs"
+                ;;
+            *)
+                _release_fail "Unknown nuclear yield: ${VAL_NUKE_YIELD:-missing}"
+                return 1
+                ;;
+        esac
+
+        _release_section_header "SolidGroundUX nuclear removal"
+        _release_labeled_value "Framework root" "$SGND_FRAMEWORK_ROOT"
+        _release_labeled_value "Yield" "$VAL_NUKE_YIELD"
+        _release_labeled_value "Scope" "$description"
+        _release_warn "Managed host configuration and service data will not be reverted."
+        (( FLAG_DRYRUN )) && _release_warn "Dry-run mode is active; no files will be removed."
+        printf '\n'
+
+        _nuke_confirm "$VAL_NUKE_YIELD" || return $?
+
+        case "$VAL_NUKE_YIELD" in
+            1kt)
+                _nuke_remove_state_and_logs || rc=$?
+                ;;
+            1mt)
+                _nuke_remove_code || rc=$?
+                ;;
+            tsar)
+                _nuke_remove_config || rc=$?
+                (( rc == 0 )) && _nuke_remove_code || rc=$?
+                (( rc == 0 )) && _nuke_remove_state_and_logs || rc=$?
+                if (( rc == 0 )); then
+                    _nuke_remove_path "$(_nuke_root_path "/var/lib/solidgroundux")" || rc=$?
+                fi
+                ;;
+        esac
+
+        (( rc == 0 )) || return "$rc"
+        _release_ok "SolidGroundUX nuclear removal completed: $VAL_NUKE_YIELD"
+        return 0
     }
 
     # fn: init_paths - Resolve target, state, release, and archive directories
@@ -3721,7 +4134,8 @@ EOF
 # --- Main ----------------------------------------------------------------------------
     # fn: main - Run standalone sgnd-setup initialization and dispatch
         # . Purpose
-        #   Run standalone sgnd-setup initialization and dispatch.
+        #   Dispatch nuclear cleanup before normal Setup initialization, otherwise run the
+        #   standalone setup lifecycle and selected package action.
         # . Returns
         #   Exit status of the selected interactive or command-line action.
         # . Usage
@@ -3737,7 +4151,15 @@ EOF
         VAL_TARGET_ROOT="$default_root"
 
         parse_args "$@" || return $?
-        _ensure_root
+        _ensure_root "$@" || return $?
+
+        # Nuclear cleanup must not initialize Setup state, load project configuration,
+        # or depend on a working framework. Its deletion root comes from the physical
+        # sgnd-setup location using the canonical framework-locator root algorithm.
+        if [[ "$ACTION" == "nuke" ]]; then
+            _action_nuke
+            return $?
+        fi
 
         clear
 
@@ -3831,6 +4253,7 @@ EOF
             install) _action_install_latest_local_packages || rc=$? ;;
             rollback) _action_rollback || rc=$? ;;
             remove) _action_remove || rc=$? ;;
+            nuke) _action_nuke || rc=$? ;;
             *) _release_fail "Unknown action: $ACTION"; rc=1 ;;
         esac
 

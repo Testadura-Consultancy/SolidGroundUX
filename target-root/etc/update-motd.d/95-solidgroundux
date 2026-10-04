@@ -122,5 +122,5 @@ printf  '\n'
 
 printf '%sRun %ssgnd-console%s%s to manage this system.%s\n' \
     "$CYAN" "$YELLOW" "$RESET" "$CYAN" "$RESET"
-printf '%sRun %ssgnd-release-manager%s%s to install updates, roll back, or remove SolidGroundUX.%s\n' \
+printf '%sRun %ssgnd-setup%s%s to install updates, roll back, or remove SolidGroundUX.%s\n' \
     "$CYAN" "$YELLOW" "$RESET" "$CYAN" "$RESET"

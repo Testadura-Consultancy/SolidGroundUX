@@ -1,0 +1,308 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Appendix 1: README</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></div>
+<header class="doc-page-header">
+  <div class="doc-title">Appendix 1: README</div>
+  <div class="doc-breadcrumb">SolidGroundUX / Appendices / Appendix 1: README</div>
+</header>
+<table>
+<tr>
+<td width="170" align="center" valign="middle">
+  <img width="96" height="96" alt="SolidGroundUX logo" src="../assets/images/sux-readmelogo.png" />
+</td>
+<td valign="middle">
+  <big><big><big><strong>SolidGroundUX</strong></big></big></big><br>
+  <sub>Version 2.1.2626414 · © 2026 Testadura</sub>
+</td>
+</tr>
+</table>
+<table>
+<tr>
+<td width="33%" align="center">
+  <a href="https://testadura-consultancy.github.io/SolidGroundUX/"><strong>Documentation</strong></a><br>
+  Product reference and guides
+</td>
+<td width="33%" align="center">
+  <a href="appendix-changelog-solidgroundux.html"><strong>Changelog</strong></a><br>
+  Releases and development history
+</td>
+<td width="33%" align="center">
+  <a href="appendix-license-solidgroundux.html"><strong>License</strong></a><br>
+  Terms of use and redistribution
+</td>
+</tr>
+</table>
+<hr>
+<h3 id="about-solidgroundux" class="ct-L2Sectionheader">About SolidGroundUX</h3>
+<p class="ct-documentbody">The best way to understand SolidGroundUX is not by looking at its features, but by understanding why it came to be.</p>
+<p class="ct-documentbody">SolidGroundUX evolved from the observation that many aspects of application development are not unique to a single project. Configuration, logging, user interaction, state management, deployment and documentation are recurring concerns. Once these problems have been solved well, they should become reusable rather than repeatedly reimplemented.</p>
+<p class="ct-documentbody">Instead of treating Bash scripts as isolated utilities, SolidGroundUX treats them as software projects. By providing a common runtime, shared services and consistent conventions, applications become easier to understand, maintain and extend, while developers remain free to focus on the problem their application is meant to solve.</p>
+<p class="ct-documentbody">The framework does not attempt to hide Bash or prescribe a pattern merely because it is fashionable. It provides practical building blocks where they add value and stays out of the way where they do not.</p>
+<p class="ct-documentbody">SolidGroundUX has since grown into a small family of related products. The Framework provides the common runtime and reusable APIs; Management Console Modules provides the modular Linux administration application; the SolidGroundUX SDK owns development, documentation and release tooling. All three follow the same framework conventions without requiring management or development tooling to be part of the Framework itself.</p>
+<h3 id="cprp-the-design-principles" class="ct-L2Sectionheader">CPRP: the design principles</h3>
+<p class="ct-documentbody">Every design decision in SolidGroundUX is evaluated against four principles:</p>
+<ul>
+<li><strong>Consistency</strong> — Similar problems deserve similar solutions.</li>
+<li><strong>Predictability</strong> — Software should behave as developers expect.</li>
+<li><strong>Readability</strong> — Code is read far more often than it is written.</li>
+<li><strong>Pragmatism</strong> — Abstractions and patterns should earn their place by adding value.</li>
+</ul>
+<p class="ct-documentbody">SolidGroundUX is opinionated enough to provide a dependable way of doing things, but pragmatic enough not to insist that every possible factory must become a factory or every list of choices must become an enumeration.</p>
+<h3 id="see-it-in-action" class="ct-L2Sectionheader">See it in action</h3>
+<p class="ct-documentbody">A consistent runtime, semantic UI, integrated documentation, deployment tooling, release management and reusable libraries working together as a single framework.</p>
+<p class="ct-documentbody">Most shell scripts start small. Over time, they accumulate argument parsing, configuration loading, state management, logging, menus, prompts, validation and deployment logic—often implemented slightly differently in every project.</p>
+<p class="ct-documentbody">SolidGroundUX provides a common foundation for those recurring concerns. The result is less repetitive infrastructure code, more predictable behaviour and applications that remain understandable as they grow.</p>
+<p align="center">
+  <img alt="SolidGroundUX framework overview" src="../assets/images/SolidGround UX.png" />
+</p>
+<br><br>
+<h3 id="architecture" class="ct-L2Sectionheader">Architecture</h3>
+<p class="ct-documentbody">SolidGroundUX is organized around a small common runtime rather than a collection of unrelated utilities.</p>
+<pre class="doc-license-text"><code>flowchart TB
+
+    APP[&quot;Applications &amp; Executables&quot;]
+    CONSOLE[&quot;SolidGround Management Console Modules&quot;]
+    TOOLING[&quot;SolidGround SDK / Development &amp; Release Tooling&quot;]
+
+    RUNTIME[&quot;Bootstrap &amp; Runtime&quot;]
+
+    SERVICES[&quot;Framework Services&lt;br/&gt;UI &amp; Theming · Logging · Configuration · Persistent State · Dialogs &amp; Input · Menu API&quot;]
+    LIBS[&quot;Shared Libraries&lt;br/&gt;Data Tables · Common Helpers · Console Helpers&quot;]
+    PAGES[&quot;Management Console Pages&lt;br/&gt;Computer Setup · Storage · AD Server · AD Client · AD Management · Samba · Web · SQL Server · Docker · Framework Test · Development&quot;]
+
+    APP --&gt; RUNTIME
+    CONSOLE --&gt; RUNTIME
+    TOOLING --&gt; RUNTIME
+
+    RUNTIME --&gt; SERVICES
+    RUNTIME --&gt; LIBS
+
+    CONSOLE --&gt; PAGES
+    PAGES --&gt; SERVICES
+    PAGES --&gt; LIBS</code></pre>
+<p class="ct-documentbody">The framework supplies the common execution environment. Applications and tools opt into the services they need, while the Management Console uses the same public framework APIs to assemble a larger interactive application.</p>
+<hr>
+<h2 id="framework-runtime" class="ct-L1Sectionheader">Framework Runtime</h2>
+<h3 id="bootstrap-and-execution" class="ct-L2Sectionheader">Bootstrap and execution</h3>
+<p class="ct-documentbody">Executable scripts explicitly bootstrap into SolidGroundUX. The bootstrap layer provides a predictable runtime environment including:</p>
+<ul>
+<li>Framework-root discovery from the executing component</li>
+<li>Runtime path construction</li>
+<li>Library loading through <code>SGND_USING</code></li>
+<li>Script metadata</li>
+<li>Argument processing</li>
+<li>Configuration initialization</li>
+<li>Persistent state initialization</li>
+<li>UI and logging initialization</li>
+</ul>
+<p class="ct-documentbody">Applications therefore start from a common execution model instead of recreating their own startup infrastructure.</p>
+<h3 id="command-line-processing" class="ct-L2Sectionheader">Command-line processing</h3>
+<p class="ct-documentbody">SolidGroundUX provides declarative argument handling for:</p>
+<ul>
+<li>Long and short options</li>
+<li>Flags</li>
+<li>Value arguments</li>
+<li>Enumerated choices</li>
+<li>Validation</li>
+<li>Generated help</li>
+<li>Usage examples</li>
+<li>Framework-provided built-in arguments</li>
+</ul>
+<p class="ct-documentbody">Arguments are described as metadata and processed by the framework rather than manually parsed in each executable.</p>
+<h3 id="configuration" class="ct-L2Sectionheader">Configuration</h3>
+<p class="ct-documentbody">Configuration supports system-wide, user-specific and application-specific values.</p>
+<p class="ct-documentbody">The framework resolves the applicable configuration during startup and makes the effective settings available to the application. This allows scripts to use persistent configuration without embedding configuration-file parsing throughout their implementation.</p>
+<h3 id="persistent-state" class="ct-L2Sectionheader">Persistent state</h3>
+<p class="ct-documentbody">State is intended for values that belong to an execution workflow rather than permanent configuration.</p>
+<p class="ct-documentbody">Typical uses include:</p>
+<ul>
+<li>Previous user selections</li>
+<li>Last-used paths</li>
+<li>Console preferences</li>
+<li>Incremental deployment timestamps</li>
+<li>Wizard and workflow values</li>
+</ul>
+<p class="ct-documentbody">Scripts declare the state they want to persist; the framework handles loading and saving it.</p>
+<h3 id="logging" class="ct-L2Sectionheader">Logging</h3>
+<p class="ct-documentbody">SolidGroundUX provides semantic message functions and independently configurable console and file logging.</p>
+<p class="ct-documentbody">Applications can emit messages according to meaning—information, warning, failure, success, debug and related states—without deciding presentation at every call site.</p>
+<p class="ct-documentbody">Console and file log levels are controlled independently, allowing interactive output to remain quiet while retaining more detailed diagnostic logging when required.</p>
+<h3 id="terminal-ui-and-dialogs" class="ct-L2Sectionheader">Terminal UI and dialogs</h3>
+<p class="ct-documentbody">The UI layer provides reusable terminal primitives for:</p>
+<ul>
+<li>Titles and section headers</li>
+<li>Labels and values</li>
+<li>Wrapped and aligned text</li>
+<li>Semantic colours</li>
+<li>Themes</li>
+<li>Glyphs</li>
+<li>Input prompts</li>
+<li>Decisions and selections</li>
+<li>Form-style input</li>
+<li>Date/time input</li>
+<li>Auto-continue dialogs</li>
+<li>Progress indicators</li>
+</ul>
+<p class="ct-documentbody">Presentation is separated from application logic wherever doing so adds practical value.</p>
+<p align="center">
+  <img alt="SolidGroundUX theme showcase" src="../assets/images/Theme Showcase.png" />
+</p>
+<h3 id="menu-api" class="ct-L2Sectionheader">Menu API</h3>
+<p class="ct-documentbody"><code>sgnd-menu.sh</code> provides the reusable public menu API used by the Management Console and standalone framework tools.</p>
+<p class="ct-documentbody">Consumers can create a menu, register groups and items, render the current page, read or dispatch selections, and control optional console chrome without implementing their own menu model.</p>
+<p class="ct-documentbody">This is deliberately separate from the SolidGround Management Console itself: the console is a consumer of the menu framework, not the definition of it.</p>
+<h3 id="data-tables" class="ct-L2Sectionheader">Data tables</h3>
+<p class="ct-documentbody">The datatable library provides schema-based operations for pipe-separated datasets and is used internally where structured shell data is preferable to parallel ad-hoc arrays.</p>
+<h3 id="shared-libraries" class="ct-L2Sectionheader">Shared libraries</h3>
+<p class="ct-documentbody">Reusable functionality lives in common libraries rather than being copied between applications or console modules.</p>
+<p class="ct-documentbody">A useful distinction has evolved within the framework naming convention:</p>
+<ul>
+<li><code>sgnd_*</code> — public framework API intended for consumers.</li>
+<li><code>_sgnd_*</code> — framework-internal API available to cooperating SolidGroundUX libraries and components.</li>
+<li><code>_foo</code> — local implementation detail belonging to a particular script or module.</li>
+</ul>
+<p class="ct-documentbody">Bash cannot enforce these access levels, but the convention makes intended ownership clear.</p>
+<hr>
+<h2 id="solidground-management-console" class="ct-L1Sectionheader">SolidGround Management Console</h2>
+<p class="ct-documentbody">The SolidGround Management Console is a modular administration application built on the SolidGroundUX runtime and public menu API.</p>
+<p class="ct-documentbody">It is intended to provide a consistent interface for common Linux system-management tasks while delegating substantial workflows to reusable framework libraries and executables.</p>
+<p align="center">
+  <img alt="SolidGround Console" src="../assets/images/SolidGroundManagementConsole.png" />
+</p>
+<h3 id="index-based-navigation" class="ct-L2Sectionheader">Index-based navigation</h3>
+<p class="ct-documentbody">The console starts with a lightweight main index.</p>
+<p class="ct-documentbody">At startup it discovers the available console pages and reads their lightweight metadata, but does not immediately source every implementation module.</p>
+<p class="ct-documentbody">When a page is selected:</p>
+<ol>
+<li>Its module is sourced.</li>
+<li>The module registers its detailed groups and actions.</li>
+<li>The selected page is rendered.</li>
+<li>The module remains loaded for the rest of the console process.</li>
+</ol>
+<p class="ct-documentbody">Returning to the index does not unload the page.</p>
+<p class="ct-documentbody">This keeps initial console startup lightweight while avoiding repeated loading once functionality has been used.</p>
+<h3 id="page-visibility" class="ct-L2Sectionheader">Page visibility</h3>
+<p class="ct-documentbody">Console pages can be enabled or disabled through persistent visibility state.</p>
+<p class="ct-documentbody">When running as root, the index exposes <strong>Manage visibility</strong> (<code>V</code>). Changes are stored in the existing console-module state and the index is rebuilt immediately.</p>
+<p class="ct-documentbody">Visibility is therefore part of the console environment rather than hard-coded into the host.</p>
+<h3 id="direct-controls" class="ct-L2Sectionheader">Direct controls</h3>
+<p class="ct-documentbody">Frequently used runtime controls are available directly from the console instead of requiring a separate settings page.</p>
+<p class="ct-documentbody">These include controls for such things as:</p>
+<ul>
+<li>Dry-run or commit mode</li>
+<li>Access context</li>
+<li>Console logging</li>
+<li>File logging</li>
+<li>Theme</li>
+<li>Lines per page</li>
+<li>Redraw</li>
+<li>Interactive shell access</li>
+</ul>
+<p class="ct-documentbody">The exact available controls are shown by the console itself.</p>
+<h3 id="management-pages" class="ct-L2Sectionheader">Management pages</h3>
+<p class="ct-documentbody">The current console is organized around functional pages including:</p>
+<h4 id="computer-setup" class="ct-L3Sectionheader">Computer Setup</h4>
+<p class="ct-documentbody">Base-machine preparation and configuration, including machine identity, networking, SSH, package management and template preparation.</p>
+<h4 id="storage" class="ct-L3Sectionheader">Storage</h4>
+<p class="ct-documentbody">Local storage provisioning and inspection, including filesystem creation, persistent mounting, expansion, validation, status, ownership and permissions.</p>
+<h4 id="active-directory-server" class="ct-L3Sectionheader">Active Directory Server</h4>
+<p class="ct-documentbody">Samba Active Directory server installation, provisioning, validation, status and directory-management functions.</p>
+<h4 id="active-directory-client" class="ct-L3Sectionheader">Active Directory Client</h4>
+<p class="ct-documentbody">Domain-client installation, join/leave workflows, membership status and related DNS integration.</p>
+<h4 id="samba-file-server" class="ct-L3Sectionheader">Samba File Server</h4>
+<p class="ct-documentbody">Samba file-server installation, validation and managed-share administration.</p>
+<h4 id="solidgroundux" class="ct-L3Sectionheader">SolidGroundUX</h4>
+<p class="ct-documentbody">Framework information and maintenance, including configuration, state, logging, diagnostics and access to the Release Manager.</p>
+<h4 id="development" class="ct-L3Sectionheader">Development</h4>
+<p class="ct-documentbody">Workspace, deployment, release preparation, wrapper creation, documentation and other SolidGroundUX development workflows.</p>
+<p class="ct-documentbody">The page structure can evolve without requiring the console host itself to become a monolithic administration script.</p>
+<hr>
+<h2 id="development-tooling" class="ct-L1Sectionheader">Development Tooling</h2>
+<p class="ct-documentbody">SolidGroundUX includes tools for building and maintaining applications that use the framework.</p>
+<h3 id="workspaces" class="ct-L2Sectionheader">Workspaces</h3>
+<p class="ct-documentbody"><code>create-workspace</code> creates a repository-shaped development workspace. It discovers installed convenience templates, lets the developer choose which templates to copy into the workspace, can instantiate starter scripts per selected template, and creates basic repository material including <code>README.md</code>, <code>CHANGELOG.md</code>, and project assets.</p>
+<p class="ct-documentbody"><code>deploy-workspace</code> deploys complete or filtered workspace content locally or remotely. It supports incremental deployment and can select content by filename or mask and modification time.</p>
+<h3 id="documentation-generation" class="ct-L2Sectionheader">Documentation generation</h3>
+<p class="ct-documentbody"><code>doc-generator</code> extracts structured documentation from source comments, maintains a normalized processor/renderer boundary, and renders a navigable HTML documentation set.</p>
+<p class="ct-documentbody">The source dialect supports presentation hints, image groups, semantic tables using <code>. Table</code> / <code>. EndTable</code> with <code>::</code> cell separators, and <code>&lt;&gt;</code> alignment columns for proportional-font layout without turning aligned text into a table. A literal <code>@</code> modifier is defined to protect documentation text from structural interpretation.</p>
+<p class="ct-documentbody">Generation can build a complete collection, update selected or changed content, or render again from existing normalized data. Per-product <code>.docignore</code> configuration and deterministic multi-product asset handling allow one documentation collection to span multiple products without silently overwriting duplicate assets.</p>
+<p class="ct-documentbody">Documentation therefore remains close to the code it describes rather than becoming an unrelated document that must be maintained independently.</p>
+<p align="center">
+  <img alt="SolidGroundUX documentation generator" src="../assets/images/DocGenerator.png" />
+</p>
+<h3 id="release-preparation" class="ct-L2Sectionheader">Release preparation</h3>
+<p class="ct-documentbody"><code>prepare-release</code> turns one or more development products into prepared SolidGroundUX release packages.</p>
+<p class="ct-documentbody">A release run can select a primary product and companion products. Each product keeps its own product identity and its own version/build update policy. A combined bundle inherits Version and Build from the primary product rather than maintaining separate bundle metadata.</p>
+<p class="ct-documentbody">The tool can create individual product releases, a combined bundle, or both. A bundle inherits Version and Build from its primary product. Human-readable product names are retained in package metadata, while generated filenames use filesystem-safe product names.</p>
+<p class="ct-documentbody">Its responsibilities include per-product release metadata maintenance, checksums, manifests, removed-file tracking, executable permissions, wrapper verification, product ownership collision detection and creation of the final release artifacts. Removal baselines are selected independently per product (and for the bundle), with manifest choices filtered to the matching product. Conflicting bundle paths are reported rather than silently allowing one product to overwrite another.</p>
+<p class="ct-documentbody">Every prepared package carries project/product identity used by <code>release-manager</code>, so Version and Build do not have to be re-entered during installation or update. The resulting release packages are intended to be consumed by <code>release-manager</code>.</p>
+<hr>
+<h2 id="installation-and-release-management" class="ct-L1Sectionheader">Installation and Release Management</h2>
+<p class="ct-documentbody">SolidGroundUX uses <code>release-manager.sh</code> as the canonical installation and release-lifecycle tool for the framework and separately released SolidGroundUX products.</p>
+<p class="ct-documentbody">The Release Manager discovers prepared packages from their package metadata and can switch between bundled and individual products. Each project keeps its own release/archive state and GitHub repository configuration. Version and Build belong to the prepared package and are not operator-entered Release Manager settings.</p>
+<p class="ct-documentbody">The previous separate installer, updater and uninstaller architecture has been superseded.</p>
+<p class="ct-documentbody">A normal release flow is:</p>
+<pre class="doc-license-text"><code>Development workspace
+        |
+        v
+prepare-release
+        |
+        v
+Prepared release artifacts
+        |
+        v
+release-manager
+        |
+        +--&gt; install
+        +--&gt; update
+        +--&gt; rollback / reinstall
+        +--&gt; remove</code></pre>
+<h3 id="filesystem-based-release-state" class="ct-L2Sectionheader">Filesystem-based release state</h3>
+<p class="ct-documentbody">Release state is represented by the release artifacts themselves rather than a separate current-version database.</p>
+<p class="ct-documentbody">The release manager uses:</p>
+<pre class="doc-license-text"><code>/var/lib/solidgroundux/releases
+/var/lib/solidgroundux/archive</code></pre>
+<p class="ct-documentbody">Available releases are kept beneath <code>releases/</code>. Installed release history is retained beneath <code>archive/</code>, where the highest archived release represents the currently installed release.</p>
+<p class="ct-documentbody">This makes the release lifecycle inspectable using ordinary filesystem tools.</p>
+<h3 id="bootstrap-installation" class="ct-L2Sectionheader">Bootstrap installation</h3>
+<p class="ct-documentbody">A release bundle can include both the prepared release and <code>release-manager.sh</code>.</p>
+<p class="ct-documentbody">On a fresh machine, the bundle can be extracted into a temporary location and the bundled release manager executed. It establishes the canonical release-management directories, installs itself into its managed location, validates the accompanying release and proceeds through the normal installation path.</p>
+<p class="ct-documentbody">The bootstrap path therefore converges on the same release model used for subsequent updates and rollbacks.</p>
+<hr>
+<h2 id="conventions-and-extensibility" class="ct-L1Sectionheader">Conventions and Extensibility</h2>
+<p class="ct-documentbody">SolidGroundUX favors convention over repeated configuration.</p>
+<p class="ct-documentbody">Executable scripts, source-only libraries and Management Console modules each follow recognizable structures. Shared behavior is moved into common libraries when multiple independent consumers need it.</p>
+<p class="ct-documentbody">In particular, lazy-loaded console modules must not depend on another page having been opened first. Functionality genuinely shared between modules belongs in an appropriately scoped common library. Management-console-specific ownership remains with the Management Console Modules product.</p>
+<p class="ct-documentbody">This keeps page modules focused on registration and subject-specific behavior while preserving predictable dependencies.</p>
+<hr>
+<h2 id="included-tools" class="ct-L1Sectionheader">Included Tools</h2>
+<table class="doc-data-table">
+<thead><tr><th>Tool</th><th>Purpose</th></tr></thead>
+<tbody>
+<tr><td><code>sgnd-smoketest</code></td><td>Validate the framework installation and exercise core framework APIs and runtime behaviour</td></tr>
+<tr><td><code>tar-it</code> / <code>untar-it</code></td><td>Framework archive helpers used by framework consumers and tooling</td></tr>
+</tbody>
+</table>
+<hr>
+<h2 id="intended-audience" class="ct-L1Sectionheader">Intended Audience</h2>
+<p class="ct-documentbody">SolidGroundUX is intended for developers and system administrators who:</p>
+<ul>
+<li>Build more than a handful of shell scripts</li>
+<li>Prefer reusable infrastructure over copy-and-paste development</li>
+<li>Want a consistent application structure</li>
+<li>Value documentation, readability and maintainability</li>
+<li>Prefer software that remains understandable and inspectable rather than hiding behaviour behind unnecessary abstraction</li>
+</ul>
+<p class="ct-documentbody">SolidGroundUX does not try to turn Bash into another language.</p>
+<p class="ct-documentbody">It tries to provide enough solid ground beneath Bash applications that they can be treated like software.</p>
+</main>
+</body>
+</html>

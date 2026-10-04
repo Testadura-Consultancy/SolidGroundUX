@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Updating and Reconciliation</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></div>
+<header class="doc-page-header">
+  <div class="doc-title">Updating and Reconciliation</div>
+  <div class="doc-breadcrumb">sdk-deployment_preface.sh::Deployment:Updating and Reconciliation:</div>
+</header>
+<div class="ct-L2Sectionbody"></div>
+<p class="ct-L2Sectionbody">Updates install a complete incoming release rather than applying binary deltas. The incoming manifest establishes the files that belong to the new release, while the `.removed` manifest identifies obsolete paths that must be removed from the active installation.</p>
+<div class="ct-L2Sectionbody"></div>
+<p class="ct-L2Sectionbody">This model keeps the target filesystem reconcilable: an update is defined by the desired release contents, not by a chain of imperative patches from every historical version.</p>
+<div class="ct-L2Sectionbody"></div>
+</main>
+</body>
+</html>

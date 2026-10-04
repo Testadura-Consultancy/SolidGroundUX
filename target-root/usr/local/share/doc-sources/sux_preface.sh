@@ -3,8 +3,8 @@
 # ----------------------------------------------------------------------------------
 # Metadata:
 #   Version     : 2.1
-#   Build       : 2627501
-#   Checksum    : 79b13a0b974dd4ca7305f65e907daf41df32bb46d69d2798ccedaffbc47a7cf8
+#   Build       : 2627700
+#   Checksum    : 74f7f5eb605a7aa4f04854c7dac0bd344b53ca008688e3b65181bb7173f2916e
 #   Source      : sux-preface.sh
 #   Type        : documentation
 #   Group       : SolidGroundUX
@@ -97,9 +97,15 @@
 # > layered configuration, persistent state, validation, and transfer of selected values
 # > between invocations.
 #
+# . Images
+#   sux-config-state-precedence.png :: Precedence of configuration and state layers in SolidGroundUX.
+#
 # -- Logging and terminal UI ---------------------------------------------------------
 # > Screen messaging, file logging, themes, palettes, title bars, sections, typed prompts,
 # > dialogs, and menu primitives share one vocabulary and one runtime policy.
+#
+# . Images
+#   sux-theme-showcase.png :: SolidGroundUX themes and palettes.
 #
 # -- Reusable APIs ------------------------------------------------------------------
 # > Common libraries provide metadata/header parsing, datatable helpers, system helpers,

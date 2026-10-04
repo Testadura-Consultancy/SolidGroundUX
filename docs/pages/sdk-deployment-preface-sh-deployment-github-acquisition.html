@@ -14,19 +14,9 @@
   <div class="doc-breadcrumb">sdk-deployment_preface.sh::Deployment:GitHub Acquisition:</div>
 </header>
 <div class="ct-L2Sectionbody"></div>
-<p class="ct-L2Sectionbody">GitHub is the default authoritative source for determining the latest published SolidGroundUX release. Generic project packages can always be supplied directly by file or URL; project-specific online discovery can be added through project metadata without changing the package-installation engine.</p>
+<p class="ct-L2Sectionbody">Setup can query the configured GitHub release source, compare the published release with local/installed state, and download the product ZIP when acquisition is needed. Acquisition changes where a package comes from; it does not change the package installation model.</p>
 <div class="ct-L2Sectionbody"></div>
-<p class="ct-L2Sectionbody">release-manager.sh asks GitHub which SolidGroundUX release is current before downloading.</p>
-<div class="ct-L2Sectionbody"></div>
-<p class="ct-L2Sectionbody">If that release is already present under archive/ it is considered installed.</p>
-<div class="ct-L2Sectionbody"></div>
-<p class="ct-L2Sectionbody">If it is already present under releases/ it is considered downloaded.</p>
-<div class="ct-L2Sectionbody"></div>
-<p class="ct-L2Sectionbody">In either case, the release manager avoids downloading the same release again.</p>
-<div class="ct-L2Sectionbody"></div>
-<p class="ct-L2Sectionbody">New downloads are staged in a temporary directory first. The ZIP is extracted, the contained release identity is checked, required release files are verified, checksums are validated, and release paths are checked for unsafe traversal.</p>
-<div class="ct-L2Sectionbody"></div>
-<p class="ct-L2Sectionbody">Only a valid release set is admitted into releases/.</p>
+<p class="ct-L2Sectionbody">Local files, downloaded files, and first-install bundle files therefore converge on the same Setup validation and installation path.</p>
 <div class="ct-L2Sectionbody"></div>
 </main>
 </body>

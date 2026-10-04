@@ -14,17 +14,13 @@
   <div class="doc-breadcrumb">sdk-deployment_preface.sh::Deployment:Integrity and Recovery:</div>
 </header>
 <div class="ct-L2Sectionbody"></div>
-<p class="ct-L2Sectionbody">Release integrity is validated before installation by checking the supplied SHA-256 sidecar files and release paths.</p>
+<p class="ct-L2Sectionbody">Release artifacts carry SHA-256 sidecars so Setup can validate the package material before installation. The Setup executable is intentionally capable of operating with its fallback UI when Framework bootstrap is unavailable, which keeps the repair path independent from the health of the active runtime.</p>
 <div class="ct-L2Sectionbody"></div>
-<p class="ct-L2Sectionbody">The release engine intentionally remains independent of the installed framework. Its standalone UI and default-theme fallback are always available. Framework UI primitives and the active theme are used only when they can be loaded successfully.</p>
+<p class="ct-L2Sectionbody">The result is a simple ownership model:</p>
 <div class="ct-L2Sectionbody"></div>
-<p class="ct-L2Sectionbody">As a result, the canonical copy at:</p>
-<div class="ct-L2Sectionbody"></div>
-<div class="ct-L2Sectionbody">    /var/lib/solidgroundux/release-manager.sh</div>
-<div class="ct-L2Sectionbody"></div>
-<p class="ct-L2Sectionbody">remains usable for update, rollback, reinstallation, or removal even if the live SolidGroundUX installation is incomplete or damaged.</p>
-<div class="ct-L2Sectionbody"></div>
-<p class="ct-L2Sectionbody">This independence is a core deployment design principle.</p>
+<div class="ct-L2Sectionbody">    deploy-workspace.sh   development copy/test loop</div>
+<div class="ct-L2Sectionbody">    prepare-release.sh    release creation</div>
+<div class="ct-L2Sectionbody">    sgnd-setup            installed product lifecycle</div>
 </main>
 </body>
 </html>

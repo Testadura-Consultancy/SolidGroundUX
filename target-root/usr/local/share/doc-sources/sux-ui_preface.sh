@@ -3,8 +3,8 @@
 # ----------------------------------------------------------------------------------
 # Metadata:
 #   Version     : 2.1
-#   Build       : 2627501
-#   Checksum    : 07ad94dee15808e84251ad67d62202ccd7097c14116e21ed342ac3331da40ae8
+#   Build       : 2627700
+#   Checksum    : 6443e4a4d14b34093e6efe76b34c9800789dba2d457341c544a55e76ff915ee6
 #   Source      : sux-ui-preface.sh
 #   Type        : documentation
 #   Group       : UI
@@ -85,6 +85,9 @@
 # > This prevents consuming scripts from embedding ANSI codes or hard-coded color
 # > choices.
 #
+# . Images
+#   ssux-theme-showcase.png :: UI Theme Showcase
+#  
 # > The active style can reflect the current run mode, such as normal operation,
 # > dry-run execution, debugging, or another framework-defined state. Applications
 # > communicate intent through the public API; the UI layer selects the appropriate

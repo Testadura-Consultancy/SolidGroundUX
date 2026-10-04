@@ -42,6 +42,8 @@ release-manager.sh|Mark Fieten|Testadura Consultancy|-|© 2025 - 2026 Testadura 
 sgnd-setup.sh|Mark Fieten|Testadura Consultancy|-|© 2025 - 2026 Testadura Consultancy|Licensed under the Testadura Non-Commercial License (TD-NC) v1.1.
 mod-template.sh|Mark Fieten|Testadura Consultancy|-|© 2025 - 2026 Testadura Consultancy|Licensed under the Testadura Non-Commercial License (TD-NC) v1.1.
 mcm_console_preface.sh|Mark Fieten|Testadura Consultancy|-|© 2025 - 2026 Testadura Consultancy|Licensed under the Testadura Non-Commercial License (TD-NC) v1.1.
+mcm-role-managers_preface.sh|Mark Fieten|Testadura Consultancy|-|© 2025 - 2026 Testadura Consultancy|Licensed under the Testadura Non-Commercial License (TD-NC) v1.1.
+mcm-modules_preface.sh|Mark Fieten|Testadura Consultancy|-|© 2025 - 2026 Testadura Consultancy|Licensed under the Testadura Non-Commercial License (TD-NC) v1.1.
 mcm_preface.sh|Mark Fieten|Testadura Consultancy|-|© 2025 - 2026 Testadura Consultancy|Licensed under the Testadura Non-Commercial License (TD-NC) v1.1.
 manage-docker-server.sh|Mark Fieten|Testadura Consultancy|-|© 2025 - 2026 Testadura Consultancy|Licensed under the Testadura Non-Commercial License (TD-NC) v1.1.
 manage-samba-file-server.sh|Mark Fieten|Testadura Consultancy|-|© 2025 - 2026 Testadura Consultancy|Licensed under the Testadura Non-Commercial License (TD-NC) v1.1.
@@ -80,6 +82,7 @@ solidground-management-console-modules-definitions.sh|Mark Fieten|Testadura Cons
 doc-template.sh|Mark Fieten|Testadura Consultancy|-|© 2025 - 2026 Testadura Consultancy|Licensed under the Testadura Non-Commercial License (TD-NC) v1.1.
 templates_preface.sh|Mark Fieten|Testadura Consultancy|-|© 2025 - 2026 Testadura Consultancy|Licensed under the Testadura Non-Commercial License (TD-NC) v1.1.
 sdk-documentation_preface.sh|Mark Fieten|Testadura Consultancy|-|© 2025 - 2026 Testadura Consultancy|Licensed under the Testadura Non-Commercial License (TD-NC) v1.1.
+sdk_preface.sh|Mark Fieten|Testadura Consultancy|-|© 2025 - 2026 Testadura Consultancy|Licensed under the Testadura Non-Commercial License (TD-NC) v1.1.
 sdk-tools_preface.sh|Mark Fieten|Testadura Consultancy|-|© 2025 - 2026 Testadura Consultancy|Licensed under the Testadura Non-Commercial License (TD-NC) v1.1.
 sdk-deployment_preface.sh|Mark Fieten|Testadura Consultancy|-|© 2025 - 2026 Testadura Consultancy|Licensed under the Testadura Non-Commercial License (TD-NC) v1.1.
 doc-generator.sh|Mark Fieten|Testadura Consultancy|-|© 2025 - 2026 Testadura Consultancy|Licensed under the Testadura Non-Commercial License (TD-NC) v1.1.

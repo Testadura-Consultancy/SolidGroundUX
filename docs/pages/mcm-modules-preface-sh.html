@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>SolidGroundUX Management Console Modules - Module Registration</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></div>
+<header class="doc-page-header">
+  <div class="doc-title">SolidGroundUX Management Console Modules - Module Registration</div>
+  <div class="doc-breadcrumb">SolidGroundUX Codex / mcm-modules_preface.sh</div>
+</header>
+<div class="ct-L1Sectionheader">Module Registration</div>
+<div class="ct-L1Sectionbody"></div>
+<p class="ct-L1Sectionbody">Management Console modules define the guided pages shown by `sgnd-console`. They are orchestration and registration units: each module describes its page, groups, menu items, validation entry points, and the actions that should be invoked for its subject.</p>
+<div class="ct-L1Sectionbody"></div>
+<p class="ct-L1Sectionbody">A console module is not the preferred home for reusable system-management logic. Persistent operational work belongs in the corresponding role manager or shared library so the same operation can be tested and invoked outside the console host.</p>
+<div class="ct-L1Sectionbody"></div>
+<div class="ct-L2Sectionheader">Lazy Loading</div>
+<div class="ct-L2Sectionbody"></div>
+<p class="ct-L2Sectionbody">The console discovers module metadata without sourcing every implementation. A module is sourced only when its page is opened and remains loaded for the life of that console process.</p>
+<div class="ct-L2Sectionbody"></div>
+<p class="ct-L2Sectionbody">Modules must therefore be self-contained at load time. They must not rely on another page having been opened first, and cross-module helpers belong in a commonly owned library rather than in one of the participating module files.</p>
+<div class="ct-L2Sectionbody"></div>
+<div class="ct-L2Sectionheader">Registration Contract</div>
+<div class="ct-L2Sectionbody"></div>
+<p class="ct-L2Sectionbody">Once loaded, a module registers its groups and menu items through the Framework-owned menu API. Functions referenced by registrations must already be defined, and the normal source-only/library guard keeps repeated sourcing harmless.</p>
+<div class="ct-L2Sectionbody"></div>
+<p class="ct-L2Sectionbody">Numeric filename prefixes determine page ordering. Group/item ordering is local to the module and expresses the operator-facing workflow for that page.</p>
+<div class="ct-L2Sectionbody"></div>
+<div class="ct-L2Sectionheader">Action Boundary</div>
+<div class="ct-L2Sectionbody"></div>
+<p class="ct-L2Sectionbody">Menu actions may perform lightweight orchestration directly, but system-changing work should normally delegate to a role manager. The module is responsible for passing the relevant execution context, including DRYRUN, and for presenting completion/status in the standard console interaction model.</p>
+<div class="ct-L2Sectionbody"></div>
+<p class="ct-L2Sectionbody">This split keeps the UI declarative and the operational code independently reusable.</p>
+<div class="ct-L2Sectionbody"></div>
+<div class="ct-L2Sectionheader">Documentation</div>
+<div class="ct-L2Sectionbody"></div>
+<p class="ct-L2Sectionbody">The generated reference beneath this group documents the individual module pages and their registration contracts. The Console documentation describes host behavior, navigation, paging, visibility, and lifecycle rules shared by all modules.</p>
+</main>
+</body>
+</html>

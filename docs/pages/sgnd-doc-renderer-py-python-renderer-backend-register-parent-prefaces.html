@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Register prefaces as parent-node content</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></div>
+<header class="doc-page-header">
+  <div class="doc-title">Register prefaces as parent-node content</div>
+  <div class="doc-breadcrumb">SolidGroundUX Codex / sgnd_doc_renderer.py / Python Renderer Backend / register_parent_prefaces</div>
+</header>
+<div class="ct-functionbody sh-highlight">Purpose</div>
+<div class="ct-functionbody">  Associate product, group, or subgroup preface modules with their parent node.</div>
+<div class="ct-functionbody">  The first preface supplies the parent&#x27;s page reference; all registered prefaces</div>
+<div class="ct-functionbody">  are rendered into that parent page and are not emitted as navigation children.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Arguments</div>
+<div class="ct-functionbody">  parent_node_id  Navigation node that owns the preface content.</div>
+<div class="ct-functionbody">  modules         Preface modules associated with that hierarchy level.</div>
+<div class="ct-functionbody sh-highlight">Returns</div>
+<div class="ct-functionbody">  Module-level content reference for the first preface, or an empty string.</div>
+<div class="ct-functionbody sh-highlight">Usage</div>
+<div class="ct-functionbody">  self.register_parent_prefaces(&lt;parent_node_id&gt;, &lt;modules&gt;)</div>
+</main>
+</body>
+</html>

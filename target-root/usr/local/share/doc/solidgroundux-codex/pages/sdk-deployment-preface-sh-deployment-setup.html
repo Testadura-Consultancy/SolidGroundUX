@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Setup</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></div>
+<header class="doc-page-header">
+  <div class="doc-title">Setup</div>
+  <div class="doc-breadcrumb">sdk-deployment_preface.sh::Deployment:Setup:</div>
+</header>
+<div class="ct-L2Sectionbody"></div>
+<p class="ct-L2Sectionbody">`sgnd-setup.sh` is the canonical installation and product-lifecycle interface for current SolidGroundUX releases. It is self-sufficient enough to run before the Framework exists and to remain usable for repair when the installed Framework cannot be bootstrapped normally.</p>
+<div class="ct-L2Sectionbody"></div>
+<p class="ct-L2Sectionbody">On a healthy installation Setup can reuse the normal SolidGroundUX UI primitives and active theme. When that is not possible, it uses its own small fallback UI rather than making recovery depend on the component being repaired.</p>
+<div class="ct-L2Sectionbody"></div>
+<p class="ct-L2Sectionbody">After installation the public entry point is:</p>
+<div class="ct-L2Sectionbody"></div>
+<div class="ct-L2Sectionbody">    sgnd-setup</div>
+<div class="ct-L2Sectionbody"></div>
+<p class="ct-L2Sectionbody">Common non-interactive actions include:</p>
+<div class="ct-L2Sectionbody"></div>
+<div class="ct-L2Sectionbody">    sgnd-setup --check</div>
+<div class="ct-L2Sectionbody">    sgnd-setup --download</div>
+<div class="ct-L2Sectionbody">    sgnd-setup --update</div>
+<div class="ct-L2Sectionbody">    sgnd-setup --install</div>
+<div class="ct-L2Sectionbody">    sgnd-setup --rollback</div>
+<div class="ct-L2Sectionbody">    sgnd-setup --remove</div>
+<div class="ct-L2Sectionbody"></div>
+<p class="ct-L2Sectionbody">A specific local product ZIP can be supplied as a transient source:</p>
+<div class="ct-L2Sectionbody"></div>
+<div class="ct-L2Sectionbody">    sgnd-setup --install --source /tmp/SolidGroundUX-2.1.&lt;build&gt;-release.zip</div>
+<div class="ct-L2Sectionbody"></div>
+<p class="ct-L2Sectionbody">Automation can combine an action with `--auto`; project selection can be made explicit with `--project &lt;slug&gt;`. `--dryrun` previews filesystem actions without applying them.</p>
+<div class="ct-L2Sectionbody"></div>
+<p class="ct-L2Sectionbody">The executable&#x27;s generated `--help` output is the authoritative option reference. This preface describes the lifecycle rather than duplicating every argument.</p>
+<div class="ct-L2Sectionbody"></div>
+</main>
+</body>
+</html>

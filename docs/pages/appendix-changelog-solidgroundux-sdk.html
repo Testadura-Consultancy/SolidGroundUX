@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Appendix Y: Change Log</title>
+  <title>Appendix 4: Change Log</title>
   <link rel="stylesheet" href="../assets/doc.css">
   <link rel="stylesheet" href="../assets/theme.css">
 </head>
@@ -10,71 +10,71 @@
 <main class="doc-page">
 <div class="doc-page-branding"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></div>
 <header class="doc-page-header">
-  <div class="doc-title">Appendix Y: Change Log</div>
-  <div class="doc-breadcrumb">SolidGroundUX SDK / Appendices / Appendix Y: Change Log</div>
+  <div class="doc-title">Appendix 4: Change Log</div>
+  <div class="doc-breadcrumb">SolidGroundUX SDK / Appendices / Appendix 4: Change Log</div>
 </header>
-<h2 class="ct-L1Sectionheader">Changelog</h2>
+<h2 id="changelog" class="ct-L1Sectionheader">Changelog</h2>
 <p class="ct-documentbody">All notable changes to SolidGroundUX SDK are documented in this file.</p>
-<h3 class="ct-L2Sectionheader">Unreleased</h3>
-<h4 class="ct-L3Sectionheader">Changed</h4>
+<h3 id="unreleased" class="ct-L2Sectionheader">Unreleased</h3>
+<h4 id="changed" class="ct-L3Sectionheader">Changed</h4>
 <ul>
 <li>Reworked release preparation around a single product-package model: every selected product is now emitted as its own product release ZIP; multi-product bundled releases are no longer produced.</li>
 <li>Removed the redundant primary-product selection from multi-product release preparation; selected products remain peers and are prepared in the operator-selected order.</li>
-<li>First-install packages now replace the former bundled-release role and use the independent Version/Build identity of `sgnd-setup.sh` rather than borrowing a selected product&#x27;s release identity.</li>
-<li>Product `tar.gz` payloads and their checksum sidecars are now treated as ZIP-internal staging artifacts and are removed after successful product packaging/export instead of being retained as standalone release outputs.</li>
-<li>Added a separate first-install transport ZIP containing `sgnd-setup.sh` plus the selected product release ZIPs, keeping bootstrap transport distinct from installable product packages.</li>
-<li>Updated release package metadata to format 3 with `SGND_PACKAGE_TYPE=product`.</li>
-<li>Added a configurable release output-directory prompt to `prepare-release`, persisted as state for reuse on subsequent runs.</li>
+<li>First-install packages now replace the former bundled-release role and use the independent Version/Build identity of <code>sgnd-setup.sh</code> rather than borrowing a selected product&#x27;s release identity.</li>
+<li>Product <code>tar.gz</code> payloads and their checksum sidecars are now treated as ZIP-internal staging artifacts and are removed after successful product packaging/export instead of being retained as standalone release outputs.</li>
+<li>Added a separate first-install transport ZIP containing <code>sgnd-setup.sh</code> plus the selected product release ZIPs, keeping bootstrap transport distinct from installable product packages.</li>
+<li>Updated release package metadata to format 3 with <code>SGND_PACKAGE_TYPE=product</code>.</li>
+<li>Added a configurable release output-directory prompt to <code>prepare-release</code>, persisted as state for reuse on subsequent runs.</li>
 <li>Release preparation now reports the final destination path of the generated release artifacts explicitly.</li>
 </ul>
-<h4 class="ct-L3Sectionheader">Fixed</h4>
+<h4 id="fixed" class="ct-L3Sectionheader">Fixed</h4>
 <ul>
-<li>Fixed non-interactive `receive-files.sh` execution hanging during workspace deployment by suppressing title rendering for the receiver path, avoiding terminal/titlebar probing when no controlling TTY is available.</li>
-<li>Restored normal `deploy-workspace` completion after the receiver/confirmation handling regression; development-to-production streaming again returns cleanly after transfer.</li>
-<li>Fixed release output cleanup so intermediate `tar.gz`, manifest, removal-manifest, and checksum artifacts remain staging-only and are removed after successful packaging; the release output directory now contains only the final product release ZIPs and first-install ZIP.</li>
+<li>Fixed non-interactive <code>receive-files.sh</code> execution hanging during workspace deployment by suppressing title rendering for the receiver path, avoiding terminal/titlebar probing when no controlling TTY is available.</li>
+<li>Restored normal <code>deploy-workspace</code> completion after the receiver/confirmation handling regression; development-to-production streaming again returns cleanly after transfer.</li>
+<li>Fixed release output cleanup so intermediate <code>tar.gz</code>, manifest, removal-manifest, and checksum artifacts remain staging-only and are removed after successful packaging; the release output directory now contains only the final product release ZIPs and first-install ZIP.</li>
 <li>Fixed release preparation cleanup so packaging metadata and checksum sidecars are retained inside their owning product ZIPs without leaking duplicate loose artifacts into the final release directory.</li>
 </ul>
-<h3 class="ct-L2Sectionheader">Release 2.1.2626712</h3>
-<h4 class="ct-L3Sectionheader">Changed</h4>
+<h3 id="release-2-1-2626712" class="ct-L2Sectionheader">Release 2.1.2626712</h3>
+<h4 id="changed" class="ct-L3Sectionheader">Changed</h4>
 <ul>
-<li>`prepare-release` now synchronizes existing literal `SGND_*_MODULE_VERSION` and `SGND_*_MODULE_BUILD` assignments when the corresponding canonical header Version or Build is updated, without creating metadata variables that are not already present.</li>
+<li><code>prepare-release</code> now synchronizes existing literal <code>SGND_*_MODULE_VERSION</code> and <code>SGND_*_MODULE_BUILD</code> assignments when the corresponding canonical header Version or Build is updated, without creating metadata variables that are not already present.</li>
 <li>Remote multi-product deployment now establishes one shared SSH connection for the deployment session and prepares remote receiver sudo access once before streaming products, limiting interactive authentication to at most one SSH password and one remote sudo password regardless of the number of selected products.</li>
 <li>Standardized public executable wrappers on the current canonical wrapper template, including framework-root discovery and target resolution instead of fixed installed or development paths.</li>
 </ul>
-<h4 class="ct-L3Sectionheader">Fixed</h4>
+<h4 id="fixed" class="ct-L3Sectionheader">Fixed</h4>
 <ul>
 <li>Removed a stale development-machine path from the Release Manager public wrapper by resolving the installed Release Manager through the canonical wrapper target mechanism.</li>
 </ul>
-<h3 class="ct-L2Sectionheader">Release 2.1.2626612</h3>
-<h4 class="ct-L3Sectionheader">Added</h4>
+<h3 id="release-2-1-2626612" class="ct-L2Sectionheader">Release 2.1.2626612</h3>
+<h4 id="added" class="ct-L3Sectionheader">Added</h4>
 <ul>
 <li>Established SolidGroundUX SDK as the owner of development, workspace, deployment, documentation and release tooling separated from the SolidGroundUX Framework.</li>
-<li>Added multi-product documentation collections with product discovery/selection, a primary product, product-specific `.docignore` configuration, deterministic duplicate-module handling and merged product assets.</li>
+<li>Added multi-product documentation collections with product discovery/selection, a primary product, product-specific <code>.docignore</code> configuration, deterministic duplicate-module handling and merged product assets.</li>
 <li>Added explicit documentation collection/output handling and documentation table syntax support.</li>
 <li>Added multi-product release preparation with per-product Version/Build policy, primary-product bundle identity, product ownership collision detection and per-product removal-baseline selection.</li>
 <li>Added release-package discovery and product-aware release/removal handling, including manifest-based removal and ownership-based removal paths.</li>
-<li>Added a declarative `workspace-layout.cfg` used by `create-workspace` to instantiate the complete canonical target-root tree, including system/user configuration and state locations, MOTD, runtime, share and var directories.</li>
-<li>Added optional project Description input to `create-workspace`; the description is stored in project definitions and reused by generated repository material.</li>
+<li>Added a declarative <code>workspace-layout.cfg</code> used by <code>create-workspace</code> to instantiate the complete canonical target-root tree, including system/user configuration and state locations, MOTD, runtime, share and var directories.</li>
+<li>Added optional project Description input to <code>create-workspace</code>; the description is stored in project definitions and reused by generated repository material.</li>
 <li>Added generated project README, changelog, license placeholder, default SolidGroundUX icon and Git placeholders for otherwise-empty canonical workspace directories.</li>
 </ul>
-<h4 class="ct-L3Sectionheader">Changed</h4>
+<h4 id="changed" class="ct-L3Sectionheader">Changed</h4>
 <ul>
-<li>Made `deploy-workspace` product-aware: product repositories can now be discovered beneath a product root and deployed individually or together.</li>
-<li>Added product selection, including an `All products` option, while retaining explicit single-source deployment compatibility.</li>
+<li>Made <code>deploy-workspace</code> product-aware: product repositories can now be discovered beneath a product root and deployed individually or together.</li>
+<li>Added product selection, including an <code>All products</code> option, while retaining explicit single-source deployment compatibility.</li>
 <li>Deployment filtering and reporting now operate per selected product.</li>
-<li>Moved `create-workspace`, `deploy-workspace`, `prepare-release`, release management, documentation generation/rendering/processing, wrapper generation and canonical normalization into the SDK product boundary.</li>
-<li>`create-workspace` now derives generated README identity from project definitions: Title, Version.Build, Copyright, project name and Description. Generated README navigation points to installed documentation, changelog and license and no longer embeds Framework-specific marketing captions.</li>
-<li>`create-workspace` now creates the full canonical workspace tree even when individual directories are not initially used; empty directories are retained in Git with placeholders that are excluded from release content.</li>
+<li>Moved <code>create-workspace</code>, <code>deploy-workspace</code>, <code>prepare-release</code>, release management, documentation generation/rendering/processing, wrapper generation and canonical normalization into the SDK product boundary.</li>
+<li><code>create-workspace</code> now derives generated README identity from project definitions: Title, Version.Build, Copyright, project name and Description. Generated README navigation points to installed documentation, changelog and license and no longer embeds Framework-specific marketing captions.</li>
+<li><code>create-workspace</code> now creates the full canonical workspace tree even when individual directories are not initially used; empty directories are retained in Git with placeholders that are excluded from release content.</li>
 <li>Convenience templates are discovered by product ownership and copied into workspace-local templates for project use. Starter scripts receive the new project identity and canonical Version/Build defaults.</li>
-<li>`doc-generator` now treats duplicate module basenames across products as deterministic first-wins collisions: the duplicate is warned about and skipped rather than overwriting or aborting the collection.</li>
-<li>`prepare-release` now treats product identity independently from repository identity and keeps release metadata/baseline state with each selected product. Bundles inherit Version/Build from the primary product.</li>
+<li><code>doc-generator</code> now treats duplicate module basenames across products as deterministic first-wins collisions: the duplicate is warned about and skipped rather than overwriting or aborting the collection.</li>
+<li><code>prepare-release</code> now treats product identity independently from repository identity and keeps release metadata/baseline state with each selected product. Bundles inherit Version/Build from the primary product.</li>
 <li>SDK executables running from a non-root SDK development tree now resolve Framework-owned resources through the Framework resolver while preserving their own SDK development context.</li>
 </ul>
-<h4 class="ct-L3Sectionheader">Fixed</h4>
+<h4 id="fixed" class="ct-L3Sectionheader">Fixed</h4>
 <ul>
-<li>Fixed `create-workspace` prematurely aborting after starter-script generation when the final selected template was non-executable; subsequent definitions, MOTD, README, changelog, license and placeholder generation now runs normally.</li>
-<li>Fixed `normalize-canon` assuming canonical Framework fragments existed beneath the SDK development root; canonical fragments now resolve from the actual local or installed Framework.</li>
-<li>Fixed `prepare-release` product identity updates for canonically indented `*_VERSION` and `*_BUILD` assignments and improved failure reporting for identity/header/checksum update failures.</li>
+<li>Fixed <code>create-workspace</code> prematurely aborting after starter-script generation when the final selected template was non-executable; subsequent definitions, MOTD, README, changelog, license and placeholder generation now runs normally.</li>
+<li>Fixed <code>normalize-canon</code> assuming canonical Framework fragments existed beneath the SDK development root; canonical fragments now resolve from the actual local or installed Framework.</li>
+<li>Fixed <code>prepare-release</code> product identity updates for canonically indented <code>*_VERSION</code> and <code>*_BUILD</code> assignments and improved failure reporting for identity/header/checksum update failures.</li>
 <li>Fixed release baseline discovery so the Framework product-name prefix does not absorb similarly named companion products such as Management Console Modules.</li>
 <li>Fixed documentation output behavior so duplicate modules and assets are reported without silently replacing previously collected product content.</li>
 </ul>

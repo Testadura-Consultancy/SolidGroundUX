@@ -1,0 +1,163 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Appendix 1: README</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></div>
+<header class="doc-page-header">
+  <div class="doc-title">Appendix 1: README</div>
+  <div class="doc-breadcrumb">SolidGroundUX Management Console Modules / Appendices / Appendix 1: README</div>
+</header>
+<table>
+<tr>
+<td width="170" align="center" valign="middle">
+  <img width="96" height="96" alt="SolidGroundUX logo" src="../assets/images/mcm_readmelogo.png" />
+</td>
+<td valign="middle">
+  <big><big><big><strong>SolidGroundUX: Management Console Modules</strong></big></big></big><br>
+  <sub>Version 2.1.2626414 · © 2026 Testadura</sub>
+</td>
+</tr>
+</table>
+<table>
+<tr>
+<td width="33%" align="center">
+  <a href="https://testadura-consultancy.github.io/SolidGroundUX/"><strong>Documentation</strong></a><br>
+  Product reference and guides
+</td>
+<td width="33%" align="center">
+  <a href="appendix-changelog-solidgroundux-management-console-modules.html"><strong>Changelog</strong></a><br>
+  Releases and development history
+</td>
+<td width="33%" align="center">
+  <a href="appendix-license-solidgroundux-management-console-modules.html"><strong>License</strong></a><br>
+  Terms of use and redistribution
+</td>
+</tr>
+</table>
+<hr>
+<h3 id="about-solidgroundux-management-console-modules" class="ct-L2Sectionheader">About SolidGroundUX Management Console Modules</h3>
+<p class="ct-documentbody">The <strong>SolidGroundUX Management Console Modules</strong> provide system-management functionality for the SolidGroundUX Management Console.</p>
+<p class="ct-documentbody">These modules were originally distributed as part of the standard SolidGroundUX release. They are now maintained as a separate project so that management functionality can evolve independently from the SolidGroundUX framework itself.</p>
+<p class="ct-documentbody">SolidGroundUX provides the framework, runtime and shared utilities. This project owns the Management Console host, its public <code>sgnd-console</code> command, the console modules, and the management-specific executables that use the Framework.</p>
+<h3 id="architecture" class="ct-L2Sectionheader">Architecture</h3>
+<p class="ct-documentbody">Management Console modules are primarily <strong>presentation and orchestration components</strong>.</p>
+<p class="ct-documentbody">A console module may:</p>
+<ul>
+<li>register menu groups and menu items;</li>
+<li>determine availability and display status;</li>
+<li>provide lightweight read-only status or validation functions;</li>
+<li>orchestrate other registered actions;</li>
+<li>dispatch work to framework or management executables.</li>
+</ul>
+<p class="ct-documentbody">Persistent or reusable system-changing functionality should normally be implemented in a separate executable rather than directly inside a console module.</p>
+<p class="ct-documentbody">Conceptually:</p>
+<pre class="doc-license-text"><code>Management Console
+        │
+        ▼
+Console module
+  menu registration
+  presentation
+  status / orchestration
+        │
+        ▼
+Management executable
+        │
+        ▼
+System changes</code></pre>
+<p class="ct-documentbody">Executables created specifically to implement management functionality belong to this project. Generic SolidGroundUX utilities remain part of the SolidGroundUX framework project, even when a Management Console module provides a menu entry for them.</p>
+<p class="ct-documentbody">For example, the Development module may expose framework utilities such as workspace creation, deployment or release preparation without taking ownership of those utilities.</p>
+<h3 id="framework-integration" class="ct-L2Sectionheader">Framework integration</h3>
+<p class="ct-documentbody">Management Console Modules depends on the SolidGroundUX Framework runtime and public APIs. Framework testing is split deliberately by ownership:</p>
+<ul>
+<li>The Framework provides the public <code>sgnd-smoketest</code> command for framework installation validation and interactive framework smoke tests.</li>
+<li>The Management Console Modules <strong>Framework Test</strong> page calls <code>sgnd-smoketest</code> for framework-owned suites.</li>
+<li>Console registration validation remains owned by Management Console Modules because module discovery, registration and handler validation are console-application concerns.</li>
+<li>Module validation remains owned by Management Console Modules and uses the canonical validator contract below.</li>
+</ul>
+<p class="ct-documentbody">The former Management Console-owned <code>framework-smoketest.sh</code> implementation and <code>sgnd-framework-smoketest</code> public command are no longer part of this product.</p>
+<h4 id="module-validation-contract" class="ct-L3Sectionheader">Module validation contract</h4>
+<p class="ct-documentbody">Every console module exposes a validator named:</p>
+<pre class="doc-license-text"><code>validate_module_&lt;module-id-with-hyphens-replaced-by-underscores&gt;</code></pre>
+<p class="ct-documentbody">The validator may print detailed diagnostics and sets:</p>
+<pre class="doc-license-text"><code>SGND_MODULE_VALIDATION_MESSAGE=&lt;concise summary&gt;</code></pre>
+<p class="ct-documentbody">It returns one of the standard validation states:</p>
+<pre class="doc-license-text"><code>0  Passed
+1  Failed
+2  Warning
+3  Skipped / not applicable</code></pre>
+<p class="ct-documentbody">Applicability is decided by the module itself. A missing canonical validator is a module-contract error rather than a skipped validation.</p>
+<h3 id="dryrun-contract" class="ct-L2Sectionheader">DRYRUN contract</h3>
+<p class="ct-documentbody">All persistent actions exposed through the Management Console must respect the SolidGroundUX <strong>DRYRUN</strong> contract.</p>
+<p class="ct-documentbody">When DRYRUN is active, an action may inspect the system and report what it would do, but it must not make persistent changes. This includes changes to:</p>
+<ul>
+<li>files and directories;</li>
+<li>system or application configuration;</li>
+<li>SolidGroundUX configuration or state;</li>
+<li>services;</li>
+<li>users and groups;</li>
+<li>repositories;</li>
+<li>remote systems.</li>
+</ul>
+<p class="ct-documentbody">Console modules must propagate DRYRUN to delegated executables. A delegated action must not silently escape DRYRUN semantics.</p>
+<p class="ct-documentbody">DRYRUN output should describe intended actions using <strong>Would ...</strong> while the preview is running, with enough detail to identify the relevant target, value, file, service, user, repository, or remote system where practical. A mutating action should finish its DRYRUN path with an explicit retrospective confirmation, for example: <strong>DRYRUN complete. The changes shown above would have been applied; no changes were written.</strong></p>
+<h3 id="menu-presentation" class="ct-L2Sectionheader">Menu presentation</h3>
+<p class="ct-documentbody">Modules and management executables that present menus should follow the standard SolidGroundUX console layout.</p>
+<p class="ct-documentbody">Menu sections should use <code>sgnd_print_sectionheader</code> rather than ad-hoc <code>Option: ...</code> headings or separators. The menu should have the standard separator above the option section and an empty line after the final menu option.</p>
+<p class="ct-documentbody">This keeps submenus visually consistent with the rest of the SolidGroundUX Management Console.</p>
+<h3 id="project-layout" class="ct-L2Sectionheader">Project layout</h3>
+<p class="ct-documentbody">Console modules are installed below the SolidGroundUX console-module directory:</p>
+<pre class="doc-license-text"><code>target-root/
+└── usr/
+    └── local/
+        ├── lib/
+        │   └── solidgroundux/
+        │       └── common/
+        │           └── active-directory-management.sh
+        └── libexec/
+            └── solidgroundux/
+                ├── console-modules/
+                │   ├── 10-computer-setup.sh
+                │   ├── 15-storage.sh
+                │   ├── 20-active-directory-server.sh
+                │   ├── 25-active-directory-client.sh
+                │   ├── 27-active-directory-management.sh
+                │   ├── 30-samba-file-server.sh
+                │   ├── 40-solidgroundux.sh
+                │   ├── 45-solidground-framework-test.sh
+                │   ├── 50-web-server.sh
+                │   ├── 60-sqlserver.sh
+                │   ├── 70-docker-server.sh
+                │   └── 90-development.sh
+                ├── manage-active-directory-client.sh
+                ├── manage-active-directory-server.sh
+                ├── manage-active-directory.sh
+                ├── manage-docker-containers.sh
+                ├── manage-docker-server.sh
+                ├── manage-samba-file-server.sh
+                ├── manage-samba-shares.sh
+                ├── manage-solidgroundux.sh
+                ├── manage-sqlserver.sh
+                ├── manage-storage.sh
+                ├── manage-web-server.sh
+                ├── publish-web-content.sh
+                └── set-identity.sh</code></pre>
+<p class="ct-documentbody">Management-specific executables may live alongside the SolidGroundUX executable tooling outside the <code>console-modules</code> directory. They remain part of this project when their primary purpose is to implement functionality owned by a Management Console module.</p>
+<h3 id="convenience-templates" class="ct-L2Sectionheader">Convenience templates</h3>
+<p class="ct-documentbody">Canonical convenience templates are owned by the product that defines them and are installed below <code>usr/local/share/solidgroundux/convenience-templates</code>.</p>
+<p class="ct-documentbody">The SolidGroundUX Framework supplies the generic executable, library, documentation and wrapper templates. Management Console Modules supplies the console-module template because the module contract belongs to this product.</p>
+<p class="ct-documentbody"><code>create-workspace</code> discovers the installed convenience templates and lets the developer select which ones to copy into a new workspace. The copied templates become workspace-local starter/reference copies and may then be used to instantiate project starter scripts.</p>
+<h3 id="development-principle" class="ct-L2Sectionheader">Development principle</h3>
+<p class="ct-documentbody">The boundary for this project is intentionally simple:</p>
+<blockquote><p class="ct-documentbody">**Console modules register and present functionality; executables</p></blockquote>
+<blockquote><p class="ct-documentbody">implement functionality.**</p></blockquote>
+<p class="ct-documentbody">Small presentation-only and read-only helpers may remain inside a module where extracting them provides no practical benefit. Persistent system-changing operations should live behind the module boundary in an appropriate executable.</p>
+<p class="ct-documentbody">This separation keeps the Management Console modules small, makes management actions independently testable, and provides a consistent place to enforce framework conventions such as DRYRUN.</p>
+</main>
+</body>
+</html>

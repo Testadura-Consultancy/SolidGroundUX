@@ -14,28 +14,17 @@
   <div class="doc-breadcrumb">sdk-deployment_preface.sh:::Deployment:</div>
 </header>
 <div class="ct-L1Sectionbody"></div>
-<p class="ct-L1Sectionbody">SolidGroundUX deployment is built around three complementary tools:</p>
-<div class="ct-L1Sectionbody"></div>
-<div class="ct-L1Sectionbody">    prepare-release.sh</div>
-<div class="ct-L1Sectionbody">        Builds complete, versioned release artifacts from a workspace.</div>
-<div class="ct-L1Sectionbody"></div>
-<div class="ct-L1Sectionbody">    deploy-workspace.sh</div>
-<div class="ct-L1Sectionbody">        Streams selected development files directly to a target machine.</div>
-<div class="ct-L1Sectionbody"></div>
-<div class="ct-L1Sectionbody">    release-manager.sh</div>
-<div class="ct-L1Sectionbody">        Standalone release acquisition, installation, update, rollback,</div>
-<div class="ct-L1Sectionbody">        reinstallation, and removal.</div>
-<div class="ct-L1Sectionbody"></div>
-<p class="ct-L1Sectionbody">Together they cover the two main deployment scenarios:</p>
+<p class="ct-L1Sectionbody">SolidGroundUX uses two deliberately different deployment paths:</p>
 <div class="ct-L1Sectionbody"></div>
 <div class="ct-L1Sectionbody">    Development deployment</div>
-<div class="ct-L1Sectionbody">        Fast transfer of selected workspace files without creating a formal release.</div>
+<div class="ct-L1Sectionbody">        `deploy-workspace.sh` transfers a workspace or selected workspace content to</div>
+<div class="ct-L1Sectionbody">        a target root for testing. It does not create installed-release history.</div>
 <div class="ct-L1Sectionbody"></div>
 <div class="ct-L1Sectionbody">    Release deployment</div>
-<div class="ct-L1Sectionbody">        Creation, validation, installation, update, rollback, and removal of</div>
-<div class="ct-L1Sectionbody">        complete SolidGroundUX releases.</div>
+<div class="ct-L1Sectionbody">        `prepare-release.sh` creates product release ZIPs. `sgnd-setup` validates and</div>
+<div class="ct-L1Sectionbody">        installs those packages and owns update, rollback, reinstall, and removal.</div>
 <div class="ct-L1Sectionbody"></div>
-<p class="ct-L1Sectionbody">The release manager is deliberately self-sufficient. It always carries a small standalone UI and default-theme fallback so it can bootstrap a clean machine or recover a damaged installation. When a healthy SolidGroundUX framework is available at the selected target root, the manager may reuse the normal framework UI primitives and active theme without making the release engine dependent on them.</p>
+<p class="ct-L1Sectionbody">The distinction matters. Development deployment optimizes the edit/test loop; Setup manages complete, identifiable releases.</p>
 <div class="ct-L1Sectionbody"></div>
 </main>
 </body>

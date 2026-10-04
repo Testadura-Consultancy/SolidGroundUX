@@ -5,10 +5,6 @@ All notable changes to SolidGroundUX are documented in this file.
 The format is inspired by *Keep a Changelog* while remaining focused on
 practical framework development.
 
-## Backlog
-
-- No open Framework backlog items are currently recorded here. Management Console-specific backlog items are tracked in the Management Console Modules changelog.
-
 ## Unreleased
 
 ### Added
@@ -18,10 +14,11 @@ practical framework development.
 - Added canonical `Shortname` support to comment-header metadata. `sgnd_module_init_metadata` now uses the header Shortname when present and falls back to the normalized source filename when it is absent.
 - Added metadata-driven current-script aliases so executable metadata such as Title, Description, Version and Build can be derived from canonical parsed header metadata instead of being repeated as hard-coded runtime literals.
 - Added configurable `SGND_MENU_Q_EXIT` behavior to the reusable menu layer so applications can disable `Q/q` exit handling while preserving the historical default for other menu consumers.
+- Added `sgnd-setup --nuke <yield>` maintenance modes: `1kt` clears generated state/logs while preserving code and configuration, `1mt` removes the SolidGroundUX code installation while preserving configuration/state/logs, and `tsar` removes all SolidGroundUX-owned code, configuration, state, and logs.
 
 ### Changed
 - Standardized product ZIPs as the release unit: acquisition may come from GitHub, the canonical local package store, or another directory, but all selected packages enter the same validation/install pipeline.
-- Replaced the former bundled-release concept with a first-install transport package containing `sgnd-setup.sh` and normal product release ZIPs; the first-install package has its own Setup Version/Build identity.
+- Replaced the former bundled-release concept with a first-install transport package containing `sgnd-setup.sh` and normal product release ZIPs; the package Version follows Setup while its Build reflects the highest build contained in the bootstrap package.
 - Rebalanced the Setup dashboard columns so full product names fit more naturally and Installed/Local/GitHub values display compact Version.Build identities instead of long release basenames.
 - First install now discovers adjacent product ZIPs, admits them to the canonical package store, lets the operator select one or more products, installs through the normal package pipeline, and cleans temporary bootstrap files afterward.
 - Successful product installs archive the original ZIP beneath the canonical releases archive while retaining extracted internal release history for rollback/removal.
@@ -31,6 +28,8 @@ practical framework development.
 - Changed first-install completion to offer **Setup**, **Management Console**, or **Exit**, with Exit as the default and `Esc` treated as Exit.
 - Kept the first-install completion selector framework-independent so bootstrap/recovery operation does not depend on SolidGroundUX UI helpers before the framework is available.
 - Management Console applications can now treat `Esc` as the canonical return/exit control while leaving reusable framework menu behavior configurable for other consumers.
+- Destructive Setup cleanup now derives its scope using the same physical-path root semantics as the framework locator, so a staged/development `target-root` can be cleaned without touching the host installation. Setup remains framework-independent for these rescue/removal paths.
+- Setup removal operations remove SolidGroundUX-owned files and persistent data according to the selected yield but do not attempt to undo operating-system configuration previously applied by SolidGroundUX.
 
 ### Fixed
 - Fixed comment-header parsing variable shadowing that could prevent parsed banner Product/Title values from propagating correctly into module metadata.

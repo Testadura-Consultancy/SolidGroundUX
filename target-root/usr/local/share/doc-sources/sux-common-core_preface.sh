@@ -3,8 +3,8 @@
 # ----------------------------------------------------------------------------------
 # Metadata:
 #   Version     : 2.1
-#   Build       : 2627501
-#   Checksum    : 532ba48413689a77b4b74114e721d1f76a6e78edae75c04f2e6f8ce6682eb7ce
+#   Build       : 2627700
+#   Checksum    : 1b82f55c30db031f96de7f475ab360c7cee9d4836423fb0a85db574c8eab797a
 #   Source      : sux-common-core-preface.sh
 #   Type        : documentation
 #   Group       : Common Core
@@ -42,7 +42,8 @@
 # > or cached information. Scripts opt individual values into persistence explicitly.
 # >
 # . Images
-#   sux-config-state-precedence.png | Configuration and state precedence in SolidGroundUX.
+#   sux-config-state-precedence.png :: Configuration and state precedence in SolidGroundUX.
+#
 # -- Command-Line Arguments ----------------------------------------------------------
 #  
 # >

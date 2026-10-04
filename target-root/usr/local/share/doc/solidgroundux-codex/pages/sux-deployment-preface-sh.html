@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>SolidGroundUX - Deployment and Release Management</title>
+  <title>SolidGroundUX - Deployment Boundary</title>
   <link rel="stylesheet" href="../assets/doc.css">
   <link rel="stylesheet" href="../assets/theme.css">
 </head>
@@ -10,10 +10,61 @@
 <main class="doc-page">
 <div class="doc-page-branding"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></div>
 <header class="doc-page-header">
-  <div class="doc-title">SolidGroundUX - Deployment and Release Management</div>
+  <div class="doc-title">SolidGroundUX - Deployment Boundary</div>
   <div class="doc-breadcrumb">SolidGroundUX Codex / sux-deployment_preface.sh</div>
 </header>
-
+<div class="ct-L1Sectionheader">Deployment</div>
+<div class="ct-L1Sectionbody"></div>
+<p class="ct-L1Sectionbody">Deployment sits on the boundary between the installed SolidGroundUX Framework and the SDK that creates and moves release artifacts. The Framework owns the runtime entry point that can install, update, roll back, repair, or remove products. The SDK owns release preparation, development deployment, and the tooling used to produce those product packages.</p>
+<div class="ct-L1Sectionbody"></div>
+<p class="ct-L1Sectionbody">Keeping that boundary explicit avoids two different deployment stories appearing in the documentation. This Framework section therefore describes only the installed lifecycle boundary. The detailed release-development workflow belongs to the SolidGroundUX SDK documentation.</p>
+<div class="ct-L1Sectionbody"></div>
+<div class="ct-L2Sectionheader">Setup</div>
+<div class="ct-L2Sectionbody"></div>
+<p class="ct-L2Sectionbody">`sgnd-setup.sh` is the canonical setup and lifecycle entry point for current SolidGroundUX installations. It is deliberately self-sufficient: it can bootstrap a clean machine before the Framework exists and can continue to operate when an installed Framework is incomplete or damaged.</p>
+<div class="ct-L2Sectionbody"></div>
+<p class="ct-L2Sectionbody">Setup works with product release ZIPs. Each package identifies its owning product and contains the complete release payload, manifest, removal manifest, and integrity sidecars required to install or reconcile that product.</p>
+<div class="ct-L2Sectionbody"></div>
+<p class="ct-L2Sectionbody">A first-install bundle places `sgnd-setup.sh` next to the release ZIPs required for a clean installation. After the first install, the installed `sgnd-setup` entry point remains available for normal lifecycle operations.</p>
+<div class="ct-L2Sectionbody"></div>
+<div class="ct-L2Sectionheader">Legacy Release Manager</div>
+<div class="ct-L2Sectionbody"></div>
+<p class="ct-L2Sectionbody">`release-manager.sh` predates Setup and remains available as a compatibility path for installations created before the Setup transition. New documentation and new installations should start with `sgnd-setup` rather than introducing Release Manager as a second canonical lifecycle tool.</p>
+<div class="ct-L2Sectionbody"></div>
+<p class="ct-L2Sectionbody">The transition from the old Release Manager model to Setup is intentionally a one-time bridge. It is not a reason to maintain two parallel lifecycle models.</p>
+<div class="ct-L2Sectionbody"></div>
+<div class="ct-L2Sectionheader">SDK Ownership</div>
+<div class="ct-L2Sectionbody"></div>
+<p class="ct-L2Sectionbody">The SDK owns the development side of deployment:</p>
+<div class="ct-L2Sectionbody"></div>
+<div class="ct-L2Sectionbody">    prepare-release.sh</div>
+<div class="ct-L2Sectionbody">        Builds and validates distributable product release packages.</div>
+<div class="ct-L2Sectionbody"></div>
+<div class="ct-L2Sectionbody">    deploy-workspace.sh</div>
+<div class="ct-L2Sectionbody">        Transfers a development workspace into a target root for testing. It is not</div>
+<div class="ct-L2Sectionbody">        an installer and does not define installed-release lifecycle state.</div>
+<div class="ct-L2Sectionbody"></div>
+<div class="ct-L2Sectionbody">    Documentation Generator</div>
+<div class="ct-L2Sectionbody">        Regenerates the documentation shipped or published with a release.</div>
+<div class="ct-L2Sectionbody"></div>
+<p class="ct-L2Sectionbody">The SDK Deployment section documents those tools together with the Setup workflow they feed. Framework reference pages document the installed scripts and APIs themselves.</p>
+<div class="ct-L2Sectionbody"></div>
+<div class="ct-L2Sectionheader">Mental Model</div>
+<div class="ct-L2Sectionbody"></div>
+<p class="ct-L2Sectionbody">The intended flow is:</p>
+<div class="ct-L2Sectionbody"></div>
+<div class="ct-L2Sectionbody">    source workspace</div>
+<div class="ct-L2Sectionbody">        -&gt; SDK development/test deployment</div>
+<div class="ct-L2Sectionbody">        -&gt; SDK release preparation</div>
+<div class="ct-L2Sectionbody">        -&gt; product release ZIPs</div>
+<div class="ct-L2Sectionbody">        -&gt; sgnd-setup</div>
+<div class="ct-L2Sectionbody">        -&gt; installed products</div>
+<div class="ct-L2Sectionbody"></div>
+<p class="ct-L2Sectionbody">Development deployment and installed-product lifecycle deliberately remain separate. A workspace can be copied repeatedly during development without creating release history, while Setup works only with release packages and their lifecycle metadata.</p>
+<div class="ct-L2Sectionbody"></div>
+<div class="ct-L2Sectionheader">Where to Continue</div>
+<div class="ct-L2Sectionbody"></div>
+<p class="ct-L2Sectionbody">For release creation, first installation, command-line Setup examples, GitHub acquisition, workspace deployment, rollback, and recovery, continue with the SolidGroundUX SDK Deployment documentation.</p>
 </main>
 </body>
 </html>

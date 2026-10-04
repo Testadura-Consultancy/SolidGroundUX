@@ -3,9 +3,9 @@
 # ----------------------------------------------------------------------------------
 # Metadata:
 #   Version     : 2.1
-#   Build       : 2627501
-#   Checksum    : f067b412f914ad6def3baceb18adb7303fadc460b5fe61d1dd8cfca8e2132eba
-#   Source      : sux-epilogue.sh
+#   Build       : 2627700
+#   Checksum    : 5636dd85648e7bc27f94bfcc079138f5381ba2662dbf4e7122eb7bf653ab9965
+#   Source      : sux_epilogue.sh
 #   Type        : documentation
 #   Group       : SolidGroundUX
 #   Purpose     : Product epilogue
@@ -73,16 +73,19 @@
 # -- Use themed colors, styles, and glyphs ------------------------------------------
 #
 # > Use the framework UI variables instead of hard-coded terminal escape sequences.
-# > Color and style variables keep output consistent across scripts, while glyph
-# > variables provide reusable symbols for status, navigation, prompts, and visual
-# > markers.
+# > Color and style variables keep framework UI primitives consistent across themes,
+# > while glyph variables provide reusable symbols for status, navigation, prompts,
+# > and visual markers.
 #
-# > Typical use:
-# >     printf "%s%s%s\n" "$SGND_CLR_OK" "Operation completed" "$SGND_CLR_RESET"
-# >     printf "%s %s\n" "$SGND_GLYPH_OK" "Validated"
-#
-# > Prefer the say and ask helpers for normal user interaction. Use color, style, and
-# > glyph variables directly only when a script needs custom formatted output.
+# > Program-generated messages should still go through the SolidGroundUX output
+# > primitives rather than being printed directly. For example:
+# >
+# >     sayok "Operation completed"
+# >     sayinfo "Validated"
+# >
+# > Use theme/color/glyph variables directly when implementing a UI primitive or the
+# > immediate mechanics of a prompt/input interaction. They are not a reason to bypass
+# > `say*`, `sgnd_print*`, or the shared dialog helpers for ordinary application output.
 #
 # -- Ask the user for input ----------------------------------------------------------
 #

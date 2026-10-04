@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Workspace Deployment</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></div>
+<header class="doc-page-header">
+  <div class="doc-title">Workspace Deployment</div>
+  <div class="doc-breadcrumb">sdk-deployment_preface.sh::Deployment:Workspace Deployment:</div>
+</header>
+<div class="ct-L2Sectionbody"></div>
+<p class="ct-L2Sectionbody">`deploy-workspace.sh` exists for development, staging, and repeatable test deployment. It can transfer a complete workspace or a filtered/incremental selection into a local or remote target root whose layout mirrors the eventual installed filesystem.</p>
+<div class="ct-L2Sectionbody"></div>
+<p class="ct-L2Sectionbody">Workspace deployment is not a substitute for Setup. It does not admit a release into installed history, does not turn an arbitrary development tree into a release, and should not be used to test lifecycle behavior that depends on product packages.</p>
+<div class="ct-L2Sectionbody"></div>
+<p class="ct-L2Sectionbody">A useful development sequence is:</p>
+<div class="ct-L2Sectionbody"></div>
+<div class="ct-L2Sectionbody">    edit source</div>
+<div class="ct-L2Sectionbody">        -&gt; deploy-workspace.sh</div>
+<div class="ct-L2Sectionbody">        -&gt; exercise/test target</div>
+<div class="ct-L2Sectionbody">        -&gt; regenerate documentation as needed</div>
+<div class="ct-L2Sectionbody">        -&gt; prepare-release.sh</div>
+<div class="ct-L2Sectionbody">        -&gt; sgnd-setup --install/--update using the produced ZIP</div>
+<div class="ct-L2Sectionbody"></div>
+</main>
+</body>
+</html>

@@ -43,16 +43,11 @@ sux-common-core_preface.sh|User Interface Services|Available Services||User Inte
 sux-common-core_preface.sh|Console Applications|Available Services||Console Applications|2
 sux-common-core_preface.sh|Documentation Generation|Available Services||Documentation Generation|2
 sux-deployment_preface.sh|Deployment|||Deployment|1
-sux-deployment_preface.sh|Release Preparation|Deployment||Release Preparation|2
-sux-deployment_preface.sh|Products and Bundles|Deployment||Products and Bundles|2
-sux-deployment_preface.sh|Release Manager|Deployment||Release Manager|2
-sux-deployment_preface.sh|First Installation|Deployment||First Installation|2
-sux-deployment_preface.sh|Interactive Use|Deployment||Interactive Use|2
-sux-deployment_preface.sh|Command-line Use|Deployment||Command-line Use|2
-sux-deployment_preface.sh|GitHub Acquisition|Deployment||GitHub Acquisition|2
-sux-deployment_preface.sh|Relationship to deploy-workspace.sh|Deployment||Relationship to deploy-workspace.sh|2
-sux-deployment_preface.sh|How the Three Tools Relate|Deployment||How the Three Tools Relate|2
-sux-deployment_preface.sh|Integrity and Recovery|Deployment||Integrity and Recovery|2
+sux-deployment_preface.sh|Setup|Deployment||Setup|2
+sux-deployment_preface.sh|Legacy Release Manager|Deployment||Legacy Release Manager|2
+sux-deployment_preface.sh|SDK Ownership|Deployment||SDK Ownership|2
+sux-deployment_preface.sh|Mental Model|Deployment||Mental Model|2
+sux-deployment_preface.sh|Where to Continue|Deployment||Where to Continue|2
 sux_epilogue.sh|How do I...?|||How do I...?|1
 sux_epilogue.sh|Add a command-line argument|How do I...?||Add a command-line argument|2
 sux_epilogue.sh|Use configuration files|How do I...?||Use configuration files|2
@@ -303,26 +298,25 @@ mod-template.sh|Public module actions|||Public module actions|1
 mod-template.sh|Module validation contract|||Module validation contract|1
 mod-template.sh|Console registration|||Console registration|1
 mcm_console_preface.sh|SolidGround Management Console|||SolidGround Management Console|1
-mcm_console_preface.sh|Console Module Lifecycle|SolidGround Management Console||Console Module Lifecycle|2
-mcm_console_preface.sh|Main Components|SolidGround Management Console||Main Components|2
-mcm_console_preface.sh|Governing Boundary|SolidGround Management Console||Governing Boundary|2
+mcm_console_preface.sh|Architecture|SolidGround Management Console||Architecture|2
+mcm_console_preface.sh|Discovery and Lazy Loading|SolidGround Management Console||Discovery and Lazy Loading|2
 mcm_console_preface.sh|Main Index|SolidGround Management Console||Main Index|2
-mcm_console_preface.sh|Lazy Module Lifecycle|SolidGround Management Console||Lazy Module Lifecycle|2
-mcm_console_preface.sh|Module Contract|SolidGround Management Console||Module Contract|2
-mcm_console_preface.sh|Page Ordering|SolidGround Management Console||Page Ordering|2
-mcm_console_preface.sh|Navigation|SolidGround Management Console||Navigation|2
-mcm_console_preface.sh|Post-action Pause|SolidGround Management Console||Post-action Pause|2
-mcm_console_preface.sh|Startup Presentation|SolidGround Management Console||Startup Presentation|2
-mcm_console_preface.sh|Console Status and Direct Controls|SolidGround Management Console||Console Status and Direct Controls|2
-mcm_console_preface.sh|Paging and Rendering|SolidGround Management Console||Paging and Rendering|2
-mcm_console_preface.sh|Module Enable State|SolidGround Management Console||Module Enable State|2
-mcm_console_preface.sh|Action Status|SolidGround Management Console||Action Status|2
-mcm_console_preface.sh|SolidGroundUX Page|SolidGround Management Console||SolidGroundUX Page|2
-mcm_console_preface.sh|Storage Page|SolidGround Management Console||Storage Page|2
-mcm_console_preface.sh|Active Directory and Samba Share Management|SolidGround Management Console||Active Directory and Samba Share Management|2
-mcm_console_preface.sh|Creating a New Console Module|SolidGround Management Console||Creating a New Console Module|2
-mcm_console_preface.sh|Dedicated Console Applications|SolidGround Management Console||Dedicated Console Applications|2
+mcm_console_preface.sh|Navigation and Direct Controls|SolidGround Management Console||Navigation and Direct Controls|2
+mcm_console_preface.sh|Module Boundary|SolidGround Management Console||Module Boundary|2
+mcm_console_preface.sh|Action Status and Post-Action Flow|SolidGround Management Console||Action Status and Post-Action Flow|2
+mcm_console_preface.sh|SolidGroundUX Lifecycle Integration|SolidGround Management Console||SolidGroundUX Lifecycle Integration|2
+mcm_console_preface.sh|Extending the Console|SolidGround Management Console||Extending the Console|2
 mcm_console_preface.sh|Why This Architecture Matters|SolidGround Management Console||Why This Architecture Matters|2
+mcm-role-managers_preface.sh|Role Managers|||Role Managers|1
+mcm-role-managers_preface.sh|Responsibilities|Role Managers||Responsibilities|2
+mcm-role-managers_preface.sh|Output and Interaction|Role Managers||Output and Interaction|2
+mcm-role-managers_preface.sh|DRYRUN and Safety|Role Managers||DRYRUN and Safety|2
+mcm-role-managers_preface.sh|Relationship to Module Registration|Role Managers||Relationship to Module Registration|2
+mcm-modules_preface.sh|Module Registration|||Module Registration|1
+mcm-modules_preface.sh|Lazy Loading|Module Registration||Lazy Loading|2
+mcm-modules_preface.sh|Registration Contract|Module Registration||Registration Contract|2
+mcm-modules_preface.sh|Action Boundary|Module Registration||Action Boundary|2
+mcm-modules_preface.sh|Documentation|Module Registration||Documentation|2
 mcm_preface.sh|SolidGroundUX Management Console Modules|||SolidGroundUX Management Console Modules|1
 mcm_preface.sh|Architecture|SolidGroundUX Management Console Modules||Architecture|2
 manage-docker-server.sh|Bootstrap|||Bootstrap|1
@@ -588,6 +582,13 @@ sdk-documentation_preface.sh|Generated Output|Documentation Generator||Generated
 sdk-documentation_preface.sh|Prefaces and Epilogues|Documentation Generator||Prefaces and Epilogues|2
 sdk-documentation_preface.sh|Documentation Conventions|Documentation Generator||Documentation Conventions|2
 sdk-documentation_preface.sh|Why Source-Based Documentation|Documentation Generator||Why Source-Based Documentation|2
+sdk_preface.sh|SolidGroundUX SDK|||SolidGroundUX SDK|1
+sdk_preface.sh|Product Boundaries|SolidGroundUX SDK||Product Boundaries|2
+sdk_preface.sh|Typical Workflow|SolidGroundUX SDK||Typical Workflow|2
+sdk_preface.sh|Repository-Shaped Workspaces|SolidGroundUX SDK||Repository-Shaped Workspaces|2
+sdk_preface.sh|Documentation as Part of Development|SolidGroundUX SDK||Documentation as Part of Development|2
+sdk_preface.sh|Deployment and Release|SolidGroundUX SDK||Deployment and Release|2
+sdk_preface.sh|Documentation Map|SolidGroundUX SDK||Documentation Map|2
 sdk-tools_preface.sh|SDK|||SDK|1
 sdk-tools_preface.sh|Typical Development Workflow|SDK||Typical Development Workflow|2
 sdk-tools_preface.sh|Creating a New Project|SDK||Creating a New Project|2
@@ -602,14 +603,14 @@ sdk-tools_preface.sh|Workspace Layout|SDK||Workspace Layout|2
 sdk-tools_preface.sh|Development Conventions|SDK||Development Conventions|2
 sdk-deployment_preface.sh|Deployment|||Deployment|1
 sdk-deployment_preface.sh|Release Preparation|Deployment||Release Preparation|2
-sdk-deployment_preface.sh|Products and Bundles|Deployment||Products and Bundles|2
-sdk-deployment_preface.sh|Release Manager|Deployment||Release Manager|2
+sdk-deployment_preface.sh|Product Packages and First-Install Bundle|Deployment||Product Packages and First-Install Bundle|2
+sdk-deployment_preface.sh|Setup|Deployment||Setup|2
 sdk-deployment_preface.sh|First Installation|Deployment||First Installation|2
-sdk-deployment_preface.sh|Interactive Use|Deployment||Interactive Use|2
-sdk-deployment_preface.sh|Command-line Use|Deployment||Command-line Use|2
+sdk-deployment_preface.sh|Updating and Reconciliation|Deployment||Updating and Reconciliation|2
+sdk-deployment_preface.sh|Rollback, Reinstall, and Removal|Deployment||Rollback, Reinstall, and Removal|2
+sdk-deployment_preface.sh|Legacy Release Manager|Deployment||Legacy Release Manager|2
 sdk-deployment_preface.sh|GitHub Acquisition|Deployment||GitHub Acquisition|2
-sdk-deployment_preface.sh|Relationship to deploy-workspace.sh|Deployment||Relationship to deploy-workspace.sh|2
-sdk-deployment_preface.sh|How the Three Tools Relate|Deployment||How the Three Tools Relate|2
+sdk-deployment_preface.sh|Workspace Deployment|Deployment||Workspace Deployment|2
 sdk-deployment_preface.sh|Integrity and Recovery|Deployment||Integrity and Recovery|2
 doc-generator.sh|Bootstrap|||Bootstrap|1
 doc-generator.sh|Script identity|||Script identity|1

@@ -1,11 +1,11 @@
 # ==================================================================================
-# SolidGroundUX - Deployment and Release Management
+# SolidGroundUX - Deployment Boundary
 # ----------------------------------------------------------------------------------
 # Metadata:
 #   Version     : 2.1
-#   Build       : 2627501
-#   Checksum    : 78511f3f1510ad2c850b3caaccf9bdd592ab31ad2f90bf0487e31e19a2d39b28
-#   Source      : sdk-deployment-preface.sh
+#   Build       : 2627700
+#   Checksum    : 45bd67ba89586ee8bba11155e8f9acf91ff08a7106f2d1ea0c86dc5923188202
+#   Source      : sux-deployment_preface.sh
 #   Type        : documentation
 #   Group       : Deployment
 #   Purpose     : Group preface
@@ -19,325 +19,68 @@
 # ==================================================================================
 # - Deployment ----------------------------------------------------------------------
 #
-# > SolidGroundUX deployment is built around three complementary tools:
+# > Deployment sits on the boundary between the installed SolidGroundUX Framework and
+# > the SDK that creates and moves release artifacts. The Framework owns the runtime
+# > entry point that can install, update, roll back, repair, or remove products. The SDK
+# > owns release preparation, development deployment, and the tooling used to produce
+# > those product packages.
 #
-# >     prepare-release.sh
-# >         Builds complete, versioned release artifacts from a workspace.
+# > Keeping that boundary explicit avoids two different deployment stories appearing in
+# > the documentation. This Framework section therefore describes only the installed
+# > lifecycle boundary. The detailed release-development workflow belongs to the
+# > SolidGroundUX SDK documentation.
 #
-# >     deploy-workspace.sh
-# >         Streams selected development files directly to a target machine.
+# -- Setup --------------------------------------------------------------------------
 #
-# >     release-manager.sh
-# >         Standalone release acquisition, installation, update, rollback,
-# >         reinstallation, and removal.
+# > `sgnd-setup.sh` is the canonical setup and lifecycle entry point for current
+# > SolidGroundUX installations. It is deliberately self-sufficient: it can bootstrap a
+# > clean machine before the Framework exists and can continue to operate when an
+# > installed Framework is incomplete or damaged.
 #
-# > Together they cover the two main deployment scenarios:
+# > Setup works with product release ZIPs. Each package identifies its owning product and
+# > contains the complete release payload, manifest, removal manifest, and integrity
+# > sidecars required to install or reconcile that product.
 #
-# >     Development deployment
-# >         Fast transfer of selected workspace files without creating a formal release.
+# > A first-install bundle places `sgnd-setup.sh` next to the release ZIPs required for a
+# > clean installation. After the first install, the installed `sgnd-setup` entry point
+# > remains available for normal lifecycle operations.
 #
-# >     Release deployment
-# >         Creation, validation, installation, update, rollback, and removal of
-# >         complete SolidGroundUX releases.
 #
-# > The release manager is deliberately self-sufficient. It always carries a small
-# > standalone UI and default-theme fallback so it can bootstrap a clean machine or
-# > recover a damaged installation. When a healthy SolidGroundUX framework is available
-# > at the selected target root, the manager may reuse the normal framework UI primitives
-# > and active theme without making the release engine dependent on them.
+# -- SDK Ownership ------------------------------------------------------------------
 #
-# -- Release Preparation -------------------------------------------------------------
-#
-# > prepare-release.sh creates the canonical project release set in the workspace release
-# > output directory. These build artifacts are not copied into the target-root release
-# > state; release-manager.sh admits them there only when a package is acquired/installed.
-#
-# > A release contains a complete target-root filesystem image rather than a binary
-# > patch. The distributable ZIP contains:
-#
-# >     release-package.info
-# >     <Product>-<version>.<build>.tar.gz
-# >     <Product>-<version>.<build>.tar.gz.sha256
-# >     <Product>-<version>.<build>.manifest
-# >     <Product>-<version>.<build>.manifest.sha256
-# >     <Product>-<version>.<build>.removed
-# >     <Product>-<version>.<build>.removed.sha256
-#
-# > SolidGroundUX framework packages additionally contain release-manager.sh at ZIP root
-# > so the package can bootstrap a clean machine. Generic project packages omit the
-# > manager and are consumed by an already installed Release Manager.
-#
-# > The tar archive contains the complete target-root tree for that release.
-#
-# > release-package.info is the package shipping label. It identifies the package format,
-# > project slug, product, version, build, and release name without requiring the manager
-# > to inspect the tar archive first.
-#
-# > The normal manifest describes the paths contained in the release.
-#
-# > The removed manifest is generated by comparing the previous release manifest with
-# > the new one. It contains paths that existed in the previous release but no longer
-# > belong to the new release. release-manager.sh applies this file during an update.
-#
-# > Example:
-#
-# >     prepare-release.sh
-#
-# > Useful examples:
-#
-# >     prepare-release.sh --updatebuild
-# >     prepare-release.sh --updateversion
-# >     prepare-release.sh --bumpminor
-# >     prepare-release.sh --bumpmajor
-# >     prepare-release.sh --dryrun
-#
-# > prepare-release.sh is a development/release-authoring tool and therefore uses the
-# > normal SolidGroundUX framework runtime.
-#
-# -- Products and Bundles ------------------------------------------------------------
-#
-# > Release preparation is product-aware. Each product retains its own identity,
-# > version, build policy, package metadata, repository information, and release state.
-# > Products can be prepared and distributed independently.
-#
-# > A bundle combines compatible product releases for convenient distribution without
-# > merging their identities. The bundle inherits the primary product version and build;
-# > companion products remain independently versioned and can subsequently be updated
-# > through the Release Manager on their own lifecycle.
-#
-# . Images
-#   sdk-product-release-lifecycle.png :: Product-aware release and bundle lifecycle.
-#
-# -- Release Manager -----------------------------------------------------------------
-#
-# > release-manager.sh is the canonical installation and release-lifecycle tool.
-#
-# > It replaces the former separate installer, updater, and uninstaller scripts.
-#
-# > Its state model is intentionally filesystem-based and project-aware.
-#
-# > SolidGroundUX retains the canonical locations:
-#
-# >     /var/lib/solidgroundux/releases
-# >     /var/lib/solidgroundux/archive/<release>
-#
-# > Additional projects keep their own state beneath:
-#
-# >     /var/lib/solidgroundux/projects/<project>/releases
-# >     /var/lib/solidgroundux/projects/<project>/archive/<release>
-#
-# > The highest versioned archive directory represents the currently installed release
-# > for that project. No separate current-version database is required.
-#
-# > A first install consists of validating and extracting a complete release archive.
-#
-# > A later install is treated as an update. The new release is extracted normally,
-# > and its .removed manifest is applied so files that disappeared from the release
-# > are removed from the active installation.
-#
-# > Rollback installs a selected archived release again and removes files that belong
-# > only to the newer release. Newer archived releases are returned to releases/ so
-# > the highest remaining archive directory continues to represent the active version.
-#
-# > Removal removes the active release contents and returns archived release sets to
-# > releases/, preserving them for later reinstallation.
-#
-# -- First Installation --------------------------------------------------------------
-#
-# > SolidGroundUX release ZIPs contain release-manager.sh together with the complete
-# > prepared release set and release-package.info.
-#
-# > A first installation therefore remains deliberately small:
-#
-# >     cd /tmp
-# >     unzip SolidGroundUX-<version>-release.zip
-# >     sudo ./release-manager.sh
-#
-# > Because the ZIP-root manager is not yet running from its canonical installed
-# > location, the default target root is `/`. In interactive mode the target root is
-# > still asked explicitly before installation proceeds.
-#
-# > On first run, release-manager.sh:
-#
-# >     - Reads release-package.info and identifies the package.
-# >     - Asks for or resolves the target root and other stateful parameters.
-# >     - Creates the required release-management directories.
-# >     - Validates the release artifacts, checksums, manifests, and archive paths.
-# >     - Admits the release into the selected project's releases directory.
-# >     - Installs the complete tar archive into the selected target root.
-# >     - Moves the installed release set into that project's archive history.
-# >     - Uses the release-manager.sh installed by the SolidGroundUX tar as the canonical
-# >       `/var/lib/solidgroundux/release-manager.sh` copy.
-# >     - Creates or verifies the public release-manager wrapper.
-# >     - Cleans only known temporary bootstrap files after successful installation.
-#
-# > The bootstrap copy never overwrites the canonical manager merely because it is
-# > executing from another path. The installed release owns the permanent manager copy.
-#
-# -- Interactive Use -----------------------------------------------------------------
-#
-# > Running release-manager.sh without an action opens the interactive Release Manager:
-#
-# >     sudo /var/lib/solidgroundux/release-manager.sh
-#
-# > Parameter values are presented as questions and persisted as standalone state so the
-# > accepted values become defaults on later runs. Typical parameters include:
-#
-# >     - Target root.
-# >     - Project.
-# >     - Package source.
-# >     - GitHub repository.
-# >     - Release selector.
+# > The SDK owns the development side of deployment:
 # >
-# > The menu provides the release lifecycle actions:
+# >     prepare-release.sh
+# >         Builds and validates distributable product release packages.
+# >
+# >     deploy-workspace.sh
+# >         Transfers a development workspace into a target root for testing. It is not
+# >         an installer and does not define installed-release lifecycle state.
+# >
+# >     Documentation Generator
+# >         Regenerates the documentation shipped or published with a release.
 #
-# >     - Check GitHub for the latest release.
-# >     - Download the latest release.
-# >     - Update to the latest release.
-# >     - Install a local package/release.
-# >     - Select an archived version for reinstallation or rollback.
-# >     - Remove the selected project.
-# >     - Select the active project for project-specific operations.
+# > The SDK Deployment section documents those tools together with the Setup workflow
+# > they feed. Framework reference pages document the installed scripts and APIs
+# > themselves.
 #
-# > The standalone fallback UI is based on the SolidGroundUX default theme. When a
-# > healthy SolidGroundUX framework is available at the selected target root, the manager
-# > may switch to the normal framework UI primitives and active theme.
+# -- Mental Model -------------------------------------------------------------------
 #
-# -- Command-line Use ----------------------------------------------------------------
+# > The intended flow is:
+# >
+# >     source workspace
+# >         -> SDK development/test deployment
+# >         -> SDK release preparation
+# >         -> product release ZIPs
+# >         -> sgnd-setup
+# >         -> installed products
 #
-# > Command-line actions invoke the same functions exposed by the interactive menu.
-# > Arguments therefore select an action and/or provide parameter values; they do not
-# > form a separate release workflow.
+# > Development deployment and installed-product lifecycle deliberately remain separate.
+# > A workspace can be copied repeatedly during development without creating release
+# > history, while Setup works only with release packages and their lifecycle metadata.
 #
-# > Check GitHub without changing the machine:
+# -- Where to Continue --------------------------------------------------------------
 #
-# >     release-manager.sh --check
-#
-# > Download the latest release without installing it:
-#
-# >     release-manager.sh --download
-#
-# > Check, download if required, and install the latest GitHub release:
-#
-# >     release-manager.sh --update
-#
-# > Install the newest release already available locally:
-#
-# >     release-manager.sh --install
-#
-# > Install directly from a package ZIP or URL:
-#
-# >     release-manager.sh --install --source /tmp/SolidGroundUX-release.zip
-#
-# >     release-manager.sh --install \
-# >         --source https://example.org/releases/SolidGroundUX-release.zip
-#
-# > Roll back to the previous archived release:
-#
-# >     release-manager.sh --rollback
-#
-# > Roll back to a specific archived release:
-#
-# >     release-manager.sh --rollback --release 2.1.2624102
-#
-# > Remove the selected project:
-#
-# >     release-manager.sh --remove
-#
-# > Select a known project explicitly:
-#
-# >     release-manager.sh --project solidground-management-modules --install
-#
-# > Run an action without questions or confirmations:
-#
-# >     release-manager.sh --update --auto
-#
-# > Preview filesystem changes:
-#
-# >     release-manager.sh --update --dryrun
-#
-# > Override the default GitHub repository:
-#
-# >     release-manager.sh --check --repo Testadura-Mark/SolidGroundUX
-#
-# > Alternate target roots can be supplied for development, testing, or recovery:
-#
-# >     release-manager.sh --install \
-# >         --target-root /mnt/testroot \
-# >         --source /tmp/SolidGroundUX-release.zip
-#
-# -- GitHub Acquisition --------------------------------------------------------------
-#
-# > GitHub is the default authoritative source for determining the latest published
-# > SolidGroundUX release. Generic project packages can always be supplied directly by
-# > file or URL; project-specific online discovery can be added through project metadata
-# > without changing the package-installation engine.
-#
-# > release-manager.sh asks GitHub which SolidGroundUX release is current before downloading.
-#
-# > If that release is already present under archive/ it is considered installed.
-#
-# > If it is already present under releases/ it is considered downloaded.
-#
-# > In either case, the release manager avoids downloading the same release again.
-#
-# > New downloads are staged in a temporary directory first. The ZIP is extracted,
-# > the contained release identity is checked, required release files are verified,
-# > checksums are validated, and release paths are checked for unsafe traversal.
-#
-# > Only a valid release set is admitted into releases/.
-#
-# -- Relationship to deploy-workspace.sh --------------------------------------------
-#
-# > deploy-workspace.sh serves a different purpose from release-manager.sh.
-#
-# > It is intended for rapid development deployment, where selected files from a
-# > workspace need to be transferred directly to a test or development machine.
-#
-# > It supports:
-#
-# >     - Local or SSH deployment.
-# >     - Optional directory filtering.
-# >     - Filenames and shell-style masks.
-# >     - Changed-after filtering.
-# >     - Deployment since the last successful transfer.
-# >     - Dry-run operation.
-# >     - Persistent deployment settings.
-#
-# > Example:
-#
-# >     deploy-workspace.sh # >         --remote sysadmin@td-pdc # >         --source ~/dev/target-root # >         --match '*.sh'
-#
-# > Incremental deployment:
-#
-# >     deploy-workspace.sh # >         --remote sysadmin@td-pdc # >         --since-last
-#
-# > deploy-workspace.sh does not create an installed release record and does not
-# > participate in archive-based rollback. It is therefore ideal during development,
-# > while prepare-release.sh plus release-manager.sh provide the formal release path.
-#
-# -- How the Three Tools Relate -------------------------------------------------------
-#
-# . Images
-#   sdk-deployment-model.png :: SolidGroundUX Deployment Model
-#
-# > This keeps the deployment architecture small, deterministic, and easy to inspect
-# > or manipulate directly when necessary.
-#
-# -- Integrity and Recovery ----------------------------------------------------------
-#
-# > Release integrity is validated before installation by checking the supplied
-# > SHA-256 sidecar files and release paths.
-#
-# > The release engine intentionally remains independent of the installed framework.
-# > Its standalone UI and default-theme fallback are always available. Framework UI
-# > primitives and the active theme are used only when they can be loaded successfully.
-#
-# > As a result, the canonical copy at:
-#
-# >     /var/lib/solidgroundux/release-manager.sh
-#
-# > remains usable for update, rollback, reinstallation, or removal even if the live
-# > SolidGroundUX installation is incomplete or damaged.
-#
-# > This independence is a core deployment design principle.
+# > For release creation, first installation, command-line Setup examples, GitHub
+# > acquisition, workspace deployment, rollback, and recovery, continue with the
+# > SolidGroundUX SDK Deployment documentation.

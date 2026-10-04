@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>SolidGroundUX SDK - Introduction</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></div>
+<header class="doc-page-header">
+  <div class="doc-title">SolidGroundUX SDK - Introduction</div>
+  <div class="doc-breadcrumb">SolidGroundUX Codex / sdk_preface.sh</div>
+</header>
+<div class="ct-L1Sectionheader">SolidGroundUX SDK</div>
+<div class="ct-L1Sectionbody"></div>
+<p class="ct-L1Sectionbody">The SolidGroundUX SDK is the development and release-engineering companion to the SolidGroundUX Framework. It contains the tools and templates used to create repository-shaped workspaces, maintain metadata, generate documentation, deploy development trees, and prepare distributable product releases.</p>
+<div class="ct-L1Sectionbody"></div>
+<p class="ct-L1Sectionbody">The SDK is not part of the Framework runtime. Applications and servers do not need the SDK merely to run SolidGroundUX. It exists for people building, documenting, testing, packaging, or releasing SolidGroundUX-based products.</p>
+<div class="ct-L1Sectionbody"></div>
+<div class="ct-L2Sectionheader">Product Boundaries</div>
+<div class="ct-L2Sectionbody"></div>
+<p class="ct-L2Sectionbody">Version 2.1 separates the suite into three sibling products with clear ownership:</p>
+<div class="ct-L2Sectionbody"></div>
+<div class="ct-L2Sectionbody">    SolidGroundUX Framework</div>
+<div class="ct-L2Sectionbody">        Bootstrap, runtime, configuration/state, logging, UI primitives, common</div>
+<div class="ct-L2Sectionbody">        libraries, and reusable application APIs.</div>
+<div class="ct-L2Sectionbody"></div>
+<div class="ct-L2Sectionbody">    SolidGroundUX Management Console Modules</div>
+<div class="ct-L2Sectionbody">        The management-console host plus the modules and role managers used for</div>
+<div class="ct-L2Sectionbody">        guided server administration.</div>
+<div class="ct-L2Sectionbody"></div>
+<div class="ct-L2Sectionbody">    SolidGroundUX SDK</div>
+<div class="ct-L2Sectionbody">        Development workspaces, documentation generation, development deployment,</div>
+<div class="ct-L2Sectionbody">        templates, release preparation, and related engineering tools.</div>
+<div class="ct-L2Sectionbody"></div>
+<p class="ct-L2Sectionbody">MCM and SDK both depend on the Framework. They do not depend on each other.</p>
+<div class="ct-L2Sectionbody"></div>
+<div class="ct-L2Sectionheader">Typical Workflow</div>
+<div class="ct-L2Sectionbody"></div>
+<p class="ct-L2Sectionbody">A normal SDK-assisted development cycle is:</p>
+<div class="ct-L2Sectionbody"></div>
+<div class="ct-L2Sectionbody">    create or open a workspace</div>
+<div class="ct-L2Sectionbody">        -&gt; edit and test source</div>
+<div class="ct-L2Sectionbody">        -&gt; deploy the workspace to a development target when needed</div>
+<div class="ct-L2Sectionbody">        -&gt; update metadata and documentation</div>
+<div class="ct-L2Sectionbody">        -&gt; prepare a release</div>
+<div class="ct-L2Sectionbody">        -&gt; install/test the resulting product ZIP with sgnd-setup</div>
+<div class="ct-L2Sectionbody"></div>
+<p class="ct-L2Sectionbody">The exact path is intentionally flexible. Documentation can be regenerated without preparing a release, and a workspace can be deployed repeatedly while code is still changing.</p>
+<div class="ct-L2Sectionbody"></div>
+<div class="ct-L2Sectionheader">Repository-Shaped Workspaces</div>
+<div class="ct-L2Sectionbody"></div>
+<p class="ct-L2Sectionbody">SDK tools work with `target-root` layouts that mirror the final filesystem. A source file destined for `/usr/local/libexec/solidgroundux` therefore lives beneath the same path inside the workspace target root.</p>
+<div class="ct-L2Sectionbody"></div>
+<p class="ct-L2Sectionbody">This keeps development paths, release manifests, and installed paths aligned. It also allows workspace deployment and release preparation to operate on the same tree without maintaining a second mapping model.</p>
+<div class="ct-L2Sectionbody"></div>
+<div class="ct-L2Sectionheader">Documentation as Part of Development</div>
+<div class="ct-L2Sectionbody"></div>
+<p class="ct-L2Sectionbody">Documentation generation is a first-class SDK workflow rather than a release-time afterthought. Source comments provide the generated reference material, while documentation-only sources provide introductions, architecture, examples, boundaries, and closing material where prose adds value.</p>
+<div class="ct-L2Sectionbody"></div>
+<p class="ct-L2Sectionbody">Product, group, and subgroup prefaces are landing-page content. Epilogues are used only when a section genuinely benefits from closing or reference material after its normal children.</p>
+<div class="ct-L2Sectionbody"></div>
+<div class="ct-L2Sectionheader">Deployment and Release</div>
+<div class="ct-L2Sectionbody"></div>
+<p class="ct-L2Sectionbody">The SDK deliberately separates development deployment from release installation. `deploy-workspace.sh` copies a development tree so it can be exercised in place. `prepare-release.sh` creates distributable product packages. `sgnd-setup`, supplied by the Framework/first-install package, consumes those releases and owns the installed product lifecycle.</p>
+<div class="ct-L2Sectionbody"></div>
+<p class="ct-L2Sectionbody">That separation makes it possible to test quickly during development without pretending every test copy is an installed release.</p>
+<div class="ct-L2Sectionbody"></div>
+<div class="ct-L2Sectionheader">Documentation Map</div>
+<div class="ct-L2Sectionbody"></div>
+<p class="ct-L2Sectionbody">The main SDK documentation areas are:</p>
+<div class="ct-L2Sectionbody"></div>
+<div class="ct-L2Sectionbody">    SDK</div>
+<div class="ct-L2Sectionbody">        Workspace creation, metadata, release preparation, deployment helpers, and</div>
+<div class="ct-L2Sectionbody">        the general development workflow.</div>
+<div class="ct-L2Sectionbody"></div>
+<div class="ct-L2Sectionbody">    Documentation Generator</div>
+<div class="ct-L2Sectionbody">        Documentation syntax, parsing, rendering, navigation, images, tables,</div>
+<div class="ct-L2Sectionbody">        prefaces/epilogues, and generated output.</div>
+<div class="ct-L2Sectionbody"></div>
+<div class="ct-L2Sectionbody">    Deployment</div>
+<div class="ct-L2Sectionbody">        Release packages, Setup, first installation, GitHub acquisition, development</div>
+<div class="ct-L2Sectionbody">        deployment, rollback, and recovery boundaries.</div>
+<div class="ct-L2Sectionbody"></div>
+<div class="ct-L2Sectionbody">    Templates</div>
+<div class="ct-L2Sectionbody">        Canonical executable, library, module, wrapper, and documentation structures</div>
+<div class="ct-L2Sectionbody">        used when creating new SolidGroundUX components.</div>
+<div class="ct-L2Sectionbody"></div>
+<p class="ct-L2Sectionbody">Start with the SDK workflow when building something new, the Documentation Generator when changing the documentation model, and Deployment when turning a tested workspace into an installable release.</p>
+</main>
+</body>
+</html>
