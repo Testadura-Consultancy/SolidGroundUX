@@ -7,6 +7,8 @@ practical framework development.
 
 ## Unreleased
 
+## Release 2.1.2627700 
+
 ### Added
 - Added standalone `sgnd-setup` as the product lifecycle entry point for first installation, local/GitHub updates, rollback, removal, and package management; `sgnd-release-manager` remains available as a compatibility alias.
 - Added a product-centric Setup dashboard showing installed, newest local, and newest GitHub releases per known product, with newer availability highlighted.
