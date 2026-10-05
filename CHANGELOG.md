@@ -7,6 +7,8 @@ The format is inspired by *Keep a Changelog* while remaining focused on practica
 ## Backlog
 
 - Scan Framework, SDK and Management Console Modules for hard-coded `/usr/local/share/solidgroundux` references and migrate appropriate usages to the canonical `SGND_SHARE_DIR` framework variable.
+- `sgnd-setup.sh`: remove hardcoded product definitions/repository URLs. Move the bootstrap product catalog to an external configuration file (e.g. sgnd-setup.cfg) so new products can be added without changing setup code. Keep sgnd-setup.sh generic.
+- Add canonical filesystem ownership metadata (ownership.dta or equivalent) for product/module-owned and managed paths, and migrate install/update/remove/nuke/repair logic to consume it.
 
 ## Unreleased
 
