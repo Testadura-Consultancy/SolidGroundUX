@@ -3,8 +3,8 @@
 # -------------------------------------------------------------------------------------
 # Metadata:
 #   Version     : 2.1
-#   Build       : 2627501
-#   Checksum    : b29302906ec712480b472732385d8b9edb23406797eac8e5cbb28d265db3743b
+#   Build       : 2627808
+#   Checksum    : 1050d22c9b0e81a92abccfc4227e24b40e878bd71fc61d09c397e739af9cc58a
 #   Source      : sgnd-bootstrap-env.sh
 #   Type        : library
 #   Group       : Bootstrap
@@ -239,6 +239,7 @@ set -uo pipefail
         SGND_COMMON_LIB="$SGND_FRAMEWORK_ROOT/usr/local/lib/$product/common"
         SGND_GLOBALS_FOLDER="$SGND_FRAMEWORK_ROOT/usr/local/lib/$product/globals"
         SGND_COMMON_EXE="$SGND_FRAMEWORK_ROOT/usr/local/libexec/$product"
+        SGND_SHARE_DIR="$SGND_FRAMEWORK_ROOT/usr/local/share/$product"
 
         SGND_SYSCFG_DIR="$SGND_FRAMEWORK_ROOT/etc/$product"
         SGND_USRCFG_DIR="$SGND_USER_HOME/.config/$product"

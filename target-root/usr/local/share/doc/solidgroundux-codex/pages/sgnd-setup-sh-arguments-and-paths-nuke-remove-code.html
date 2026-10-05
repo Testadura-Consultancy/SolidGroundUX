@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Remove installed SolidGroundUX code beneath the located root</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><a class="doc-page-branding-home" href="title.html" title="Documentation home"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></a></div>
+<header class="doc-page-header">
+  <div class="doc-title">Remove installed SolidGroundUX code beneath the located root</div>
+  <div class="doc-breadcrumb">SolidGroundUX Codex / sgnd-setup.sh / Arguments and paths / _nuke_remove_code</div>
+</header>
+<p class="ct-functionbody">Purpose:</p>
+<div class="ct-functionbody">  Remove framework/application trees, documentation, Setup copies, and public wrappers.</div>
+<div class="ct-functionbody"></div>
+<p class="ct-functionbody">Behavior:</p>
+<div class="ct-functionbody">  - Keeps removal paths explicit; unrelated files are never wildcard-deleted recursively.</div>
+<div class="ct-functionbody">  - Removes the canonical sgnd-setup/release-manager copies from /var/lib/solidgroundux.</div>
+<div class="ct-functionbody">  - May unlink the currently executing sgnd-setup file; Bash continues from the open script.</div>
+<div class="ct-functionbody"></div>
+<p class="ct-functionbody">Returns:</p>
+<div class="ct-functionbody">  0 on success; non-zero on the first removal failure.</div>
+<div class="ct-functionbody"></div>
+<p class="ct-functionbody">Usage:</p>
+<div class="ct-functionbody">  _nuke_remove_code</div>
+</main>
+</body>
+</html>

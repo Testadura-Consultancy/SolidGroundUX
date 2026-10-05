@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Load the release exclusion policy for a product root</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><a class="doc-page-branding-home" href="title.html" title="Documentation home"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></a></div>
+<header class="doc-page-header">
+  <div class="doc-title">Load the release exclusion policy for a product root</div>
+  <div class="doc-breadcrumb">SolidGroundUX Codex / doc-generator.sh / Local script functions / _doc_load_release_excludes</div>
+</header>
+<div class="ct-functionbody sh-highlight">Purpose</div>
+<div class="ct-functionbody">  Load the same mandatory, repository, and product-defined exclusions used by</div>
+<div class="ct-functionbody">  prepare-release so documentation collection ignores development-only payload.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Arguments</div>
+<div class="ct-functionbody">  $1  Product source root, normally &lt;repository&gt;/target-root.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Outputs (globals)</div>
+<div class="ct-functionbody">  SGND_DOC_ACTIVE_RELEASE_EXCLUDES</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Returns</div>
+<div class="ct-functionbody">  0 after the exclusion list has been assembled.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Usage</div>
+<div class="ct-functionbody">  _doc_load_release_excludes &quot;$source_root&quot;</div>
+</main>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Persistent parser dataset cache directory</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><a class="doc-page-branding-home" href="title.html" title="Documentation home"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></a></div>
+<header class="doc-page-header">
+  <div class="doc-title">Persistent parser dataset cache directory</div>
+  <div class="doc-breadcrumb">SolidGroundUX Codex / doc-renderer.sh / Local definitions / DOC_PARSER_CACHE_DIR</div>
+</header>
+<div class="ct-variablebody sh-highlight">Purpose</div>
+<div class="ct-variablebody">  Hold the normalized parser tables used by Full-update, Selected, and Changed modes.</div>
+<div class="ct-variablebody"></div>
+<div class="ct-variablebody sh-highlight">Behavior</div>
+<div class="ct-variablebody">  - Defaults to usr/local/share/doc-sources/.cache/&lt;site-slug&gt;/parser.</div>
+<div class="ct-variablebody">  - Lives outside the rendered website so the output tree is fully disposable.</div>
+<div class="ct-variablebody">  - May be overridden by callers before rendering.</div>
+</main>
+</body>
+</html>

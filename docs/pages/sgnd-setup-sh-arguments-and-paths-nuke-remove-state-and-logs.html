@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Remove generated SolidGroundUX state and logs</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><a class="doc-page-branding-home" href="title.html" title="Documentation home"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></a></div>
+<header class="doc-page-header">
+  <div class="doc-title">Remove generated SolidGroundUX state and logs</div>
+  <div class="doc-breadcrumb">SolidGroundUX Codex / sgnd-setup.sh / Arguments and paths / _nuke_remove_state_and_logs</div>
+</header>
+<p class="ct-functionbody">Purpose:</p>
+<div class="ct-functionbody">  Clear operational state, caches, and logs without removing installed code,</div>
+<div class="ct-functionbody">  release packages, or persistent configuration.</div>
+<div class="ct-functionbody"></div>
+<p class="ct-functionbody">Behavior:</p>
+<div class="ct-functionbody">  - Removes Setup runtime state but preserves release-manager.cfg and package archives.</div>
+<div class="ct-functionbody">  - Removes current and legacy system log locations.</div>
+<div class="ct-functionbody">  - Removes per-user state/cache/log data beneath homes belonging to the selected root.</div>
+<div class="ct-functionbody">  - Removes framework.state because it is runtime state stored under the user cfg tree.</div>
+<div class="ct-functionbody">  - Never reads host /etc/passwd for a staged/development root.</div>
+<div class="ct-functionbody"></div>
+<p class="ct-functionbody">Returns:</p>
+<div class="ct-functionbody">  0 on success; non-zero on the first removal failure.</div>
+<div class="ct-functionbody"></div>
+<p class="ct-functionbody">Usage:</p>
+<div class="ct-functionbody">  _nuke_remove_state_and_logs</div>
+</main>
+</body>
+</html>

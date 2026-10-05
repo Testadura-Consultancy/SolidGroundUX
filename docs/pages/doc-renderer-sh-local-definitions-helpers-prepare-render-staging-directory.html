@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Prepare a fresh renderer output staging tree</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><a class="doc-page-branding-home" href="title.html" title="Documentation home"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></a></div>
+<header class="doc-page-header">
+  <div class="doc-title">Prepare a fresh renderer output staging tree</div>
+  <div class="doc-breadcrumb">SolidGroundUX Codex / doc-renderer.sh / Local definitions / Helpers / _prepare_render_staging_directory</div>
+</header>
+<div class="ct-functionbody sh-highlight">Purpose</div>
+<div class="ct-functionbody">  Guarantee that each HTML render starts from an empty directory without touching</div>
+<div class="ct-functionbody">  the currently published local site until rendering has succeeded.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Arguments</div>
+<div class="ct-functionbody">  $1  Final output directory.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Output</div>
+<div class="ct-functionbody">  Creates &lt;output&gt;.new as an empty staging directory.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Returns</div>
+<div class="ct-functionbody">  0 when the staging directory is ready; 1 on invalid/unsafe paths or filesystem failure.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Usage</div>
+<div class="ct-functionbody">  _prepare_render_staging_directory &quot;$VAL_OUTDIR&quot;</div>
+</main>
+</body>
+</html>

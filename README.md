@@ -1,11 +1,11 @@
 <table>
 <tr>
 <td width="170" align="center" valign="middle">
-  <img width="96" height="96" alt="SolidGroundUX logo" src="target-root/usr/local/assets/sux-readmelogo.png" />
+  <img width="96" height="96" alt="SolidGroundUX logo" src="usr/local/share/doc-sources/assets/sux-readmelogo.png" />
 </td>
 <td valign="middle">
   <big><big><big><strong>SolidGroundUX</strong></big></big></big><br>
-  <sub>Version 2.1.2626414 · © 2026 Testadura</sub>
+  <sub>Version 2.1.2627700 · © 2026 Testadura</sub>
 </td>
 </tr>
 </table>
@@ -61,7 +61,7 @@ Most shell scripts start small. Over time, they accumulate argument parsing, con
 SolidGroundUX provides a common foundation for those recurring concerns. The result is less repetitive infrastructure code, more predictable behaviour and applications that remain understandable as they grow.
 
 <p align="center">
-  <img alt="SolidGroundUX framework overview" src="target-root/usr/local/assets/SolidGround UX.png" />
+  <img alt="SolidGroundUX framework overview" src="usr/local/share/doc-sources/assets/SolidGround UX.png" />
 </p>
 
 <br><br>
@@ -179,7 +179,7 @@ The UI layer provides reusable terminal primitives for:
 Presentation is separated from application logic wherever doing so adds practical value.
 
 <p align="center">
-  <img alt="SolidGroundUX theme showcase" src="target-root/usr/local/assets/Theme Showcase.png" />
+  <img alt="SolidGroundUX theme showcase" src="target-root/usr/local/share/doc-sources/assets/sux-theme-showcase.png" /> 
 </p>
 
 ## Menu API
@@ -213,10 +213,6 @@ Bash cannot enforce these access levels, but the convention makes intended owner
 The SolidGround Management Console is a modular administration application built on the SolidGroundUX runtime and public menu API.
 
 It is intended to provide a consistent interface for common Linux system-management tasks while delegating substantial workflows to reusable framework libraries and executables.
-
-<p align="center">
-  <img alt="SolidGround Console" src="target-root/usr/local/assets/SolidGroundManagementConsole.png" />
-</p>
 
 ## Index-based navigation
 
@@ -286,7 +282,7 @@ Samba file-server installation, validation and managed-share administration.
 
 ### SolidGroundUX
 
-Framework information and maintenance, including configuration, state, logging, diagnostics and access to the Release Manager.
+Framework information and maintenance, including configuration, state, logging, diagnostics and access to Setup.
 
 ### Development
 
@@ -316,29 +312,27 @@ Generation can build a complete collection, update selected or changed content, 
 
 Documentation therefore remains close to the code it describes rather than becoming an unrelated document that must be maintained independently.
 
-<p align="center">
-  <img alt="SolidGroundUX documentation generator" src="target-root/usr/local/assets/DocGenerator.png" />
-</p>
-
 ## Release preparation
 
-`prepare-release` turns one or more development products into prepared SolidGroundUX release packages.
+`prepare-release` turns one or more development products into distributable SolidGroundUX product release packages.
 
-A release run can select a primary product and companion products. Each product keeps its own product identity and its own version/build update policy. A combined bundle inherits Version and Build from the primary product rather than maintaining separate bundle metadata.
+Each selected product is released independently and keeps its own project/product identity, Version, Build, manifest history and removal baseline. Product ZIPs are the release unit; current release preparation does not assemble multiple products into a combined release archive.
 
-The tool can create individual product releases, a combined bundle, or both. A bundle inherits Version and Build from its primary product. Human-readable product names are retained in package metadata, while generated filenames use filesystem-safe product names.
+A product release ZIP contains `release-package.info`, the complete release archive, manifest, removed manifest and checksum sidecars. Human-readable product names remain in package metadata, while generated filenames use filesystem-safe product names.
 
-Its responsibilities include per-product release metadata maintenance, checksums, manifests, removed-file tracking, executable permissions, wrapper verification, product ownership collision detection and creation of the final release artifacts. Removal baselines are selected independently per product (and for the bundle), with manifest choices filtered to the matching product. Conflicting bundle paths are reported rather than silently allowing one product to overwrite another.
+When SolidGroundUX itself is part of the release run, `prepare-release` can additionally create a first-install transport ZIP. This transport is deliberately separate from the product packages and contains `sgnd-setup.sh` plus the selected product release ZIPs. It replaces the former bundled-release concept without changing the identity of any contained product package.
 
-Every prepared package carries project/product identity used by `release-manager`, so Version and Build do not have to be re-entered during installation or update. The resulting release packages are intended to be consumed by `release-manager`.
+Release preparation is also responsible for per-product metadata maintenance, checksums, manifests, removed-file tracking, executable permissions, wrapper verification and creation of the final product artifacts.
+
+Every product package carries the identity consumed by `sgnd-setup`, so Version and Build do not have to be re-entered during installation or update.
 
 ---
 
-# Installation and Release Management
+# Installation and Setup Lifecycle
 
-SolidGroundUX uses `release-manager.sh` as the canonical installation and release-lifecycle tool for the framework and separately released SolidGroundUX products.
+SolidGroundUX uses `sgnd-setup.sh` as the canonical standalone installation and lifecycle tool for the framework and separately released SolidGroundUX products.
 
-The Release Manager discovers prepared packages from their package metadata and can switch between bundled and individual products. Each project keeps its own release/archive state and GitHub repository configuration. Version and Build belong to the prepared package and are not operator-entered Release Manager settings.
+Setup remains usable on a clean or damaged machine because its release engine does not depend on an existing working framework. After installation the canonical recovery copy is `/var/lib/solidgroundux/sgnd-setup.sh`, with `sgnd-setup` as the normal public command.
 
 The previous separate installer, updater and uninstaller architecture has been superseded.
 
@@ -350,40 +344,40 @@ Development workspace
         v
 prepare-release
         |
-        v
-Prepared release artifacts
+        +--> one product ZIP per selected product
         |
-        v
-release-manager
-        |
-        +--> install
-        +--> update
-        +--> rollback / reinstall
-        +--> remove
+        +--> optional first-install ZIP
+                |
+                v
+           sgnd-setup
+                |
+                +--> install
+                +--> update
+                +--> rollback / reinstall
+                +--> remove
 ```
 
 ## Filesystem-based release state
 
-Release state is represented by the release artifacts themselves rather than a separate current-version database.
+Release state remains filesystem-based and project-aware rather than depending on an opaque current-version database.
 
-The release manager uses:
+Setup uses the SolidGroundUX state root beneath `/var/lib/solidgroundux`. Pending product ZIPs are admitted below `releases/`; successfully installed original product ZIPs are retained below `releases/archive/<project>/`. Extracted release history used by rollback and removal remains beneath the framework/project archive state, including `/var/lib/solidgroundux/archive/` for SolidGroundUX itself and project-specific state below `/var/lib/solidgroundux/projects/<project>/`.
 
-```text
-/var/lib/solidgroundux/releases
-/var/lib/solidgroundux/archive
+This keeps the lifecycle inspectable with ordinary filesystem tools while preserving the original distributable product packages separately from the internal extracted release history.
+
+## First installation
+
+A first-install transport ZIP contains `sgnd-setup.sh` and the selected product release ZIPs.
+
+On a fresh machine, extract that transport into a temporary directory and run:
+
+```bash
+sudo ./sgnd-setup.sh
 ```
 
-Available releases are kept beneath `releases/`. Installed release history is retained beneath `archive/`, where the highest archived release represents the currently installed release.
+Setup discovers the adjacent product packages, admits them into managed release state, lets the operator select which products to install, installs them through the normal package pipeline, and converges on the same lifecycle used for subsequent updates and rollbacks. In automatic mode, all adjacent first-install product packages are selected.
 
-This makes the release lifecycle inspectable using ordinary filesystem tools.
-
-## Bootstrap installation
-
-A release bundle can include both the prepared release and `release-manager.sh`.
-
-On a fresh machine, the bundle can be extracted into a temporary location and the bundled release manager executed. It establishes the canonical release-management directories, installs itself into its managed location, validates the accompanying release and proceeds through the normal installation path.
-
-The bootstrap path therefore converges on the same release model used for subsequent updates and rollbacks.
+The installed Framework supplies the canonical Setup copy at `/var/lib/solidgroundux/sgnd-setup.sh`; Setup also installs the public `sgnd-setup` command.
 
 ---
 

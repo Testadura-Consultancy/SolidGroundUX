@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Apply one permission policy row</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><a class="doc-page-branding-home" href="title.html" title="Documentation home"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></a></div>
+<header class="doc-page-header">
+  <div class="doc-title">Apply one permission policy row</div>
+  <div class="doc-breadcrumb">SolidGroundUX Codex / sgnd-repair-permissions.sh / Local helpers / _apply_policy_row</div>
+</header>
+<div class="ct-functionbody sh-highlight">Purpose</div>
+<div class="ct-functionbody">  Apply an exact target rule or an explicitly masked child selection.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Arguments</div>
+<div class="ct-functionbody">  $1  Type: d for directory or f for regular file.</div>
+<div class="ct-functionbody">  $2  Target path, absolute or framework-root relative.</div>
+<div class="ct-functionbody">  $3  Owner name, numeric uid, or operator.</div>
+<div class="ct-functionbody">  $4  Group name, numeric gid, or operator.</div>
+<div class="ct-functionbody">  $5  Octal permission mode.</div>
+<div class="ct-functionbody">  $6  Optional filemask: empty for exact target, * for all immediate children,</div>
+<div class="ct-functionbody">      ** for all descendants recursively, or a shell-style glob such as</div>
+<div class="ct-functionbody">      sgnd-* for matching immediate children.</div>
+<div class="ct-functionbody">  $7  Source policy line number.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Behavior</div>
+<div class="ct-functionbody">  - Empty filemask applies only to the exact target.</div>
+<div class="ct-functionbody">  - * applies to all immediate children of the declared directory root.</div>
+<div class="ct-functionbody">  - ** applies to all descendants recursively below the declared root.</div>
+<div class="ct-functionbody">  - Other shell-style glob patterns, such as sgnd-*, match immediate children.</div>
+<div class="ct-functionbody">  - Type d selects directories; type f selects regular files.</div>
+<div class="ct-functionbody">  - Mask expansion uses find -P and therefore does not follow symbolic links.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Side effects</div>
+<div class="ct-functionbody">  May create an exact directory target and may change ownership and permissions.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Returns</div>
+<div class="ct-functionbody">  0 when the row is valid and applied or has no matching masked objects.</div>
+<div class="ct-functionbody">  1 when validation or filesystem modification fails.</div>
+<div class="ct-functionbody">  2 when an exact declared file is absent; this is reported as a warning.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Usage</div>
+<div class="ct-functionbody">  _apply_policy_row &quot;d&quot; &quot;usr/local/share/solidgroundux/.cache&quot; &quot;operator&quot; &quot;operator&quot; &quot;0755&quot; &quot;**&quot; 3</div>
+</main>
+</body>
+</html>

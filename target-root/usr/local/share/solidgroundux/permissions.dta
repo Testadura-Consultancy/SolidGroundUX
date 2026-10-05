@@ -1,0 +1,25 @@
+# SolidGroundUX filesystem permission policy
+# Format: type|path|owner|group|mode|filemask
+#
+# type:
+#   d  directory
+#   f  regular file
+#
+# filemask:
+#   empty   exact target only
+#   *       all immediate children of the declared type
+#   **      all descendants recursively of the declared type
+#   glob    matching immediate children, for example sgnd-*
+#
+# Relative paths are resolved below SGND_FRAMEWORK_ROOT.
+# The symbolic owner/group value "operator" resolves to the invoking sudo user.
+
+# SolidGroundUX executable payload.
+d|usr/local/libexec/solidgroundux|root|root|0755|
+f|usr/local/libexec/solidgroundux|root|root|0755|*
+
+# Public SolidGroundUX command wrappers, including sgnd itself and sgnd-* commands.
+f|usr/local/bin|root|root|0755|sgnd*
+
+# Documentation generator runtime cache must be writable by the normal operator.
+d|usr/local/share/doc-sources/.cache|operator|operator|0755|

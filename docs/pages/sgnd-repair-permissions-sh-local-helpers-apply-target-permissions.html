@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Apply ownership and mode to one resolved target</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><a class="doc-page-branding-home" href="title.html" title="Documentation home"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></a></div>
+<header class="doc-page-header">
+  <div class="doc-title">Apply ownership and mode to one resolved target</div>
+  <div class="doc-breadcrumb">SolidGroundUX Codex / sgnd-repair-permissions.sh / Local helpers / _apply_target_permissions</div>
+</header>
+<div class="ct-functionbody sh-highlight">Purpose</div>
+<div class="ct-functionbody">  Apply one already-resolved permission rule to a single filesystem object.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Arguments</div>
+<div class="ct-functionbody">  $1  Type: d for directory or f for regular file.</div>
+<div class="ct-functionbody">  $2  Resolved absolute target path.</div>
+<div class="ct-functionbody">  $3  Resolved owner name or numeric uid.</div>
+<div class="ct-functionbody">  $4  Resolved group name or numeric gid.</div>
+<div class="ct-functionbody">  $5  Octal permission mode.</div>
+<div class="ct-functionbody">  $6  Source policy line number.</div>
+<div class="ct-functionbody">  $7  Create missing directory: 1 or 0.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Side effects</div>
+<div class="ct-functionbody">  May create an exact directory target and may change ownership and permissions.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Returns</div>
+<div class="ct-functionbody">  0 when the target was applied or was already correct.</div>
+<div class="ct-functionbody">  1 when validation or filesystem modification fails.</div>
+<div class="ct-functionbody">  2 when a declared object is absent and creation is not permitted.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Usage</div>
+<div class="ct-functionbody">  _apply_target_permissions &quot;d&quot; &quot;$target&quot; &quot;$owner&quot; &quot;$group&quot; &quot;0755&quot; 3 1</div>
+</main>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Resolve the non-root operator account</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><a class="doc-page-branding-home" href="title.html" title="Documentation home"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></a></div>
+<header class="doc-page-header">
+  <div class="doc-title">Resolve the non-root operator account</div>
+  <div class="doc-breadcrumb">SolidGroundUX Codex / sgnd-repair-permissions.sh / Local helpers / _resolve_operator</div>
+</header>
+<div class="ct-functionbody sh-highlight">Purpose</div>
+<div class="ct-functionbody">  Resolve the symbolic permission-policy identity &quot;operator&quot;.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Behavior</div>
+<div class="ct-functionbody">  - Uses SUDO_USER when the script was elevated from a non-root account.</div>
+<div class="ct-functionbody">  - Refuses to silently translate operator to root when no invoking operator</div>
+<div class="ct-functionbody">    can be identified.</div>
+<div class="ct-functionbody"></div>
+<p class="ct-functionbody">Outputs (globals)</p>
+<div class="ct-functionbody">  SGND_PERMISSION_OPERATOR_USER</div>
+<div class="ct-functionbody">  SGND_PERMISSION_OPERATOR_GROUP</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Returns</div>
+<div class="ct-functionbody">  0 when an operator user and primary group were resolved.</div>
+<div class="ct-functionbody">  1 when no non-root operator can be identified.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Usage</div>
+<div class="ct-functionbody">  _resolve_operator</div>
+</main>
+</body>
+</html>

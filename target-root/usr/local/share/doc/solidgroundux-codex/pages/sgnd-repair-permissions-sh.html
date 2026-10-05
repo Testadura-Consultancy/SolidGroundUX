@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>SolidGroundUX - Repair Permissions</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><a class="doc-page-branding-home" href="title.html" title="Documentation home"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></a></div>
+<header class="doc-page-header">
+  <div class="doc-title">SolidGroundUX - Repair Permissions</div>
+  <div class="doc-breadcrumb">SolidGroundUX Codex / sgnd-repair-permissions.sh</div>
+</header>
+<div class="ct-modulebody sh-label">Description</div>
+<div class="ct-modulebody">  Reads a pipe-separated permission policy file and applies the declared owner,</div>
+<div class="ct-modulebody">  group, and mode to each target. Relative target paths are resolved below the</div>
+<div class="ct-modulebody">  active SolidGroundUX framework root so the same policy can be used in staged</div>
+<div class="ct-modulebody">  development trees and on installed systems.</div>
+<div class="ct-modulebody"></div>
+<div class="ct-modulebody">  By default a policy row affects only its exact target. An optional filemask extends</div>
+<div class="ct-modulebody">  the rule below a directory: * selects all immediate children, ** selects all</div>
+<div class="ct-modulebody">  descendants recursively, and any other shell-style glob (for example sgnd-*)</div>
+<div class="ct-modulebody">  selects matching immediate children. The declared type still filters directories</div>
+<div class="ct-modulebody">  (d) from regular files (f).</div>
+<div class="ct-modulebody"></div>
+<div class="ct-modulebody">  Exact directory records create the directory when it is missing. File records and</div>
+<div class="ct-modulebody">  masked roots are never invented; missing objects are reported instead.</div>
+<div class="ct-modulebody"></div>
+<div class="ct-modulebody sh-label">Design principles</div>
+<div class="ct-modulebody">  - Permission policy is declarative and external to the executable.</div>
+<div class="ct-modulebody">  - Permission changes are non-recursive unless a policy row explicitly uses **.</div>
+<div class="ct-modulebody">  - Named filemasks such as sgnd-* are limited to immediate children.</div>
+<div class="ct-modulebody">  - Recursive selection never follows symbolic links outside the declared tree.</div>
+<div class="ct-modulebody">  - The symbolic owner/group value &quot;operator&quot; resolves to the invoking sudo user.</div>
+<div class="ct-modulebody">  - Missing or invalid policy data fails visibly instead of being guessed.</div>
+<div class="ct-modulebody">  - Dry-run reports intended changes without modifying the filesystem.</div>
+<div class="ct-modulebody"></div>
+<div class="ct-modulebody sh-label">Role in framework</div>
+<div class="ct-modulebody">  - Repairs runtime-writable ownership after root-owned installation or update work.</div>
+<div class="ct-modulebody">  - Provides one reusable implementation for sgnd-setup and Management Console actions.</div>
+<div class="ct-modulebody"></div>
+<div class="ct-modulebody sh-label">Non-goals</div>
+<div class="ct-modulebody">  - Implicit or unrestricted recursive permission changes.</div>
+<div class="ct-modulebody">  - Following symbolic links while expanding masked selections.</div>
+<div class="ct-modulebody">  - Creating missing regular files or masked search roots.</div>
+<div class="ct-modulebody">  - Inferring ownership or modes that are not declared in the policy file.</div>
+<div class="ct-modulebody"></div>
+</main>
+</body>
+</html>

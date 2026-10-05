@@ -3,8 +3,8 @@
 # -------------------------------------------------------------------------------------
 # Metadata:
 #   Version     : 2.1
-#   Build       : 2627501
-#   Checksum    : 2bd387b54b63b3b023befd072e638c0e7ad480268ff6f7318feec2b38da19b44
+#   Build       : 2627808
+#   Checksum    : 68f0d6985486a6a362856589a25187c1854e17ecefc987acc89dff1dbf64bddf
 #   Source      : sgnd-args.sh
 #   Type        : library
 #   Group       : Common Core
@@ -204,8 +204,9 @@ set -uo pipefail
         #
         # . Behavior
         #   - Selects builtin specs, script specs, or both depending on the source argument.
-        #   - Initializes flag variables to their configured default or 0.
-        #   - Initializes value and enum variables to their configured default or empty.
+        #   - Initializes only argument target variables that are not already set.
+        #   - Uses the configured default (or 0 for flags, empty for values/enums) when initialization is required.
+        #   - Preserves values already restored from state/config so explicit CLI arguments can override them later.
         #   - Stores the selected combined specification in SGND_EFFECTIVE_ARGS_SPEC.
         #
         # . Arguments
@@ -267,7 +268,11 @@ set -uo pipefail
                     ;;
             esac
 
-            printf -v "$_sgnd_var" '%s' "$init_value"
+            # State/config is loaded before script arguments are parsed. Do not let
+            # argument-spec defaults overwrite an already restored or explicitly seeded value.
+            if [[ ! -v "$_sgnd_var" ]]; then
+                printf -v "$_sgnd_var" '%s' "$init_value"
+            fi
         done
 
         SGND_EFFECTIVE_ARGS_SPEC=( "${args[@]}" )
@@ -295,7 +300,8 @@ set -uo pipefail
         # Notes:
         #   - type is flag, value, or enum.
         #   - enum choices are comma-separated.
-        #   - Target variables are initialized by _sgnd_arg_init_defaults.
+        #   - Unset target variables are initialized by _sgnd_arg_init_defaults.
+        #   - Existing state/config values are preserved until an explicit CLI option overrides them.
     SGND_BUILTIN_ARGS=(
         "dryrun|D|flag|FLAG_DRYRUN|Emulate only; do not perform actions|"
         "help|H|flag|FLAG_HELP|Show command-line help and exit|"
@@ -516,7 +522,8 @@ set -uo pipefail
         # Reset positional/preserved array.
         SGND_POSITIONAL=()
 
-        # Initialize only the selected argument variables from defaults.
+        # Initialize only unset selected argument variables from defaults. Existing
+        # state/config values remain in place until an explicit CLI option overrides them.
         _sgnd_arg_init_defaults "$source"
 
         # Main parse loop

@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Require deliberate confirmation for a nuclear removal yield</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><a class="doc-page-branding-home" href="title.html" title="Documentation home"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></a></div>
+<header class="doc-page-header">
+  <div class="doc-title">Require deliberate confirmation for a nuclear removal yield</div>
+  <div class="doc-breadcrumb">SolidGroundUX Codex / sgnd-setup.sh / Arguments and paths / _nuke_confirm</div>
+</header>
+<p class="ct-functionbody">Purpose:</p>
+<div class="ct-functionbody">  Prevent an interactive nuclear removal from proceeding on an accidental invocation.</div>
+<div class="ct-functionbody"></div>
+<p class="ct-functionbody">Behavior:</p>
+<div class="ct-functionbody">  - --auto is the explicit non-interactive confirmation contract.</div>
+<div class="ct-functionbody">  - Interactive calls must type the selected yield token exactly (case-insensitive).</div>
+<div class="ct-functionbody"></div>
+<p class="ct-functionbody">Returns:</p>
+<div class="ct-functionbody">  0 when confirmed; 2 when cancelled; 1 when confirmation cannot be collected.</div>
+<div class="ct-functionbody"></div>
+<p class="ct-functionbody">Usage:</p>
+<div class="ct-functionbody">  _nuke_confirm &quot;tsar&quot;</div>
+</main>
+</body>
+</html>

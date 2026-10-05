@@ -1,43 +1,49 @@
 # Installing SolidGroundUX
 
-SolidGroundUX uses a standalone `release-manager.sh` for installation, update,
-rollback, reinstallation, and removal of the framework and separately packaged
-SolidGroundUX products.
+SolidGroundUX uses the standalone `sgnd-setup.sh` tool for installation, update,
+rollback, reinstallation, removal, and recovery of the framework and separately
+packaged SolidGroundUX products.
 
-The release manager does not depend on an existing SolidGroundUX installation.
-It can therefore be used on a clean machine or to recover an incomplete or
-damaged installation.
+Setup does not depend on an existing working SolidGroundUX installation. It can
+therefore be used on a clean machine or to recover an incomplete or damaged
+installation.
 
 ## Download
 
-Download the latest SolidGroundUX release bundle from:
+Download the latest SolidGroundUX first-install package or individual product
+release package from:
 
 https://github.com/Testadura-Mark/SolidGroundUX/releases
 
-The framework release can be provided as an individual package or as a bundle
-containing companion SolidGroundUX products. `prepare-release.sh` may produce both
-forms in the same release run. Each product retains its own release-metadata policy,
-while a combined bundle inherits Version and Build from its primary product.
+Current releases use **one product ZIP per product**. A multi-product release run
+does not create a combined product bundle. When SolidGroundUX itself is selected,
+`prepare-release.sh` may additionally create a first-install transport ZIP.
 
-Typical package names are:
+Typical names are:
 
 * `SolidGroundUX-<version>.<build>-release.zip`
-* `SolidGroundUX-bundled-<version>.<build>-release.zip`
-* `<Product-Name>-<version>.<build>-release.zip`
+* `SolidGroundUX-Management-Console-Modules-<version>.<build>-release.zip`
+* `SolidGroundUX-SDK-<version>.<build>-release.zip`
+* `SolidGroundUX-first-install-<version>.<build>.zip`
 
-Generated filenames use filesystem-safe product names (for example, spaces are
-replaced with hyphens); the human-readable product name remains in package metadata.
+Each product release ZIP contains:
 
-The ZIP contains:
+* `release-package.info`
+* `<Product>-<version>.<build>.tar.gz`
+* `<Product>-<version>.<build>.tar.gz.sha256`
+* `<Product>-<version>.<build>.manifest`
+* `<Product>-<version>.<build>.manifest.sha256`
+* `<Product>-<version>.<build>.removed`
+* `<Product>-<version>.<build>.removed.sha256`
 
-* `release-manager.sh`
-* `SolidGroundUX-<version>.tar.gz`
-* `SolidGroundUX-<version>.tar.gz.sha256`
-* `SolidGroundUX-<version>.manifest`
-* `SolidGroundUX-<version>.manifest.sha256`
-* `SolidGroundUX-<version>.removed`
-* `SolidGroundUX-<version>.removed.sha256`
-* `SHA256SUMS`
+The first-install transport ZIP is not itself a product release. It contains:
+
+* `sgnd-setup.sh`
+* the selected product release ZIPs
+
+The first-install package replaces the former bundled-release concept. The product
+ZIPs inside it retain their own project, product, Version, Build, and release
+identity.
 
 ## First-time Installation
 
@@ -47,236 +53,249 @@ For example:
 
 ```bash
 cd /tmp
-unzip SolidGroundUX-<version>-release.zip
-chmod +x release-manager.sh
-sudo ./release-manager.sh --install
+unzip SolidGroundUX-first-install-<version>.<build>.zip
+chmod +x sgnd-setup.sh
+sudo ./sgnd-setup.sh
 ```
 
-The release manager then:
+With no action specified, Setup recognizes product release ZIPs beside itself as a
+first-install set. It then:
 
-1. Creates the required release-management directories.
-2. Detects the release files beside itself.
-3. Verifies checksums and release paths.
-4. Moves the validated release set into `/var/lib/solidgroundux/releases`.
-5. Installs the release into the target filesystem.
-6. Moves the installed release set into the versioned archive.
-7. Copies itself to:
+1. Creates the required Setup and release-state directories.
+2. Installs a standalone Setup copy for recovery.
+3. Validates the adjacent product ZIP metadata.
+4. Admits the selected product ZIPs into managed release state.
+5. Lets the operator select one, several, or all available products.
+6. Extracts and validates each selected product release.
+7. Installs each product through the normal release engine.
+8. Archives the successfully installed original product ZIPs.
+9. Verifies the canonical Setup copy and public wrappers.
+10. Offers Setup, the Management Console, or return to the shell.
+
+For a non-interactive first installation, `--auto` selects all adjacent product
+packages and suppresses interactive selection:
+
+```bash
+sudo ./sgnd-setup.sh --auto
+```
+
+After installation, the canonical recovery copy is:
 
 ```text
-/var/lib/solidgroundux/release-manager.sh
+/var/lib/solidgroundux/sgnd-setup.sh
 ```
 
-8. Removes only the known temporary bootstrap files after a successful install.
+The normal public command is:
 
-After the first installation, the temporary copy of the release manager is no
-longer required.
+```bash
+sudo sgnd-setup
+```
+
 
 ## Release Storage
 
-SolidGroundUX deliberately uses the filesystem itself as release state.
+SolidGroundUX deliberately uses filesystem state for the release lifecycle.
 
-### Available releases
+### Pending product packages
 
-Downloaded/admitted or rolled-back releases are stored below:
-
-```text
-/var/lib/solidgroundux/releases
-```
-
-These releases are available for installation.
-
-### Installed release history
-
-Installed releases are stored below:
+Downloaded, admitted, or otherwise locally available product release ZIPs are stored
+below:
 
 ```text
-/var/lib/solidgroundux/archive/<release>
+/var/lib/solidgroundux/releases/
 ```
 
-For example:
+These ZIPs are available for installation.
+
+### Installed original product packages
+
+After successful installation, the original distributable product ZIP is retained
+below:
 
 ```text
-/var/lib/solidgroundux/archive/SolidGroundUX-1.8.2622102
+/var/lib/solidgroundux/releases/archive/<project>/
 ```
 
-The highest versioned directory in `archive/` represents the currently installed
-release.
+This store preserves the original package independently of the extracted release
+history.
 
-No separate current-version database is required.
+### Extracted release history
 
-## Interactive Release Manager
+The release engine also keeps extracted archive/manifest history for rollback,
+reinstallation, and removal.
 
-After installation, start the release manager with:
+SolidGroundUX itself uses:
+
+```text
+/var/lib/solidgroundux/archive/
+```
+
+Additional projects use project-specific state below:
+
+```text
+/var/lib/solidgroundux/projects/<project>/
+```
+
+including their release and archive state as required by the lifecycle engine.
+
+The active release is derived from this filesystem release history; no separate
+opaque current-version database is required.
+
+## Interactive Setup
+
+After installation, start Setup with:
 
 ```bash
-sudo /var/lib/solidgroundux/release-manager.sh
+sudo sgnd-setup
 ```
 
-The interactive Release Manager discovers available bundled and individual
-packages from their package metadata. Bundle identity follows the primary product,
-while contained products retain their own product metadata. Selecting a package establishes its project,
-product, Version, Build, managed release/archive directories, and GitHub repository.
-Version and Build are therefore not entered manually in the Release Manager.
+Setup discovers known products and locally available product packages from their
+metadata. Product identity, Version, Build, release line, and repository settings
+are derived from package/project state rather than re-entered as release metadata.
 
-The interactive menu can:
-
-* Select another available package.
-* Check the selected project's GitHub repository for the latest release.
-* Download the latest release.
-* Update to the latest GitHub release.
-* Install the newest locally available release.
-* Reinstall or roll back to an archived release.
-* Remove SolidGroundUX.
-
-Archived releases are shown in a submenu with the current release marked
-explicitly.
+The interactive interface provides lifecycle actions including checking for online
+releases, downloading, installing local packages, updating, rollback/reinstallation,
+and removal.
 
 ## Checking for Updates
 
-To check GitHub without changing the local machine:
+To check the configured GitHub release source without changing the installed
+product:
 
 ```bash
-sudo /var/lib/solidgroundux/release-manager.sh --check
+sudo sgnd-setup --check
 ```
 
-The release manager checks the GitHub repository configured for the selected
-project/package and compares its latest published release with releases already
-present in that project's `archive/` or `releases/` state.
-
-If the latest release is already installed or downloaded, it is not downloaded
-again.
+Setup compares the latest published release with locally downloaded and installed
+release state for the selected project.
 
 ## Downloading Without Installing
 
-To download and validate the latest release without installing it:
+To download and validate the latest product package without installing it:
 
 ```bash
-sudo /var/lib/solidgroundux/release-manager.sh --download
+sudo sgnd-setup --download
 ```
 
-Downloads are first staged in a temporary directory.
-
-The ZIP is extracted and validated before its release files are admitted into:
+Downloads are staged and validated before they are admitted into:
 
 ```text
-/var/lib/solidgroundux/releases
+/var/lib/solidgroundux/releases/
 ```
 
-This prevents incomplete or malformed downloads from contaminating the local
-release repository.
+This prevents incomplete or malformed downloads from contaminating managed release
+state.
 
 ## Updating
 
-To check GitHub, download the latest release when required, and install it:
+To obtain and install the latest GitHub product package:
 
 ```bash
-sudo /var/lib/solidgroundux/release-manager.sh --update
+sudo sgnd-setup --update
 ```
 
-An update installs the complete new release archive and applies the incoming
-`.removed` manifest.
-
-The `.removed` manifest identifies paths that belonged to the previous release
-but are no longer part of the new release.
-
-Because each SolidGroundUX release contains a complete framework tree, updates
-do not depend on incremental binary patching.
-
-For unattended operation:
+Interactive operation can select the applicable project/product. For unattended
+operation, select the project explicitly:
 
 ```bash
-sudo /var/lib/solidgroundux/release-manager.sh --update --auto
+sudo sgnd-setup --update --auto --project solidgroundux
 ```
+
+An update installs the complete incoming release and applies its `.removed`
+manifest. Releases do not depend on incremental binary patching.
 
 ## Installing a Local Release
 
-To install the newest release already available under `releases/`:
+To install the newest locally available product package:
 
 ```bash
-sudo /var/lib/solidgroundux/release-manager.sh --install
+sudo sgnd-setup --install
 ```
 
-To install a specific release:
+To request a specific release identity:
 
 ```bash
-sudo /var/lib/solidgroundux/release-manager.sh     --install     --release 1.8.2622102
+sudo sgnd-setup --install --release <release>
 ```
+
+Local package discovery includes product ZIPs beside the running Setup script and
+those already admitted beneath the managed `releases/` directory.
 
 ## Rollback and Reinstallation
 
 To roll back to the previous archived release:
 
 ```bash
-sudo /var/lib/solidgroundux/release-manager.sh --rollback
+sudo sgnd-setup --rollback
 ```
 
-To install a specific archived release:
+To select a specific archived release:
 
 ```bash
-sudo /var/lib/solidgroundux/release-manager.sh     --rollback     --release 1.8.2621804
+sudo sgnd-setup --rollback --release <release>
 ```
 
-Rollback makes the active filesystem match the selected archived release.
-
-Files that exist only in the newer release are removed, and the selected
-complete release archive is installed again.
-
-Newer archived versions are returned to `releases/`, so the highest remaining
-archive directory continues to represent the active version.
+Rollback makes the installed filesystem match the selected archived release and
+keeps the release-state model consistent for later reinstall or update operations.
 
 ## Removing SolidGroundUX
 
-To remove the active SolidGroundUX installation:
+To remove the active selected project installation:
 
 ```bash
-sudo /var/lib/solidgroundux/release-manager.sh --remove
+sudo sgnd-setup --remove
 ```
 
-The release manager removes framework-owned paths using the current release
-manifest.
-
-Archived release sets are returned to `releases/` rather than discarded, so
-they remain available for later reinstallation.
+Setup uses the installed release manifests and ownership information to remove
+managed product content while preserving release packages needed for later
+reinstallation where the lifecycle contract requires it.
 
 ## Dry Run
 
 To preview filesystem changes without applying them:
 
 ```bash
-sudo /var/lib/solidgroundux/release-manager.sh --update --dryrun
+sudo sgnd-setup --update --dryrun
 ```
 
-The same option can be used with install, rollback, and removal operations.
+The same option can be used with install, rollback, removal, and other supported
+lifecycle actions.
 
 ## Alternate Release Source
 
-The default update source is the latest published GitHub release.
+The default update source is the configured GitHub release.
 
-A specific ZIP file may also be used:
+A specific product release ZIP may also be used:
 
 ```bash
-sudo /var/lib/solidgroundux/release-manager.sh     --update     --source /tmp/SolidGroundUX-release.zip
+sudo sgnd-setup --update --source /tmp/SolidGroundUX-<version>.<build>-release.zip
 ```
 
 Or a direct URL:
 
 ```bash
-sudo /var/lib/solidgroundux/release-manager.sh     --update     --source https://example.org/releases/SolidGroundUX-release.zip
+sudo sgnd-setup --update --source https://example.org/releases/SolidGroundUX-<version>.<build>-release.zip
 ```
+
+`--source` is transient for the selected action and does not replace the persistent
+release-source configuration.
 
 ## Testing With Alternate Roots
 
-The release manager supports alternate target and state roots, which is useful
-for testing installation behavior without modifying the live system:
+Setup supports alternate target and state roots, which is useful for testing
+installation behavior without modifying the live system:
 
 ```bash
-sudo ./release-manager.sh     --install     --target-root /mnt/testroot     --state-root /mnt/testroot/var/lib/solidgroundux
+sudo ./sgnd-setup.sh \
+    --install \
+    --target-root /mnt/testroot \
+    --state-root /mnt/testroot/var/lib/solidgroundux
 ```
 
 ## Development Deployment
 
-Formal releases are created with `prepare-release.sh` and installed with
-`release-manager.sh`.
+Formal product releases are created with `prepare-release.sh` and installed with
+`sgnd-setup.sh`.
 
 During development, `deploy-workspace.sh` provides a faster path for deploying
 selected workspace files directly to a local or remote test machine.

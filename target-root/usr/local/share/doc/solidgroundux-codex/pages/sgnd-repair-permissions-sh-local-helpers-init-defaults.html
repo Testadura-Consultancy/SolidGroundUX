@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Resolve the default permission policy path</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><a class="doc-page-branding-home" href="title.html" title="Documentation home"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></a></div>
+<header class="doc-page-header">
+  <div class="doc-title">Resolve the default permission policy path</div>
+  <div class="doc-breadcrumb">SolidGroundUX Codex / sgnd-repair-permissions.sh / Local helpers / _init_defaults</div>
+</header>
+<div class="ct-functionbody sh-highlight">Purpose</div>
+<div class="ct-functionbody">  Resolve the default permission policy below the framework shared-data root.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Behavior</div>
+<div class="ct-functionbody">  - Requires SGND_SHARE_DIR to have been initialized by framework bootstrap.</div>
+<div class="ct-functionbody">  - Defaults the policy to SGND_SHARE_DIR/permissions.dta.</div>
+<div class="ct-functionbody">  - Preserves an explicitly supplied --file value.</div>
+<div class="ct-functionbody"></div>
+<p class="ct-functionbody">Inputs (globals)</p>
+<div class="ct-functionbody">  SGND_SHARE_DIR</div>
+<div class="ct-functionbody"></div>
+<p class="ct-functionbody">Outputs (globals)</p>
+<div class="ct-functionbody">  VAL_PERMISSION_FILE</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Returns</div>
+<div class="ct-functionbody">  0 when SGND_SHARE_DIR is available.</div>
+<div class="ct-functionbody">  1 when the framework shared-data directory was not initialized.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Usage</div>
+<div class="ct-functionbody">  _init_defaults</div>
+</main>
+</body>
+</html>

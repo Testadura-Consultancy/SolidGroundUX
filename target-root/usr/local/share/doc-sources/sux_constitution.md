@@ -1064,21 +1064,23 @@ The script SHOULD distinguish between:
 
 ---
 
-# 16. Installer Behaviour
+# 16. Setup and Installer Behaviour
 
-## 16.1 Canonical Release Manager
+## 16.1 Canonical Setup
 
-`release-manager.sh` is the canonical installation and release-lifecycle tool for SolidGroundUX packages.
+`sgnd-setup.sh` is the canonical standalone installation and release-lifecycle tool for SolidGroundUX product packages.
 
-Separate legacy installer, updater, and uninstaller commands MUST NOT be documented as current interfaces once their responsibilities have been absorbed by the Release Manager.
+The public `sgnd-setup` command SHOULD be used for normal installed operation.
 
-Prepared release packages are produced by `prepare-release.sh` and consumed by `release-manager.sh`.
+Separate legacy installer, updater, and uninstaller commands MUST NOT be documented as current interfaces once their responsibilities have been absorbed by Setup.
 
-The Release Manager MUST remain usable when SolidGroundUX is not yet installed or is damaged. Its release engine therefore MUST NOT depend on a working framework runtime.
+Prepared product release packages are produced by `prepare-release.sh` and consumed by `sgnd-setup.sh`.
 
-## 16.2 Release Package Contract
+Setup MUST remain usable when SolidGroundUX is not yet installed or is damaged. Its release engine therefore MUST NOT depend on a working framework runtime.
 
-Every distributable package MUST contain a `release-package.info` shipping label identifying at least:
+## 16.2 Product Release Package Contract
+
+Every distributable product release package MUST contain a `release-package.info` shipping label identifying at least:
 
 ```text
 package format
@@ -1089,29 +1091,33 @@ build
 release
 ```
 
-A package MUST also contain the complete release archive, manifest, removed manifest, and their checksum sidecars. When multiple products are assembled into one bundle, path ownership collisions MUST be detected and reported rather than resolved by silent overwrite.
+A product package MUST also contain the complete release archive, manifest, removed manifest, and their checksum sidecars.
 
-SolidGroundUX framework packages MAY additionally contain a ZIP-root `release-manager.sh` bootstrap copy. Generic project packages SHOULD rely on an already installed Release Manager.
+Product ZIPs are the canonical release unit. A current multi-product release run MUST produce independent product ZIPs rather than combining product trees into one release archive. Each product retains its own identity, Version, Build, release history, and removal baseline.
+
+A first-install transport ZIP MAY contain `sgnd-setup.sh` plus multiple already-prepared product release ZIPs. The first-install transport is not itself a product release package and MUST NOT alter the identity of the product ZIPs it contains.
 
 The package identity file is transport metadata. The deployed project definitions file remains the authoritative runtime project identity.
 
-## 16.3 Bootstrap and Canonical Manager
+## 16.3 First-Install Bootstrap and Canonical Setup
 
-A ZIP-root Release Manager is a bootstrap runner, not the authoritative installed copy.
+A ZIP-root `sgnd-setup.sh` in a first-install transport is a bootstrap runner, not the authoritative installed copy.
 
 On first installation:
 
-1. the bootstrap manager identifies and validates the adjacent package;
+1. Setup discovers and validates adjacent product release ZIPs;
 2. the target root is resolved or explicitly confirmed;
-3. the package archive is installed;
-4. the installed tar establishes the canonical manager under `var/lib/solidgroundux`;
-5. the bootstrap copy MAY clean up its known temporary files.
+3. selected product ZIPs are admitted into managed release state;
+4. selected product releases are installed through the normal release engine;
+5. the installed Framework establishes the canonical Setup copy at `/var/lib/solidgroundux/sgnd-setup.sh`;
+6. Setup establishes the normal public `sgnd-setup` command;
+7. the bootstrap copy MAY clean up only its known temporary first-install files.
 
-The running bootstrap or development copy MUST NOT overwrite the canonical manager merely because its pathname differs.
+The running bootstrap or development copy MUST NOT overwrite the canonical installed Setup merely because its pathname differs.
 
 ## 16.4 Integrity
 
-Releases MUST include checksum verification for the archive, manifest, and removed manifest.
+Product releases MUST include checksum verification for the archive, manifest, and removed manifest.
 
 Installation MUST stop when integrity or path-safety verification fails.
 
@@ -1121,7 +1127,7 @@ Archive extraction MUST NOT overwrite ownership, mode, ACLs, or extended attribu
 
 ## 16.6 Operation Detection
 
-The Release Manager SHOULD identify whether the selected action represents:
+Setup SHOULD identify whether the selected action represents:
 
 - first installation;
 - repair or reinstall;
@@ -1135,37 +1141,47 @@ The operator SHOULD be informed when behavior differs by mode.
 
 Release state is filesystem-based and project-aware.
 
-SolidGroundUX retains the canonical state locations:
+Pending or downloaded product ZIPs are admitted below:
 
 ```text
 /var/lib/solidgroundux/releases/
+```
+
+Successfully installed original product ZIPs are retained below:
+
+```text
+/var/lib/solidgroundux/releases/archive/<project>/
+```
+
+The extracted release history used by the release engine remains project-aware. SolidGroundUX itself uses the canonical archive state beneath:
+
+```text
 /var/lib/solidgroundux/archive/
 ```
 
-Additional projects use:
+Additional projects use project-specific state beneath:
 
 ```text
-/var/lib/solidgroundux/projects/<project>/releases/
-/var/lib/solidgroundux/projects/<project>/archive/
+/var/lib/solidgroundux/projects/<project>/
 ```
 
 The release lifecycle SHOULD remain inspectable with ordinary filesystem tools rather than depending on an opaque current-version database.
 
-Build output produced by `prepare-release.sh` belongs to the workspace release-output directory. It MUST NOT be copied into the target-root managed release-state directories merely as a side effect of preparing a release. A package enters managed `releases/` state when the Release Manager acquires or admits it.
+Build output produced by `prepare-release.sh` belongs to the workspace release-output directory. It MUST NOT be copied into target-root managed release state merely as a side effect of preparing a release. A product package enters managed `releases/` state when Setup acquires or admits it.
 
 ## 16.8 Interactive and Non-Interactive Operation
 
-Interactive Release Manager operation SHOULD present stateful parameter values as questions and release actions through a menu.
+Interactive Setup operation SHOULD present stateful parameter values as questions and release actions through a menu.
 
-Non-interactive action arguments such as check, download, update, install, rollback, and remove MUST dispatch the same underlying action functions used by the interactive menu.
+Non-interactive action arguments such as check, download, update, install, rollback, and remove MUST dispatch the same underlying action functions used by the interactive interface.
 
-Explicit command-line values take precedence over stored parameter state. `--auto` MAY suppress questions and confirmations where the selected action already expresses informed intent.
+Explicit command-line values take precedence over stored parameter state. `--auto` MAY suppress questions and confirmations where the selected action already expresses informed intent. When automatic operation requires product/project selection, that selection MUST be explicit or otherwise deterministic.
 
 ## 16.9 Standalone and Framework UI
 
-The Release Manager MUST always have a minimal standalone UI and fallback theme available.
+Setup MUST always have a minimal standalone UI and fallback theme available.
 
-When a healthy SolidGroundUX framework exists at the selected target root, the manager MAY use the normal SolidGroundUX UI primitives and active theme. Failure to load the framework UI MUST fall back safely to the standalone implementation and MUST NOT prevent release recovery operations.
+When a healthy SolidGroundUX framework exists at the selected target root, Setup MAY use the normal SolidGroundUX UI primitives and active theme. Failure to load the framework UI MUST fall back safely to the standalone implementation and MUST NOT prevent installation or recovery operations.
 
 
 # 17. Security
@@ -1325,7 +1341,7 @@ SGND_VERSION.SGND_BUILD
 
 Project-specific definitions MAY provide equivalent project-scoped Version and Build globals.
 
-When a release contains multiple products, version/build update policy MUST be evaluated per product. A combined bundle MUST inherit the release identity of its primary product rather than maintaining an independent bundle version/build policy.
+When a release run contains multiple products, version/build update policy MUST be evaluated independently per product. Each product ZIP retains its own Version and Build. A first-install transport MAY contain multiple product ZIPs, but it is not a combined release unit and MUST NOT replace their individual release identities.
 
 Build identifiers MAY embed date or time information according to the release process.
 

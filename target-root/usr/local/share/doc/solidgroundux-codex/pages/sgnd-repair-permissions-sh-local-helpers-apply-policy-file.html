@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Read and apply a permission policy file</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><a class="doc-page-branding-home" href="title.html" title="Documentation home"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></a></div>
+<header class="doc-page-header">
+  <div class="doc-title">Read and apply a permission policy file</div>
+  <div class="doc-breadcrumb">SolidGroundUX Codex / sgnd-repair-permissions.sh / Local helpers / _apply_policy_file</div>
+</header>
+<div class="ct-functionbody sh-highlight">Purpose</div>
+<div class="ct-functionbody">  Apply every active permission rule from one PSV policy file.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Behavior</div>
+<div class="ct-functionbody">  - Empty filemask keeps exact-target behavior; * selects all immediate children;</div>
+<div class="ct-functionbody">    ** selects descendants recursively; other glob patterns match immediate children.</div>
+<div class="ct-functionbody">  - Ignores blank lines and lines beginning with #.</div>
+<div class="ct-functionbody">  - Trims whitespace around every field.</div>
+<div class="ct-functionbody">  - Continues after row failures so all problems are reported in one run.</div>
+<div class="ct-functionbody">  - Treats missing exact declared files as warnings rather than hard failures.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Arguments</div>
+<div class="ct-functionbody">  $1  Policy file path.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Returns</div>
+<div class="ct-functionbody">  0 when every applicable row was valid and applied.</div>
+<div class="ct-functionbody">  1 when one or more rows failed.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Usage</div>
+<div class="ct-functionbody">  _apply_policy_file &quot;$VAL_PERMISSION_FILE&quot;</div>
+</main>
+</body>
+</html>
