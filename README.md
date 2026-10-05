@@ -61,12 +61,6 @@ Most shell scripts start small. Over time, they accumulate argument parsing, con
 
 SolidGroundUX provides a common foundation for those recurring concerns. The result is less repetitive infrastructure code, more predictable behaviour and applications that remain understandable as they grow.
 
-<p align="center">
-  <img alt="SolidGroundUX framework overview" src="usr/local/share/doc-sources/assets/SolidGround UX.png" />
-</p>
-
-<br><br>
-
 ## Architecture
 
 SolidGroundUX is organized around a small common runtime rather than a collection of unrelated utilities.
