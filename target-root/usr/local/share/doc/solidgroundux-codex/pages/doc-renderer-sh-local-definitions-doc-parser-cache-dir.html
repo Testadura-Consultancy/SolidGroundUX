@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
+  <link rel="icon" type="image/png" href="../favicon.png">
   <title>Persistent parser dataset cache directory</title>
   <link rel="stylesheet" href="../assets/doc.css">
   <link rel="stylesheet" href="../assets/theme.css">
@@ -17,7 +18,7 @@
 <div class="ct-variablebody">  Hold the normalized parser tables used by Full-update, Selected, and Changed modes.</div>
 <div class="ct-variablebody"></div>
 <div class="ct-variablebody sh-highlight">Behavior</div>
-<div class="ct-variablebody">  - Defaults to usr/local/share/doc-sources/.cache/&lt;site-slug&gt;/parser.</div>
+<div class="ct-variablebody">  - Defaults to the configured documentation collection cache&#x27;s parser directory.</div>
 <div class="ct-variablebody">  - Lives outside the rendered website so the output tree is fully disposable.</div>
 <div class="ct-variablebody">  - May be overridden by callers before rendering.</div>
 </main>

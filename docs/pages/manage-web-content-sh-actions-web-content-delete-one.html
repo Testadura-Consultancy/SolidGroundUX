@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="icon" type="image/png" href="../favicon.png">
+  <title>Remove one selected page or child section recoverably</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><a class="doc-page-branding-home" href="title.html" title="Documentation home"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></a></div>
+<header class="doc-page-header">
+  <div class="doc-title">Remove one selected page or child section recoverably</div>
+  <div class="doc-breadcrumb">SolidGroundUX Codex / manage-web-content.sh / Actions / _web_content_delete_one</div>
+</header>
+<div class="ct-functionbody sh-highlight">Purpose</div>
+<div class="ct-functionbody">  Preview and archive one selected canonical page or child section while preserving</div>
+<div class="ct-functionbody">  translation and descendant safety rules.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Arguments</div>
+<div class="ct-functionbody">  $1  SELECTION - Display value returned by inspect-delete / ask_selection.</div>
+<div class="ct-functionbody">  $2  COUNT_VAR - Caller variable receiving the number of archived files.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Returns</div>
+<div class="ct-functionbody">  0 when content was archived and removed.</div>
+<div class="ct-functionbody">  2 when the selected item was skipped or its deletion was cancelled.</div>
+<div class="ct-functionbody">  Other non-zero values when inspection, preview, or deletion fails.</div>
+</main>
+</body>
+</html>

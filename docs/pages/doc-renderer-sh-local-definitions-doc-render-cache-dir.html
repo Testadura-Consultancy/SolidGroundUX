@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
+  <link rel="icon" type="image/png" href="../favicon.png">
   <title>Persistent renderer input cache directory</title>
   <link rel="stylesheet" href="../assets/doc.css">
   <link rel="stylesheet" href="../assets/theme.css">
@@ -17,7 +18,7 @@
 <div class="ct-variablebody">  Hold the complete exported renderer input set for fast HTML-only rebuilds.</div>
 <div class="ct-variablebody"></div>
 <div class="ct-variablebody sh-highlight">Behavior</div>
-<div class="ct-variablebody">  - Defaults to usr/local/share/doc-sources/.cache/&lt;site-slug&gt;/renderer.</div>
+<div class="ct-variablebody">  - Defaults to the configured documentation collection cache&#x27;s renderer directory.</div>
 <div class="ct-variablebody">  - Is refreshed after Full, Selected, and Changed generation.</div>
 <div class="ct-variablebody">  - Is consumed directly by Render mode without reparsing source files.</div>
 <div class="ct-variablebody">  - Lives outside the rendered website so every render can replace the full site.</div>

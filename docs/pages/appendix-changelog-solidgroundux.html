@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
+  <link rel="icon" type="image/png" href="../favicon.png">
   <title>Appendix 7: Change Log</title>
   <link rel="stylesheet" href="../assets/doc.css">
   <link rel="stylesheet" href="../assets/theme.css">
@@ -19,6 +20,8 @@
 <h3 id="backlog" class="ct-L2Sectionheader">Backlog</h3>
 <ul>
 <li>Scan Framework, SDK and Management Console Modules for hard-coded <code>/usr/local/share/solidgroundux</code> references and migrate appropriate usages to the canonical <code>SGND_SHARE_DIR</code> framework variable.</li>
+<li><code>sgnd-setup.sh</code>: remove hardcoded product definitions/repository URLs. Move the bootstrap product catalog to an external configuration file (e.g. sgnd-setup.cfg) so new products can be added without changing setup code. Keep sgnd-setup.sh generic.</li>
+<li>Add canonical filesystem ownership metadata (ownership.dta or equivalent) for product/module-owned and managed paths, and migrate install/update/remove/nuke/repair logic to consume it.</li>
 </ul>
 <h3 id="unreleased" class="ct-L2Sectionheader">Unreleased</h3>
 <h3 id="release-2-1-2627801" class="ct-L2Sectionheader">Release 2.1.2627801</h3>

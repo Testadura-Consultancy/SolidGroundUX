@@ -2,7 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Resolve the external cache root for the current site</title>
+  <link rel="icon" type="image/png" href="../favicon.png">
+  <title>Resolve the persistent cache for the selected documentation root</title>
   <link rel="stylesheet" href="../assets/doc.css">
   <link rel="stylesheet" href="../assets/theme.css">
 </head>
@@ -10,16 +11,21 @@
 <main class="doc-page">
 <div class="doc-page-branding"><a class="doc-page-branding-home" href="title.html" title="Documentation home"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></a></div>
 <header class="doc-page-header">
-  <div class="doc-title">Resolve the external cache root for the current site</div>
+  <div class="doc-title">Resolve the persistent cache for the selected documentation root</div>
   <div class="doc-breadcrumb">SolidGroundUX Codex / doc-renderer.sh / Local definitions / Helpers / _doc_cache_root_dir</div>
 </header>
 <div class="ct-functionbody sh-highlight">Purpose</div>
-<div class="ct-functionbody">  Keep parser and renderer working state beneath canonical doc-sources,</div>
-<div class="ct-functionbody">  separate from the disposable generated website tree.</div>
+<div class="ct-functionbody">  Keep parser and renderer state tied to VAL_DOCUMENT_ROOT, not to the</div>
+<div class="ct-functionbody">  installation or development location of the framework executable.</div>
+<div class="ct-functionbody">  For the canonical share/doc root, use the sibling share/doc-sources/.cache;</div>
+<div class="ct-functionbody">  for another configured documentation root, use its own .cache directory.</div>
+<div class="ct-functionbody">  In both cases the cache stays outside the disposable generated site.</div>
 <div class="ct-functionbody"></div>
 <div class="ct-functionbody sh-highlight">Output</div>
-<div class="ct-functionbody">  Writes usr/local/share/doc-sources/.cache/&lt;site-slug&gt; beneath the active framework root.</div>
+<div class="ct-functionbody">  Writes &lt;cache-base&gt;/&lt;site-slug&gt; to stdout.</div>
 <div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Returns</div>
+<div class="ct-functionbody">  0 when the documentation root is configured; 1 otherwise.</div>
 <div class="ct-functionbody sh-highlight">Usage</div>
 <div class="ct-functionbody">  _doc_cache_root_dir</div>
 </main>

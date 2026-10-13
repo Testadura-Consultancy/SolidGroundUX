@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
+  <link rel="icon" type="image/png" href="../favicon.png">
   <title>_framework_locator - Resolve and load the active SolidGroundUX framework</title>
   <link rel="stylesheet" href="../assets/doc.css">
   <link rel="stylesheet" href="../assets/theme.css">
@@ -19,26 +20,28 @@
 <div class="ct-functionbody"></div>
 <div class="ct-functionbody sh-highlight">Behavior</div>
 <div class="ct-functionbody">  - Resolves the physical path of the executing script.</div>
-<div class="ct-functionbody">  - Treats usr, etc, and var as canonical top-level SolidGroundUX tree roots.</div>
+<div class="ct-functionbody">  - Treats usr, etc, and var as the canonical top-level SolidGroundUX tree roots.</div>
 <div class="ct-functionbody">  - Uses the last occurrence of one of those path components to determine the</div>
 <div class="ct-functionbody">    active filesystem root.</div>
 <div class="ct-functionbody">  - Resolves production scripts beneath /usr, /etc, or /var to root (/).</div>
 <div class="ct-functionbody">  - Resolves staged/development trees to the path prefix preceding the detected</div>
 <div class="ct-functionbody">    usr, etc, or var component.</div>
 <div class="ct-functionbody">  - Loads sgnd-exe-common.sh from the resolved framework root when available.</div>
-<div class="ct-functionbody">  - Falls back to the installed executable runtime for staged trees where the</div>
-<div class="ct-functionbody">    development copy does not yet contain that runtime library.</div>
+<div class="ct-functionbody">  - For staged/development trees where the executable common library is not</div>
+<div class="ct-functionbody">    present, falls back to the installed framework copy without changing</div>
+<div class="ct-functionbody">    SGND_FRAMEWORK_ROOT.</div>
 <div class="ct-functionbody"></div>
 <div class="ct-functionbody sh-highlight">Globals (write)</div>
 <div class="ct-functionbody">  SGND_FRAMEWORK_ROOT</div>
 <div class="ct-functionbody"></div>
 <div class="ct-functionbody sh-highlight">Output</div>
-<div class="ct-functionbody">  Writes fatal bootstrap errors to stderr with printf because framework output</div>
-<div class="ct-functionbody">  helpers are unavailable until sgnd-exe-common.sh has been loaded.</div>
+<div class="ct-functionbody">  Writes fatal bootstrap errors to stderr using printf because framework UI</div>
+<div class="ct-functionbody">  helpers are not available until sgnd-exe-common.sh has been loaded.</div>
 <div class="ct-functionbody"></div>
 <div class="ct-functionbody sh-highlight">Returns</div>
-<div class="ct-functionbody">  0 when the framework root was resolved and executable runtime loaded.</div>
-<div class="ct-functionbody">  126 when resolution or runtime loading fails.</div>
+<div class="ct-functionbody">  0 when the framework root was resolved and executable common library loaded.</div>
+<div class="ct-functionbody">  126 when the script path cannot be resolved, no canonical root component can</div>
+<div class="ct-functionbody">  be found, or the executable common library is unreadable.</div>
 <div class="ct-functionbody"></div>
 <div class="ct-functionbody sh-highlight">Usage</div>
 </main>

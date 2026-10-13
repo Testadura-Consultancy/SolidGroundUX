@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="icon" type="image/png" href="../favicon.png">
+  <title>Report how many canonical content files changed</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><a class="doc-page-branding-home" href="title.html" title="Documentation home"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></a></div>
+<header class="doc-page-header">
+  <div class="doc-title">Report how many canonical content files changed</div>
+  <div class="doc-breadcrumb">SolidGroundUX Codex / manage-web-content.sh / Helpers / _web_content_record_activity</div>
+</header>
+<div class="ct-functionbody sh-highlight">Purpose</div>
+<div class="ct-functionbody">  Allow the Management Console wrapper to distinguish a successful no-op content</div>
+<div class="ct-functionbody">  action from one that changed the canonical website content.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Behavior</div>
+<div class="ct-functionbody">  - Uses SGND_WEB_CONTENT_ACTIVITY_FILE only when a caller supplies it.</div>
+<div class="ct-functionbody">  - Writes a single non-negative integer and produces no user-facing output.</div>
+<div class="ct-functionbody">  - Does not make the underlying content action fail when the optional marker</div>
+<div class="ct-functionbody">    cannot be written.</div>
+<div class="ct-functionbody"></div>
+<div class="ct-functionbody sh-highlight">Arguments</div>
+<div class="ct-functionbody">  $1  COUNT - Number of canonical content files changed during this action.</div>
+</main>
+</body>
+</html>

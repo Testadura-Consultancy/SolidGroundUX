@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
+  <link rel="icon" type="image/png" href="../favicon.png">
   <title>Appendix 4: Change Log</title>
   <link rel="stylesheet" href="../assets/doc.css">
   <link rel="stylesheet" href="../assets/theme.css">
@@ -17,6 +18,12 @@
 <p class="ct-documentbody">All notable changes to SolidGroundUX Management Console Modules are documented in this file.</p>
 <p class="ct-documentbody">The format is inspired by <em>Keep a Changelog</em> while remaining focused on practical framework development.</p>
 <h3 id="backlog" class="ct-L2Sectionheader">Backlog</h3>
+<ul>
+<li>Fix the hardcoded legacy documentation path in both manage-web-server.sh and publish-web-content.sh.</li>
+<li>When published documentation already exists and SolidGroundUX gets upgraded, the Web Server module should be able to show something like “Installed documentation newer than published documentation” and offer Update published documentation.</li>
+<li>Add an option to completely remove a managed website, with separate handling of web-server configuration and optional document-root deletion.</li>
+<li>Add favicon support for managed websites, allowing sites such as the SolidGroundUX documentation site to expose a recognizable browser/tab icon.</li>
+</ul>
 <h4 id="ad-server-module" class="ct-L3Sectionheader">AD Server module</h4>
 <ul>
 <li>Add support for joining an existing Active Directory domain as an additional writable domain controller, including discovery/authentication, additional-DC provisioning, Kerberos/resolver/DNS configuration, replication validation, and compound subtask progress reporting. This is a post-2.1 feature.</li>
@@ -26,6 +33,33 @@
 <li>Add a Management Console action to inspect and repair SolidGroundUX filesystem ownership/permissions by invoking the Framework-owned <code>sgnd-repair-permissions.sh</code> policy engine.</li>
 </ul>
 <h3 id="unreleased" class="ct-L2Sectionheader">Unreleased</h3>
+<h4 id="added" class="ct-L3Sectionheader">Added</h4>
+<ul>
+<li>Added the new <strong>Web Content Management</strong> module (<code>55-web-content-management</code>) with the <code>manage-web-content.sh</code> management executable and supporting Python package under <code>usr/local/lib/solidgroundux/py/webcontent</code>.</li>
+<li>Added Markdown-based static-site generation from site configuration, content, templates, CSS, and assets, including multilingual routes and language-aware navigation.</li>
+<li>Added content hierarchy support based on the website content tree, with section landing pages, nested subpages, breadcrumbs, and automatically generated <strong>In deze sectie</strong> child-page indexes.</li>
+<li>Added interactive Markdown ingestion from the canonical site <code>incoming/</code> directory, with support for an operator-supplied directory or <code>--ingest-dir</code> override.</li>
+<li>Added metadata-assisted ingestion that uses metadata already present in a Markdown file, derives safe defaults where possible, and interactively asks only for missing or ambiguous values.</li>
+<li>Added batch ingestion with remembered defaults for repeated metadata such as language, content type, and parent section, allowing subsequent files to accept the previous choices with Enter.</li>
+<li>Added archival of successfully ingested source Markdown under <code>ingested/YYYY-MM-DD/</code>, preserving the original input while writing normalized canonical content into the website content tree.</li>
+<li>Added safe page deletion with multi-select support, translation-aware handling, recursive section deletion confirmation, protected section roots, and archival under <code>deleted/YYYY-MM-DD/</code> rather than immediate destruction.</li>
+<li>Added Testadura Markdown component extensions, including nested <code>:::</code> component blocks, responsive <code>td-grid</code> / <code>td-tile</code> layouts, callouts, inline/image classes, and native scroll-snap image galleries.</li>
+<li>Added configurable featured-content support through <code>featured.cfg</code>, allowing product pages or articles to be curated independently of the site navigation and resolved per language by the generator.</li>
+<li>Added website-source validation for content metadata, duplicate generated routes, missing section indexes, component CSS references, featured-content targets, and other generation-time consistency checks.</li>
+</ul>
+<h4 id="changed" class="ct-L3Sectionheader">Changed</h4>
+<ul>
+<li>Changed website generation so the filesystem content tree is authoritative for page hierarchy while <code>navigation.cfg</code> remains focused on the main site navigation.</li>
+<li>Changed non-listing section child pages to render as normal pages by default while article/listing sections retain article behavior.</li>
+<li>Changed multilingual generation so navigation and language-switch links are emitted only for translations that actually exist in the generated output.</li>
+<li>Changed Web Content Management action status handling so a successful ingest or delete operation that changes website source marks <strong>Generate website</strong> as warning until the site is regenerated successfully.</li>
+<li>Changed page-deletion UX to use multi-selection and the standard SolidGroundUX auto-continue flow, with <strong>Enter</strong> returning to the menu and <strong>A</strong> offering another deletion pass.</li>
+</ul>
+<h4 id="fixed" class="ct-L3Sectionheader">Fixed</h4>
+<ul>
+<li>Fixed language-switch generation that could previously expose links to untranslated pages when only a subset of configured languages was generated.</li>
+<li>Fixed nested Testadura Markdown component parsing so nested <code>:::</code> blocks are handled correctly without being confused by fenced code blocks containing the same marker.</li>
+</ul>
 <h3 id="release-2-1-2627801" class="ct-L2Sectionheader">Release 2.1.2627801</h3>
 <h4 id="solidgroundux-setup" class="ct-L3Sectionheader">SolidGroundUX setup</h4>
 <ul>
