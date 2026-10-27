@@ -18,9 +18,11 @@
 <div class="ct-functionbody">  Run the normal post-clone computer setup sequence.</div>
 <div class="ct-functionbody"></div>
 <div class="ct-functionbody sh-highlight">Behavior</div>
-<div class="ct-functionbody">  - Runs the same four actions registered beneath Prepare computer.</div>
-<div class="ct-functionbody">  - Persists the result of each individual step through the console tracker.</div>
+<div class="ct-functionbody">  - Runs the four indented machine setup actions (menu items 2-5), in order:</div>
+<div class="ct-functionbody">    identity, server host keys, SSH service, and SolidGround sudo access.</div>
+<div class="ct-functionbody">  - Persists each action result through the console tracker.</div>
 <div class="ct-functionbody">  - Stops on the first failed step.</div>
+<div class="ct-functionbody">  - Never executes personal SSH key management or validation actions.</div>
 <div class="ct-functionbody"></div>
 <div class="ct-functionbody sh-highlight">Returns</div>
 <div class="ct-functionbody">  0 when all steps succeed; otherwise the failing step status.</div>

@@ -18,12 +18,6 @@
 <p class="ct-documentbody">All notable changes to SolidGroundUX Management Console Modules are documented in this file.</p>
 <p class="ct-documentbody">The format is inspired by <em>Keep a Changelog</em> while remaining focused on practical framework development.</p>
 <h3 id="backlog" class="ct-L2Sectionheader">Backlog</h3>
-<ul>
-<li>Fix the hardcoded legacy documentation path in both manage-web-server.sh and publish-web-content.sh.</li>
-<li>When published documentation already exists and SolidGroundUX gets upgraded, the Web Server module should be able to show something like “Installed documentation newer than published documentation” and offer Update published documentation.</li>
-<li>Add an option to completely remove a managed website, with separate handling of web-server configuration and optional document-root deletion.</li>
-<li>Add favicon support for managed websites, allowing sites such as the SolidGroundUX documentation site to expose a recognizable browser/tab icon.</li>
-</ul>
 <h4 id="ad-server-module" class="ct-L3Sectionheader">AD Server module</h4>
 <ul>
 <li>Add support for joining an existing Active Directory domain as an additional writable domain controller, including discovery/authentication, additional-DC provisioning, Kerberos/resolver/DNS configuration, replication validation, and compound subtask progress reporting. This is a post-2.1 feature.</li>
@@ -33,6 +27,14 @@
 <li>Add a Management Console action to inspect and repair SolidGroundUX filesystem ownership/permissions by invoking the Framework-owned <code>sgnd-repair-permissions.sh</code> policy engine.</li>
 </ul>
 <h3 id="unreleased" class="ct-L2Sectionheader">Unreleased</h3>
+<h4 id="web-content-management-2-1-final-workflow-and-authoring-updates" class="ct-L3Sectionheader">Web Content Management 2.1 — final workflow and authoring updates</h4>
+<ul>
+<li>Consolidated the Incoming workflow around <strong>Retrieve Incoming</strong>, <strong>Import local files to Incoming</strong>, and <strong>Review and ingest Incoming package</strong>, including ZIP packages with Markdown and local resources.</li>
+<li>Added automatic movement of successfully ingested packages to <code>incoming/archive/</code>; failed or conflicting packages remain available for review.</li>
+<li>Added <code>featured_order</code> front-matter ordering for the homepage Featured slider: numbered items first (ascending), followed by unnumbered items alphabetically; <code>nav_order</code> remains independent.</li>
+<li>Documented the front-matter Featured workflow, the remaining legacy <code>featured.cfg</code> override, and the separate <code>featured-slider.cfg</code> autoplay setting.</li>
+<li>Updated the Web Content Manager preface and repository authoring instructions to reflect the current Incoming and Featured workflows.</li>
+</ul>
 <h4 id="added" class="ct-L3Sectionheader">Added</h4>
 <ul>
 <li>Added the new <strong>Web Content Management</strong> module (<code>55-web-content-management</code>) with the <code>manage-web-content.sh</code> management executable and supporting Python package under <code>usr/local/lib/solidgroundux/py/webcontent</code>.</li>
@@ -45,7 +47,28 @@
 <li>Added safe page deletion with multi-select support, translation-aware handling, recursive section deletion confirmation, protected section roots, and archival under <code>deleted/YYYY-MM-DD/</code> rather than immediate destruction.</li>
 <li>Added Testadura Markdown component extensions, including nested <code>:::</code> component blocks, responsive <code>td-grid</code> / <code>td-tile</code> layouts, callouts, inline/image classes, and native scroll-snap image galleries.</li>
 <li>Added configurable featured-content support through <code>featured.cfg</code>, allowing product pages or articles to be curated independently of the site navigation and resolved per language by the generator.</li>
-<li>Added website-source validation for content metadata, duplicate generated routes, missing section indexes, component CSS references, featured-content targets, and other generation-time consistency checks.</li>
+<li>Added website-source validation for content metadata, duplicate generated routes, optional section-index structure, component CSS references, featured-content targets, and other generation-time consistency checks.</li>
+<li>Added section management for creating, renaming/moving, and removing website sections, including configurable section index pages and explicit choices for moving, archiving, or deleting contained content.</li>
+<li>Added interactive page-metadata editing and management of publication status, with draft/preview output separated from the public website.</li>
+<li>Added website publication destinations stored as reusable profiles, including SSH/rsync targets and <strong>Update</strong> versus <strong>Mirror</strong> synchronization previews with explicit confirmation.</li>
+<li>Added remote Nginx-site provisioning from Web Content Management: check the destination host and document root, offer to create missing sites, and refuse silently changing conflicting existing site configurations.</li>
+<li>Added assisted SSH authentication recovery for remote publication, including agent detection, fallback to the fixed SolidGroundUX socket, key unlocking, public-key installation, and retry.</li>
+<li>Added remote publication-directory preparation and permission checks, with confirmed remediation for the publishing account while keeping the site readable by Nginx.</li>
+<li>Added optional internal DNS A-record registration and post-publication DNS/HTTP verification as part of the website-deployment workflow.</li>
+<li>Added optional DNS A-record cleanup to <strong>Web Server Management → Manage Sites → Remove site</strong>, limited to a record matching the local web-server address and requiring explicit confirmation.</li>
+<li>Added a documentation content comparison to <strong>Documentation status</strong>, with a confirmed <strong>Update published documentation</strong> operation using an rsync checksum preview.</li>
+<li>Added favicon rendering/support through the Python site renderer so published sites can serve <code>favicon.ico</code> as a static asset; no separate Nginx management action is required.</li>
+</ul>
+<ul>
+<li>Added optional per-site HTTPS configuration in <strong>Web Server Management → Manage Sites</strong>, supporting existing certificates or self-signed test certificates and optional HTTP-to-HTTPS redirection, with Nginx configuration validation and rollback.</li>
+<li>Added per-site private URL-section management using Nginx HTTP Basic Authentication, bcrypt password hashes stored outside the document root, and optional on-demand installation of <code>apache2-utils</code> (<code>htpasswd</code>).</li>
+<li>Added an HTTPS-only Markdown upload receiver behind Nginx Basic Authentication, accepting up to ten <code>.md</code> files per request, with per-file limits and storage outside the public document root.</li>
+<li>Added a drag-and-drop Markdown upload page and a separate authenticated upload endpoint; the website can publish the upload page without exposing the receiver publicly.</li>
+<li>Added <strong>Retrieve Incoming</strong> in Web Content Management, with persistently configurable SSH source host, account, port, and remote incoming directory, selection of multiple files, and post-transfer remote archiving of successfully retrieved files.</li>
+<li>Added multi-file selection to <strong>Ingest</strong>, alongside the existing ingest-all workflow.</li>
+<li>Added automatically generated, expandable sidebar navigation for nested sections and subpages, using configured main-section labels and Markdown page titles, with support for sections without index pages.</li>
+<li>Added <code>hidden</code> navigation behavior and <code>ShowHidden</code>/<code>HideHidden</code> browsing controls, including preservation across internal navigation; private-page metadata is checked against configured protected URL prefixes at generation time.</li>
+<li>Added content-hash versioning of local CSS and JavaScript asset references to reduce stale browser asset caching.</li>
 </ul>
 <h4 id="changed" class="ct-L3Sectionheader">Changed</h4>
 <ul>
@@ -54,11 +77,38 @@
 <li>Changed multilingual generation so navigation and language-switch links are emitted only for translations that actually exist in the generated output.</li>
 <li>Changed Web Content Management action status handling so a successful ingest or delete operation that changes website source marks <strong>Generate website</strong> as warning until the site is regenerated successfully.</li>
 <li>Changed page-deletion UX to use multi-selection and the standard SolidGroundUX auto-continue flow, with <strong>Enter</strong> returning to the menu and <strong>A</strong> offering another deletion pass.</li>
+<li>Changed Web Content Management publishing from a configuration-file-only operation into an interactive, destination-based deployment flow while retaining preview and cancellation controls.</li>
+<li>Changed remote hosting operations to execute the canonical Web Server Management executable under the existing constrained SolidGroundUX sudo policy rather than assuming general passwordless sudo.</li>
+<li>Changed SSH helper loading to use <code>SGND_USING=(sgnd-ssh-deployment.sh)</code> and its Framework-owned common library, rather than a hand-maintained set of library search paths.</li>
+<li>Changed Computer Setup into a thin console orchestrator with separate computer/identity and SSH-access management executables; added per-user SSH key-generation, remote installation, agent-unlock, and authentication-test actions.</li>
+<li>Changed the installed-documentation source path in Web Server Management to <code>/usr/local/share/doc/solidgroundux-codex</code>, with an override through <code>SGND_WEB_DOC_INSTALLED_ROOT</code> or <code>web-server.cfg</code>.</li>
+</ul>
+<ul>
+<li>Changed content validation to permit missing language variants and optional section index pages; an untranslated or index-less intermediate directory no longer blocks generation solely because its index is absent.</li>
+<li>Changed the site navigation from flat top-level links to a recursive hierarchy; hidden section nodes suppress their descendants in ordinary navigation but can be revealed with <code>ShowHidden</code>.</li>
+<li>Changed the upload-page generation to include the required JavaScript explicitly and fail if the expected upload script is unavailable; the script and other JavaScript assets now publish from <code>www/js/</code> rather than <code>www/images/</code>.</li>
+<li>Changed the web-content publishing flow to distinguish successful rsync publication from subsequent HTTP verification warnings; an HTTP-to-HTTPS <code>301</code> is still reported as a pending verification rather than a publishing failure.</li>
 </ul>
 <h4 id="fixed" class="ct-L3Sectionheader">Fixed</h4>
 <ul>
 <li>Fixed language-switch generation that could previously expose links to untranslated pages when only a subset of configured languages was generated.</li>
 <li>Fixed nested Testadura Markdown component parsing so nested <code>:::</code> blocks are handled correctly without being confused by fenced code blocks containing the same marker.</li>
+<li>Fixed reversed SSH username/hostname parameters during remote publishing authentication checks.</li>
+<li>Fixed remote Web Server executable resolution to use the canonical MCM <code>libexec</code> path rather than nonexistent <code>mcm</code> subdirectories.</li>
+<li>Fixed remote provisioning&#x27;s incompatible <code>sudo -n true</code> precheck and aligned privileged site setup with the configured SolidGroundUX executable sudo rule.</li>
+<li>Fixed a publishing-script regression that restored obsolete manual SSH-helper sourcing and argument ordering.</li>
+</ul>
+<ul>
+<li>Fixed managed Basic Auth password-file directory and file permissions so the Nginx worker can read credentials without exposing them publicly.</li>
+<li>Fixed Markdown upload setup to recognize existing managed HTTPS and Basic Auth configuration and avoid rewriting a functioning TLS-protected site.</li>
+<li>Fixed <code>ShowHidden</code> behavior across page navigation, including support for hidden subsection navigation in the generated HTML.</li>
+<li>Fixed the upload page silently losing its drag-and-drop interface when the external JavaScript reference was missing from generated HTML.</li>
+<li>Fixed upload-script path handling after relocating <code>markdown-upload.js</code> from <code>images/</code> to <code>js/</code>.</li>
+</ul>
+<h4 id="known-limitations" class="ct-L3Sectionheader">Known limitations</h4>
+<ul>
+<li>HTTP verification after publication still reports an intentional <code>301</code> redirect to HTTPS as pending; follow the redirect and validate HTTPS with an appropriate certificate trust policy in a future refinement.</li>
+<li><code>private: true</code> is publication metadata, not access control: server-side Nginx authentication must be configured and tested independently for each protected URL and upload endpoint.</li>
 </ul>
 <h3 id="release-2-1-2627801" class="ct-L2Sectionheader">Release 2.1.2627801</h3>
 <h4 id="solidgroundux-setup" class="ct-L3Sectionheader">SolidGroundUX setup</h4>

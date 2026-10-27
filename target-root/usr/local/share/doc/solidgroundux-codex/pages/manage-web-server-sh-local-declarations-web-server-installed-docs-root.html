@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <link rel="icon" type="image/png" href="../favicon.png">
-  <title>Resolve the installed SolidGroundUX documentation path</title>
+  <title>Resolve installed documentation from configuration</title>
   <link rel="stylesheet" href="../assets/doc.css">
   <link rel="stylesheet" href="../assets/theme.css">
 </head>
@@ -11,13 +11,15 @@
 <main class="doc-page">
 <div class="doc-page-branding"><a class="doc-page-branding-home" href="title.html" title="Documentation home"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></a></div>
 <header class="doc-page-header">
-  <div class="doc-title">Resolve the installed SolidGroundUX documentation path</div>
+  <div class="doc-title">Resolve installed documentation from configuration</div>
   <div class="doc-breadcrumb">SolidGroundUX Codex / manage-web-server.sh / Local declarations / _web_server_installed_docs_root</div>
 </header>
+<div class="ct-functionbody sh-highlight">Purpose</div>
+<div class="ct-functionbody">  Use SGND_WEB_DOC_INSTALLED_ROOT from the environment or web-server.cfg;</div>
+<div class="ct-functionbody">  otherwise use the supported installed documentation location. This replaces</div>
+<div class="ct-functionbody">  the legacy /usr/local/share/testadura/solidgroundux/doc default.</div>
 <div class="ct-functionbody sh-highlight">Output</div>
-<div class="ct-functionbody">  Writes the documentation directory belonging to the active framework root.</div>
-<div class="ct-functionbody sh-highlight">Usage</div>
-<div class="ct-functionbody">  _web_server_installed_docs_root</div>
+<div class="ct-functionbody">  Prints an absolute path beneath the active framework root when staged.</div>
 </main>
 </body>
 </html>

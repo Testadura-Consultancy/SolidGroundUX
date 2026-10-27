@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="icon" type="image/png" href="../favicon.png">
+  <title>Noninteractive, idempotent site provisioning for an approved remote deployment.</title>
+  <link rel="stylesheet" href="../assets/doc.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<main class="doc-page">
+<div class="doc-page-branding"><a class="doc-page-branding-home" href="title.html" title="Documentation home"><span class="doc-page-branding-title">SolidGroundUX Documentation</span><img src="../assets/branding/doc-header-logo.png" alt="SolidGroundUX"></a></div>
+<header class="doc-page-header">
+  <div class="doc-title">Noninteractive, idempotent site provisioning for an approved remote deployment.</div>
+  <div class="doc-breadcrumb">SolidGroundUX Codex / manage-web-server.sh / Site management / _web_server_ensure_site</div>
+</header>
+<div class="ct-functionbody sh-highlight">Behavior</div>
+<div class="ct-functionbody">  - Only creates a dedicated site under the configured web root.</div>
+<div class="ct-functionbody">  - Returns success for an existing identical configuration, without changing it.</div>
+<div class="ct-functionbody">  - Rejects duplicate hostnames and conflicting sites; never rewrites existing sites.</div>
+<div class="ct-functionbody">  - Runs as root via the authorized SolidGroundUX executable sudo rule.</div>
+<div class="ct-functionbody">  - Preserves the explicitly supplied unprivileged publisher for directory ownership.</div>
+<div class="ct-functionbody">  - Tests Nginx before reload and rolls back only newly created configuration.</div>
+<div class="ct-functionbody">  - Does not register DNS; DNS changes are a separate management action.</div>
+</main>
+</body>
+</html>
