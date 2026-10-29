@@ -742,14 +742,19 @@ set -uo pipefail
         #   - Provides a public SolidGroundUX helper or command entry point.
         #   - Reads or updates SolidGroundUX runtime, metadata, configuration, or UI globals as needed.
         #   - Uses SolidGroundUX datatable rows and schemas for structured state.
+        #   - Uses SGND_DT_HEADERLINE_CLR for the horizontal header rules,
+        #     SGND_DT_COLUMNNAME_CLR for column headings, and
+        #     SGND_DT_DATACOLOR_CLR for data rows and the table label.
+        #   - Resolves each color as explicit argument, then active theme,
+        #     then legacy palette fallback.
         #
         # . Arguments
         #   $1  SCHEMA - Datatable schema string.
         #   $2  TABLE_NAME - Variable, field, or item name.
-        #   $3  PRETTYPRINT - Positional value used by this function.
-        #   $4  HEADERCOLOR - Color value.
-        #   $5  DATACOLOR - Color value.
-        #   $6  TOP_N - Positional value used by this function.
+        #   $3  PRETTYPRINT - Legacy formatting hint when no theme is active (0 or 1).
+        #   $4  HEADERCOLOR - Optional override for header rules and heading text.
+        #   $5  DATACOLOR - Optional override for data text.
+        #   $6  TOP_N - Optional maximum rows to print.
         #
         # . Output
         #   Writes computed or formatted text to stdout unless the function explicitly targets stderr or /dev/tty.
@@ -780,7 +785,8 @@ set -uo pipefail
         local cell=""
         local row=""
         local color_reset="${RESET:-}"
-        local color_header=""
+        local color_headerline=""
+        local color_columnname=""
         local color_data=""
         local -a widths=()
         local -a columns=()
@@ -792,13 +798,25 @@ set -uo pipefail
             prettyprint=1
         fi
 
+        # Theme roles are independent: horizontal rules, column headings, and
+        # data can each be styled without changing the other two.
+        # Preserve the historical palette fallback when no style is loaded.
         if (( prettyprint )); then
-            color_header="$(sgnd_sgr "${headercolor:-${CYAN:-}}" "" "$FX_BOLD")"
-            color_data="${datacolor:-${SILVER:-}}"
+            color_headerline="${SGND_DT_HEADERLINE_CLR:-$(sgnd_sgr "${SGND_UI_BORDER:-${CYAN:-}}" "" "${FX_BOLD:-}")}"
+            color_columnname="${SGND_DT_COLUMNNAME_CLR:-$(sgnd_sgr "${SGND_UI_LABEL:-${CYAN:-}}" "" "${FX_BOLD:-}")}"
         else
-            color_header="${WHITE:-}"
-            color_data="${SILVER:-}"
+            color_headerline="${SGND_DT_HEADERLINE_CLR:-${SGND_UI_BORDER:-${WHITE:-}}}"
+            color_columnname="${SGND_DT_COLUMNNAME_CLR:-${SGND_UI_LABEL:-${WHITE:-}}}"
         fi
+        color_data="${SGND_DT_DATACOLOR_CLR:-${SGND_UI_TEXT:-${SILVER:-}}}"
+
+        # Backwards-compatible per-table overrides. The existing HEADERCOLOR
+        # argument intentionally applies to both heading text and header rules.
+        if [[ -n "$headercolor" ]]; then
+            color_headerline="$(sgnd_sgr "$headercolor" "" "${FX_BOLD:-}")"
+            color_columnname="$color_headerline"
+        fi
+        [[ -z "$datacolor" ]] || color_data="$datacolor"
 
         sgnd_dt_split_schema "$schema"
         columns=("${SGND_DT_SPLIT[@]}")
@@ -829,7 +847,7 @@ set -uo pipefail
 
         if (( print_count < row_count )); then
             printf '\n%sTable: %s%s (%s of %s rows)%s\n' \
-                "$color_header" \
+                "$color_columnname" \
                 "$color_data" \
                 "$table_name" \
                 "$print_count" \
@@ -837,7 +855,7 @@ set -uo pipefail
                 "$color_reset"
         else
             printf '\n%sTable: %s%s (%s rows)%s\n' \
-                "$color_header" \
+                "$color_columnname" \
                 "$color_data" \
                 "$table_name" \
                 "$row_count" \
@@ -845,7 +863,7 @@ set -uo pipefail
         fi
 
         # print top border
-        printf '%s' "$color_header"
+        printf '%s' "$color_headerline"
 
         for (( j=0; j<col_count; j++ )); do
             for (( k=0; k<widths[j]; k++ )); do
@@ -858,7 +876,7 @@ set -uo pipefail
         printf '%s\n' "$color_reset"
 
         # print column names
-        printf '%s' "$color_header"
+        printf '%s' "$color_columnname"
 
         for (( j=0; j<col_count; j++ )); do
             printf '%-*s' "${widths[j]}" "${columns[j]}"
@@ -868,7 +886,7 @@ set -uo pipefail
         printf '%s\n' "$color_reset"
 
         # print bottom border
-        printf '%s' "$color_header"
+        printf '%s' "$color_headerline"
 
         for (( j=0; j<col_count; j++ )); do
             for (( k=0; k<widths[j]; k++ )); do

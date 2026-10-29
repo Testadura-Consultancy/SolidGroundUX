@@ -103,6 +103,11 @@ SGND_SECTION_TEXTCLR="$(sgnd_sgr "$SGND_UI_TEXT" "" "$FX_BOLD")"
 SGND_SECTION_BORDER=$LN_H
 SGND_SECTION_BORDERCLR=$SGND_UI_BORDER
 
+# DataTable colors (theme defaults; function arguments may override them)
+SGND_DT_HEADERLINE_CLR=$SGND_UI_BORDER
+SGND_DT_COLUMNNAME_CLR="$(sgnd_sgr "$SGND_UI_LABEL" "" "$FX_BOLD")"
+SGND_DT_DATACOLOR_CLR=$SGND_UI_TEXT
+
 SGND_UI_DEFAULT=$DARK_SILVER
 
 # - Documentation summaries ---------------------------------------------------------
@@ -201,6 +206,9 @@ SGND_UI_DEFAULT=$DARK_SILVER
         #   SGND_SECTION_TEXTCLR = bold SGND_UI_TEXT
         #   SGND_SECTION_BORDER = $LN_H
         #   SGND_SECTION_BORDERCLR = SGND_UI_BORDER
+        #   SGND_DT_HEADERLINE_CLR = $SGND_UI_BORDER
+        #   SGND_DT_COLUMNNAME_CLR = bold SGND_UI_LABEL
+        #   SGND_DT_DATACOLOR_CLR = $SGND_UI_TEXT
         #   SGND_UI_DEFAULT = $DARK_SILVER
         #
         # Notes:
