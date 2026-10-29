@@ -4,14 +4,16 @@ All notable changes to SolidGroundUX are documented in this file.
 
 The format is inspired by *Keep a Changelog* while remaining focused on practical framework development.
 
-## Backlog
-
-- Scan Framework, SDK and Management Console Modules for hard-coded `/usr/local/share/solidgroundux` references and migrate appropriate usages to the canonical `SGND_SHARE_DIR` framework variable.
-- Add canonical filesystem ownership metadata (ownership.dta or equivalent) for product/module-owned and managed paths, and migrate install/update/remove/nuke/repair logic to consume it.
-
 ## Unreleased
 
+### Added
+
+- Added separate DataTable theme defaults for header separator lines (`SGND_DT_HEADERLINE_CLR`), column names (`SGND_DT_COLUMNNAME_CLR`), and data text (`SGND_DT_DATACOLOR_CLR`) across the Framework themes.
+
 ### Changed
+
+- Normalized `SGND_SHARE_DIR` resolution for installed and staged/development roots and made it available in runtime-global metadata for Framework, SDK, and MCM consumers.
+- Made DataTable rendering use active-theme colors by default while preserving explicit `headercolor` and `datacolor` overrides and legacy fallback behavior.
 
 - Replaced hardcoded Setup product/repository defaults with an external `sgnd-setup.cfg` catalog seeded from a packaged `.default` file, including SDK product discovery without assuming a GitHub release URL.
 - Simplified interactive Setup removal to **Remove product** without manual manifest selection. Complete removal uses the active release manifest; recovery falls back to a limited ownership-header scan.
