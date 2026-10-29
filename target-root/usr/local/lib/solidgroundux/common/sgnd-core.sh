@@ -68,9 +68,7 @@ set -uo pipefail
         #   Exits with code 2 when executed instead of sourced.
         #
         # . Usage
-        #   ```bash
         #   _sgnd_lib_guard
-        #   ```
     _sgnd_lib_guard() {
         local lib_base=""
         local guard=""
@@ -97,90 +95,111 @@ set -uo pipefail
     fi
 # - Public API ---------------------------------------------------------------------
     # -- Runtime requirements ----------------------------------------------------------
-        # fn: sgnd_have - Check whether a command is available on PATH.
+        # fn: sgnd_have - Have
             # . Purpose
             #   Check whether a command is available on PATH.
             #
+            # . Behavior
+            #   - Provides a public SolidGroundUX helper or command entry point.
+            #
             # . Arguments
-            #   $1  Command name.
+            #   $1  ARG1 - Positional value used by this function.
+            #
+            # . Side effects
+            #   May update files, directories, runtime state, or process state required by the workflow.
             #
             # . Returns
-            #   0 if the command is found; nonzero otherwise.
+            #   0 on success unless the called command returns a different status.
             #
             # . Usage
-            #   ```bash
-            #   sgnd_have bash
-            #   ```
+            #   sgnd_have "bash" && printf 'bash is available\n'
         sgnd_have() { command -v "$1" >/dev/null 2>&1; }
-        # fn: sgnd_need_cmd - Require a command or exit the current shell script.
+        # fn: sgnd_need_cmd - Need cmd
             # . Purpose
-            #   Require a command or exit the current shell script.
+            #   Require a command to exist or terminate the current script.
+            #
+            # . Behavior
+            #   - Provides a public SolidGroundUX helper or command entry point.
             #
             # . Arguments
-            #   $1  Command name.
+            #   $1  ARG1 - Positional value used by this function.
+            #
+            # . Output
+            #   Writes computed or formatted text to stdout unless the function explicitly targets stderr or /dev/tty.
             #
             # . Side effects
-            #   Prints a diagnostic to stderr and exits when missing.
+            #   May update files, directories, runtime state, or process state required by the workflow.
             #
             # . Returns
-            #   0 if found; exits with status 1 if missing.
+            #   0 on success.
+            #   Non-zero when validation, resolution, user cancellation, or execution fails.
             #
             # . Usage
-            #   ```bash
-            #   sgnd_need_cmd bash
-            #   ```
+            #   sgnd_need_cmd "bash"
         sgnd_need_cmd() { sgnd_have "$1" || { printf 'Missing required command: %s\n' "$1" >&2; exit 1; }; }
-        # fn: sgnd_need_bash - Require a minimum Bash major version or exit.
+        # fn: sgnd_need_bash - Need bash
             # . Purpose
-            #   Require a minimum Bash major version or exit.
+            #   Require a minimum Bash major version.
+            #
+            # . Behavior
+            #   - Provides a public SolidGroundUX helper or command entry point.
             #
             # . Arguments
-            #   $1  Optional minimum major version (default 4).
+            #   $1  4 - Positional value used by this function.
+            #
+            # . Output
+            #   Writes computed or formatted text to stdout unless the function explicitly targets stderr or /dev/tty.
             #
             # . Side effects
-            #   Writes a version error to stderr when the requirement is not met.
+            #   May update files, directories, runtime state, or process state required by the workflow.
             #
             # . Returns
-            #   0 when Bash meets the requirement; exits with status 1 otherwise.
+            #   0 on success.
+            #   Non-zero when validation, resolution, user cancellation, or execution fails.
             #
             # . Usage
-            #   ```bash
-            #   sgnd_need_bash 4
-            #   ```
+            #   sgnd_need_bash "${4}"
         sgnd_need_bash() { (( BASH_VERSINFO[0] >= ${1:-4} )) || { printf 'Bash %s+ required.\n' "${1:-4}" >&2; exit 1; }; }
-        # fn: sgnd_need_tty - Require standard output to be a terminal.
+        # fn: sgnd_need_tty - Need tty
             # . Purpose
-            #   Require standard output to be a terminal.
+            #   Require stdout to be attached to a terminal.
+            #
+            # . Behavior
+            #   - Provides a public SolidGroundUX helper or command entry point.
+            #
+            # . Output
+            #   Writes computed or formatted text to stdout unless the function explicitly targets stderr or /dev/tty.
             #
             # . Side effects
-            #   Prints an error to stderr when no stdout TTY is attached.
+            #   May update files, directories, runtime state, or process state required by the workflow.
             #
             # . Returns
-            #   0 if stdout is a TTY; 1 otherwise.
+            #   0 on success.
+            #   Non-zero when validation, resolution, user cancellation, or execution fails.
             #
             # . Usage
-            #   ```bash
             #   sgnd_need_tty
-            #   ```
         sgnd_need_tty() { [[ -t 1 ]] || { printf 'No TTY attached.\n' >&2; return 1; }; }
     # -- Filesystem and paths ----------------------------------------------------------
-        # fn: sgnd_can_append - Check whether an existing file is writable or a new file can be created.
+        # fn: sgnd_can_append - Can append
             # . Purpose
-            #   Check whether an existing file is writable or a new file can be created.
+            #   Check whether a file can be appended to, creating its parent path if needed.
+            #
+            # . Behavior
+            #   - Provides a public SolidGroundUX helper or command entry point.
             #
             # . Arguments
-            #   $1  Target file path.
+            #   $1  F - Positional value used by this function.
             #
             # . Side effects
-            #   May create missing parent directories during the writability check.
+            #   May update files, directories, runtime state, or process state required by the workflow.
             #
             # . Returns
-            #   0 for a writable file/parent; 1 when it cannot be made writable.
+            #   0 on success.
+            #   Non-zero when validation, resolution, user cancellation, or execution fails.
             #
             # . Usage
-            #   ```bash
-            #   sgnd_can_append "/tmp/sgnd-demo/log.txt"
-            #   ```
+            #   sgnd_can_append "example" && printf 'Success\n' || printf 'Failed\n'
         sgnd_can_append() {
             local f="$1"
             local d
@@ -202,45 +221,47 @@ set -uo pipefail
             [[ -w "$d" ]] || return 1
             return 0
         }
-        # fn: sgnd_ensure_dir - Ensure a named directory exists.
+        # fn: sgnd_ensure_dir - Ensure dir
             # . Purpose
-            #   Ensure a named directory exists.
+            #   Create a directory when it does not already exist.
+            #
+            # . Behavior
+            #   - Provides a public SolidGroundUX helper or command entry point.
             #
             # . Arguments
-            #   $1  Directory path.
+            #   $1  DIR - Directory path.
             #
             # . Side effects
-            #   Creates a missing directory and its parents.
+            #   May update files, directories, runtime state, or process state required by the workflow.
             #
             # . Returns
-            #   0 if present or created; 2 if the path is empty; otherwise mkdir status.
+            #   0 on success unless the called command returns a different status.
             #
             # . Usage
-            #   ```bash
-            #   sgnd_ensure_dir "/tmp/sgnd-demo"
-            #   ```
+            #   sgnd_ensure_dir "/tmp/sgnd-example"
         sgnd_ensure_dir() {
             local dir="${1:-}"
             [[ -n "$dir" ]] || return 2
             [[ -d "$dir" ]] || mkdir -p -- "$dir"
         }
-        # fn: sgnd_abs_path - Resolve a path using readlink -f or realpath.
+        # fn: sgnd_abs_path - Abs path
             # . Purpose
-            #   Resolve a path using readlink -f or realpath.
+            #   Resolve a path to an absolute path.
+            #
+            # . Behavior
+            #   - Provides a public SolidGroundUX helper or command entry point.
             #
             # . Arguments
-            #   $1  Path to resolve.
+            #   $1  ARG1 - Positional value used by this function.
             #
-            # . Output
-            #   Prints the canonical absolute path.
+            # . Side effects
+            #   May update files, directories, runtime state, or process state required by the workflow.
             #
             # . Returns
-            #   0 when resolved; 127 if neither utility is available; otherwise realpath status.
+            #   0 on success unless the called command returns a different status.
             #
             # . Usage
-            #   ```bash
-            #   sgnd_abs_path "/tmp/../tmp"
-            #   ```
+            #   sgnd_abs_path "/tmp"
         sgnd_abs_path() {
             if sgnd_have readlink; then
                 readlink -f -- "$1" 2>/dev/null && return 0
@@ -253,57 +274,54 @@ set -uo pipefail
 
             return 127
         }
-        # fn: sgnd_mktemp_dir - Create a unique temporary directory.
+        # fn: sgnd_mktemp_dir - Mktemp dir
             # . Purpose
-            #   Create a unique temporary directory.
+            #   Create and print a temporary directory path.
             #
-            # . Output
-            #   Prints the new directory path.
+            # . Behavior
+            #   - Provides a public SolidGroundUX helper or command entry point.
+            #
+            # . Side effects
+            #   May update files, directories, runtime state, or process state required by the workflow.
             #
             # . Returns
-            #   Status returned by mktemp.
+            #   0 on success unless the called command returns a different status.
             #
             # . Usage
-            #   ```bash
-            #   temp_dir="$(sgnd_mktemp_dir)"
-            #   ```
+            #   sgnd_mktemp_dir
         sgnd_mktemp_dir() { mktemp -d 2>/dev/null || TMPDIR=${TMPDIR:-/tmp} mktemp -d "${TMPDIR%/}/XXXXXX"; }
-        # fn: sgnd_mktemp_file - Create a unique temporary file inside TMPDIR.
+        # fn: sgnd_mktemp_file - Mktemp file
             # . Purpose
-            #   Create a unique temporary file inside TMPDIR.
+            #   Create and print a temporary file path.
             #
-            # . Output
-            #   Prints the new file path.
+            # . Behavior
+            #   - Provides a public SolidGroundUX helper or command entry point.
             #
             # . Returns
-            #   Status returned by mktemp.
+            #   0 on success unless the called command returns a different status.
             #
             # . Usage
-            #   ```bash
-            #   temp_file="$(sgnd_mktemp_file)"
-            #   ```
+            #   temp_file="$(sgnd_mktemp_file)"; printf '%s\n' "$temp_file"
         sgnd_mktemp_file() { TMPDIR=${TMPDIR:-/tmp} mktemp "${TMPDIR%/}/XXXXXX"; }
     # -- Values and variables ---------------------------------------------------------
-        # fn: sgnd_slugify - Normalize arbitrary text into a lowercase filename slug.
+        # fn: sgnd_slugify - Slugify
             # . Purpose
-            #   Normalize arbitrary text into a lowercase filename slug.
+            #   Convert text to a lowercase filesystem-friendly slug.
             #
-            # . Description
-            #   Whitespace becomes hyphens; repeated hyphens and leading/trailing hyphens are removed.
+            # . Behavior
+            #   - Provides a public SolidGroundUX helper or command entry point.
             #
             # . Arguments
-            #   $1  Text to normalize.
+            #   $1  S - Positional value used by this function.
             #
             # . Output
-            #   Lowercase letters, digits, hyphen, underscore and dot; falls back to hub for empty results.
+            #   Writes computed or formatted text to stdout unless the function explicitly targets stderr or /dev/tty.
             #
             # . Returns
-            #   0 after printing the slug.
+            #   0 on success unless the called command returns a different status.
             #
             # . Usage
-            #   ```bash
-            #   sgnd_slugify "My New Site"
-            #   ```
+            #   sgnd_slugify "solidgroundux-example"
         sgnd_slugify() {
             local s="${1:-}"
 
@@ -321,23 +339,24 @@ set -uo pipefail
             [[ -n "$s" ]] || s="hub"
             printf '%s' "$s"
         }
-        # fn: sgnd_hash_sha256_file - Calculate the SHA-256 checksum of a readable file.
+        # fn: sgnd_hash_sha256_file - Hash sha256 file
             # . Purpose
-            #   Calculate the SHA-256 checksum of a readable file.
+            #   Calculate the SHA-256 hash of a file.
+            #
+            # . Behavior
+            #   - Provides a public SolidGroundUX helper or command entry point.
             #
             # . Arguments
-            #   $1  File path.
+            #   $1  FILE - File path.
             #
             # . Output
-            #   Prints the hex digest followed by a newline.
+            #   Writes computed or formatted text to stdout unless the function explicitly targets stderr or /dev/tty.
             #
             # . Returns
-            #   0 when hashed; 2 for unreadable file; 3 for hashing errors; 127 if hashing tools are missing.
+            #   0 on success unless the called command returns a different status.
             #
             # . Usage
-            #   ```bash
-            #   sgnd_hash_sha256_file "/tmp/sgnd-demo.cfg"
-            #   ```
+            #   sgnd_hash_sha256_file "/tmp/sgnd-example.txt" "/tmp/sgnd-example.txt" && printf 'Success\n' || printf 'Failed\n'
         sgnd_hash_sha256_file() {
             local file="$1"
             local out
@@ -358,24 +377,26 @@ set -uo pipefail
 
             return 127
         }
-        # fn: sgnd_safe_replace_file - Replace a destination with a prepared file while retaining its mode.
+        # fn: sgnd_safe_replace_file - Safe replace file
             # . Purpose
-            #   Replace a destination with a prepared file while retaining its mode.
+            #   Atomically replace a target file with a prepared temporary file.
+            #
+            # . Behavior
+            #   - Provides a public SolidGroundUX helper or command entry point.
             #
             # . Arguments
-            #   $1  Prepared source file.
-            #   $2  Existing destination file.
+            #   $1  SRC - Source path.
+            #   $2  DST - Destination path.
             #
             # . Side effects
-            #   Copies the destination file mode onto the source and moves it over the destination.
+            #   May update files, directories, runtime state, or process state required by the workflow.
             #
             # . Returns
-            #   0 when moved; 1 if either file is absent or chmod/mv fails.
+            #   0 on success.
+            #   Non-zero when validation, resolution, user cancellation, or execution fails.
             #
             # . Usage
-            #   ```bash
-            #   sgnd_safe_replace_file "$temp_file" "$config_file"
-            #   ```
+            #   sgnd_safe_replace_file "/tmp/sgnd-example.txt" "/tmp/sgnd-example.txt"
         sgnd_safe_replace_file() {
             local src="${1:?missing source}"
             local dst="${2:?missing destination}"
@@ -386,39 +407,38 @@ set -uo pipefail
             chmod --reference="$dst" "$src" || return 1
             mv "$src" "$dst" || return 1
         }    
-        # fn: sgnd_is_set - Test whether a named shell variable has been declared.
+        # fn: sgnd_is_set - Is set
             # . Purpose
-            #   Test whether a named shell variable has been declared.
+            #   Check whether a shell variable is set.
+            #
+            # . Behavior
+            #   - Provides a public SolidGroundUX helper or command entry point.
             #
             # . Arguments
-            #   $1  Variable name.
+            #   $1  ARG1 - Positional value used by this function.
             #
             # . Returns
-            #   0 if declared (even if empty); 1 otherwise.
+            #   0 on success unless the called command returns a different status.
             #
             # . Usage
-            #   ```bash
-            #   sgnd_is_set SGND_UI_STYLE
-            #   ```
+            #   SGND_EXAMPLE="enabled"; sgnd_is_set "SGND_EXAMPLE" && printf 'Variable is set\n'
         sgnd_is_set() { [[ -v "$1" ]]; }
-        # fn: sgnd_default - Set a named shell variable to a default when unset or empty.
+        # fn: sgnd_default - Default
             # . Purpose
-            #   Set a named shell variable to a default when unset or empty.
+            #   Assign a default value to a shell variable when it is unset or empty.
+            #
+            # . Behavior
+            #   - Provides a public SolidGroundUX helper or command entry point.
             #
             # . Arguments
-            #   $1  Name of shell variable.
-            #   $2  Default value (optional).
-            #
-            # . Side effects
-            #   Modifies the named shell variable using a nameref.
+            #   $1  NAME - Variable, field, or item name.
+            #   $2  DEFAULT - Default value.
             #
             # . Returns
-            #   0 after checking or assigning the value.
+            #   0 on success unless the called command returns a different status.
             #
             # . Usage
-            #   ```bash
-            #   sgnd_default SGND_UI_STYLE default
-            #   ```
+            #   sgnd_default "example" "example-2"
         sgnd_default() {
             local name="$1"
             local default="${2-}"
@@ -426,55 +446,59 @@ set -uo pipefail
 
             [[ -n "${ref:-}" ]] || ref="$default"
         }
-        # fn: sgnd_is_number - Test whether text contains digits only.
+        # fn: sgnd_is_number - Is number
             # . Purpose
-            #   Test whether text contains digits only.
+            #   Check whether a value contains only digits.
+            #
+            # . Behavior
+            #   - Provides a public SolidGroundUX helper or command entry point.
             #
             # . Arguments
-            #   $1  Text to validate.
+            #   $1  ARG1 - Positional value used by this function.
             #
             # . Returns
-            #   0 if it matches one or more digits; 1 otherwise.
+            #   0 on success unless the called command returns a different status.
             #
             # . Usage
-            #   ```bash
-            #   sgnd_is_number "42"
-            #   ```
+            #   sgnd_is_number "42" && printf 'Valid number\n'
         sgnd_is_number() { [[ "$1" =~ ^[0-9]+$ ]]; }
-        # fn: sgnd_array_has_items - Test whether a named array exists and is nonempty.
+        # fn: sgnd_array_has_items - Array has items
             # . Purpose
-            #   Test whether a named array exists and is nonempty.
+            #   Check whether an indexed array contains at least one item.
+            #
+            # . Behavior
+            #   - Provides a public SolidGroundUX helper or command entry point.
             #
             # . Arguments
-            #   $1  Name of a declared array.
+            #   $1  ARG1 - Positional value used by this function.
+            #
+            # . Side effects
+            #   May update files, directories, runtime state, or process state required by the workflow.
             #
             # . Returns
-            #   0 if it contains at least one item; 1 otherwise.
+            #   0 on success.
+            #   Non-zero when validation, resolution, user cancellation, or execution fails.
             #
             # . Usage
-            #   ```bash
-            #   rows=("Ada|admin")
-            #   sgnd_array_has_items rows
-            #   ```
+            #   sgnd_array_has_items "example" && printf 'Success\n' || printf 'Failed\n'
         sgnd_array_has_items() {
             declare -p "$1" &>/dev/null || return 1
             local -n _arr="$1"
             (( ${#_arr[@]} > 0 ))
         }
-        # fn: sgnd_is_true - Interpret common affirmative values as true.
+        # fn: sgnd_is_true - Is true
             # . Purpose
-            #   Interpret common affirmative values as true.
+            #   Interpret common true/false text values as a shell boolean.
             #
-            # . Arguments
-            #   $1  Value to check; case-insensitive.
+            # . Behavior
+            #   - Provides a public SolidGroundUX helper or command entry point.
             #
             # . Returns
-            #   0 for y, yes, 1 or true; 1 for everything else.
+            #   0 on success.
+            #   Non-zero when validation, resolution, user cancellation, or execution fails.
             #
             # . Usage
-            #   ```bash
-            #   sgnd_is_true yes
-            #   ```
+            #   sgnd_is_true "yes" && printf 'Value is true\n'
         sgnd_is_true() {
             case "${1,,}" in
                 y|yes|1|true) return 0 ;;
@@ -482,39 +506,41 @@ set -uo pipefail
             esac
         }
     # -- Process and runtime ----------------------------------------------------------
-        # fn: sgnd_proc_exists - Test for a running process with an exact executable name.
+        # fn: sgnd_proc_exists - Proc exists
             # . Purpose
-            #   Test for a running process with an exact executable name.
+            #   Check whether a process with the given executable name is running.
+            #
+            # . Behavior
+            #   - Provides a public SolidGroundUX helper or command entry point.
             #
             # . Arguments
-            #   $1  Executable name as matched by pgrep -x.
-            #
-            # . Returns
-            #   0 if found; nonzero otherwise.
-            #
-            # . Usage
-            #   ```bash
-            #   sgnd_proc_exists sshd
-            #   ```
-        sgnd_proc_exists() { pgrep -x "$1" &>/dev/null; }
-        # fn: sgnd_wait_for_exit - Wait until no process has the specified executable name.
-            # . Purpose
-            #   Wait until no process has the specified executable name.
-            #
-            # . Arguments
-            #   $1  Process executable name.
-            #   $2  Optional poll interval in seconds (default 0.5).
+            #   $1  ARG1 - Positional value used by this function.
             #
             # . Side effects
-            #   Sleeps between checks; there is no timeout.
+            #   May update files, directories, runtime state, or process state required by the workflow.
             #
             # . Returns
-            #   0 when the matching process is no longer running.
+            #   0 on success unless the called command returns a different status.
             #
             # . Usage
-            #   ```bash
-            #   sgnd_wait_for_exit sshd 1
-            #   ```
+            #   sgnd_proc_exists "sshd" && printf 'sshd is running\n'
+        sgnd_proc_exists() { pgrep -x "$1" &>/dev/null; }
+        # fn: sgnd_wait_for_exit - Wait for exit
+            # . Purpose
+            #   Wait for a named process to stop running.
+            #
+            # . Behavior
+            #   - Provides a public SolidGroundUX helper or command entry point.
+            #
+            # . Arguments
+            #   $1  NAME - Variable, field, or item name.
+            #   $2  INTERVAL - Positional value used by this function.
+            #
+            # . Returns
+            #   0 on success unless the called command returns a different status.
+            #
+            # . Usage
+            #   sgnd_wait_for_exit "sshd" 1
         sgnd_wait_for_exit() {
             local name="$1"
             local interval="${2:-0.5}"
@@ -523,42 +549,44 @@ set -uo pipefail
                 sleep "$interval"
             done
         }
-        # fn: sgnd_kill_if_running - Send the default pkill signal to exact-name processes if present.
+        # fn: sgnd_kill_if_running - Kill if running
             # . Purpose
-            #   Send the default pkill signal to exact-name processes if present.
+            #   Terminate processes that match the supplied executable name.
+            #
+            # . Behavior
+            #   - Provides a public SolidGroundUX helper or command entry point.
             #
             # . Arguments
-            #   $1  Executable name.
+            #   $1  ARG1 - Positional value used by this function.
             #
             # . Side effects
-            #   Calls pkill -x and ignores its error status.
+            #   May update files, directories, runtime state, or process state required by the workflow.
             #
             # . Returns
-            #   0 regardless of whether a match was found.
+            #   0 on success unless the called command returns a different status.
             #
             # . Usage
-            #   ```bash
-            #   sgnd_kill_if_running sgnd-example-process
-            #   ```
+            #   sgnd_kill_if_running "sgnd-example-process"
         sgnd_kill_if_running() { pkill -x "$1" &>/dev/null || true; }
     # -- Diagnostics and execution ----------------------------------------------------
-        # fn: sgnd_caller_id - Format caller location information for diagnostics.
+        # fn: sgnd_caller_id - Caller id
             # . Purpose
-            #   Format caller location information for diagnostics.
+            #   Return the calling script/function identity for diagnostics.
+            #
+            # . Behavior
+            #   - Provides a public SolidGroundUX helper or command entry point.
             #
             # . Arguments
-            #   $1  Optional call-stack depth (default 1).
+            #   $1  DEPTH - Positional value used by this function.
             #
             # . Output
-            #   Prints basename:line (function).
+            #   Writes computed or formatted text to stdout unless the function explicitly targets stderr or /dev/tty.
             #
             # . Returns
-            #   0 after printing the identity.
+            #   0 on success unless the called command returns a different status.
             #
             # . Usage
-            #   ```bash
-            #   sgnd_caller_id 1
-            #   ```
+            #   sgnd_caller_id "example"
         sgnd_caller_id() {
             local depth="${1:-1}"
             local file="${BASH_SOURCE[$depth]}"
@@ -567,20 +595,21 @@ set -uo pipefail
 
             printf '%s:%s (%s)' "${file##*/}" "$line" "$func"
         }
-        # fn: sgnd_stack_trace - Print the current Bash function call stack.
+        # fn: sgnd_stack_trace - Stack trace
             # . Purpose
-            #   Print the current Bash function call stack.
+            #   Print a Bash call stack for diagnostics.
+            #
+            # . Behavior
+            #   - Provides a public SolidGroundUX helper or command entry point.
             #
             # . Output
-            #   Writes one at file:line (function) entry per stack frame.
+            #   Writes computed or formatted text to stdout unless the function explicitly targets stderr or /dev/tty.
             #
             # . Returns
-            #   0 after printing.
+            #   0 on success unless the called command returns a different status.
             #
             # . Usage
-            #   ```bash
             #   sgnd_stack_trace
-            #   ```
         sgnd_stack_trace() {
             local i
             for (( i=1; i<${#FUNCNAME[@]}; i++ )); do
@@ -590,32 +619,32 @@ set -uo pipefail
                     "${FUNCNAME[$i]}"
             done
         }
-        # fn: sgnd_has_tty - Check whether the controlling terminal is readable and writable.
+        # fn: sgnd_has_tty - Has tty
             # . Purpose
-            #   Check whether the controlling terminal is readable and writable.
+            #   Check whether /dev/tty can be read and written.
+            #
+            # . Behavior
+            #   - Provides a public SolidGroundUX helper or command entry point.
             #
             # . Returns
-            #   0 when /dev/tty is accessible for both operations; 1 otherwise.
+            #   0 on success unless the called command returns a different status.
             #
             # . Usage
-            #   ```bash
             #   sgnd_has_tty
-            #   ```
         sgnd_has_tty() { [[ -r /dev/tty && -w /dev/tty ]]; }
-        # fn: sgnd_is_ui_mode - Check whether interactive UI mode is permitted and available.
+        # fn: sgnd_is_ui_mode - Is ui mode
             # . Purpose
-            #   Check whether interactive UI mode is permitted and available.
+            #   Check whether the current UI mode matches the supplied value.
             #
-            # . Description
-            #   FLAG_NOUI and FLAG_BATCH take priority over FLAG_UI; otherwise checks both stdin and stdout TTYs.
+            # . Behavior
+            #   - Provides a public SolidGroundUX helper or command entry point.
             #
             # . Returns
-            #   0 for enabled UI or interactive stdin/stdout; 1 when disabled or batch.
+            #   0 on success.
+            #   Non-zero when validation, resolution, user cancellation, or execution fails.
             #
             # . Usage
-            #   ```bash
             #   sgnd_is_ui_mode
-            #   ```
         sgnd_is_ui_mode() {
             # Explicit overrides first (future-proof)
             (( ${FLAG_NOUI:-0} ))   && return 1
@@ -625,39 +654,45 @@ set -uo pipefail
             # Fallback: interactive terminal
             [[ -t 0 && -t 1 ]]
         }
-        # fn: sgnd_is_desktop_mode - Check whether DISPLAY or WAYLAND_DISPLAY is set.
+        # fn: sgnd_is_desktop_mode - Is desktop mode
             # . Purpose
-            #   Check whether DISPLAY or WAYLAND_DISPLAY is set.
+            #   Check whether the framework is running in a desktop-capable UI mode.
+            #
+            # . Behavior
+            #   - Provides a public SolidGroundUX helper or command entry point.
             #
             # . Returns
-            #   0 when either variable is nonempty; 1 otherwise.
+            #   0 on success.
+            #   Non-zero when validation, resolution, user cancellation, or execution fails.
             #
             # . Usage
-            #   ```bash
             #   sgnd_is_desktop_mode
-            #   ```
         sgnd_is_desktop_mode() {
             [[ -n "${DISPLAY:-}" ]] && return 0
             [[ -n "${WAYLAND_DISPLAY:-}" ]] && return 0
             return 1
         }
-        # fn: sgnd_internal_call_guard - Warn when an internal helper is called outside the framework API.
+        # fn: sgnd_internal_call_guard - Internal call guard
             # . Purpose
-            #   Warn when an internal helper is called outside the framework API.
+            #   Reject calls to internal functions from outside allowed framework contexts.
+            #
+            # . Behavior
+            #   - Provides a public SolidGroundUX helper or command entry point.
             #
             # . Arguments
-            #   $1  Name of the internal function.
+            #   $1  FUNC - Positional value used by this function.
+            #
+            # . Output
+            #   Writes computed or formatted text to stdout unless the function explicitly targets stderr or /dev/tty.
             #
             # . Side effects
-            #   Prints a warning to stderr for callers outside sgnd_* and _* functions; does not block the call.
+            #   May update files, directories, runtime state, or process state required by the workflow.
             #
             # . Returns
-            #   0 for allowed callers; the warning branch also returns successfully.
+            #   0 on success unless the called command returns a different status.
             #
             # . Usage
-            #   ```bash
-            #   sgnd_internal_call_guard _sgnd_internal_helper
-            #   ```
+            #   sgnd_internal_call_guard "example" "example-2"
         sgnd_internal_call_guard() {
             local func="${1:?missing function name}"
 
@@ -669,24 +704,25 @@ set -uo pipefail
                     ;;
             esac
         }
-        # fn: sgnd_show_vars_by_prefix - Log shell variables whose names start with a supplied prefix.
+        # fn: sgnd_show_vars_by_prefix - Show vars by prefix
             # . Purpose
-            #   Log shell variables whose names start with a supplied prefix.
+            #   Print variables whose names start with a supplied prefix.
+            #
+            # . Behavior
+            #   - Provides a public SolidGroundUX helper or command entry point.
+            #   - Reads or updates SolidGroundUX runtime, metadata, configuration, or UI globals as needed.
+            #   - Uses framework UI/output conventions for terminal or dialog interaction.
             #
             # . Arguments
-            #   $1  Nonempty variable-name prefix.
-            #   $2  Optional flag to also print through sayinfo when debug is disabled.
-            #
-            # . Side effects
-            #   Uses saydebug and optionally sayinfo to emit matching variable names/values.
+            #   $1  PREFIX - Variable prefix.
+            #   $2  ASSUME_DEBUG - Positional value used by this function.
             #
             # . Returns
-            #   0 after logging; 1 when the prefix is missing.
+            #   0 on success.
+            #   Non-zero when validation, resolution, user cancellation, or execution fails.
             #
             # . Usage
-            #   ```bash
-            #   sgnd_show_vars_by_prefix SGND_DT_ 1
-            #   ```
+            #   sgnd_show_vars_by_prefix "example" "example-2"
         sgnd_show_vars_by_prefix() {
             local prefix="${1:-}"
             local assume_debug="${2:-0}"
@@ -708,56 +744,59 @@ set -uo pipefail
 
             return 0
         }
-        # fn: sgnd_version_ge - Test whether the first version sorts at or above the second.
+        # fn: sgnd_version_ge - Version ge
             # . Purpose
-            #   Test whether the first version sorts at or above the second.
+            #   Compare two version strings and return success when the first is greater or equal.
+            #
+            # . Behavior
+            #   - Provides a public SolidGroundUX helper or command entry point.
             #
             # . Arguments
-            #   $1  Current version.
-            #   $2  Minimum required version.
-            #
-            # . Returns
-            #   0 if the first version is greater or equal according to sort -V; 1 otherwise.
-            #
-            # . Usage
-            #   ```bash
-            #   sgnd_version_ge "2.2" "2.1"
-            #   ```
-        sgnd_version_ge() { [[ "$(printf '%s\n' "$2" "$1" | sort -V | head -n1)" == "$2" ]]; }
-        # fn: sgnd_timestamp - Print the current local timestamp in log format.
-            # . Purpose
-            #   Print the current local timestamp in log format.
+            #   $1  ARG1 - Positional value used by this function.
+            #   $2  ARG2 - Positional value used by this function.
             #
             # . Output
-            #   Prints YYYY-MM-DD HH:MM:SS.
+            #   Writes computed or formatted text to stdout unless the function explicitly targets stderr or /dev/tty.
             #
             # . Returns
-            #   0 on success; otherwise date command status.
+            #   0 on success unless the called command returns a different status.
             #
             # . Usage
-            #   ```bash
-            #   sgnd_timestamp
-            #   ```
-        sgnd_timestamp() { date +"%Y-%m-%d %H:%M:%S"; }
-        # fn: sgnd_retry - Retry a command a fixed number of times with a delay.
+            #   sgnd_version_ge "1.8.0" "1.7.9" && printf 'Version requirement met\n'
+        sgnd_version_ge() { [[ "$(printf '%s\n' "$2" "$1" | sort -V | head -n1)" == "$2" ]]; }
+        # fn: sgnd_timestamp - Timestamp
             # . Purpose
-            #   Retry a command a fixed number of times with a delay.
+            #   Print the current timestamp in SolidGroundUX log format.
+            #
+            # . Behavior
+            #   - Provides a public SolidGroundUX helper or command entry point.
+            #
+            # . Returns
+            #   0 on success unless the called command returns a different status.
+            #
+            # . Usage
+            #   sgnd_timestamp
+        sgnd_timestamp() { date +"%Y-%m-%d %H:%M:%S"; }
+        # fn: sgnd_retry - Retry
+            # . Purpose
+            #   Retry a command until it succeeds or the retry count is exhausted.
+            #
+            # . Behavior
+            #   - Provides a public SolidGroundUX helper or command entry point.
             #
             # . Arguments
-            #   $1  Maximum attempts (at least 1).
-            #   $2  Delay between attempts, in seconds.
-            #   $3...  Executable command and its arguments.
+            #   $1  N - Positional value used by this function.
+            #   $2  D - Positional value used by this function.
             #
             # . Side effects
-            #   Executes the command up to the specified limit and sleeps between failed attempts.
+            #   May update files, directories, runtime state, or process state required by the workflow.
             #
             # . Returns
-            #   0 when the command succeeds; 1 when all attempts fail; 2 for invalid count or missing command.
+            #   0 on success.
+            #   Non-zero when validation, resolution, user cancellation, or execution fails.
             #
             # . Usage
-            #   ```bash
-            #   sgnd_retry 3 1 test -f "/tmp/ready.flag"
-            #   ```
+            #   sgnd_retry "example" "example-2"
         sgnd_retry() {
             local n="$1"
             local d="$2"
@@ -775,50 +814,48 @@ set -uo pipefail
             return 1
         }
     # -- Collections and strings ------------------------------------------------------
-        # fn: sgnd_join - Join positional arguments with a literal delimiter.
+        # fn: sgnd_join - Join
             # . Purpose
-            #   Join positional arguments with a literal delimiter.
+            #   Join arguments using a delimiter.
+            #
+            # . Behavior
+            #   - Provides a public SolidGroundUX helper or command entry point.
             #
             # . Arguments
-            #   $1  Delimiter.
-            #   $2...  Values to join.
+            #   $1  IFS - Positional value used by this function.
             #
             # . Output
-            #   Writes the joined values without a newline.
+            #   Writes computed or formatted text to stdout unless the function explicitly targets stderr or /dev/tty.
             #
             # . Returns
-            #   0 after printing.
+            #   0 on success unless the called command returns a different status.
             #
             # . Usage
-            #   ```bash
-            #   sgnd_join "," alpha beta gamma
-            #   ```
+            #   sgnd_join "example"
         sgnd_join() {
             local IFS="$1"
             shift
             printf '%s' "$*"
         }
-        # fn: sgnd_array_union - Populate a named destination array with unique items from source arrays.
+        # fn: sgnd_array_union - Array union
             # . Purpose
-            #   Populate a named destination array with unique items from source arrays.
+            #   Build the union of two shell arrays.
+            #
+            # . Behavior
+            #   - Provides a public SolidGroundUX helper or command entry point.
             #
             # . Arguments
-            #   $1  Name of destination array.
-            #   $2...  Names of one or more source arrays.
+            #   $1  DEST_NAME - Variable, field, or item name.
             #
             # . Side effects
-            #   Resets the destination array and inserts first occurrences only.
+            #   May update files, directories, runtime state, or process state required by the workflow.
             #
             # . Returns
-            #   0 after combining arrays; 1 if no destination or source argument is given.
+            #   0 on success.
+            #   Non-zero when validation, resolution, user cancellation, or execution fails.
             #
             # . Usage
-            #   ```bash
-            #   left=(alpha beta)
-            #   right=(beta gamma)
-            #   combined=()
-            #   sgnd_array_union combined left right
-            #   ```
+            #   sgnd_array_union "example"
         sgnd_array_union() {
             local dest_name="$1"
             local src_name
@@ -847,46 +884,48 @@ set -uo pipefail
 
             return 0
         }
-        # fn: sgnd_trim - Trim whitespace from both ends of a string.
+        # fn: sgnd_trim - Trim
             # . Purpose
-            #   Trim whitespace from both ends of a string.
+            #   Trim leading and trailing whitespace from text.
             #
-            # . Arguments
-            #   $@  Words to trim, joined by spaces.
+            # . Behavior
+            #   - Provides a public SolidGroundUX helper or command entry point.
             #
             # . Output
-            #   Prints trimmed text without a newline.
+            #   Writes computed or formatted text to stdout unless the function explicitly targets stderr or /dev/tty.
             #
             # . Returns
-            #   0 after printing.
+            #   0 on success unless the called command returns a different status.
             #
             # . Usage
-            #   ```bash
-            #   sgnd_trim "  hello world  "
-            #   ```
+            #   sgnd_trim "   SolidGroundUX example   "
         sgnd_trim() {
             local v="${*:-}"
             v="${v#"${v%%[![:space:]]*}"}"
             printf '%s' "${v%"${v##*[![:space:]]}"}"
         }
-        # fn: sgnd_string_repeat - Repeat a string a specified number of times.
+        # fn: sgnd_string_repeat - String repeat
             # . Purpose
-            #   Repeat a string a specified number of times.
+            #   Repeat a string a fixed number of times.
+            #
+            # . Behavior
+            #   - Provides a public SolidGroundUX helper or command entry point.
             #
             # . Arguments
-            #   $1  String to repeat (default a space).
-            #   $2  Repeat count (default 0).
+            #   $1  S - Positional value used by this function.
+            #   $2  N - Positional value used by this function.
             #
             # . Output
-            #   Writes the repeated string without a newline.
+            #   Writes computed or formatted text to stdout unless the function explicitly targets stderr or /dev/tty.
+            #
+            # . Side effects
+            #   May update files, directories, runtime state, or process state required by the workflow.
             #
             # . Returns
-            #   0 after printing.
+            #   0 on success unless the called command returns a different status.
             #
             # . Usage
-            #   ```bash
-            #   sgnd_string_repeat "-" 5
-            #   ```
+            #   sgnd_string_repeat "example" "example-2" "example-3"
         sgnd_string_repeat() {
             local s="${1- }"
             local n="${2-0}"
@@ -901,25 +940,29 @@ set -uo pipefail
 
             printf '%s' "$out"
         }
-        # fn: sgnd_fill_left - Left-pad text with a character to a minimum width.
+        # fn: sgnd_fill_left - Fill left
             # . Purpose
-            #   Left-pad text with a character to a minimum width.
+            #   Pad text on the left to a target width.
+            #
+            # . Behavior
+            #   - Provides a public SolidGroundUX helper or command entry point.
             #
             # . Arguments
-            #   $1  Text.
-            #   $2  Target width (default 20).
-            #   $3  Pad string (default space).
+            #   $1  SOURCE - Source path or identifier.
+            #   $2  MAXLENGTH - Positional value used by this function.
+            #   $3  CHAR - Positional value used by this function.
             #
             # . Output
-            #   Writes padded text without a newline.
+            #   Writes computed or formatted text to stdout unless the function explicitly targets stderr or /dev/tty.
+            #
+            # . Side effects
+            #   May update files, directories, runtime state, or process state required by the workflow.
             #
             # . Returns
-            #   0 after printing.
+            #   0 on success unless the called command returns a different status.
             #
             # . Usage
-            #   ```bash
-            #   sgnd_fill_left "42" 5 "0"
-            #   ```
+            #   sgnd_fill_left "/tmp/sgnd-example.txt" "example-2" "example-3"
         sgnd_fill_left() {
             local source="${1-}"
             local maxlength="${2-20}"
@@ -931,25 +974,29 @@ set -uo pipefail
             pad="$(sgnd_string_repeat "$char" "$padcount")"
             printf '%s%s' "$pad" "$source"
         }
-        # fn: sgnd_fill_right - Right-pad text with a character to a minimum width.
+        # fn: sgnd_fill_right - Fill right
             # . Purpose
-            #   Right-pad text with a character to a minimum width.
+            #   Pad text on the right to a target width.
+            #
+            # . Behavior
+            #   - Provides a public SolidGroundUX helper or command entry point.
             #
             # . Arguments
-            #   $1  Text.
-            #   $2  Target width (default 20).
-            #   $3  Pad string (default space).
+            #   $1  SOURCE - Source path or identifier.
+            #   $2  MAXLENGTH - Positional value used by this function.
+            #   $3  CHAR - Positional value used by this function.
             #
             # . Output
-            #   Writes padded text without a newline.
+            #   Writes computed or formatted text to stdout unless the function explicitly targets stderr or /dev/tty.
+            #
+            # . Side effects
+            #   May update files, directories, runtime state, or process state required by the workflow.
             #
             # . Returns
-            #   0 after printing.
+            #   0 on success unless the called command returns a different status.
             #
             # . Usage
-            #   ```bash
-            #   sgnd_fill_right "Ada" 8 "."
-            #   ```
+            #   sgnd_fill_right "/tmp/sgnd-example.txt" "example-2" "example-3"
         sgnd_fill_right() {
             local source="${1-}"
             local maxlength="${2-20}"
@@ -961,25 +1008,29 @@ set -uo pipefail
             pad="$(sgnd_string_repeat "$char" "$padcount")"
             printf '%s%s' "$source" "$pad"
         }
-        # fn: sgnd_fill_center - Center text to a minimum width using a padding string.
+        # fn: sgnd_fill_center - Fill center
             # . Purpose
-            #   Center text to a minimum width using a padding string.
+            #   Center text in a target width.
+            #
+            # . Behavior
+            #   - Provides a public SolidGroundUX helper or command entry point.
             #
             # . Arguments
-            #   $1  Text.
-            #   $2  Target width (default 20).
-            #   $3  Pad string (default space).
+            #   $1  SOURCE - Source path or identifier.
+            #   $2  MAXLENGTH - Positional value used by this function.
+            #   $3  CHAR - Positional value used by this function.
             #
             # . Output
-            #   Writes padded text without a newline.
+            #   Writes computed or formatted text to stdout unless the function explicitly targets stderr or /dev/tty.
+            #
+            # . Side effects
+            #   May update files, directories, runtime state, or process state required by the workflow.
             #
             # . Returns
-            #   0 after printing.
+            #   0 on success unless the called command returns a different status.
             #
             # . Usage
-            #   ```bash
-            #   sgnd_fill_center "Title" 15 "-"
-            #   ```
+            #   sgnd_fill_center "/tmp/sgnd-example.txt" "example-2" "example-3"
         sgnd_fill_center() {
             local source="${1-}"
             local maxlength="${2-20}"
@@ -1000,46 +1051,49 @@ set -uo pipefail
             printf '%s%s%s' "$pad_left" "$source" "$pad_right"
         }
     # -- Terminal text layout ---------------------------------------------------------
-        # fn: sgnd_visible_length - Count display characters after removing ANSI SGR escapes.
+        # fn: sgnd_visible_length - Visible length
             # . Purpose
-            #   Count display characters after removing ANSI SGR escapes.
+            #   Return visible text length after stripping ANSI escape sequences.
+            #
+            # . Behavior
+            #   - Provides a public SolidGroundUX helper or command entry point.
             #
             # . Arguments
-            #   $1  Text, potentially containing ANSI styling.
+            #   $1  TEXT - Text value.
             #
             # . Output
-            #   Writes the count to stdout.
+            #   Writes computed or formatted text to stdout unless the function explicitly targets stderr or /dev/tty.
             #
             # . Returns
-            #   0 after counting.
+            #   0 on success unless the called command returns a different status.
             #
             # . Usage
-            #   ```bash
-            #   sgnd_visible_length "$colored_text"
-            #   ```
+            #   sgnd_visible_length "SolidGroundUX example"
         sgnd_visible_length() {
             local text="${1-}"
 
             text="$(printf '%s' "$text" | sed -E 's/\x1B\[[0-9;]*[[:alpha:]]//g')"
             printf '%s' "$text" | wc -m
         }
-        # fn: sgnd_terminal_width - Compute the effective terminal render width.
+        # fn: sgnd_terminal_width - Terminal width
             # . Purpose
-            #   Compute the effective terminal render width.
+            #   Return the active terminal width or a configured fallback.
             #
-            # . Description
-            #   Uses tput cols when available and falls back to 80 when no valid result is returned.
+            # . Behavior
+            #   - Provides a public SolidGroundUX helper or command entry point.
+            #   - Reads or updates SolidGroundUX runtime, metadata, configuration, or UI globals as needed.
             #
             # . Output
-            #   Writes a number clamped between 40 and SGND_MAX_RENDER_WIDTH (default 140).
+            #   Writes computed or formatted text to stdout unless the function explicitly targets stderr or /dev/tty.
+            #
+            # . Side effects
+            #   May update files, directories, runtime state, or process state required by the workflow.
             #
             # . Returns
-            #   0 after printing the width.
+            #   0 on success unless the called command returns a different status.
             #
             # . Usage
-            #   ```bash
             #   sgnd_terminal_width
-            #   ```
         sgnd_terminal_width() {
             local term_width=80
             local max_render_width="${SGND_MAX_RENDER_WIDTH:-140}"
@@ -1054,24 +1108,25 @@ set -uo pipefail
 
             printf '%s\n' "$term_width"
         }
-        # fn: sgnd_padded_visible - Right-pad styled text using its visible character width.
+        # fn: sgnd_padded_visible - Padded visible
             # . Purpose
-            #   Right-pad styled text using its visible character width.
+            #   Pad styled text based on visible width rather than byte length.
+            #
+            # . Behavior
+            #   - Provides a public SolidGroundUX helper or command entry point.
             #
             # . Arguments
-            #   $1  Text, possibly ANSI-colored.
-            #   $2  Minimum visible width.
+            #   $1  TEXT - Text value.
+            #   $2  WIDTH - Target display width.
             #
             # . Output
-            #   Writes text plus trailing spaces without a newline.
+            #   Writes computed or formatted text to stdout unless the function explicitly targets stderr or /dev/tty.
             #
             # . Returns
-            #   0 after writing the string.
+            #   0 on success unless the called command returns a different status.
             #
             # . Usage
-            #   ```bash
-            #   sgnd_padded_visible "$colored_label" 20
-            #   ```
+            #   sgnd_padded_visible "SolidGroundUX example" 20
         sgnd_padded_visible() {
             local text="${1-}"
             local width="${2:-0}"
@@ -1084,24 +1139,25 @@ set -uo pipefail
 
             printf '%s%*s' "$text" "$pad_len" ""
         }
-        # fn: sgnd_wrap_words - Wrap a string into lines of a given display width.
+        # fn: sgnd_wrap_words - Wrap words
             # . Purpose
-            #   Wrap a string into lines of a given display width.
+            #   Wrap text to a target visible width.
+            #
+            # . Behavior
+            #   - Provides a public SolidGroundUX helper or command entry point.
             #
             # . Arguments
-            #   --width N  Target width (default 80).
-            #   --text TEXT  Text to wrap.
+            #   $1  ARG1 - Positional value used by this function.
+            #   $2  ARG2 - Positional value used by this function.
             #
             # . Output
-            #   Writes one or more text lines to stdout.
+            #   Writes computed or formatted text to stdout unless the function explicitly targets stderr or /dev/tty.
             #
             # . Returns
-            #   0 after printing; 2 on unknown argument.
+            #   0 on success unless the called command returns a different status.
             #
             # . Usage
-            #   ```bash
-            #   sgnd_wrap_words --width 40 --text "A rather long message to be wrapped"
-            #   ```
+            #   sgnd_wrap_words "example" "example-2"
         sgnd_wrap_words() {
             local width=80
             local text=""
@@ -1134,20 +1190,25 @@ set -uo pipefail
             [[ -n "$line" ]] && printf '%s\n' "$line"
         }
     # -- Validation -------------------------------------------------------------------
-    # fn: sgnd_validate_ipv4 - Check IPv4 dotted-quad syntax and octet ranges.
+    # fn: sgnd_validate_ipv4 - Validate ipv4
         # . Purpose
-        #   Check IPv4 dotted-quad syntax and octet ranges.
+        #   Validate an IPv4 address.
+        #
+        # . Behavior
+        #   - Provides a public SolidGroundUX helper or command entry point.
         #
         # . Arguments
-        #   $1  Candidate IPv4 address.
+        #   $1  IP - Positional value used by this function.
+        #
+        # . Side effects
+        #   May update files, directories, runtime state, or process state required by the workflow.
         #
         # . Returns
-        #   0 for exactly four decimal octets between 0 and 255; 1 otherwise.
+        #   0 on success.
+        #   Non-zero when validation, resolution, user cancellation, or execution fails.
         #
         # . Usage
-        #   ```bash
-        #   sgnd_validate_ipv4 "192.168.0.10"
-        #   ```
+        #   sgnd_validate_ipv4 "192.168.0.10" && printf 'Success\n' || printf 'Failed\n'
     sgnd_validate_ipv4() {
         local ip="$1"
         local IFS='.'
@@ -1164,230 +1225,246 @@ set -uo pipefail
 
         return 0
     }
-    # fn: sgnd_validate_yesno - Validate a one-character Y or N choice.
+    # fn: sgnd_validate_yesno - Validate yesno
         # . Purpose
-        #   Validate a one-character Y or N choice.
+        #   Validate a single-character yes/no response.
+        #
+        # . Behavior
+        #   - Provides a public SolidGroundUX helper or command entry point.
         #
         # . Arguments
-        #   $1  Candidate value.
+        #   $1  ARG1 - Positional value used by this function.
         #
         # . Returns
-        #   0 for Y/y/N/n; 1 otherwise.
+        #   0 when the value is valid.
+        #   1 when the value is invalid.
         #
         # . Usage
-        #   ```bash
-        #   sgnd_validate_yesno y
-        #   ```
+        #   sgnd_validate_yesno "yes" && printf 'Valid yes/no value\n'
     sgnd_validate_yesno() { [[ "$1" =~ ^[YyNn]$ ]]; }
-    # fn: sgnd_validate_int - Test whether a string is a signed integer.
+    # fn: sgnd_validate_int - Validate int
         # . Purpose
-        #   Test whether a string is a signed integer.
+        #   Validate a signed integer.
+        #
+        # . Behavior
+        #   - Provides a public SolidGroundUX helper or command entry point.
         #
         # . Arguments
-        #   $1  Candidate value.
+        #   $1  ARG1 - Positional value used by this function.
         #
         # . Returns
-        #   0 for an optional minus sign followed by digits; 1 otherwise.
+        #   0 when the value is valid.
+        #   1 when the value is invalid.
         #
         # . Usage
-        #   ```bash
-        #   sgnd_validate_int "-42"
-        #   ```
+        #   sgnd_validate_int "42" && printf 'Valid integer\n'
     sgnd_validate_int() { [[ "$1" =~ ^-?[0-9]+$ ]]; }
-    # fn: sgnd_validate_numeric - Test whether a string is a signed integer or decimal.
+    # fn: sgnd_validate_numeric - Validate numeric
         # . Purpose
-        #   Test whether a string is a signed integer or decimal.
+        #   Validate a signed integer or decimal number.
+        #
+        # . Behavior
+        #   - Provides a public SolidGroundUX helper or command entry point.
         #
         # . Arguments
-        #   $1  Candidate numeric value.
+        #   $1  ARG1 - Positional value used by this function.
         #
         # . Returns
-        #   0 for digits with an optional preceding minus and optional decimal fraction; 1 otherwise.
+        #   0 when the value is valid.
+        #   1 when the value is invalid.
         #
         # . Usage
-        #   ```bash
-        #   sgnd_validate_numeric "-42.5"
-        #   ```
+        #   sgnd_validate_numeric "42.5" && printf 'Valid numeric value\n'
     sgnd_validate_numeric() { [[ "$1" =~ ^-?[0-9]+([.][0-9]+)?$ ]]; }
-    # fn: sgnd_validate_text - Check that a string is not empty.
+    # fn: sgnd_validate_text - Validate text
         # . Purpose
-        #   Check that a string is not empty.
+        #   Validate that text is not empty.
+        #
+        # . Behavior
+        #   - Provides a public SolidGroundUX helper or command entry point.
         #
         # . Arguments
-        #   $1  Candidate text.
+        #   $1  ARG1 - Positional value used by this function.
         #
         # . Returns
-        #   0 if nonempty (including whitespace-only strings); 1 otherwise.
+        #   0 when the value is valid.
+        #   1 when the value is invalid.
         #
         # . Usage
-        #   ```bash
-        #   sgnd_validate_text "Hello"
-        #   ```
+        #   sgnd_validate_text "SolidGroundUX" && printf 'Valid text\n'
     sgnd_validate_text() { [[ -n "$1" ]]; }
-    # fn: sgnd_validate_bool - Validate a recognized textual boolean token.
+    # fn: sgnd_validate_bool - Validate bool
         # . Purpose
-        #   Validate a recognized textual boolean token.
+        #   Validate a common boolean value.
         #
-        # . Description
-        #   This validates both affirmative and negative values; use sgnd_is_true to test truthiness.
-        #
-        # . Arguments
-        #   $1  Candidate token, case-insensitive.
+        # . Behavior
+        #   - Provides a public SolidGroundUX helper or command entry point.
         #
         # . Returns
-        #   0 for y/yes/n/no/true/false/1/0; 1 otherwise.
+        #   0 on success.
+        #   Non-zero when validation, resolution, user cancellation, or execution fails.
         #
         # . Usage
-        #   ```bash
-        #   sgnd_validate_bool "false"
-        #   ```
+        #   sgnd_validate_bool "true" && printf 'Valid Boolean\n'
     sgnd_validate_bool() {
         case "${1,,}" in
             y|yes|n|no|true|false|1|0) return 0 ;;
             *) return 1 ;;
         esac
     }
-    # fn: sgnd_validate_date - Validate the shape of an ISO calendar date.
+    # fn: sgnd_validate_date - Validate date
         # . Purpose
-        #   Validate the shape of an ISO calendar date.
+        #   Validate a date string in YYYY-MM-DD form.
         #
-        # . Description
-        #   Checks the string pattern only; does not verify that the date exists.
+        # . Behavior
+        #   - Provides a public SolidGroundUX helper or command entry point.
         #
         # . Arguments
-        #   $1  Candidate YYYY-MM-DD string.
+        #   $1  ARG1 - Positional value used by this function.
         #
         # . Returns
-        #   0 for a syntactically matching date string; 1 otherwise.
+        #   0 when the value is valid.
+        #   1 when the value is invalid.
         #
         # . Usage
-        #   ```bash
-        #   sgnd_validate_date "2026-10-29"
-        #   ```
+        #   sgnd_validate_date "2026-07-31" && printf 'Valid date\n'
     sgnd_validate_date() { [[ "$1" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; }
-    # fn: sgnd_validate_cidr - Validate a CIDR prefix length, not a network address.
+    # fn: sgnd_validate_cidr - Validate cidr
         # . Purpose
-        #   Validate a CIDR prefix length, not a network address.
+        #   Validate a CIDR prefix length.
+        #
+        # . Behavior
+        #   - Provides a public SolidGroundUX helper or command entry point.
         #
         # . Arguments
-        #   $1  Prefix length in decimal notation.
+        #   $1  ARG1 - Positional value used by this function.
         #
         # . Returns
-        #   0 for a number from 0 to 32; 1 otherwise.
+        #   0 when the value is valid.
+        #   1 when the value is invalid.
         #
         # . Usage
-        #   ```bash
-        #   sgnd_validate_cidr 24
-        #   ```
+        #   sgnd_validate_cidr "192.168.0.0/24" && printf 'Valid CIDR\n'
     sgnd_validate_cidr() { [[ "$1" =~ ^([0-9]|[12][0-9]|3[0-2])$ ]]; }
-    # fn: sgnd_validate_slug - Check a lowercase slug against allowed characters.
+    # fn: sgnd_validate_slug - Validate slug
         # . Purpose
-        #   Check a lowercase slug against allowed characters.
+        #   Validate a lowercase slug suitable for identifiers or paths.
+        #
+        # . Behavior
+        #   - Provides a public SolidGroundUX helper or command entry point.
         #
         # . Arguments
-        #   $1  Slug.
+        #   $1  ARG1 - Positional value used by this function.
         #
         # . Returns
-        #   0 for one or more lowercase ASCII letters, digits, periods, underscores or hyphens; 1 otherwise.
+        #   0 when the value is valid.
+        #   1 when the value is invalid.
         #
         # . Usage
-        #   ```bash
-        #   sgnd_validate_slug sgnd-docs
-        #   ```
+        #   sgnd_validate_slug "solidgroundux-example" && printf 'Valid slug\n'
     sgnd_validate_slug() { [[ "$1" =~ ^[a-z0-9._-]+$ ]]; }
-    # fn: sgnd_validate_fs_name - Check a conservative single filesystem component.
+    # fn: sgnd_validate_fs_name - Validate fs name
         # . Purpose
-        #   Check a conservative single filesystem component.
+        #   Validate a conservative filesystem name.
         #
-        # . Description
-        #   This checks allowed characters only, not special names or path traversal safety.
+        # . Behavior
+        #   - Provides a public SolidGroundUX helper or command entry point.
         #
         # . Arguments
-        #   $1  Candidate name.
+        #   $1  ARG1 - Positional value used by this function.
         #
         # . Returns
-        #   0 for one or more ASCII letters, digits, periods, underscores or hyphens; 1 otherwise.
+        #   0 when the value is valid.
+        #   1 when the value is invalid.
         #
         # . Usage
-        #   ```bash
-        #   sgnd_validate_fs_name Framework_2.2
-        #   ```
+        #   sgnd_validate_fs_name "solidgroundux-example" && printf 'Valid filesystem name\n'
     sgnd_validate_fs_name() { [[ "$1" =~ ^[A-Za-z0-9._-]+$ ]]; }
-    # fn: sgnd_validate_file_exists - Test whether a path refers to an existing regular file.
+    # fn: sgnd_validate_file_exists - Validate file exists
         # . Purpose
-        #   Test whether a path refers to an existing regular file.
+        #   Validate that a file exists.
+        #
+        # . Behavior
+        #   - Provides a public SolidGroundUX helper or command entry point.
         #
         # . Arguments
-        #   $1  Path to test.
+        #   $1  PATH - Filesystem path.
         #
         # . Returns
-        #   0 for an existing regular file; 1 otherwise.
+        #   0 when the value is valid.
+        #   1 when the value is invalid.
         #
         # . Usage
-        #   ```bash
-        #   sgnd_validate_file_exists "/etc/hosts"
-        #   ```
+        #   sgnd_validate_file_exists "/tmp/sgnd-example" && printf 'Success\n' || printf 'Failed\n'
     sgnd_validate_file_exists() {
         local path="$1"
         [[ -f "$path" ]]
     }
-    # fn: sgnd_validate_path_exists - Test whether a filesystem path exists.
+    # fn: sgnd_validate_path_exists - Validate path exists
         # . Purpose
-        #   Test whether a filesystem path exists.
+        #   Validate that a filesystem path exists.
+        #
+        # . Behavior
+        #   - Provides a public SolidGroundUX helper or command entry point.
         #
         # . Arguments
-        #   $1  Path to test.
+        #   $1  ARG1 - Positional value used by this function.
         #
         # . Returns
-        #   0 when -e matches; 1 otherwise.
+        #   0 when the value is valid.
+        #   1 when the value is invalid.
         #
         # . Usage
-        #   ```bash
-        #   sgnd_validate_path_exists "/tmp"
-        #   ```
+        #   sgnd_validate_path_exists "/tmp" && printf 'Path exists\n'
     sgnd_validate_path_exists() { [[ -e "$1" ]]; }
-    # fn: sgnd_validate_dir_exists - Test whether a path is an existing directory.
+    # fn: sgnd_validate_dir_exists - Validate dir exists
         # . Purpose
-        #   Test whether a path is an existing directory.
+        #   Validate that a directory exists.
+        #
+        # . Behavior
+        #   - Provides a public SolidGroundUX helper or command entry point.
         #
         # . Arguments
-        #   $1  Directory to test.
+        #   $1  ARG1 - Positional value used by this function.
         #
         # . Returns
-        #   0 when -d matches; 1 otherwise.
+        #   0 when the value is valid.
+        #   1 when the value is invalid.
         #
         # . Usage
-        #   ```bash
-        #   sgnd_validate_dir_exists "/tmp"
-        #   ```
+        #   sgnd_validate_dir_exists "/tmp" && printf 'Directory exists\n'
     sgnd_validate_dir_exists() { [[ -d "$1" ]]; }
-    # fn: sgnd_validate_executable - Test whether a filesystem path is executable.
+    # fn: sgnd_validate_executable - Validate executable
         # . Purpose
-        #   Test whether a filesystem path is executable.
+        #   Validate that a path exists and is executable.
+        #
+        # . Behavior
+        #   - Provides a public SolidGroundUX helper or command entry point.
         #
         # . Arguments
-        #   $1  Path to test.
+        #   $1  ARG1 - Positional value used by this function.
         #
         # . Returns
-        #   0 when the path is executable; 1 otherwise.
+        #   0 when the value is valid.
+        #   1 when the value is invalid.
         #
         # . Usage
-        #   ```bash
-        #   sgnd_validate_executable "/bin/bash"
-        #   ```
+        #   sgnd_validate_executable "/bin/bash" && printf 'Executable found\n'
     sgnd_validate_executable() { [[ -x "$1" ]]; }
-    # fn: sgnd_validate_file_not_exists - Check that a regular file does not already exist.
+    # fn: sgnd_validate_file_not_exists - Validate file not exists
         # . Purpose
-        #   Check that a regular file does not already exist.
+        #   Validate that a file does not already exist.
+        #
+        # . Behavior
+        #   - Provides a public SolidGroundUX helper or command entry point.
         #
         # . Arguments
-        #   $1  Path to test.
+        #   $1  ARG1 - Positional value used by this function.
         #
         # . Returns
-        #   0 when the path is not an existing regular file; 1 otherwise.
+        #   0 when the value is valid.
+        #   1 when the value is invalid.
         #
         # . Usage
-        #   ```bash
-        #   sgnd_validate_file_not_exists "/tmp/sgnd-new-file"
-        #   ```
+        #   sgnd_validate_file_not_exists "/tmp/sgnd-new-file" && printf 'Path is available\n'
     sgnd_validate_file_not_exists() { [[ ! -f "$1" ]]; }

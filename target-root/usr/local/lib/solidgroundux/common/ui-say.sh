@@ -73,9 +73,7 @@ set -uo pipefail
         #   Exits with code 2 when executed instead of sourced.
         #
         # . Usage
-        #   ```bash
         #   _sgnd_lib_guard
-        #   ```
     _sgnd_lib_guard() {
         local lib_base=""
         local guard=""
@@ -132,9 +130,7 @@ set -uo pipefail
         #   0 always.
         #
         # . Usage
-        #   ```bash
         #   _say_normalize_log_level "example"
-        #   ```
     _say_normalize_log_level() {
 
         case "${1,,}" in
@@ -191,9 +187,7 @@ set -uo pipefail
         #   1 if the message should be suppressed.
         #
         # . Usage
-        #   ```bash
         #   _say_should_print_console "example"
-        #   ```
     _say_should_print_console() {
 
         local type="${1^^}"
@@ -275,9 +269,7 @@ set -uo pipefail
         #   1 when the message should be suppressed.
         #
         # . Usage
-        #   ```bash
         #   _say_should_write_log "example"
-        #   ```
     _say_should_write_log() {
         local type="${1^^}"
         local level
@@ -322,9 +314,7 @@ set -uo pipefail
         #   Non-zero when validation, resolution, I/O, or user cancellation fails.
         #
         # . Usage
-        #   ```bash
         #   _say_caller 1
-        #   ```
     _say_caller() {
         local i
         for ((i=1; i<${#FUNCNAME[@]}; i++)); do
@@ -366,9 +356,7 @@ set -uo pipefail
         #   Non-zero when validation, resolution, I/O, or user cancellation fails.
         #
         # . Usage
-        #   ```bash
-        #   _say_write_log INFO "Started" "2026-10-29"
-        #   ```
+        #   _say_write_log "example" "example-2" "2026-07-31"
     _say_write_log() {
         local type="${1^^}"
         local msg="$2"
@@ -433,9 +421,7 @@ set -uo pipefail
         #   Non-zero when validation, resolution, I/O, or user cancellation fails.
         #
         # . Usage
-        #   ```bash
         #   _sgnd_rotate_logs "/tmp/sgnd-example.txt"
-        #   ```
     _sgnd_rotate_logs() {
             # . Usage _sgnd_rotate_logs "/path/to/logfile"
             local logfile="$1"
@@ -490,9 +476,7 @@ set -uo pipefail
         #   Non-zero when validation, resolution, I/O, or user cancellation fails.
         #
         # . Usage
-        #   ```bash
         #   _sgnd_logfile
-        #   ```
     _sgnd_logfile() {
         
         # Determine logfile path according to priority:
@@ -533,9 +517,7 @@ set -uo pipefail
         #   Non-zero when validation, resolution, I/O, or user cancellation fails.
         #
         # . Usage
-        #   ```bash
         #   _sayprogress_write_slot "example" "SolidGroundUX example"
-        #   ```
     _sayprogress_write_slot() {
         local slot="${1:-0}"
         local text="${2:-}"
@@ -582,9 +564,7 @@ set -uo pipefail
         #   Non-zero when validation, resolution, I/O, or user cancellation fails.
         #
         # . Usage
-        #   ```bash
         #   _sgnd_ensure_linebreak "example"
-        #   ```
     _sgnd_ensure_linebreak() {
         if (( ${SGND_LINEBREAK_PENDING:-0} )); then
             printf '\n' >&2
@@ -653,12 +633,10 @@ set -uo pipefail
         #   0 always. Unknown message types are normalized to EMPTY.
         #
         # . Usage
-        #   ```bash
         #   say INFO "Starting workspace deployment"
         #   say --type WARN --date "Configuration file not found"
         #   say --show label,icon --colorize all OK "Deployment completed"
         #   say "Plain output without a message prefix"
-        #   ```
     say() {
       # -- Declarations
         local type="EMPTY"
@@ -939,9 +917,7 @@ set -uo pipefail
         #   1 when an unknown argument is supplied.
         #
         # . Usage
-        #   ```bash
         #   sayprogress_begin --slots 2
-        #   ```
     sayprogress_begin() {
         local slots=1
 
@@ -1025,9 +1001,7 @@ set -uo pipefail
         #   1 when an unknown argument is supplied.
         #
         # . Usage
-        #   ```bash
-        #   sayprogress --current 5 --total 10 --label "Processing"
-        #   ```
+        #   sayprogress "example" "example-2"
     sayprogress() {
         local current=0
         local slot=0
@@ -1189,9 +1163,7 @@ set -uo pipefail
         #   0 always.
         #
         # . Usage
-        #   ```bash
         #   sayprogress_done "Package installation complete"
-        #   ```
     sayprogress_done() {
         local slots="${SGND_PROGRESS_RESERVED:-0}"
         local i
@@ -1227,9 +1199,7 @@ set -uo pipefail
                 #   0 when the message was handled.
                 #
                 # . Usage
-                #   ```bash
                 #   sayinfo "SolidGroundUX example"
-                #   ```
         sayinfo() {
             say INFO "$@"
         }
@@ -1248,9 +1218,7 @@ set -uo pipefail
                 #   0 when the message was handled.
                 #
                 # . Usage
-                #   ```bash
                 #   saystart "Starting SolidGroundUX example"
-                #   ```
         saystart() {
             say STRT "$@"
         }
@@ -1264,9 +1232,7 @@ set -uo pipefail
             #   - Defaults to SGND_UI_WARNING_DELAY (fallback 0.5); an explicit --delay supplied by the caller overrides it.
             #
             # . Usage
-            #   ```bash
             #   saywarning "Example warning"
-            #   ```
             #
             # Examples:
             #   saywarning "Configuration missing"
@@ -1292,9 +1258,7 @@ set -uo pipefail
                 #   0 when the message was handled.
                 #
                 # . Usage
-                #   ```bash
                 #   sayfail "Example failure"
-                #   ```
         sayfail() {
             say FAIL --delay "${SGND_UI_ERROR_DELAY:-0.5}" "$@"
         }
@@ -1313,9 +1277,7 @@ set -uo pipefail
                 #   0 when the message was handled.
                 #
                 # . Usage
-                #   ```bash
                 #   saycancel "Operation cancelled"
-                #   ```
         saycancel() {
             say CNCL "$@"
         }
@@ -1334,9 +1296,7 @@ set -uo pipefail
                 #   0 when the message was handled.
                 #
                 # . Usage
-                #   ```bash
                 #   sayok "Operation completed"
-                #   ```
         sayok() {
             say OK "$@"
         }
@@ -1355,9 +1315,7 @@ set -uo pipefail
                 #   0 when the message was handled.
                 #
                 # . Usage
-                #   ```bash
                 #   sayend "SolidGroundUX example complete"
-                #   ```
         sayend() {
             say END "$@"
         }
@@ -1370,9 +1328,7 @@ set -uo pipefail
             #   - Prints directly to stdout.
             #
             # . Usage
-            #   ```bash
             #   justsay "Hello world"
-            #   ```
             #
             # Examples:
             #   justsay "Raw output"
@@ -1390,9 +1346,7 @@ set -uo pipefail
                 #   0 when the message was handled.
                 #
                 # . Usage
-                #   ```bash
                 #   justsay "Raw status line"
-                #   ```
         justsay() {
             printf '%s\n' "$@"
         }
@@ -1411,9 +1365,7 @@ set -uo pipefail
                 #   0 when the message was ignored or handled.
                 #
                 # . Usage
-                #   ```bash
                 #   saydebug "Example debug message"
-                #   ```
         saydebug() {
             local src="${BASH_SOURCE[1]##*/}"
             local func="${FUNCNAME[1]}"

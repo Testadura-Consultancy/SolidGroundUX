@@ -67,9 +67,7 @@ set -uo pipefail
         #   Exits with code 2 when executed instead of sourced.
         #
         # . Usage
-        #   ```bash
         #   _sgnd_lib_guard
-        #   ```
     _sgnd_lib_guard() {
         local lib_base=""
         local guard=""
@@ -117,9 +115,7 @@ set -uo pipefail
         #   0 always.
         #
         # . Usage
-        #   ```bash
         #   _sh_err "SolidGroundUX example error"
-        #   ```
         #
         # Examples:
         #   _sh_err "Palette file missing"
@@ -142,9 +138,7 @@ set -uo pipefail
         #   Non-zero when validation, resolution, I/O, or user cancellation fails.
         #
         # . Usage
-        #   ```bash
         #   _sh_err "$value"
-        #   ```
     _sh_err() {
         if declare -f say >/dev/null 2>&1; then
             say --type FAIL "$*"
@@ -169,9 +163,7 @@ set -uo pipefail
         #   Non-zero when validation, resolution, I/O, or user cancellation fails.
         #
         # . Usage
-        #   ```bash
         #   confirm "example"
-        #   ```
     confirm() {
         if declare -f ask >/dev/null 2>&1; then
             local _ans
@@ -215,9 +207,7 @@ set -uo pipefail
         #   Non-zero when validation, resolution, I/O, or user cancellation fails.
         #
         # . Usage
-        #   ```bash
         #   _sgnd_ui_resolve_theme_file "/tmp/sgnd-example.txt" "/tmp/sgnd-example.txt"
-        #   ```
     _sgnd_ui_resolve_theme_file() {
         local kind="$1"
         local spec="$2"
@@ -279,9 +269,7 @@ set -uo pipefail
         #   Non-zero when validation, resolution, I/O, or user cancellation fails.
         #
         # . Usage
-        #   ```bash
         #   sgnd_strip_ansi "example"
-        #   ```
     sgnd_strip_ansi() {
         sed -r $'s/\x1B\\[[0-9;?]*[[:alpha:]]//g' <<<"$1"
     }
@@ -305,9 +293,7 @@ set -uo pipefail
         #   Non-zero when validation, resolution, I/O, or user cancellation fails.
         #
         # . Usage
-        #   ```bash
         #   sgnd_visible_len "example"
-        #   ```
     sgnd_visible_len() {
         local plain
         plain="$(sgnd_strip_ansi "$1")"
@@ -340,9 +326,7 @@ set -uo pipefail
         #   Non-zero when validation, resolution, I/O, or user cancellation fails.
         #
         # . Usage
-        #   ```bash
-        #   sgnd_ui_set_theme --palette default --style default
-        #   ```
+        #   sgnd_ui_set_theme "example" "example-2"
     sgnd_ui_set_theme() {
         local palette_spec=""
         local style_spec=""
@@ -461,11 +445,9 @@ set -uo pipefail
         #   2 when invalid arguments are supplied.
         #
         # . Usage
-        #   ```bash
         #   sgnd_theme
         #   sgnd_theme dark
         #   sgnd_theme fantasy --save
-        #   ```
     sgnd_theme() {
         local theme=""
         local save=0
@@ -593,9 +575,7 @@ set -uo pipefail
         #   Non-zero when validation, resolution, I/O, or user cancellation fails.
         #
         # . Usage
-        #   ```bash
         #   sgnd_ui_set_default_theme "steelblue"
-        #   ```
     sgnd_ui_set_default_theme() {
         sgnd_ui_set_theme --default
     }
@@ -620,9 +600,7 @@ set -uo pipefail
         #   Non-zero when validation, resolution, I/O, or user cancellation fails.
         #
         # . Usage
-        #   ```bash
         #   style="$(sgnd_sgr 97 44 1)"; printf '%bSolidGroundUX%b\n' "$style" "${RESET:-$'\e[0m'}"
-        #   ```
     sgnd_sgr() {
         local -a parts=()
         local -a subparts=()
@@ -693,9 +671,7 @@ set -uo pipefail
         #   Non-zero when validation, resolution, I/O, or user cancellation fails.
         #
         # . Usage
-        #   ```bash
         #   sgnd_fg "example"
-        #   ```
     sgnd_fg() {  # fn: sgnd_fg <fg> [fx...]
         local fg="${1:-}"
         shift || true
@@ -710,9 +686,7 @@ set -uo pipefail
         #   Returns the underlying command or workflow status.
         #
         # . Usage
-        #   ```bash
         #   sgnd_bg 24
-        #   ```
     sgnd_bg() {  # fn: sgnd_bg <bg> [fx...]
         local bg="${1:-}"
         shift || true
@@ -728,9 +702,7 @@ set -uo pipefail
         #   Returns the underlying command or workflow status.
         #
         # . Usage
-        #   ```bash
         #   sgnd_update_runmode
-        #   ```
     sgnd_update_runmode() {
         if (( FLAG_DRYRUN )); then
             RUN_MODE="$(sgnd_runmode_color)DRYRUN${RESET}"
@@ -758,9 +730,7 @@ set -uo pipefail
         #   Non-zero when validation, resolution, I/O, or user cancellation fails.
         #
         # . Usage
-        #   ```bash
         #   sgnd_runmode_color
-        #   ```
     sgnd_runmode_color() {
         (( FLAG_DRYRUN )) && printf '%s' "$SGND_UI_DRYRUN" || printf '%s' "$SGND_UI_COMMIT"
     }
@@ -784,9 +754,7 @@ set -uo pipefail
         #   0 always.
         #
         # . Usage
-        #   ```bash
         #   sgnd_terminal_width
-        #   ```
     sgnd_terminal_width() {
         local width=""
         local tty_fd=""
@@ -836,10 +804,8 @@ set -uo pipefail
         #   0 always.
         #
         # . Usage
-        #   ```bash
         #   sgnd_render_width
         #   sgnd_render_width 120
-        #   ```
     sgnd_render_width() {
         local requested="${1:-0}"
         local terminal_width
@@ -883,12 +849,10 @@ set -uo pipefail
         #   Non-zero when validation, resolution, I/O, or user cancellation fails.
         #
         # . Usage
-        #   ```bash
         #   labelwidth="$(printf '%s\n' "Hostname" "Primary IPv4" "SolidGround sudo" | awk '{ if (length > max) max = length } END { print max }')"
         #   sgnd_print_labeledvalue --label "Hostname" --value "$hostname" --labelwidth "$labelwidth"
         #   sgnd_print_labeledvalue --label "Primary IPv4" --value "$primary_ip" --labelwidth "$labelwidth"
         #   sgnd_print_labeledvalue --label "SolidGround sudo" --value "$sudo_state" --labelwidth "$labelwidth"
-        #   ```
     sgnd_print_labeledvalue() {
         local label=""
         local value=""
@@ -1015,13 +979,11 @@ set -uo pipefail
         #   2 when no label is supplied or a numeric option is invalid.
         #
         # . Usage
-        #   ```bash
         #   labelwidth="$(printf '%s\n' "Changed files" "Warnings" "Description" | awk '{ if (length > max) max = length } END { print max }')"
         #   sgnd_print_labeledmultivalue \
         #       --label "Changed files" \
         #       --labelwidth "$labelwidth" \
         #       --items "file-one.sh" "file-two.sh"
-        #   ```
         #
         #   sgnd_print_labeledmultivalue \
         #       --label "Description" \
@@ -1095,23 +1057,6 @@ set -uo pipefail
 
         printf -v continuation_prefix '%*s' "$continuation_width" ''
 
-        # fn: _sgnd_labeledmultivalue_emit - Render one labeled or continuation value line
-            # . Purpose
-            #   Render one labeled or continuation value line.
-            #
-            # . Arguments
-            #   $1  One already wrapped value line.
-            #
-            # . Side effects
-            #   Updates enclosing renderer variables first_output and emitted; writes formatted text to stdout.
-            #
-            # . Returns
-            #   0 after rendering the line.
-            #
-            # . Usage
-            #   ```bash
-            #   _sgnd_labeledmultivalue_emit "$line"
-            #   ```
         _sgnd_labeledmultivalue_emit() {
             local line="$1"
 
@@ -1193,9 +1138,7 @@ set -uo pipefail
         #   Non-zero when validation, resolution, I/O, or user cancellation fails.
         #
         # . Usage
-        #   ```bash
-        #   sgnd_print_fill --left "Host" --right "server01"
-        #   ```
+        #   sgnd_print_fill "example" "example-2"
     sgnd_print_fill() {
         local left="" right=""
         local padleft=2 padright=1 maxwidth=""
@@ -1285,9 +1228,7 @@ set -uo pipefail
         #   Non-zero when validation, resolution, I/O, or user cancellation fails.
         #
         # . Usage
-        #   ```bash
-        #   sgnd_print_titlebar --left "SolidGroundUX" --right "Setup"
-        #   ```
+        #   sgnd_print_titlebar "example" "example-2"
     sgnd_print_titlebar() {
 
         local left="${SGND_SCRIPT_TITLE:-$SGND_SCRIPT_BASE}"
@@ -1393,9 +1334,7 @@ set -uo pipefail
         #   Non-zero when validation, resolution, I/O, or user cancellation fails.
         #
         # . Usage
-        #   ```bash
-        #   sgnd_print_sectionheader --text "Configuration"
-        #   ```
+        #   sgnd_print_sectionheader "example" "example-2"
     sgnd_print_sectionheader() {
         local text=""
         local textclr="${SGND_SECTION_TEXTCLR:-$(sgnd_sgr "$SGND_UI_TEXT" "" "$FX_BOLD")}"
@@ -1501,9 +1440,7 @@ set -uo pipefail
         #   Non-zero when validation, resolution, I/O, or user cancellation fails.
         #
         # . Usage
-        #   ```bash
-        #   sgnd_print --text "Operation complete"
-        #   ```
+        #   sgnd_print "example" "example-2"
     sgnd_print() {
         local text=""
         local textclr="${SGND_UI_TEXT:-}"
@@ -1599,9 +1536,7 @@ set -uo pipefail
         #   Non-zero when validation, resolution, I/O, or user cancellation fails.
         #
         # . Usage
-        #   ```bash
-        #   sgnd_print_single --text "Operation complete"
-        #   ```
+        #   sgnd_print_single "example" "example-2"
     sgnd_print_single() {
         local text=""
         local textclr="${SGND_UI_TEXT:-}"
@@ -1693,9 +1628,7 @@ set -uo pipefail
         #   Non-zero when validation, resolution, I/O, or user cancellation fails.
         #
         # . Usage
-        #   ```bash
         #   sgnd_print_file "/tmp/sgnd-example.txt"
-        #   ```
     sgnd_print_file() {
         local file="$1"
         
@@ -1776,9 +1709,7 @@ set -uo pipefail
         #   Non-zero when validation, resolution, I/O, or user cancellation fails.
         #
         # . Usage
-        #   ```bash
-        #   sgnd_print_cell 20 "Status"
-        #   ```
+        #   sgnd_print_cell 20 "example-2"
     sgnd_print_cell() {
         local width="$1"
         local s="$2"
@@ -1816,9 +1747,7 @@ set -uo pipefail
         #   Non-zero when validation, resolution, I/O, or user cancellation fails.
         #
         # . Usage
-        #   ```bash
         #   sgnd_module_show_metadata "example"
-        #   ```
     sgnd_module_show_metadata() {
         local module_ref="${1:?missing module prefix or file}"
         local prefix=""
@@ -1921,9 +1850,7 @@ set -uo pipefail
         #       0 always.
         #
         #     . Usage
-        #   ```bash
         #       sgnd_clear
-        #   ```
     sgnd_clear() {
         #printf '\033[H\033[2J\033[3J'
         printf '\033[H\033[2J'
@@ -1949,9 +1876,7 @@ set -uo pipefail
         #   Non-zero when validation, resolution, I/O, or user cancellation fails.
         #
         # . Usage
-        #   ```bash
         #   sgnd_color_samples
-        #   ```
     sgnd_color_samples(){
         printf '\n%s\n\n' "---- Available foreground colors & effects in SolidGroundUX ----"
 
@@ -1990,9 +1915,7 @@ set -uo pipefail
         #   Non-zero when validation, resolution, I/O, or user cancellation fails.
         #
         # . Usage
-        #   ```bash
         #   sgnd_sample_row "Status" "Operational"
-        #   ```
     sgnd_sample_row(){
         local clr name val
 
@@ -2057,9 +1980,7 @@ set -uo pipefail
         #   0 always.
         #
         # . Usage
-        #   ```bash
         #   color_name="$(_sgnd_style_color_description "$SGND_UI_BORDER")"
-        #   ```
     _sgnd_style_color_description() {
         local color_value="${1:-}"
         local palette_name=""
@@ -2134,9 +2055,7 @@ set -uo pipefail
         #   0 on success.
         #
         # . Usage
-        #   ```bash
         #   sgnd_style_samples
-        #   ```
     sgnd_style_samples() {
         local current_theme="${SGND_UI_STYLE##*/}"
         local message_type=""

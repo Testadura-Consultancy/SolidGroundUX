@@ -67,9 +67,7 @@ set -uo pipefail
         #   Exits with code 2 when executed instead of sourced.
         #
         # . Usage
-        #   ```bash
         #   _sgnd_lib_guard
-        #   ```
     _sgnd_lib_guard() {
         local lib_base=""
         local guard=""
@@ -126,9 +124,7 @@ set -uo pipefail
         #   0 always.
         #
         # . Usage
-        #   ```bash
         #   _build_framework_dirs
-        #   ```
     _build_framework_dirs(){
         SGND_FRAMEWORK_DIRS=(
             "s|$SGND_COMMON_LIB"
@@ -158,9 +154,7 @@ set -uo pipefail
         #   0 on success unless the called command returns a different status.
         #
         # . Usage
-        #   ```bash
         #   sgnd_apply_defaults
-        #   ```
     sgnd_apply_defaults() {
         : "${SGND_FRAMEWORK_ROOT:=$SGND_DEFAULT_FRAMEWORK_ROOT}"
         : "${SGND_LOG_MAX_BYTES:=$SGND_DEFAULT_LOG_MAX_BYTES}"
@@ -203,9 +197,7 @@ set -uo pipefail
         #   0 on success unless the called command returns a different status.
         #
         # . Usage
-        #   ```bash
         #   sgnd_defaults_reset
-        #   ```
     sgnd_defaults_reset() {
         local spec audience var desc extra
         for spec in "${SGND_FRAMEWORK_GLOBALS[@]}"; do
@@ -236,9 +228,7 @@ set -uo pipefail
         #   0 on success unless the called command returns a different status.
         #
         # . Usage
-        #   ```bash
         #   sgnd_rebase_directories
-        #   ```
     sgnd_rebase_directories() {
         local product=""
 
@@ -293,9 +283,7 @@ set -uo pipefail
         #   0 on success unless the called command returns a different status.
         #
         # . Usage
-        #   ```bash
         #   sgnd_rebase_framework_cfg_paths
-        #   ```
     sgnd_rebase_framework_cfg_paths() {
         SGND_FRAMEWORK_SYSCFG_FILE="$SGND_SYSCFG_DIR/$SGND_FRAMEWORK_CFG_BASENAME"
         SGND_FRAMEWORK_USRCFG_FILE="$SGND_USRCFG_DIR/$SGND_FRAMEWORK_CFG_BASENAME"
@@ -316,9 +304,7 @@ set -uo pipefail
         #   Non-zero when validation, resolution, user cancellation, or execution fails.
         #
         # . Usage
-        #   ```bash
         #   sgnd_ensure_dirs
-        #   ```
     sgnd_ensure_dirs() {
         local spec
         local kind
