@@ -165,6 +165,7 @@ set -uo pipefail
         "both|SGND_COMMON_LIB|Directory containing common SolidGroundUX library files.|"
         "both|SGND_GLOBALS_FOLDER|Directory containing framework and project definition libraries.|"
         "both|SGND_COMMON_EXE|Directory containing common SolidGroundUX executable files.|"
+        "system|SGND_SHARE_DIR|Shared SolidGroundUX resources such as permission policies and workspace templates.|"
         "system|SGND_SYSCFG_DIR|Directory containing system-level SolidGroundUX configuration files.|"
         "user|SGND_USRCFG_DIR|Directory containing user-level SolidGroundUX configuration files.|"
         "user|SGND_STATE_DIR|Directory containing user-level SolidGroundUX state files.|"

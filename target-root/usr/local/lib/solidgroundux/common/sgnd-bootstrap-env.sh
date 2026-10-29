@@ -239,7 +239,7 @@ set -uo pipefail
         SGND_COMMON_LIB="$SGND_FRAMEWORK_ROOT/usr/local/lib/$product/common"
         SGND_GLOBALS_FOLDER="$SGND_FRAMEWORK_ROOT/usr/local/lib/$product/globals"
         SGND_COMMON_EXE="$SGND_FRAMEWORK_ROOT/usr/local/libexec/$product"
-        SGND_SHARE_DIR="$SGND_FRAMEWORK_ROOT/usr/local/share/$product"
+        SGND_SHARE_DIR="${SGND_FRAMEWORK_ROOT%/}/usr/local/share/$product"
 
         SGND_SYSCFG_DIR="$SGND_FRAMEWORK_ROOT/etc/$product"
         SGND_USRCFG_DIR="$SGND_USER_HOME/.config/$product"
