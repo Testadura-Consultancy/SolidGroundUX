@@ -6,7 +6,7 @@
 </td>
 <td valign="middle">
   <h2>SolidGroundUX</h2>
-  <h4>Version 2.1.2627808 · © 2026 Testadura</h4>
+  <h4>Version 2.1.2630201 · © 2026 Testadura</h4>
 </td>
 </tr>
 </table>
@@ -40,7 +40,7 @@ Instead of treating Bash scripts as isolated utilities, SolidGroundUX treats the
 
 The framework does not attempt to hide Bash or prescribe a pattern merely because it is fashionable. It provides practical building blocks where they add value and stays out of the way where they do not.
 
-SolidGroundUX has since grown into a small family of related products. The Framework provides the common runtime and reusable APIs; Management Console Modules provides the modular Linux administration application; the SolidGroundUX SDK owns development, documentation and release tooling. All three follow the same framework conventions without requiring management or development tooling to be part of the Framework itself.
+SolidGroundUX has since grown into a small family of related products. The Framework provides the common runtime and reusable APIs; Management Console Modules owns the modular Linux administration application, website/content management and documentation bundles; the SolidGroundUX SDK owns workspace creation, deployment and release preparation. All three follow the same framework conventions without requiring management or development tooling to be part of the Framework itself.
 
 ## CPRP: the design principles
 
@@ -69,14 +69,14 @@ SolidGroundUX is organized around a small common runtime rather than a collectio
 flowchart TB
 
     APP["Applications & Executables"]
-    CONSOLE["SolidGround Management Console Modules"]
-    TOOLING["SolidGround SDK / Development & Release Tooling"]
+    CONSOLE["SolidGroundUX Management Console Modules"]
+    TOOLING["SolidGroundUX SDK / Workspace & Release Tooling"]
 
     RUNTIME["Bootstrap & Runtime"]
 
     SERVICES["Framework Services<br/>UI & Theming · Logging · Configuration · Persistent State · Dialogs & Input · Menu API"]
     LIBS["Shared Libraries<br/>Data Tables · Common Helpers · Console Helpers"]
-    PAGES["Management Console Pages<br/>Computer Setup · Storage · AD Server · AD Client · AD Management · Samba · Web · SQL Server · Docker · Framework Test · Development"]
+    PAGES["Management Console Pages<br/>Computer Setup · Storage · AD · Samba · Web Server · Web Content · SQL · PostgreSQL · MariaDB · Docker · Development"]
 
     APP --> RUNTIME
     CONSOLE --> RUNTIME
@@ -205,9 +205,9 @@ Bash cannot enforce these access levels, but the convention makes intended owner
 
 # SolidGround Management Console
 
-The SolidGround Management Console is a modular administration application built on the SolidGroundUX runtime and public menu API.
+The SolidGround Management Console is a modular administration application **owned by the separate Management Console Modules (MCM) product**. It uses the SolidGroundUX runtime and public menu API.
 
-It is intended to provide a consistent interface for common Linux system-management tasks while delegating substantial workflows to reusable framework libraries and executables.
+The Framework supplies reusable runtime services; MCM owns the console host, page registration and system-management executables. The following describes a major Framework consumer, not functionality packaged with the Framework release.
 
 ## Index-based navigation
 
@@ -279,9 +279,21 @@ Samba file-server installation, validation and managed-share administration.
 
 Framework information and maintenance, including configuration, state, logging, diagnostics and access to Setup.
 
+### Web Server and Web Content Management
+
+Nginx site management, optional HTTPS, generated static-website publishing and Markdown content authoring. Documentation sites use **Assemble Markdown → Generate Website → Publish Website**; ordinary websites use **Generate Website → Publish Website**. Source bundles and the source-to-Markdown parser are owned by MCM.
+
+### SQL Server, PostgreSQL and MariaDB
+
+Dedicated management pages for database services. PostgreSQL and MariaDB host-management workflows are present but still require live functional validation.
+
+### Docker
+
+Docker host and container management.
+
 ### Development
 
-Workspace, deployment, release preparation, wrapper creation, documentation and other SolidGroundUX development workflows.
+Entry points for SDK-owned workspace, deployment and release tools, alongside MCM-owned documentation and website workflows. A menu entry does not transfer ownership of the invoked executable to the Framework.
 
 The page structure can evolve without requiring the console host itself to become a monolithic administration script.
 
@@ -289,27 +301,25 @@ The page structure can evolve without requiring the console host itself to becom
 
 # Development Tooling
 
-SolidGroundUX includes tools for building and maintaining applications that use the framework.
+The SolidGroundUX product family includes tools for building and maintaining applications. The **SDK** owns developer workspaces, source deployment and release preparation; **MCM** owns the current documentation-bundle and static-website generation workflows. These are consumers of the Framework, not Framework-owned development utilities.
 
 ## Workspaces
 
-`create-workspace` creates a repository-shaped development workspace. It discovers installed convenience templates, lets the developer choose which templates to copy into the workspace, can instantiate starter scripts per selected template, and creates basic repository material including `README.md`, `CHANGELOG.md`, and project assets.
+The SDK-owned `create-workspace` creates a repository-shaped development workspace. It discovers installed convenience templates, lets the developer choose which templates to copy into the workspace, can instantiate starter scripts per selected template, and creates basic repository material including `README.md`, `CHANGELOG.md`, and project assets.
 
-`deploy-workspace` deploys complete or filtered workspace content locally or remotely. It supports incremental deployment and can select content by filename or mask and modification time.
+The SDK-owned `deploy-workspace` deploys complete or filtered workspace content locally or remotely. It supports incremental deployment and can select content by filename or mask and modification time.
 
 ## Documentation generation
 
-`doc-generator` extracts structured documentation from source comments, maintains a normalized processor/renderer boundary, and renders a navigable HTML documentation set.
+The current source-documentation workflow is implemented in **MCM**. Documentation bundles group one or more source repositories and generate a Markdown website source tree from structured source comments. The bundle is the top-level documentation unit; the underlying products remain separate chapters.
 
-The source dialect supports presentation hints, image groups, semantic tables using `. Table` / `. EndTable` with `::` cell separators, and `<>` alignment columns for proportional-font layout without turning aligned text into a table. A literal `@` modifier is defined to protect documentation text from structural interpretation.
+An optional **Chapter 0** may refer to a generated Markdown page by a stable relative path. MCM resolves it after assembling the content, promotes it to the bundle introduction and excludes the original page from ordinary content and indexes. It must appear exactly once.
 
-Generation can build a complete collection, update selected or changed content, or render again from existing normalized data. Per-product `.docignore` configuration and deterministic multi-product asset handling allow one documentation collection to span multiple products without silently overwriting duplicate assets.
-
-Documentation therefore remains close to the code it describes rather than becoming an unrelated document that must be maintained independently.
+The resulting Markdown is rendered into static HTML by the MCM Web Content Manager and published separately. Publishing consumes the HTML output directory and does not need the original source repositories. The older SDK `doc-generator` may still be present in SDK release payloads; it is not the maintained source for the documentation-bundle workflow.
 
 ## Release preparation
 
-`prepare-release` turns one or more development products into distributable SolidGroundUX product release packages.
+The SDK-owned `prepare-release` turns one or more development products into distributable SolidGroundUX product release packages.
 
 Each selected product is released independently and keeps its own project/product identity, Version, Build, manifest history and removal baseline. Product ZIPs are the release unit; current release preparation does not assemble multiple products into a combined release archive.
 
