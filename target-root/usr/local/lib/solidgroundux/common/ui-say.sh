@@ -367,7 +367,7 @@ set -uo pipefail
         #
         # . Usage
         #   ```bash
-        #   _say_write_log "example" "example-2" "2026-07-31"
+        #   _say_write_log INFO "Started" "2026-10-29"
         #   ```
     _say_write_log() {
         local type="${1^^}"
@@ -1026,7 +1026,7 @@ set -uo pipefail
         #
         # . Usage
         #   ```bash
-        #   sayprogress "example" "example-2"
+        #   sayprogress --current 5 --total 10 --label "Processing"
         #   ```
     sayprogress() {
         local current=0

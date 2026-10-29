@@ -319,7 +319,7 @@ set -uo pipefail
             #
             # . Usage
             #   ```bash
-            #   sgnd_port_open "example" "example-2"
+            #   sgnd_port_open "localhost" 443
             #   ```
         sgnd_port_open() {
             local h="$1"
@@ -527,7 +527,7 @@ set -uo pipefail
         #
         # . Usage
         #   ```bash
-        #   sgnd_die "example" "example-2"
+        #   sgnd_die "Unable to continue" 1
         #   ```
     sgnd_die() {
         local msg="${1-}"

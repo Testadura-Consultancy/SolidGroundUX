@@ -99,26 +99,25 @@ set -uo pipefail
         sgnd_module_init_metadata "${BASH_SOURCE[0]}"
     fi
 # - Public API ---------------------------------------------------------------------
-    # fn: sgnd_header_read - Header read
+    # fn: sgnd_header_read - Extract the initial contiguous comment header from a source file.
         # . Purpose
-        #   Read a SolidGroundUX script header from a file.
+        #   Extract the initial contiguous comment header from a source file.
         #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
+        # . Description
+        #   Skips an initial shebang and blank lines; stops at the first non-comment line after the header.
         #
         # . Arguments
-        #   $1  FILE - File path.
+        #   $1  Readable source filename.
         #
         # . Output
-        #   Writes computed or formatted text to stdout unless the function explicitly targets stderr or /dev/tty.
+        #   Writes the comment header without the final newline.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, user cancellation, or execution fails.
+        #   0 after printing the header; 1 if the file is unreadable.
         #
         # . Usage
         #   ```bash
-        #   sgnd_header_read "/tmp/sgnd-example.txt"
+        #   sgnd_header_read "$SGND_FRAMEWORK_ROOT/usr/local/lib/solidgroundux/common/sgnd-core.sh"
         #   ```
     sgnd_header_read() {
         local file="${1:?missing file}"
@@ -149,30 +148,26 @@ set -uo pipefail
 
         printf '%s' "${result%$'\n'}"
     }
-    # fn: sgnd_header_load_section_to_dt - Header load section to dt
+    # fn: sgnd_header_load_section_to_dt - Append fields from one source-header section into a datatable.
         # . Purpose
-        #   Load a named header section into a SolidGroundUX datatable.
-        #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
-        #   - Uses SolidGroundUX datatable rows and schemas for structured state.
+        #   Append fields from one source-header section into a datatable.
         #
         # . Arguments
-        #   $1  FILE - File path.
-        #   $2  SECTION - Header section name.
-        #   $3  SCHEMA - Datatable schema string.
-        #   $4  TABLE_NAME - Variable, field, or item name.
+        #   $1  Source file.
+        #   $2  Section name such as Metadata.
+        #   $3  Schema for destination rows.
+        #   $4  Name of destination table array.
         #
-        # . Output
-        #   Writes computed or formatted text to stdout unless the function explicitly targets stderr or /dev/tty.
+        # . Side effects
+        #   Appends section/key/value records to the named table array.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, user cancellation, or execution fails.
+        #   0 after reading; 1 when a row cannot be appended.
         #
         # . Usage
         #   ```bash
-        #   sgnd_header_load_section_to_dt "/tmp/sgnd-example.txt" "example-2" "example-3" "example-4"
+        #   header_rows=()
+        #   sgnd_header_load_section_to_dt "$source_file" Metadata "section|key|value" header_rows
         #   ```
     sgnd_header_load_section_to_dt() {
         local file="${1:?missing file}"
@@ -214,23 +209,22 @@ set -uo pipefail
             fi
         done < "$file"
     }
-    # fn: sgnd_header_is_section_header - Header is section header
+    # fn: sgnd_header_is_section_header - Recognize a named comment-section heading.
         # . Purpose
-        #   Check whether a line starts a named header section.
+        #   Recognize a named comment-section heading.
         #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
+        # . Description
+        #   Accepts a leading hash, space, a letter-led heading and a trailing colon; rejects indented content lines.
         #
         # . Arguments
-        #   $1  LINE - Input line.
+        #   $1  Single source-comment line.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, user cancellation, or execution fails.
+        #   0 for a section header; 1 otherwise.
         #
         # . Usage
         #   ```bash
-        #   sgnd_header_is_section_header "example" && printf 'Success\n' || printf 'Failed\n'
+        #   sgnd_header_is_section_header "# Metadata:"
         #   ```
     sgnd_header_is_section_header() {
         local line="${1-}"
@@ -239,27 +233,22 @@ set -uo pipefail
         [[ "$line" == "#   "* ]] && return 1
         return 0
     }
-    # fn: sgnd_header_buffer_load - Header buffer load
+    # fn: sgnd_header_buffer_load - Cache one source file header for repeated queries.
         # . Purpose
-        #   Load a file header into the reusable header buffer.
-        #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
-        #   - Reads or updates SolidGroundUX runtime, metadata, configuration, or UI globals as needed.
+        #   Cache one source file header for repeated queries.
         #
         # . Arguments
-        #   $1  FILE - File path.
+        #   $1  Readable source path.
         #
-        # Outputs (globals):
-        #   May update SGND_* globals shown in the function body.
+        # . Side effects
+        #   Sets SGND_HEADER_BUFFER_FILE and SGND_HEADER_BUFFER_TEXT.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, user cancellation, or execution fails.
+        #   0 when cached; 1 if unreadable or header extraction fails.
         #
         # . Usage
         #   ```bash
-        #   sgnd_header_buffer_load "/tmp/sgnd-example.txt" "example-2"
+        #   sgnd_header_buffer_load "$source_file"
         #   ```
     sgnd_header_buffer_load() {
         local file="${1:?missing file}"
@@ -269,25 +258,23 @@ set -uo pipefail
         SGND_HEADER_BUFFER_FILE="$file"
         SGND_HEADER_BUFFER_TEXT="$(sgnd_header_read "$file")" || return 1
     }
-    # fn: sgnd_header_buffer_get_section - Header buffer get section
+    # fn: sgnd_header_buffer_get_section - Retrieve a section from the currently cached source header.
         # . Purpose
-        #   Extract a section from the reusable header buffer.
-        #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
-        #   - Reads or updates SolidGroundUX runtime, metadata, configuration, or UI globals as needed.
+        #   Retrieve a section from the currently cached source header.
         #
         # . Arguments
-        #   $1  SECTION - Header section name.
-        #   $2  _OUTVAR - Target variable name.
+        #   $1  Section name.
+        #   $2  Name of the shell variable to receive the section.
+        #
+        # . Side effects
+        #   Assigns the extracted text to the caller-selected shell variable.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, user cancellation, or execution fails.
+        #   0 when the section is found; 1 if the buffer is empty or section absent.
         #
         # . Usage
         #   ```bash
-        #   sgnd_header_buffer_get_section "example" "example-2"
+        #   sgnd_header_buffer_get_section Metadata metadata_text
         #   ```
     sgnd_header_buffer_get_section() {
         local section="${1:?missing section}"
@@ -296,26 +283,25 @@ set -uo pipefail
         [[ -n "${SGND_HEADER_BUFFER_TEXT:-}" ]] || return 1
         sgnd_header_get_section_from_text "$SGND_HEADER_BUFFER_TEXT" "$section" "$_outvar"
     }
-    # fn: sgnd_header_calc_checksum - Header calc checksum
+    # fn: sgnd_header_calc_checksum - Hash a script while excluding its mutable metadata checksum fields.
         # . Purpose
-        #   Calculate the managed-body checksum for a script file.
+        #   Hash a script while excluding its mutable metadata checksum fields.
         #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
+        # . Description
+        #   Excludes Version, Build and Checksum entries within the Metadata header section from the hashed input.
         #
         # . Arguments
-        #   $1  FILE - File path.
+        #   $1  Readable source path.
         #
         # . Output
-        #   Writes computed or formatted text to stdout unless the function explicitly targets stderr or /dev/tty.
+        #   Writes a SHA-256 digest without changing the file.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, user cancellation, or execution fails.
+        #   0 after hashing; 1 if the file is unreadable.
         #
         # . Usage
         #   ```bash
-        #   sgnd_header_calc_checksum "/tmp/sgnd-example.txt" "example-2"
+        #   sgnd_header_calc_checksum "$source_file"
         #   ```
     sgnd_header_calc_checksum() {
         local file="${1:?missing file}"
@@ -332,29 +318,23 @@ set -uo pipefail
             { print }
         ' "$file" | sha256sum | awk '{print $1}'
     }
-    # fn: sgnd_header_bump_version - Header bump version
+    # fn: sgnd_header_bump_version - Refresh script checksum/build metadata and optionally bump version.
         # . Purpose
-        #   Bump a semantic version string according to a requested bump mode.
-        #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
-        #   - Reads or updates SolidGroundUX runtime, metadata, configuration, or UI globals as needed.
-        #   - Uses framework UI/output conventions for terminal or dialog interaction.
+        #   Refresh script checksum/build metadata and optionally bump version.
         #
         # . Arguments
-        #   $1  FILE - File path.
-        #   $2  MODE - Operation mode.
+        #   $1  Script path.
+        #   $2  Bump mode: none, major or minor (default none).
         #
-        # Outputs (globals):
-        #   May update SGND_* globals shown in the function body.
+        # . Side effects
+        #   May rewrite Metadata Version, Build and Checksum; sets SGND_HEADER_BUMP_CHANGED to 1 when modified.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, user cancellation, or execution fails.
+        #   0 when processed successfully; 1 on read or update failure.
         #
         # . Usage
         #   ```bash
-        #   sgnd_header_bump_version "/tmp/sgnd-example.txt" "normal"
+        #   sgnd_header_bump_version "$source_file" minor
         #   ```
     sgnd_header_bump_version() {
         local file="${1:?missing file}"
@@ -435,27 +415,24 @@ set -uo pipefail
 
         return 0
     }
-    # fn: sgnd_header_get_section - Header get section
+    # fn: sgnd_header_get_section - Read a named section from a source-file header into a shell variable.
         # . Purpose
-        #   Read a named header section from a script file.
-        #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
+        #   Read a named section from a source-file header into a shell variable.
         #
         # . Arguments
-        #   $1  FILE - File path.
-        #   $2  SECTION - Header section name.
-        #   $3  _RESULTVAR - Target variable name.
+        #   $1  Source path.
+        #   $2  Section name.
+        #   $3  Name of the destination variable.
         #
-        # . Output
-        #   Writes computed or formatted text to stdout unless the function explicitly targets stderr or /dev/tty.
+        # . Side effects
+        #   Assigns section text to the named variable.
         #
         # . Returns
-        #   0 on success unless the called command returns a different status.
+        #   0 on completion; consult the destination content to determine whether the section was present.
         #
         # . Usage
         #   ```bash
-        #   sgnd_header_get_section "/tmp/sgnd-example.txt" "example-2" "example-3"
+        #   sgnd_header_get_section "$source_file" Metadata metadata_text
         #   ```
     sgnd_header_get_section() {
         local file="${1:?missing file}"
@@ -492,28 +469,24 @@ set -uo pipefail
         result="${result%$'\n'}"
         printf -v "$_resultvar" '%s' "$result"
     }
-    # fn: sgnd_header_get_section_from_text - Header get section from text
+    # fn: sgnd_header_get_section_from_text - Extract a named section from previously loaded comment text.
         # . Purpose
-        #   Extract a named header section from supplied header text.
-        #
-        # . Behavior
-        #   - Extracts the requested comment-header section from buffered header text.
-        #   - Stops at the next section header, blank line, or closing header separator.
+        #   Extract a named section from previously loaded comment text.
         #
         # . Arguments
-        #   $1  TEXT - Text value.
-        #   $2  SECTION - Header section name.
-        #   $3  _OUTVAR - Target variable name.
+        #   $1  Header text.
+        #   $2  Section name.
+        #   $3  Destination variable name.
         #
-        # . Output
-        #   Writes computed or formatted text to stdout unless the function explicitly targets stderr or /dev/tty.
+        # . Side effects
+        #   Assigns the extracted section to the named variable.
         #
         # . Returns
-        #   0 on success unless the called command returns a different status.
+        #   0 if the section occurs; 1 if absent.
         #
         # . Usage
         #   ```bash
-        #   sgnd_header_get_section_from_text "SolidGroundUX example" "example-2" "example-3"
+        #   sgnd_header_get_section_from_text "$header_text" Metadata metadata_text
         #   ```
     sgnd_header_get_section_from_text() {
         local text="${1-}"
@@ -574,7 +547,7 @@ set -uo pipefail
         #
         # . Usage
         #   ```bash
-        #   sgnd_header_get_banner_parts_from_text "SolidGroundUX example" "example-2" "SolidGroundUX example"
+        #   sgnd_header_get_banner_parts_from_text "$header_text" product title
         #   ```
     sgnd_header_get_banner_parts_from_text() {
         local text="${1-}"
@@ -616,28 +589,24 @@ set -uo pipefail
         printf -v "$_title_var" '%s' ""
         return 1
     }
-    # fn: sgnd_header_parse_banner_line - Header parse banner line
+    # fn: sgnd_header_parse_banner_line - Split a banner comment into product and title.
         # . Purpose
-        #   Parse one SolidGroundUX banner line into structured fields.
-        #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
+        #   Split a banner comment into product and title.
         #
         # . Arguments
-        #   $1  LINE - Input line.
-        #   $2  _PRODUCT_VAR - Target variable name.
-        #   $3  _TITLE_VAR - Target variable name.
+        #   $1  Banner comment line in # Product - Title format.
+        #   $2  Output variable name for product.
+        #   $3  Output variable name for title.
         #
-        # . Output
-        #   Writes computed or formatted text to stdout unless the function explicitly targets stderr or /dev/tty.
+        # . Side effects
+        #   Assigns product/title variables, or empties them when the line does not match.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, user cancellation, or execution fails.
+        #   0 on match; 1 when no banner delimiter was found.
         #
         # . Usage
         #   ```bash
-        #   sgnd_header_parse_banner_line "example" "example-2" "SolidGroundUX example"
+        #   sgnd_header_parse_banner_line "# SolidGroundUX - Core" product title
         #   ```
     sgnd_header_parse_banner_line() {
         local line="${1-}"
@@ -664,29 +633,25 @@ set -uo pipefail
         printf -v "$_title_var" '%s' ""
         return 1
     }
-    # fn: sgnd_header_get_field - Header get field
+    # fn: sgnd_header_get_field - Read a named field from a source-header section.
         # . Purpose
-        #   Read a named metadata field from a script file.
-        #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
+        #   Read a named field from a source-header section.
         #
         # . Arguments
-        #   $1  FILE - File path.
-        #   $2  SECTION - Header section name.
-        #   $3  FIELD - Metadata field name.
-        #   $4  _RESULTVAR - Target variable name.
+        #   $1  Source path.
+        #   $2  Section name (for example Metadata).
+        #   $3  Field name (for example Version).
+        #   $4  Destination variable name.
         #
-        # . Output
-        #   Writes computed or formatted text to stdout unless the function explicitly targets stderr or /dev/tty.
+        # . Side effects
+        #   Writes the field value into the specified variable; empties it if missing.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, user cancellation, or execution fails.
+        #   0 when found; 1 when absent.
         #
         # . Usage
         #   ```bash
-        #   sgnd_header_get_field "/tmp/sgnd-example.txt" "example-2" "example-3" "example-4"
+        #   sgnd_header_get_field "$source_file" Metadata Version current_version
         #   ```
     sgnd_header_get_field() {
         local file="${1:?missing file}"
@@ -732,27 +697,24 @@ set -uo pipefail
         printf -v "$_resultvar" '%s' ""
         return 1
     }
-    # fn: sgnd_header_get_field_value - Header get field value
+    # fn: sgnd_header_get_field_value - Print a named field value directly to stdout.
         # . Purpose
-        #   Read the value part of a named metadata field from a script file.
-        #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
+        #   Print a named field value directly to stdout.
         #
         # . Arguments
-        #   $1  FILE - File path.
-        #   $2  SECTION - Header section name.
-        #   $3  FIELD - Metadata field name.
+        #   $1  Source path.
+        #   $2  Section name.
+        #   $3  Field name.
         #
         # . Output
-        #   Writes computed or formatted text to stdout unless the function explicitly targets stderr or /dev/tty.
+        #   Writes the field value or an empty string when not found.
         #
         # . Returns
-        #   0 on success unless the called command returns a different status.
+        #   Status returned by printf (the lookup status is not propagated).
         #
         # . Usage
         #   ```bash
-        #   sgnd_header_get_field_value "/tmp/sgnd-example.txt" "example-2" "example-3"
+        #   sgnd_header_get_field_value "$source_file" Metadata Version
         #   ```
     sgnd_header_get_field_value() {
         local file="$1"
@@ -784,7 +746,7 @@ set -uo pipefail
         #
         # . Usage
         #   ```bash
-        #   sgnd_header_get_banner_parts "/tmp/sgnd-example.txt" "example-2" "SolidGroundUX example"
+        #   sgnd_header_get_banner_parts "$source_file" product title
         #   ```
     sgnd_header_get_banner_parts() {
         local file="${1:?missing file}"
@@ -826,26 +788,23 @@ set -uo pipefail
         printf -v "$_title_var" '%s' ""
         return 1
     }
-    # fn: sgnd_section_get_field_value - Section get field value
+    # fn: sgnd_section_get_field_value - Extract a field value from an already loaded section string.
         # . Purpose
-        #   Read the value of a field from an already extracted section.
-        #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
+        #   Extract a field value from an already loaded section string.
         #
         # . Arguments
-        #   $1  SECTION - Header section name.
-        #   $2  FIELD - Metadata field name.
+        #   $1  Section text.
+        #   $2  Field name.
         #
         # . Output
-        #   Writes computed or formatted text to stdout unless the function explicitly targets stderr or /dev/tty.
+        #   Writes the trimmed value, without a trailing newline.
         #
         # . Returns
-        #   0 on success unless the called command returns a different status.
+        #   Status returned by the final print; an absent field produces empty output.
         #
         # . Usage
         #   ```bash
-        #   sgnd_section_get_field_value "example" "example-2"
+        #   sgnd_section_get_field_value "$metadata_text" Version
         #   ```
     sgnd_section_get_field_value() {
         local section="${1-}"
@@ -900,7 +859,7 @@ set -uo pipefail
         #
         # . Usage
         #   ```bash
-        #   sgnd_header_add_field "/tmp/sgnd-example.txt" "example-2" "example-3" "dark"
+        #   sgnd_header_add_field "$source_file" Metadata Purpose "Show example"
         #   ```
     sgnd_header_add_field() {
         local file="${1:?missing file}"
@@ -962,25 +921,25 @@ set -uo pipefail
         rm -f "$tmp_file"
         return 1
     }
-    # fn: sgnd_header_upsert_field - Header upsert field
+    # fn: sgnd_header_upsert_field - Set an existing metadata field or insert it when absent.
         # . Purpose
-        #   Add or replace a metadata field in a named header section.
-        #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
+        #   Set an existing metadata field or insert it when absent.
         #
         # . Arguments
-        #   $1  FILE - File path.
-        #   $2  SECTION - Header section name.
-        #   $3  FIELD - Metadata field name.
-        #   $4  VALUE - Value to read, validate, render, or store.
+        #   $1  Source path.
+        #   $2  Section name.
+        #   $3  Field name.
+        #   $4  New field value.
+        #
+        # . Side effects
+        #   Rewrites the source header field; does not create a missing section.
         #
         # . Returns
-        #   0 on success unless the called command returns a different status.
+        #   0 on success; otherwise the status from set/add operations.
         #
         # . Usage
         #   ```bash
-        #   sgnd_header_upsert_field "/tmp/sgnd-example.txt" "example-2" "example-3" "dark"
+        #   sgnd_header_upsert_field "$source_file" Metadata Version "2.2"
         #   ```
     sgnd_header_upsert_field() {
         local file="${1:?missing file}"
@@ -1024,7 +983,7 @@ set -uo pipefail
         #
         # . Usage
         #   ```bash
-        #   sgnd_header_set_field "/tmp/sgnd-example.txt" "example-2" "example-3" "dark"
+        #   sgnd_header_set_field "$source_file" Metadata Purpose "Show updated example"
         #   ```
     sgnd_header_set_field() {
         local file="${1:?missing file}"
@@ -1113,31 +1072,24 @@ set -uo pipefail
         return 2
     }
     
-    # fn: sgnd_framework_set_version - Update framework version identity
+    # fn: sgnd_framework_set_version - Update the framework version/build assignments in a shell source file.
         # . Purpose
-        #   Update the framework version identity stored in sgnd-bootstrap-env.sh.
-        #
-        # . Behavior
-        #   - Updates SGND_VERSION with the supplied framework version.
-        #   - Updates SGND_BUILD with the supplied framework build number.
-        #   - Preserves all other file contents and formatting.
-        #   - Performs in-place replacement of existing assignments only.
+        #   Update the framework version/build assignments in a shell source file.
         #
         # . Arguments
-        #   $1  FILE
-        #       Path to sgnd-bootstrap-env.sh.
-        #   $2  VERSION
-        #       Framework version (for example 1.6).
-        #   $3  BUILD
-        #       Framework build number (for example 2618912).
+        #   $1  Source file path.
+        #   $2  New version string.
+        #   $3  New build string.
+        #
+        # . Side effects
+        #   Replaces matching SGND_VERSION and SGND_BUILD shell assignments using sed.
         #
         # . Returns
-        #   0 when the framework version information was updated.
-        #   1 when arguments are invalid, the file is unreadable, or an update fails.
+        #   0 on success; 1 for missing input, absent file or editing failure.
         #
         # . Usage
         #   ```bash
-        #   sgnd_framework_set_version "/tmp/sgnd-example.txt" "1.8.0" "1.7.9"
+        #   sgnd_framework_set_version "$source_file" "2.2" "$build"
         #   ```
     sgnd_framework_set_version() {
         local file="${1:-}"

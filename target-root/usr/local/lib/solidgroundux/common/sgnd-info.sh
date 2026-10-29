@@ -165,7 +165,7 @@ set -uo pipefail
         #
         # . Usage
         #   ```bash
-        #   _sgnd_print_arg_spec_list "example" "example-2"
+        #   _sgnd_print_arg_spec_list "Options" SGND_EFFECTIVE_ARGS_SPEC
         #   ```
     _sgnd_print_arg_spec_list() {
         local header="${1:?missing header}"
@@ -203,7 +203,7 @@ set -uo pipefail
         #
         # . Usage
         #   ```bash
-        #   _sgnd_print_cfg_pass "SolidGroundUX example" "example-2"
+        #   _sgnd_print_cfg_pass "Current configuration" SGND_SCRIPT_GLOBALS
         #   ```
     _sgnd_print_cfg_pass() {
         local header_text="${1:?missing header text}"
@@ -258,7 +258,7 @@ set -uo pipefail
         #
         # . Usage
         #   ```bash
-        #   sgnd_print_cfg "example" "example-2"
+        #   sgnd_print_cfg SGND_SCRIPT_GLOBALS both
         #   ```
     sgnd_print_cfg() {
         local array_name="${1:?missing spec array name}"

@@ -149,7 +149,7 @@ set -uo pipefail
         #
         # . Usage
         #   ```bash
-        #   _sgnd_arg_find_spec "example" "example-2"
+        #   _sgnd_arg_find_spec help
         #   ```
     _sgnd_arg_find_spec() {
         local wanted="$1"

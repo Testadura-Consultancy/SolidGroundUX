@@ -341,7 +341,7 @@ set -uo pipefail
         #
         # . Usage
         #   ```bash
-        #   sgnd_ui_set_theme "example" "example-2"
+        #   sgnd_ui_set_theme --palette default --style default
         #   ```
     sgnd_ui_set_theme() {
         local palette_spec=""
@@ -1194,7 +1194,7 @@ set -uo pipefail
         #
         # . Usage
         #   ```bash
-        #   sgnd_print_fill "example" "example-2"
+        #   sgnd_print_fill --left "Host" --right "server01"
         #   ```
     sgnd_print_fill() {
         local left="" right=""
@@ -1286,7 +1286,7 @@ set -uo pipefail
         #
         # . Usage
         #   ```bash
-        #   sgnd_print_titlebar "example" "example-2"
+        #   sgnd_print_titlebar --left "SolidGroundUX" --right "Setup"
         #   ```
     sgnd_print_titlebar() {
 
@@ -1394,7 +1394,7 @@ set -uo pipefail
         #
         # . Usage
         #   ```bash
-        #   sgnd_print_sectionheader "example" "example-2"
+        #   sgnd_print_sectionheader --text "Configuration"
         #   ```
     sgnd_print_sectionheader() {
         local text=""
@@ -1502,7 +1502,7 @@ set -uo pipefail
         #
         # . Usage
         #   ```bash
-        #   sgnd_print "example" "example-2"
+        #   sgnd_print --text "Operation complete"
         #   ```
     sgnd_print() {
         local text=""
@@ -1600,7 +1600,7 @@ set -uo pipefail
         #
         # . Usage
         #   ```bash
-        #   sgnd_print_single "example" "example-2"
+        #   sgnd_print_single --text "Operation complete"
         #   ```
     sgnd_print_single() {
         local text=""
@@ -1777,7 +1777,7 @@ set -uo pipefail
         #
         # . Usage
         #   ```bash
-        #   sgnd_print_cell 20 "example-2"
+        #   sgnd_print_cell 20 "Status"
         #   ```
     sgnd_print_cell() {
         local width="$1"

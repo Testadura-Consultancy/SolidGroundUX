@@ -114,7 +114,7 @@ set -uo pipefail
         #
         # . Usage
         #   ```bash
-        #   _dlg_keymap "example" "example-2"
+        #   _dlg_keymap ERCPQ 0
         #   ```
     _dlg_keymap(){
         local choices="$1"
@@ -212,7 +212,7 @@ set -uo pipefail
         #
         # . Usage
         #   ```bash
-        #   sgnd_decision_normalize "dark" "example-2" "dark"
+        #   sgnd_decision_normalize Y "YES|Y,NO|N,CANCEL|C" NO
         #   ```
     sgnd_decision_normalize() {
         local value="${1-}"
@@ -305,7 +305,7 @@ set -uo pipefail
         #
         # . Usage
         #   ```bash
-        #   sgnd_decision_from_dialog_rc "example" "example-2" "dark"
+        #   sgnd_decision_from_dialog_rc 0 "YES|Y,NO|N,CANCEL|C" NO
         #   ```
     sgnd_decision_from_dialog_rc() {
         local rc="${1:-}"
@@ -367,7 +367,7 @@ set -uo pipefail
         #
         # . Usage
         #   ```bash
-        #   sgnd_dlg_autocontinue "example" "example-2" "example-3"
+        #   sgnd_dlg_autocontinue 5 "Operation complete" ERP
         #   ```
     sgnd_dlg_autocontinue() {
         local seconds="${1:-5}"
@@ -717,7 +717,7 @@ set -uo pipefail
         #
         # . Usage
         #   ```bash
-        #   sgnd_ask_decision "example" "example-2"
+        #   sgnd_ask_decision --label "Continue?" --choices "YES|Y,NO|N" --default NO
         #   ```
     sgnd_ask_decision() {
         local label=""

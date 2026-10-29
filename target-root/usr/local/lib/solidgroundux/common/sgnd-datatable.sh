@@ -96,25 +96,23 @@ set -uo pipefail
         sgnd_module_init_metadata "${BASH_SOURCE[0]}"
     fi
 # - DDL functions -----------------------------------------------------------------
-    # fn: sgnd_dt_array_length - Dt array length
+    # fn: sgnd_dt_array_length - Return the number of elements in a named indexed array.
         # . Purpose
-        #   Return the number of items in an indexed Bash array.
-        #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
+        #   Return the number of elements in a named indexed array.
         #
         # . Arguments
-        #   $1  ARRAY_NAME - Variable, field, or item name.
+        #   $1  Name of an existing Bash array (passed by name, not by value).
         #
         # . Output
-        #   Writes computed or formatted text to stdout unless the function explicitly targets stderr or /dev/tty.
+        #   Writes the count to stdout.
         #
         # . Returns
-        #   0 on success unless the called command returns a different status.
+        #   0 after writing its element count.
         #
         # . Usage
         #   ```bash
-        #   sgnd_dt_array_length "example"
+        #   rows=("Ada|admin" "Lin|viewer")
+        #   sgnd_dt_array_length rows
         #   ```
     sgnd_dt_array_length() {
         local array_name="${1:?missing array name}"
@@ -122,46 +120,46 @@ set -uo pipefail
 
         printf '%s\n' "${#array_ref[@]}"
     }
-    # fn: sgnd_dt_split_schema - Dt split schema
+    # fn: sgnd_dt_split_schema - Split a pipe-delimited schema into its column names.
         # . Purpose
-        #   Split a datatable schema string into column names.
-        #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
-        #   - Reads or updates SolidGroundUX runtime, metadata, configuration, or UI globals as needed.
+        #   Split a pipe-delimited schema into its column names.
         #
         # . Arguments
-        #   $1  SCHEMA - Datatable schema string.
+        #   $1  Schema, for example name|role.
+        #
+        # . Side effects
+        #   Populates the global SGND_DT_SPLIT array.
         #
         # . Returns
-        #   0 on success unless the called command returns a different status.
+        #   0 after splitting.
         #
         # . Usage
         #   ```bash
-        #   sgnd_dt_split_schema "example"
+        #   sgnd_dt_split_schema "name|role"
+        #   printf "%s\n" "${SGND_DT_SPLIT[@]}"
         #   ```
     sgnd_dt_split_schema() {
         local schema="${1:?missing schema}"
 
         IFS='|' read -r -a SGND_DT_SPLIT <<< "$schema"
     }
-    # fn: sgnd_dt_split_row - Dt split row
+    # fn: sgnd_dt_split_row - Split a PSV row into fields, preserving trailing empty fields.
         # . Purpose
-        #   Split a pipe-separated datatable row into fields.
-        #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
-        #   - Reads or updates SolidGroundUX runtime, metadata, configuration, or UI globals as needed.
+        #   Split a PSV row into fields, preserving trailing empty fields.
         #
         # . Arguments
-        #   $1  ROW - Datatable row value.
+        #   $1  Pipe-separated row; omitted means an empty row.
+        #
+        # . Side effects
+        #   Populates the global SGND_DT_SPLIT array.
         #
         # . Returns
-        #   0 on success unless the called command returns a different status.
+        #   0 after splitting.
         #
         # . Usage
         #   ```bash
-        #   sgnd_dt_split_row "example" "example-2" "example-3"
+        #   sgnd_dt_split_row "Ada|admin"
+        #   printf "%s\n" "${SGND_DT_SPLIT[@]}"
         #   ```
     sgnd_dt_split_row() {
         local row="${1-}"
@@ -172,29 +170,24 @@ set -uo pipefail
 
         unset 'SGND_DT_SPLIT[${#SGND_DT_SPLIT[@]}-1]'
     }
-    # fn: _dt_build_sortkey - Dt build sortkey
+    # fn: _dt_build_sortkey - Build a case-insensitive sort key from a row.
         # . Purpose
-        #   Internal helper for dt build sortkey.
-        #
-        # . Behavior
-        #   - Supports the module implementation; not intended as a public framework API.
-        #   - Uses SolidGroundUX datatable rows and schemas for structured state.
+        #   Build a case-insensitive sort key from a row.
         #
         # . Arguments
-        #   $1  SCHEMA - Datatable schema string.
-        #   $2  ROW - Datatable row value.
-        #   $3  SORT_FIELDS - Positional value used by this function.
+        #   $1  Schema containing the named columns.
+        #   $2  Pipe-separated row.
+        #   $3  Comma-separated column names used for sorting.
         #
         # . Output
-        #   Writes computed or formatted text to stdout unless the function explicitly targets stderr or /dev/tty.
+        #   Prints the lowercased field values joined by |.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, user cancellation, or execution fails.
+        #   0 after printing the sort key; 1 if a column cannot be resolved.
         #
         # . Usage
         #   ```bash
-        #   _dt_build_sortkey "example" "example-2" "example-3"
+        #   _dt_build_sortkey "name|role" "Ada|admin" "role,name"
         #   ```
     _dt_build_sortkey() {
         local schema="${1:?missing schema}"
@@ -219,23 +212,19 @@ set -uo pipefail
 
         printf '%s\n' "$sortkey"
     }
-    # fn: sgnd_dt_validate_value - Dt validate value
+    # fn: sgnd_dt_validate_value - Reject values that cannot be safely stored in a PSV row.
         # . Purpose
-        #   Validate a datatable value before it is stored in a PSV row.
-        #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
+        #   Reject values that cannot be safely stored in a PSV row.
         #
         # . Arguments
-        #   $1  VALUE - Value to read, validate, render, or store.
+        #   $1  Field value to validate.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, user cancellation, or execution fails.
+        #   0 when no pipe or newline is present; 1 otherwise.
         #
         # . Usage
         #   ```bash
-        #   sgnd_dt_validate_value "dark" && printf 'Success\n' || printf 'Failed\n'
+        #   sgnd_dt_validate_value "Ada"
         #   ```
     sgnd_dt_validate_value() {
         local value="${1-}"
@@ -244,28 +233,22 @@ set -uo pipefail
         [[ "$value" == *$'\n'* ]] && return 1
         return 0
     }
-    # fn: sgnd_dt_validate_schema - Dt validate schema
+    # fn: sgnd_dt_validate_schema - Validate a pipe-delimited schema for nonempty unique column names.
         # . Purpose
-        #   Validate a datatable schema definition.
-        #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
-        #   - Reads or updates SolidGroundUX runtime, metadata, configuration, or UI globals as needed.
-        #   - Uses SolidGroundUX datatable rows and schemas for structured state.
+        #   Validate a pipe-delimited schema for nonempty unique column names.
         #
         # . Arguments
-        #   $1  SCHEMA - Datatable schema string.
+        #   $1  Schema to check.
         #
         # . Side effects
-        #   May update files, directories, runtime state, or process state required by the workflow.
+        #   Updates SGND_DT_SPLIT with the schema fields.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, user cancellation, or execution fails.
+        #   0 when the schema is nonempty and every column name is unique and nonempty; 1 otherwise.
         #
         # . Usage
         #   ```bash
-        #   sgnd_dt_validate_schema "2026-07-31" "2026-07-31" && printf 'Success\n' || printf 'Failed\n'
+        #   sgnd_dt_validate_schema "name|role"
         #   ```
     sgnd_dt_validate_schema() {
         local schema="${1-}"
@@ -287,29 +270,23 @@ set -uo pipefail
 
         return 0
     }
-    # fn: sgnd_dt_column_index - Dt column index
+    # fn: sgnd_dt_column_index - Look up the zero-based index of a named schema column.
         # . Purpose
-        #   Return the zero-based index for a schema column.
-        #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
-        #   - Reads or updates SolidGroundUX runtime, metadata, configuration, or UI globals as needed.
-        #   - Uses SolidGroundUX datatable rows and schemas for structured state.
+        #   Look up the zero-based index of a named schema column.
         #
         # . Arguments
-        #   $1  SCHEMA - Datatable schema string.
-        #   $2  COLUMN - Datatable column name.
+        #   $1  Pipe-delimited schema.
+        #   $2  Column name to find (exact match).
         #
         # . Output
-        #   Writes computed or formatted text to stdout unless the function explicitly targets stderr or /dev/tty.
+        #   Writes the numeric column index to stdout.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, user cancellation, or execution fails.
+        #   0 when found; 1 when the column is absent.
         #
         # . Usage
         #   ```bash
-        #   sgnd_dt_column_index "example" "example-2"
+        #   sgnd_dt_column_index "name|role" "role"
         #   ```
     sgnd_dt_column_index() {
         local schema="${1:?missing schema}"
@@ -326,27 +303,22 @@ set -uo pipefail
 
         return 1
     }
-    # fn: sgnd_dt_column_count - Dt column count
+    # fn: sgnd_dt_column_count - Count the columns in a pipe-delimited schema.
         # . Purpose
-        #   Return the number of columns in a schema.
-        #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
-        #   - Reads or updates SolidGroundUX runtime, metadata, configuration, or UI globals as needed.
-        #   - Uses SolidGroundUX datatable rows and schemas for structured state.
+        #   Count the columns in a pipe-delimited schema.
         #
         # . Arguments
-        #   $1  SCHEMA - Datatable schema string.
+        #   $1  Schema string.
         #
         # . Output
-        #   Writes computed or formatted text to stdout unless the function explicitly targets stderr or /dev/tty.
+        #   Writes the count to stdout.
         #
         # . Returns
-        #   0 on success unless the called command returns a different status.
+        #   0 after writing the column count.
         #
         # . Usage
         #   ```bash
-        #   sgnd_dt_column_count "example"
+        #   sgnd_dt_column_count "name|role"
         #   ```
     sgnd_dt_column_count() {
         local schema="${1:?missing schema}"
@@ -356,27 +328,26 @@ set -uo pipefail
     }
 
 # - DML functions -----------------------------------------------------------------
-    # fn: sgnd_dt_make_row - Dt make row
+    # fn: sgnd_dt_make_row - Join values into a validated PSV row in schema order.
         # . Purpose
-        #   Build a pipe-separated datatable row from field values.
+        #   Join values into a validated PSV row in schema order.
         #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
-        #   - Uses SolidGroundUX datatable rows and schemas for structured state.
+        # . Description
+        #   Rejects a mismatched field count and values containing a pipe or newline.
         #
         # . Arguments
-        #   $1  SCHEMA - Datatable schema string.
+        #   $1  Schema string.
+        #   $2...  One field value per schema column, in order.
         #
         # . Output
-        #   Writes computed or formatted text to stdout unless the function explicitly targets stderr or /dev/tty.
+        #   Writes a pipe-separated row to stdout.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, user cancellation, or execution fails.
+        #   0 when field count and contents are valid; 1 otherwise.
         #
         # . Usage
         #   ```bash
-        #   sgnd_dt_make_row "example" "example-2" "example-3"
+        #   sgnd_dt_make_row "name|role" "Ada" "admin"
         #   ```
     sgnd_dt_make_row() {
         local schema="${1:?missing schema}"
@@ -401,29 +372,23 @@ set -uo pipefail
 
         printf '%s\n' "$row"
     }
-    # fn: sgnd_dt_has_row - Dt has row
+    # fn: sgnd_dt_has_row - Test whether any row matches a column value.
         # . Purpose
-        #   Check whether a datatable row index exists.
-        #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
-        #   - Uses SolidGroundUX datatable rows and schemas for structured state.
+        #   Test whether any row matches a column value.
         #
         # . Arguments
-        #   $1  SCHEMA - Datatable schema string.
-        #   $2  TABLE_NAME - Variable, field, or item name.
-        #   $3  COLUMN - Datatable column name.
-        #   $4  VALUE - Value to read, validate, render, or store.
-        #
-        # . Side effects
-        #   May update files, directories, runtime state, or process state required by the workflow.
+        #   $1  Schema.
+        #   $2  Name of the indexed array holding table rows.
+        #   $3  Column name.
+        #   $4  Value to match exactly.
         #
         # . Returns
-        #   0 on success unless the called command returns a different status.
+        #   0 when a matching row exists; 1 otherwise.
         #
         # . Usage
         #   ```bash
-        #   sgnd_dt_has_row "example" "example-2" "example-3" "dark" && printf 'Success\n' || printf 'Failed\n'
+        #   rows=("Ada|admin" "Lin|viewer")
+        #   sgnd_dt_has_row "name|role" rows role admin
         #   ```
     sgnd_dt_has_row() {
         local schema="${1:?missing schema}"
@@ -433,30 +398,24 @@ set -uo pipefail
 
         sgnd_dt_find_first "$schema" "$table_name" "$column" "$value" >/dev/null 2>&1
     }
-    # fn: sgnd_dt_row_get - Dt row get
+    # fn: sgnd_dt_row_get - Extract one named column from an already obtained PSV row.
         # . Purpose
-        #   Read a whole datatable row by index.
-        #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
-        #   - Reads or updates SolidGroundUX runtime, metadata, configuration, or UI globals as needed.
-        #   - Uses SolidGroundUX datatable rows and schemas for structured state.
+        #   Extract one named column from an already obtained PSV row.
         #
         # . Arguments
-        #   $1  SCHEMA - Datatable schema string.
-        #   $2  ROW - Datatable row value.
-        #   $3  COLUMN - Datatable column name.
+        #   $1  Schema.
+        #   $2  Pipe-separated row value (not a table name or index).
+        #   $3  Column name.
         #
         # . Output
-        #   Writes computed or formatted text to stdout unless the function explicitly targets stderr or /dev/tty.
+        #   Writes the selected field value to stdout.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, user cancellation, or execution fails.
+        #   0 when the column is known; 1 if it is absent.
         #
         # . Usage
         #   ```bash
-        #   sgnd_dt_row_get "example" "example-2" "example-3" "example-4"
+        #   sgnd_dt_row_get "name|role" "Ada|admin" role
         #   ```
     sgnd_dt_row_get() {
         local schema="${1:?missing schema}"
@@ -469,31 +428,25 @@ set -uo pipefail
 
         printf '%s\n' "${SGND_DT_SPLIT[index]-}"
     }
-    # fn: sgnd_dt_row_set - Dt row set
+    # fn: sgnd_dt_row_set - Return a PSV row with one named field replaced.
         # . Purpose
-        #   Replace a whole datatable row by index.
-        #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
-        #   - Reads or updates SolidGroundUX runtime, metadata, configuration, or UI globals as needed.
-        #   - Uses SolidGroundUX datatable rows and schemas for structured state.
+        #   Return a PSV row with one named field replaced.
         #
         # . Arguments
-        #   $1  SCHEMA - Datatable schema string.
-        #   $2  ROW - Datatable row value.
-        #   $3  COLUMN - Datatable column name.
-        #   $4  VALUE - Value to read, validate, render, or store.
+        #   $1  Schema.
+        #   $2  Original pipe-separated row.
+        #   $3  Column name.
+        #   $4  Replacement field value.
         #
         # . Output
-        #   Writes computed or formatted text to stdout unless the function explicitly targets stderr or /dev/tty.
+        #   Writes a new PSV row; does not modify a table array.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, user cancellation, or execution fails.
+        #   0 on success; 1 if the column or new value is invalid.
         #
         # . Usage
         #   ```bash
-        #   sgnd_dt_row_set "example" "example-2" "example-3" "dark"
+        #   sgnd_dt_row_set "name|role" "Ada|admin" role editor
         #   ```
     sgnd_dt_row_set() {
         local schema="${1:?missing schema}"
@@ -525,50 +478,51 @@ set -uo pipefail
 
         printf '%s\n' "$out"
     }
-    # fn: sgnd_dt_row_count - Dt row count
+    # fn: sgnd_dt_row_count - Count the rows stored in a named table array.
         # . Purpose
-        #   Return the number of rows in a datatable.
-        #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
-        #   - Uses SolidGroundUX datatable rows and schemas for structured state.
+        #   Count the rows stored in a named table array.
         #
         # . Arguments
-        #   $1  TABLE_NAME - Variable, field, or item name.
+        #   $1  Name of the indexed table array.
+        #
+        # . Output
+        #   Writes the count to stdout.
         #
         # . Returns
-        #   0 on success unless the called command returns a different status.
+        #   0 after writing the row count.
         #
         # . Usage
         #   ```bash
-        #   sgnd_dt_row_count "example" "example-2" "example-3"
+        #   rows=("Ada|admin")
+        #   sgnd_dt_row_count rows
         #   ```
     sgnd_dt_row_count() {
         local table_name="${1:?missing table name}"
 
         sgnd_dt_array_length "$table_name"
     }
-    # fn: sgnd_dt_insert - Dt insert
+    # fn: sgnd_dt_insert - Append an already formatted PSV row to a table array.
         # . Purpose
-        #   Insert or append a datatable row.
+        #   Append an already formatted PSV row to a table array.
         #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
-        #   - Reads or updates SolidGroundUX runtime, metadata, configuration, or UI globals as needed.
-        #   - Uses SolidGroundUX datatable rows and schemas for structured state.
+        # . Description
+        #   Validates the schema and the number of row fields; does not revalidate individual field contents.
         #
         # . Arguments
-        #   $1  SCHEMA - Datatable schema string.
-        #   $2  TABLE_NAME - Variable, field, or item name.
-        #   $3  ROW - Datatable row value.
+        #   $1  Schema.
+        #   $2  Name of the indexed table array.
+        #   $3  Complete PSV row.
+        #
+        # . Side effects
+        #   Appends a row to the named array.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, user cancellation, or execution fails.
+        #   0 when the schema and field count are valid; 1 otherwise.
         #
         # . Usage
         #   ```bash
-        #   sgnd_dt_insert "example" "example-2" "example-3"
+        #   rows=()
+        #   sgnd_dt_insert "name|role" rows "Ada|admin"
         #   ```
     sgnd_dt_insert() {
         local schema="${1:?missing schema}"
@@ -585,25 +539,24 @@ set -uo pipefail
 
         table_ref+=("$row")
     }
-    # fn: sgnd_dt_delete - Dt delete
+    # fn: sgnd_dt_delete - Delete a row and compact its table array.
         # . Purpose
-        #   Delete a datatable row by index.
-        #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
-        #   - Uses SolidGroundUX datatable rows and schemas for structured state.
+        #   Delete a row and compact its table array.
         #
         # . Arguments
-        #   $1  TABLE_NAME - Variable, field, or item name.
-        #   $2  ROW_INDEX - Zero-based datatable row index.
+        #   $1  Name of the indexed table array.
+        #   $2  Zero-based index to delete.
+        #
+        # . Side effects
+        #   Mutates the table array and compacts the remaining elements.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, user cancellation, or execution fails.
+        #   0 for an existing numeric index; 1 for invalid or out-of-range indexes.
         #
         # . Usage
         #   ```bash
-        #   sgnd_dt_delete "example" 20 "example-3" "example-4"
+        #   rows=("Ada|admin" "Lin|viewer")
+        #   sgnd_dt_delete rows 0
         #   ```
     sgnd_dt_delete() {
         local table_name="${1:?missing table name}"
@@ -619,27 +572,26 @@ set -uo pipefail
         unset 'table_ref[row_index]'
         table_ref=("${table_ref[@]}")
     }
-    # fn: sgnd_dt_get - Dt get
+    # fn: sgnd_dt_get - Read a column from a table row by numeric index.
         # . Purpose
-        #   Read one field from a datatable row.
-        #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
-        #   - Uses SolidGroundUX datatable rows and schemas for structured state.
+        #   Read a column from a table row by numeric index.
         #
         # . Arguments
-        #   $1  SCHEMA - Datatable schema string.
-        #   $2  TABLE_NAME - Variable, field, or item name.
-        #   $3  ROW_INDEX - Zero-based datatable row index.
-        #   $4  COLUMN - Datatable column name.
+        #   $1  Schema.
+        #   $2  Name of table array.
+        #   $3  Zero-based row index.
+        #   $4  Column name.
+        #
+        # . Output
+        #   Writes the field value to stdout.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, user cancellation, or execution fails.
+        #   0 when row and column exist; 1 otherwise.
         #
         # . Usage
         #   ```bash
-        #   sgnd_dt_get "example" "example-2" 20 "example-4" "example-5"
+        #   rows=("Ada|admin")
+        #   sgnd_dt_get "name|role" rows 0 role
         #   ```
     sgnd_dt_get() {
         local schema="${1:?missing schema}"
@@ -656,28 +608,27 @@ set -uo pipefail
 
         sgnd_dt_row_get "$schema" "${table_ref[row_index]}" "$column"
     }
-    # fn: sgnd_dt_set - Dt set
+    # fn: sgnd_dt_set - Update a named column in a table row by numeric index.
         # . Purpose
-        #   Set one field in a datatable row.
-        #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
-        #   - Uses SolidGroundUX datatable rows and schemas for structured state.
+        #   Update a named column in a table row by numeric index.
         #
         # . Arguments
-        #   $1  SCHEMA - Datatable schema string.
-        #   $2  TABLE_NAME - Variable, field, or item name.
-        #   $3  ROW_INDEX - Zero-based datatable row index.
-        #   $4  COLUMN - Datatable column name.
-        #   $5  VALUE - Value to read, validate, render, or store.
+        #   $1  Schema.
+        #   $2  Name of table array.
+        #   $3  Zero-based row index.
+        #   $4  Column name.
+        #   $5  New field value.
+        #
+        # . Side effects
+        #   Replaces one row in the named table array.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, user cancellation, or execution fails.
+        #   0 on update; 1 for an invalid index, column, or field value.
         #
         # . Usage
         #   ```bash
-        #   sgnd_dt_set "example" "example-2" 20 "example-4" "dark"
+        #   rows=("Ada|admin")
+        #   sgnd_dt_set "name|role" rows 0 role editor
         #   ```
     sgnd_dt_set() {
         local schema="${1:?missing schema}"
@@ -697,30 +648,26 @@ set -uo pipefail
         updated="$(sgnd_dt_row_set "$schema" "${table_ref[row_index]}" "$column" "$value")" || return 1
         table_ref[row_index]="$updated"
     }
-    # fn: sgnd_dt_find_first - Dt find first
+    # fn: sgnd_dt_find_first - Find the first row whose named column equals a value.
         # . Purpose
-        #   Find the first datatable row where a column matches a value.
-        #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
-        #   - Uses SolidGroundUX datatable rows and schemas for structured state.
+        #   Find the first row whose named column equals a value.
         #
         # . Arguments
-        #   $1  SCHEMA - Datatable schema string.
-        #   $2  TABLE_NAME - Variable, field, or item name.
-        #   $3  COLUMN - Datatable column name.
-        #   $4  VALUE - Value to read, validate, render, or store.
+        #   $1  Schema.
+        #   $2  Name of table array.
+        #   $3  Column name.
+        #   $4  Value to match exactly.
         #
         # . Output
-        #   Writes computed or formatted text to stdout unless the function explicitly targets stderr or /dev/tty.
+        #   Prints the zero-based row index of the first match.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, user cancellation, or execution fails.
+        #   0 when a row matches; 1 if no match or the column is invalid.
         #
         # . Usage
         #   ```bash
-        #   sgnd_dt_find_first "example" "example-2" "example-3" "dark"
+        #   rows=("Ada|admin")
+        #   sgnd_dt_find_first "name|role" rows role admin
         #   ```
     sgnd_dt_find_first() {
         local schema="${1:?missing schema}"
@@ -742,26 +689,25 @@ set -uo pipefail
 
         return 1
     }
-    # fn: sgnd_dt_append - Dt append
+    # fn: sgnd_dt_append - Build, validate and append a row from individual field values.
         # . Purpose
-        #   Append a complete row to a datatable.
-        #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
-        #   - Uses SolidGroundUX datatable rows and schemas for structured state.
-        #   - Uses framework UI/output conventions for terminal or dialog interaction.
+        #   Build, validate and append a row from individual field values.
         #
         # . Arguments
-        #   $1  SCHEMA - Datatable schema string.
-        #   $2  TABLE_NAME - Variable, field, or item name.
+        #   $1  Schema.
+        #   $2  Name of table array.
+        #   $3...  Values corresponding to the schema columns.
+        #
+        # . Side effects
+        #   Adds a row to the table array and emits a debug message.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, user cancellation, or execution fails.
+        #   0 on append; 1 for an invalid schema or field values.
         #
         # . Usage
         #   ```bash
-        #   sgnd_dt_append "example" "example-2" "example-3" "example-4" "example-5" "example-6"
+        #   rows=()
+        #   sgnd_dt_append "name|role" rows "Ada" "admin"
         #   ```
     sgnd_dt_append() {
         local schema="${1:?missing schema}"
@@ -774,41 +720,31 @@ set -uo pipefail
         saydebug "Appending row to $schema $table_name: $row"
         sgnd_dt_insert "$schema" "$table_name" "$row"
     }
-    # fn: sgnd_dt_print_table - Dt print table
+    # fn: sgnd_dt_print_table - Render table rows with an aligned heading and themed colors.
         # . Purpose
-        #   Render a datatable as an aligned table.
+        #   Render table rows with an aligned heading and themed colors.
         #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
-        #   - Reads or updates SolidGroundUX runtime, metadata, configuration, or UI globals as needed.
-        #   - Uses SolidGroundUX datatable rows and schemas for structured state.
-        #   - Uses SGND_DT_HEADERLINE_CLR for the horizontal header rules,
-        #     SGND_DT_COLUMNNAME_CLR for column headings, and
-        #     SGND_DT_DATACOLOR_CLR for data rows and the table label.
-        #   - Resolves each color as explicit argument, then active theme,
-        #     then legacy palette fallback.
+        # . Description
+        #   By default colors come from SGND_DT_HEADERLINE_CLR, SGND_DT_COLUMNNAME_CLR and SGND_DT_DATACOLOR_CLR with legacy palette fallbacks. Explicit color arguments override both header roles or the data role.
         #
         # . Arguments
-        #   $1  SCHEMA - Datatable schema string.
-        #   $2  TABLE_NAME - Variable, field, or item name.
-        #   $3  PRETTYPRINT - Legacy formatting hint when no theme is active (0 or 1).
-        #   $4  HEADERCOLOR - Optional override for header rules and heading text.
-        #   $5  DATACOLOR - Optional override for data text.
-        #   $6  TOP_N - Optional maximum rows to print.
+        #   $1  Schema.
+        #   $2  Name of table array.
+        #   $3  Optional prettyprint flag (0 or 1; retained for compatibility).
+        #   $4  Optional header color override (heading and both rules).
+        #   $5  Optional data color override.
+        #   $6  Optional maximum number of rows.
         #
         # . Output
-        #   Writes computed or formatted text to stdout unless the function explicitly targets stderr or /dev/tty.
-        #
-        # . Side effects
-        #   May update files, directories, runtime state, or process state required by the workflow.
+        #   Writes an aligned table to stdout.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, user cancellation, or execution fails.
+        #   0 after rendering; 1 for an invalid schema.
         #
         # . Usage
         #   ```bash
-        #   sgnd_dt_print_table "example" "example-2" "example-3" "example-4" "example-5" "example-6"
+        #   rows=("Ada|admin" "Lin|viewer")
+        #   sgnd_dt_print_table "name|role" rows
         #   ```
     sgnd_dt_print_table() {
         local schema="${1:?missing schema}"
@@ -957,29 +893,28 @@ set -uo pipefail
 
         printf '%s' "$color_reset"
     }
-    # fn: sgnd_dt_get_sorted_rows - Dt get sorted rows
+    # fn: sgnd_dt_get_sorted_rows - Return table rows sorted by one or more named columns.
         # . Purpose
-        #   Return datatable row indexes sorted by a column.
+        #   Return table rows sorted by one or more named columns.
         #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
-        #   - Uses SolidGroundUX datatable rows and schemas for structured state.
+        # . Description
+        #   Creates lowercased compound sort keys and uses a pipe-separated composite key for each row.
         #
         # . Arguments
-        #   $1  SCHEMA - Datatable schema string.
-        #   $2  TABLE_NAME - Variable, field, or item name.
-        #   $3  SORT_FIELDS - Positional value used by this function.
+        #   $1  Schema.
+        #   $2  Name of table array.
+        #   $3  Comma-separated column names in sort precedence order.
         #
         # . Output
-        #   Writes computed or formatted text to stdout unless the function explicitly targets stderr or /dev/tty.
+        #   Writes sorted PSV rows (not row indexes) to stdout.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, user cancellation, or execution fails.
+        #   0 on success; 1 if the schema or a sort column is invalid.
         #
         # . Usage
         #   ```bash
-        #   sgnd_dt_get_sorted_rows "example" "example-2" "example-3"
+        #   rows=("Lin|viewer" "Ada|admin")
+        #   sgnd_dt_get_sorted_rows "name|role" rows "role,name"
         #   ```
     sgnd_dt_get_sorted_rows() {
         local schema="${1:?missing schema}"
@@ -1002,30 +937,25 @@ set -uo pipefail
             printf '%s\t%s\n' "$sortkey" "$row"
         done | sort -t $'\t' -k1,1 | cut -f2-
     }
-    # fn: sgnd_dt_row2var - Dt row2var
+    # fn: sgnd_dt_row2var - Expand a PSV row into prefixed shell variables.
         # . Purpose
-        #   Export one datatable row to shell variables.
-        #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
-        #   - Reads or updates SolidGroundUX runtime, metadata, configuration, or UI globals as needed.
-        #   - Uses SolidGroundUX datatable rows and schemas for structured state.
+        #   Expand a PSV row into prefixed shell variables.
         #
         # . Arguments
-        #   $1  SCHEMA - Datatable schema string.
-        #   $2  TABLE_NAME - Variable, field, or item name.
-        #   $3  ROW - Datatable row value.
+        #   $1  Schema.
+        #   $2  Prefix for generated variable names.
+        #   $3  Pipe-separated row.
         #
-        # . Output
-        #   Writes computed or formatted text to stdout unless the function explicitly targets stderr or /dev/tty.
+        # . Side effects
+        #   Creates variables named PREFIX_column using lowercased schema columns and hyphens converted to underscores.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, user cancellation, or execution fails.
+        #   0 when the schema is valid; 1 otherwise.
         #
         # . Usage
         #   ```bash
-        #   sgnd_dt_row2var "example" "example-2" "example-3"
+        #   sgnd_dt_row2var "name|role" person "Ada|admin"
+        #   printf "%s\n" "$person_role"
         #   ```
     sgnd_dt_row2var() {
         local schema="${1:?missing schema}"
@@ -1055,32 +985,25 @@ set -uo pipefail
             printf -v "$var_name" '%s' "${SGND_DT_SPLIT[i]-}"
         done
     }
-    # fn: sgnd_dt_export_psv - Dt export psv
+    # fn: sgnd_dt_export_psv - Write a table to a PSV file with the schema as its first line.
         # . Purpose
-        #   Print a datatable as pipe-separated values.
-        #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
-        #   - Uses SolidGroundUX datatable rows and schemas for structured state.
+        #   Write a table to a PSV file with the schema as its first line.
         #
         # . Arguments
-        #   $1  SCHEMA - Datatable schema string.
-        #   $2  TABLE_NAME - Variable, field, or item name.
-        #   $3  OUTPUT_FILE - File path.
-        #
-        # . Output
-        #   Writes computed or formatted text to stdout unless the function explicitly targets stderr or /dev/tty.
+        #   $1  Schema.
+        #   $2  Name of table array.
+        #   $3  Destination file.
         #
         # . Side effects
-        #   May update files, directories, runtime state, or process state required by the workflow.
+        #   Creates the parent directory if necessary and overwrites the destination file.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, user cancellation, or execution fails.
+        #   0 after writing the file; 1 on invalid schema or filesystem failure.
         #
         # . Usage
         #   ```bash
-        #   sgnd_dt_export_psv "example" "example-2" "/tmp/sgnd-example.txt"
+        #   rows=("Ada|admin")
+        #   sgnd_dt_export_psv "name|role" rows "/tmp/people.psv"
         #   ```
     sgnd_dt_export_psv() {
         local schema="${1:?missing schema}"
