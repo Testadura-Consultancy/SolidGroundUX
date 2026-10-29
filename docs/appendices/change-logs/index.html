@@ -1,0 +1,1842 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Change Logs — SolidGroundUX Full documentation</title>
+<meta name="description" content="">
+<link rel="canonical" href="../../appendices/change-logs/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Change Logs">
+    <meta property="og:description" content="">
+    <meta property="og:url" content="/appendices/change-logs/">
+    <meta property="og:site_name" content="SolidGroundUX Full documentation">
+    <meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="../../images/favicon.png">
+<link rel="stylesheet" href="../../css/documentation.css?v=503a9222f588">
+<link rel="stylesheet" href="../../css/components.css?v=61ad9a45bf51">
+<link rel="stylesheet" href="../../css/bundle.css?v=d105a4c3169f">
+</head>
+<body>
+<div class="doc-shell">
+<aside class="doc-nav" aria-label="Documentation navigation">
+<a class="doc-brand" href="../../" aria-label="Documentation home"><img src="../../images/doc-index-logo.png" alt="Testadura"></a>
+<div class="doc-nav-title">Index</div>
+<div class="wc-nav-leaf"><a href="../../">SolidGroundUX Full documentation</a></div>
+<div class="wc-nav-leaf"><a href="../../introduction/">Introduction</a></div>
+<details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><span class="wc-nav-label">SolidGroundUX Framework</span></summary><div class="wc-nav-children"><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../ux/bootstrap/">Bootstrap</a></summary><div class="wc-nav-children"><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../ux/bootstrap/sgnd-bootstrap/">Bootstrap Core</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../ux/bootstrap/sgnd-bootstrap/sgnd-script-init-metadata/">sgnd_script_init_metadata</a></div><div class="wc-nav-leaf"><a href="../../ux/bootstrap/sgnd-bootstrap/sgnd-module-init-metadata/">sgnd_module_init_metadata</a></div><div class="wc-nav-leaf"><a href="../../ux/bootstrap/sgnd-bootstrap/sgnd-on-exit-install/">sgnd_on_exit_install</a></div><div class="wc-nav-leaf"><a href="../../ux/bootstrap/sgnd-bootstrap/sgnd-parse-statespec/">sgnd_parse_statespec</a></div><div class="wc-nav-leaf"><a href="../../ux/bootstrap/sgnd-bootstrap/sgnd-enable-save-state/">sgnd_enable_save_state</a></div><div class="wc-nav-leaf"><a href="../../ux/bootstrap/sgnd-bootstrap/sgnd-disable-save-state/">sgnd_disable_save_state</a></div><div class="wc-nav-leaf"><a href="../../ux/bootstrap/sgnd-bootstrap/sgnd-save-state/">sgnd_save_state</a></div><div class="wc-nav-leaf"><a href="../../ux/bootstrap/sgnd-bootstrap/sgnd-on-exit-add/">sgnd_on_exit_add</a></div><div class="wc-nav-leaf"><a href="../../ux/bootstrap/sgnd-bootstrap/sgnd-check-license/">sgnd_check_license</a></div><div class="wc-nav-leaf"><a href="../../ux/bootstrap/sgnd-bootstrap/sgnd-load-ui-style/">sgnd_load_ui_style</a></div><div class="wc-nav-leaf"><a href="../../ux/bootstrap/sgnd-bootstrap/sgnd-bootstrap/">sgnd_bootstrap</a></div></div></details><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../ux/bootstrap/sgnd-bootstrap-env/">Bootstrap Environment</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../ux/bootstrap/sgnd-bootstrap-env/sgnd-apply-defaults/">sgnd_apply_defaults</a></div><div class="wc-nav-leaf"><a href="../../ux/bootstrap/sgnd-bootstrap-env/sgnd-defaults-reset/">sgnd_defaults_reset</a></div><div class="wc-nav-leaf"><a href="../../ux/bootstrap/sgnd-bootstrap-env/sgnd-rebase-directories/">sgnd_rebase_directories</a></div><div class="wc-nav-leaf"><a href="../../ux/bootstrap/sgnd-bootstrap-env/sgnd-rebase-framework-cfg-paths/">sgnd_rebase_framework_cfg_paths</a></div><div class="wc-nav-leaf"><a href="../../ux/bootstrap/sgnd-bootstrap-env/sgnd-ensure-dirs/">sgnd_ensure_dirs</a></div></div></details><div class="wc-nav-leaf"><a href="../../ux/bootstrap/normalize-canon/">Canonical Structure Normalizer</a></div><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../ux/bootstrap/sgnd-exe-common/">Executable Runtime Support</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../ux/bootstrap/sgnd-exe-common/say/">say</a></div><div class="wc-nav-leaf"><a href="../../ux/bootstrap/sgnd-exe-common/sgnd-framework-resolve-path/">sgnd_framework_resolve_path</a></div><div class="wc-nav-leaf"><a href="../../ux/bootstrap/sgnd-exe-common/sgnd-exe-start/">sgnd_exe_start</a></div></div></details><div class="wc-nav-leaf"><a href="../../ux/bootstrap/sgnd-definitions/">Framework Definitions</a></div></div></details><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../ux/common-core/">Common Core</a></summary><div class="wc-nav-children"><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../ux/common-core/sgnd-args/">Argument Parsing</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-args/sgnd-show-help/">sgnd_show_help</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-args/sgnd-parse-args/">sgnd_parse_args</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-args/sgnd-builtinarg-handler/">sgnd_builtinarg_handler</a></div></div></details><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../ux/common-core/sgnd-cfg/">Configuration Management</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-cfg/sgnd-cfg-load/">sgnd_cfg_load</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-cfg/sgnd-cfg-set/">sgnd_cfg_set</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-cfg/sgnd-cfg-unset/">sgnd_cfg_unset</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-cfg/sgnd-cfg-reset/">sgnd_cfg_reset</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-cfg/sgnd-cfg-get/">sgnd_cfg_get</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-cfg/sgnd-cfg-has/">sgnd_cfg_has</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-cfg/sgnd-cfg-show-keys/">sgnd_cfg_show_keys</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-cfg/sgnd-cfg-has-audience/">sgnd_cfg_has_audience</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-cfg/sgnd-cfg-write-skeleton-filtered/">sgnd_cfg_write_skeleton_filtered</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-cfg/sgnd-cfg-load-file/">sgnd_cfg_load_file</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-cfg/sgnd-cfg-create-missing-domain-files/">sgnd_cfg_create_missing_domain_files</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-cfg/sgnd-cfg-domain-apply/">sgnd_cfg_domain_apply</a></div></div></details><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../ux/common-core/sgnd-core/">Core Utilities</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-have/">sgnd_have</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-need-cmd/">sgnd_need_cmd</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-need-bash/">sgnd_need_bash</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-need-tty/">sgnd_need_tty</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-can-append/">sgnd_can_append</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-ensure-dir/">sgnd_ensure_dir</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-abs-path/">sgnd_abs_path</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-mktemp-dir/">sgnd_mktemp_dir</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-mktemp-file/">sgnd_mktemp_file</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-slugify/">sgnd_slugify</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-hash-sha256-file/">sgnd_hash_sha256_file</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-safe-replace-file/">sgnd_safe_replace_file</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-is-set/">sgnd_is_set</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-default/">sgnd_default</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-is-number/">sgnd_is_number</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-array-has-items/">sgnd_array_has_items</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-is-true/">sgnd_is_true</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-proc-exists/">sgnd_proc_exists</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-wait-for-exit/">sgnd_wait_for_exit</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-kill-if-running/">sgnd_kill_if_running</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-caller-id/">sgnd_caller_id</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-stack-trace/">sgnd_stack_trace</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-has-tty/">sgnd_has_tty</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-is-ui-mode/">sgnd_is_ui_mode</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-is-desktop-mode/">sgnd_is_desktop_mode</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-internal-call-guard/">sgnd_internal_call_guard</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-show-vars-by-prefix/">sgnd_show_vars_by_prefix</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-version-ge/">sgnd_version_ge</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-timestamp/">sgnd_timestamp</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-retry/">sgnd_retry</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-join/">sgnd_join</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-array-union/">sgnd_array_union</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-trim/">sgnd_trim</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-string-repeat/">sgnd_string_repeat</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-fill-left/">sgnd_fill_left</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-fill-right/">sgnd_fill_right</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-fill-center/">sgnd_fill_center</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-visible-length/">sgnd_visible_length</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-terminal-width/">sgnd_terminal_width</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-padded-visible/">sgnd_padded_visible</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-wrap-words/">sgnd_wrap_words</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-validate-ipv4/">sgnd_validate_ipv4</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-validate-yesno/">sgnd_validate_yesno</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-validate-int/">sgnd_validate_int</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-validate-numeric/">sgnd_validate_numeric</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-validate-text/">sgnd_validate_text</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-validate-bool/">sgnd_validate_bool</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-validate-date/">sgnd_validate_date</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-validate-cidr/">sgnd_validate_cidr</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-validate-slug/">sgnd_validate_slug</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-validate-fs-name/">sgnd_validate_fs_name</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-validate-file-exists/">sgnd_validate_file_exists</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-validate-path-exists/">sgnd_validate_path_exists</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-validate-dir-exists/">sgnd_validate_dir_exists</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-validate-executable/">sgnd_validate_executable</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-core/sgnd-validate-file-not-exists/">sgnd_validate_file_not_exists</a></div></div></details><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../ux/common-core/sgnd-datatable/">Datatable</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-datatable/sgnd-dt-array-length/">sgnd_dt_array_length</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-datatable/sgnd-dt-split-schema/">sgnd_dt_split_schema</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-datatable/sgnd-dt-split-row/">sgnd_dt_split_row</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-datatable/sgnd-dt-validate-value/">sgnd_dt_validate_value</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-datatable/sgnd-dt-validate-schema/">sgnd_dt_validate_schema</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-datatable/sgnd-dt-column-index/">sgnd_dt_column_index</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-datatable/sgnd-dt-column-count/">sgnd_dt_column_count</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-datatable/sgnd-dt-make-row/">sgnd_dt_make_row</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-datatable/sgnd-dt-has-row/">sgnd_dt_has_row</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-datatable/sgnd-dt-row-get/">sgnd_dt_row_get</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-datatable/sgnd-dt-row-set/">sgnd_dt_row_set</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-datatable/sgnd-dt-row-count/">sgnd_dt_row_count</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-datatable/sgnd-dt-insert/">sgnd_dt_insert</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-datatable/sgnd-dt-delete/">sgnd_dt_delete</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-datatable/sgnd-dt-get/">sgnd_dt_get</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-datatable/sgnd-dt-set/">sgnd_dt_set</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-datatable/sgnd-dt-find-first/">sgnd_dt_find_first</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-datatable/sgnd-dt-append/">sgnd_dt_append</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-datatable/sgnd-dt-print-table/">sgnd_dt_print_table</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-datatable/sgnd-dt-get-sorted-rows/">sgnd_dt_get_sorted_rows</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-datatable/sgnd-dt-row2var/">sgnd_dt_row2var</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-datatable/sgnd-dt-export-psv/">sgnd_dt_export_psv</a></div></div></details><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../ux/common-core/sgnd-info/">Framework Information</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-info/sgnd-print-cfg/">sgnd_print_cfg</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-info/sgnd-print-framework-metadata/">sgnd_print_framework_metadata</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-info/sgnd-print-metadata/">sgnd_print_metadata</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-info/sgnd-print-args/">sgnd_print_args</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-info/sgnd-print-state/">sgnd_print_state</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-info/sgnd-print-license/">sgnd_print_license</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-info/sgnd-print-readme/">sgnd_print_readme</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-info/sgnd-showenvironment/">sgnd_showenvironment</a></div></div></details><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../ux/common-core/sgnd-comment-header-parser/">Header Parser</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-comment-header-parser/sgnd-header-read/">sgnd_header_read</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-comment-header-parser/sgnd-header-load-section-to-dt/">sgnd_header_load_section_to_dt</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-comment-header-parser/sgnd-header-is-section-header/">sgnd_header_is_section_header</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-comment-header-parser/sgnd-header-buffer-load/">sgnd_header_buffer_load</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-comment-header-parser/sgnd-header-buffer-get-section/">sgnd_header_buffer_get_section</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-comment-header-parser/sgnd-header-calc-checksum/">sgnd_header_calc_checksum</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-comment-header-parser/sgnd-header-bump-version/">sgnd_header_bump_version</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-comment-header-parser/sgnd-header-get-section/">sgnd_header_get_section</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-comment-header-parser/sgnd-header-get-section-from-text/">sgnd_header_get_section_from_text</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-comment-header-parser/sgnd-header-get-banner-parts-from-text/">sgnd_header_get_banner_parts_from_text</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-comment-header-parser/sgnd-header-parse-banner-line/">sgnd_header_parse_banner_line</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-comment-header-parser/sgnd-header-get-field/">sgnd_header_get_field</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-comment-header-parser/sgnd-header-get-field-value/">sgnd_header_get_field_value</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-comment-header-parser/sgnd-header-get-banner-parts/">sgnd_header_get_banner_parts</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-comment-header-parser/sgnd-section-get-field-value/">sgnd_section_get_field_value</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-comment-header-parser/sgnd-header-add-field/">sgnd_header_add_field</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-comment-header-parser/sgnd-header-upsert-field/">sgnd_header_upsert_field</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-comment-header-parser/sgnd-header-set-field/">sgnd_header_set_field</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-comment-header-parser/sgnd-framework-set-version/">sgnd_framework_set_version</a></div></div></details><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../ux/common-core/sgnd-menu/">Menu Library</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-menu/sgnd-menu-create/">sgnd_menu_create</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-menu/sgnd-menu-register-group/">sgnd_menu_register_group</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-menu/sgnd-menu-register-item/">sgnd_menu_register_item</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-menu/sgnd-menu-set-item-status/">sgnd_menu_set_item_status</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-menu/sgnd-menu-show-menu/">sgnd_menu_show_menu</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-menu/sgnd-console-register-group/">sgnd_console_register_group</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-menu/sgnd-console-register-item/">sgnd_console_register_item</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-menu/sgnd-menu-read-choice/">sgnd_menu_read_choice</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-menu/sgnd-menu-dispatch/">sgnd_menu_dispatch</a></div></div></details><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../ux/common-core/sgnd-system/">System Utilities</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-system/sgnd-need-root/">sgnd_need_root</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-system/sgnd-cannot-root/">sgnd_cannot_root</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-system/sgnd-need-systemd/">sgnd_need_systemd</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-system/sgnd-need-writable/">sgnd_need_writable</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-system/sgnd-is-active/">sgnd_is_active</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-system/sgnd-ensure-writable-dir/">sgnd_ensure_writable_dir</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-system/sgnd-get-primary-nic/">sgnd_get_primary_nic</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-system/sgnd-ping-ok/">sgnd_ping_ok</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-system/sgnd-port-open/">sgnd_port_open</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-system/sgnd-get-ip/">sgnd_get_ip</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-system/sgnd-real-user/">sgnd_real_user</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-system/sgnd-real-home/">sgnd_real_home</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-system/sgnd-run-as-real-user/">sgnd_run_as_real_user</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-system/sgnd-fix-ownership/">sgnd_fix_ownership</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-system/sgnd-fix-permissions/">sgnd_fix_permissions</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-system/sgnd-get-os/">sgnd_get_os</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-system/sgnd-get-os-version/">sgnd_get_os_version</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-system/sgnd-die/">sgnd_die</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-system/sgnd-require/">sgnd_require</a></div><div class="wc-nav-leaf"><a href="../../ux/common-core/sgnd-system/sgnd-must/">sgnd_must</a></div></div></details><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../ux/common-core/tar-it/">Tar It</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../ux/common-core/tar-it/main/">main</a></div></div></details><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../ux/common-core/untar-it/">Untar It</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../ux/common-core/untar-it/main/">main</a></div></div></details></div></details><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><span class="wc-nav-label">Console Actions</span></summary><div class="wc-nav-children"><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../ux/console-actions/sgnd-smoketest/">Smoke Test and Validation</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../ux/console-actions/sgnd-smoketest/input-test/">input_test</a></div><div class="wc-nav-leaf"><a href="../../ux/console-actions/sgnd-smoketest/ask-selection-test/">ask_selection_test</a></div><div class="wc-nav-leaf"><a href="../../ux/console-actions/sgnd-smoketest/ask-test/">ask_test</a></div><div class="wc-nav-leaf"><a href="../../ux/console-actions/sgnd-smoketest/say-test/">say_test</a></div><div class="wc-nav-leaf"><a href="../../ux/console-actions/sgnd-smoketest/loglevel-test/">loglevel_test</a></div><div class="wc-nav-leaf"><a href="../../ux/console-actions/sgnd-smoketest/file-loglevel-test/">file_loglevel_test</a></div><div class="wc-nav-leaf"><a href="../../ux/console-actions/sgnd-smoketest/view-log/">view_log</a></div><div class="wc-nav-leaf"><a href="../../ux/console-actions/sgnd-smoketest/motd-test/">motd_test</a></div><div class="wc-nav-leaf"><a href="../../ux/console-actions/sgnd-smoketest/sayprogress-test/">sayprogress_test</a></div><div class="wc-nav-leaf"><a href="../../ux/console-actions/sgnd-smoketest/show-colorchart/">show_colorchart</a></div><div class="wc-nav-leaf"><a href="../../ux/console-actions/sgnd-smoketest/show-theme/">show_theme</a></div></div></details></div></details><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../ux/deployment/">Deployment</a></summary><div class="wc-nav-children"><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../ux/deployment/sgnd-setup/">Setup</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../ux/deployment/sgnd-setup/print-usage/">print_usage</a></div><div class="wc-nav-leaf"><a href="../../ux/deployment/sgnd-setup/parse-args/">parse_args</a></div><div class="wc-nav-leaf"><a href="../../ux/deployment/sgnd-setup/init-paths/">init_paths</a></div><div class="wc-nav-leaf"><a href="../../ux/deployment/sgnd-setup/main/">main</a></div></div></details></div></details><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><span class="wc-nav-label">Framework Tools</span></summary><div class="wc-nav-children"><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../ux/framework-tools/sgnd-repair-permissions/">Repair Permissions</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../ux/framework-tools/sgnd-repair-permissions/main/">main</a></div></div></details></div></details><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><span class="wc-nav-label">Framework Utilities</span></summary><div class="wc-nav-children"><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../ux/framework-utilities/sgnd/">Framework Preference Utility</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../ux/framework-utilities/sgnd/main/">main</a></div></div></details></div></details><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../ux/ui/">UI</a></summary><div class="wc-nav-children"><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><span class="wc-nav-label">Styles</span></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../ux/ui/styles/10-style-dark/">Dark UI Style</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/styles/default-ui-palette/">Default UI Palette</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/styles/00-style-default/">Default UI Style</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/styles/21-style-fantasy/">Fantasy UI Style</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/styles/31-style-mono-amber/">Monochrome Amber UI Style</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/styles/32-style-mono-blue/">Monochrome Blue UI Style</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/styles/30-style-mono-green/">Monochrome Green UI Style</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/styles/23-style-psychedelic/">Psychedelic UI Style</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/styles/22-style-redalert/">RedAlert UI Style</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/styles/11-style-steelblue/">Steel Blue UI Style</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/styles/20-style-testadura/">Testadura UI Style</a></div></div></details><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../ux/ui/ui-ask/">UI Ask</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../ux/ui/ui-ask/ask/">ask</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui-ask/ask-datetime/">ask_datetime</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui-ask/ask-decision/">ask_decision</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui-ask/ask-dlg-autocontinue/">ask_dlg_autocontinue</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui-ask/ask-selection/">ask_selection</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui-ask/ask-choose/">ask_choose</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui-ask/ask-choose-immediate/">ask_choose_immediate</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui-ask/ask-prompt-form/">ask_prompt_form</a></div></div></details><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../ux/ui/ui-dlg/">UI Dialogs</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../ux/ui/ui-dlg/sgnd-decision-expand-choices/">sgnd_decision_expand_choices</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui-dlg/sgnd-decision-normalize/">sgnd_decision_normalize</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui-dlg/sgnd-decision-display-choices/">sgnd_decision_display_choices</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui-dlg/sgnd-decision-from-dialog-rc/">sgnd_decision_from_dialog_rc</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui-dlg/sgnd-dlg-autocontinue/">sgnd_dlg_autocontinue</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui-dlg/sgnd-dlg-custom-rc-for-key/">sgnd_dlg_custom_rc_for_key</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui-dlg/sgnd-prompt-fromlist/">sgnd_prompt_fromlist</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui-dlg/sgnd-ask-decision/">sgnd_ask_decision</a></div></div></details><div class="wc-nav-leaf"><a href="../../ux/ui/ui-glyphs/">UI Glyphs</a></div><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../ux/ui/ui-say/">UI Messaging</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../ux/ui/ui-say/say/">say</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui-say/sayprogress-begin/">sayprogress_begin</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui-say/sayprogress/">sayprogress</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui-say/sayprogress-done/">sayprogress_done</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui-say/sayinfo/">sayinfo</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui-say/saystart/">saystart</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui-say/saywarning/">saywarning</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui-say/sayfail/">sayfail</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui-say/saycancel/">saycancel</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui-say/sayok/">sayok</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui-say/sayend/">sayend</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui-say/justsay/">justsay</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui-say/saydebug/">saydebug</a></div></div></details><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../ux/ui/ui/">UI Rendering</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../ux/ui/ui/confirm/">confirm</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui/sgnd-strip-ansi/">sgnd_strip_ansi</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui/sgnd-visible-len/">sgnd_visible_len</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui/sgnd-ui-set-theme/">sgnd_ui_set_theme</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui/sgnd-theme/">sgnd_theme</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui/sgnd-ui-set-default-theme/">sgnd_ui_set_default_theme</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui/sgnd-sgr/">sgnd_sgr</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui/sgnd-fg/">sgnd_fg</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui/sgnd-bg/">sgnd_bg</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui/sgnd-update-runmode/">sgnd_update_runmode</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui/sgnd-runmode-color/">sgnd_runmode_color</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui/sgnd-terminal-width/">sgnd_terminal_width</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui/sgnd-render-width/">sgnd_render_width</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui/sgnd-print-labeledvalue/">sgnd_print_labeledvalue</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui/sgnd-print-labeledmultivalue/">sgnd_print_labeledmultivalue</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui/sgnd-print-fill/">sgnd_print_fill</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui/sgnd-print-titlebar/">sgnd_print_titlebar</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui/sgnd-print-sectionheader/">sgnd_print_sectionheader</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui/sgnd-print/">sgnd_print</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui/sgnd-print-single/">sgnd_print_single</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui/sgnd-print-file/">sgnd_print_file</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui/sgnd-print-cell/">sgnd_print_cell</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui/sgnd-module-show-metadata/">sgnd_module_show_metadata</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui/sgnd-clear/">sgnd_clear</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui/sgnd-color-samples/">sgnd_color_samples</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui/sgnd-sample-row/">sgnd_sample_row</a></div><div class="wc-nav-leaf"><a href="../../ux/ui/ui/sgnd-style-samples/">sgnd_style_samples</a></div></div></details></div></details></div></details>
+<details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><span class="wc-nav-label">Software Development Kit</span></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../sdk/deployment/">Deployment</a></div><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../sdk/sdk/">SDK</a></summary><div class="wc-nav-children"><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><span class="wc-nav-label">Definitions</span></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../sdk/sdk/definitions/solidgroundux-sdk-definitions/">Project Definitions</a></div></div></details><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../sdk/sdk/documentation-generator/">Documentation Generator</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../sdk/sdk/documentation-generator/doc-processor/">Document processor</a></div><div class="wc-nav-leaf"><a href="../../sdk/sdk/documentation-generator/doc-bundles/">Documentation Bundle Manager</a></div><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../sdk/sdk/documentation-generator/doc-generator/">Documentation Generator Script</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../sdk/sdk/documentation-generator/doc-generator/main/">main</a></div></div></details><div class="wc-nav-leaf"><a href="../../sdk/sdk/documentation-generator/doc-renderer/">Documentation Renderer</a></div><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../sdk/sdk/documentation-generator/doc-sample/">Documentation Sample</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../sdk/sdk/documentation-generator/doc-sample/sample-public-function/">sample_public_function</a></div><div class="wc-nav-leaf"><a href="../../sdk/sdk/documentation-generator/doc-sample/sample-function-with-arguments/">sample_function_with_arguments</a></div></div></details></div></details><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../sdk/sdk/templates/">Templates</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../sdk/sdk/templates/doc-template/">Documentation preface/epilogue template</a></div><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../sdk/sdk/templates/exe-template/">Executable Script Template</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../sdk/sdk/templates/exe-template/main/">main</a></div></div></details><div class="wc-nav-leaf"><a href="../../sdk/sdk/templates/lib-template/">Library Template</a></div></div></details><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../sdk/sdk/create-workspace/">Create Workspace</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../sdk/sdk/create-workspace/main/">main</a></div></div></details><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../sdk/sdk/create-wrappers/">Create Wrappers</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../sdk/sdk/create-wrappers/main/">main</a></div></div></details><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../sdk/sdk/deploy-workspace/">Deploy Workspace</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../sdk/sdk/deploy-workspace/main/">main</a></div></div></details><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../sdk/sdk/prepare-template/">Executable Script Template</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../sdk/sdk/prepare-template/main/">main</a></div></div></details><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../sdk/sdk/prepare-release/">Prepare Release</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../sdk/sdk/prepare-release/main/">main</a></div></div></details><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../sdk/sdk/receive-files/">Receive Files</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../sdk/sdk/receive-files/main/">main</a></div></div></details></div></details><div class="wc-nav-leaf"><a href="../../sdk/solidgroundux-sdk/">SolidGroundUX SDK</a></div></div></details>
+<details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><span class="wc-nav-label">Management Console Modules</span></summary><div class="wc-nav-children"><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><span class="wc-nav-label">Common Core</span></summary><div class="wc-nav-children"><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../mcm/common-core/active-directory-management/">Active Directory Management Library</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../mcm/common-core/active-directory-management/sgnd-console-set-dns-server/">sgnd_console_set_dns_server</a></div><div class="wc-nav-leaf"><a href="../../mcm/common-core/active-directory-management/sgnd-ad-current-netbios-domain/">sgnd_ad_current_netbios_domain</a></div><div class="wc-nav-leaf"><a href="../../mcm/common-core/active-directory-management/sgnd-ad-normalize-sssd-config/">sgnd_ad_normalize_sssd_config</a></div></div></details></div></details><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><span class="wc-nav-label">Console</span></summary><div class="wc-nav-children"><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../mcm/console/management-console/">SolidGround Management Console</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../mcm/console/management-console/sgnd-console-action-status/">sgnd_console_action_status</a></div><div class="wc-nav-leaf"><a href="../../mcm/console/management-console/sgnd-console-record-action-result/">sgnd_console_record_action_result</a></div><div class="wc-nav-leaf"><a href="../../mcm/console/management-console/sgnd-console-run-tracked/">sgnd_console_run_tracked</a></div><div class="wc-nav-leaf"><a href="../../mcm/console/management-console/main/">main</a></div></div></details></div></details><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><span class="wc-nav-label">Globals</span></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../mcm/globals/solidground-management-console-modules-definitions/">Project Definitions</a></div></div></details><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><span class="wc-nav-label">Module Registration</span></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../mcm/module-registration/25-active-directory-client/">Active Directory Client</a></div><div class="wc-nav-leaf"><a href="../../mcm/module-registration/27-active-directory-management/">Active Directory Management</a></div><div class="wc-nav-leaf"><a href="../../mcm/module-registration/20-active-directory-server/">Active Directory Server</a></div><div class="wc-nav-leaf"><a href="../../mcm/module-registration/10-computer-setup/">Computer Setup</a></div><div class="wc-nav-leaf"><a href="../../mcm/module-registration/90-development/">Development</a></div><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../mcm/module-registration/70-docker-server/">Docker Server</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../mcm/module-registration/70-docker-server/docker-prepare/">docker_prepare</a></div></div></details><div class="wc-nav-leaf"><a href="../../mcm/module-registration/62-mariadb/">MariaDB</a></div><div class="wc-nav-leaf"><a href="../../mcm/module-registration/61-postgresql/">PostgreSQL</a></div><div class="wc-nav-leaf"><a href="../../mcm/module-registration/30-samba-file-server/">Samba File Server</a></div><div class="wc-nav-leaf"><a href="../../mcm/module-registration/45-solidground-framework-test/">SolidGround Framework Test</a></div><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../mcm/module-registration/40-solidgroundux/">SolidGroundUX</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../mcm/module-registration/40-solidgroundux/framework-configure-file/">framework_configure_file</a></div><div class="wc-nav-leaf"><a href="../../mcm/module-registration/40-solidgroundux/framework-repair-permissions/">framework_repair_permissions</a></div></div></details><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../mcm/module-registration/60-sqlserver/">SQL Server</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../mcm/module-registration/60-sqlserver/sqlserver-prepare/">sqlserver_prepare</a></div></div></details><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../mcm/module-registration/15-storage/">Storage</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../mcm/module-registration/15-storage/storage-prepare/">storage_prepare</a></div><div class="wc-nav-leaf"><a href="../../mcm/module-registration/15-storage/storage-manage-directories/">storage_manage_directories</a></div></div></details><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../mcm/module-registration/55-web-content-management/">Web Content Management</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../mcm/module-registration/55-web-content-management/web-content-import-local/">web_content_import_local</a></div><div class="wc-nav-leaf"><a href="../../mcm/module-registration/55-web-content-management/web-content-publish/">web_content_publish</a></div><div class="wc-nav-leaf"><a href="../../mcm/module-registration/55-web-content-management/web-content-manage-config/">web_content_manage_config</a></div></div></details><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../mcm/module-registration/50-web-server/">Web Server</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../mcm/module-registration/50-web-server/web-prepare/">web_prepare</a></div></div></details></div></details><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><span class="wc-nav-label">Role Managers</span></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../mcm/role-managers/manage-active-directory/">Manage Active Directory</a></div><div class="wc-nav-leaf"><a href="../../mcm/role-managers/manage-active-directory-client/">Manage Active Directory Client</a></div><div class="wc-nav-leaf"><a href="../../mcm/role-managers/manage-active-directory-server/">Manage Active Directory Server</a></div><div class="wc-nav-leaf"><a href="../../mcm/role-managers/manage-docker-containers/">Manage Docker Containers</a></div><div class="wc-nav-leaf"><a href="../../mcm/role-managers/manage-docker-server/">Manage Docker Server</a></div><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../mcm/role-managers/manage-framework-logging/">Manage Framework Logging</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../mcm/role-managers/manage-framework-logging/main/">main</a></div></div></details><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../mcm/role-managers/manage-framework-state/">Manage Framework State</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../mcm/role-managers/manage-framework-state/main/">main</a></div></div></details><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../mcm/role-managers/manage-identity/">Manage Identity</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../mcm/role-managers/manage-identity/main/">main</a></div></div></details><div class="wc-nav-leaf"><a href="../../mcm/role-managers/manage-mariadb/">Manage MariaDB</a></div><div class="wc-nav-leaf"><a href="../../mcm/role-managers/manage-postgresql/">Manage PostgreSQL</a></div><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../mcm/role-managers/manage-samba-directories/">Manage Samba Directories</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../mcm/role-managers/manage-samba-directories/main/">main</a></div></div></details><div class="wc-nav-leaf"><a href="../../mcm/role-managers/manage-samba-file-server/">Manage Samba File Server</a></div><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../mcm/role-managers/manage-samba-shares/">Manage Samba Shares</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../mcm/role-managers/manage-samba-shares/main/">main</a></div></div></details><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../mcm/role-managers/manage-samba-users/">Manage Samba Users</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../mcm/role-managers/manage-samba-users/main/">main</a></div></div></details><div class="wc-nav-leaf"><a href="../../mcm/role-managers/manage-solidgroundux/">Manage SolidGroundUX</a></div><div class="wc-nav-leaf"><a href="../../mcm/role-managers/manage-sqlserver/">Manage SQL Server</a></div><div class="wc-nav-leaf"><a href="../../mcm/role-managers/manage-storage/">Manage Storage</a></div><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../mcm/role-managers/manage-web-content/">Manage Web Content</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../mcm/role-managers/manage-web-content/main/">main</a></div></div></details><div class="wc-nav-leaf"><a href="../../mcm/role-managers/manage-web-server/">Manage Web Server</a></div><div class="wc-nav-leaf"><a href="../../mcm/role-managers/manage-computer/">manage-computer</a></div><div class="wc-nav-leaf"><a href="../../mcm/role-managers/manage-ssh-access/">manage-ssh-access</a></div><div class="wc-nav-leaf"><a href="../../mcm/role-managers/publish-web-content/">Publish Web Content</a></div></div></details><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><span class="wc-nav-label">SDK</span></summary><div class="wc-nav-children"><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><span class="wc-nav-label">Templates</span></summary><div class="wc-nav-children"><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../mcm/sdk/templates/mod-template/">Console Module Template</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../mcm/sdk/templates/mod-template/sample-show-status/">sample_show_status</a></div><div class="wc-nav-leaf"><a href="../../mcm/sdk/templates/mod-template/sample-run-action/">sample_run_action</a></div></div></details></div></details></div></details><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><span class="wc-nav-label">Web Content Management</span></summary><div class="wc-nav-children"><details class="wc-nav-group"><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../mcm/web-content-management/manage-bundles/">Manage Documentation Bundles</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../mcm/web-content-management/manage-bundles/main/">main</a></div></div></details></div></details><div class="wc-nav-leaf"><a href="../../mcm/web-content-manager/">Web Content Manager</a></div></div></details>
+<details class="wc-nav-group" open><summary><span class="wc-nav-arrow" aria-hidden="true"></span><a href="../../appendices/">Appendices</a></summary><div class="wc-nav-children"><div class="wc-nav-leaf"><a href="../../appendices/api-index/">API Index &amp; Search</a></div><div class="wc-nav-leaf"><a href="../../appendices/global-variables/">Global Variables</a></div><div class="wc-nav-leaf"><a href="../../appendices/licenses/">Licenses</a></div><div class="wc-nav-leaf"><a href="../../appendices/change-logs/" class="active" aria-current="page">Change Logs</a></div><div class="wc-nav-leaf"><a href="../../appendices/attribution/">Attribution</a></div></div></details>
+
+</aside>
+<div class="doc-nav-resizer" role="separator" aria-label="Resize navigation" aria-orientation="vertical" tabindex="0" aria-valuemin="240" aria-valuemax="650" aria-valuenow="350" title="Drag to resize; double-click to reset"></div>
+<div class="doc-workspace">
+<header class="doc-header"><div class="doc-heading"><span>SolidGroundUX Documentation</span><img src="../../images/doc-header-logo.png" alt="SolidGroundUX"></div><span class="language-option" lang="nl" title="Nederlands" aria-label="Nederlands" aria-current="page"><span class="language-code">NL</span></span></header>
+<main class="doc-main"><header class="context-header" id="contextHeader"><div class="context-header-inner context-header-inner-narrow"><div class="context-header-copy"><nav class="context-breadcrumb" aria-label="Breadcrumb"><ol><li><a href="../../appendices/">Appendices</a></li></ol></nav><h1 class="context-title">Change Logs</h1></div></div></header>
+<h2 id="solidgroundux-framework">SolidGroundUX Framework</h2>
+<p><strong>Source:</strong> <code>CHANGELOG.md</code></p>
+<h1 id="changelog">Changelog</h1>
+<p>All notable changes to SolidGroundUX are documented in this file.</p>
+<p>The format is inspired by <em>Keep a Changelog</em> while remaining focused on practical framework development.</p>
+<h2 id="backlog">Backlog</h2>
+<ul>
+<li>Scan Framework, SDK and Management Console Modules for hard-coded <code>/usr/local/share/solidgroundux</code> references and migrate appropriate usages to the canonical <code>SGND_SHARE_DIR</code> framework variable.</li>
+<li><code>sgnd-setup.sh</code>: remove hardcoded product definitions/repository URLs. Move the bootstrap product catalog to an external configuration file (e.g. sgnd-setup.cfg) so new products can be added without changing setup code. Keep sgnd-setup.sh generic.</li>
+<li>Add canonical filesystem ownership metadata (ownership.dta or equivalent) for product/module-owned and managed paths, and migrate install/update/remove/nuke/repair logic to consume it.</li>
+</ul>
+<h2 id="unreleased">Unreleased</h2>
+<h2 id="release-212627801">Release 2.1.2627801</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li>Added standalone <code>sgnd-setup</code> as the product lifecycle entry point for first installation, local/GitHub updates, rollback, removal, and package management; <code>sgnd-release-manager</code> remains available as a compatibility alias.</li>
+<li>Added a product-centric Setup dashboard showing installed, newest local, and newest GitHub releases per known product, with newer availability highlighted.</li>
+<li>Added local package discovery beside the running Setup script and in the canonical releases directory, plus action-scoped selection of another package directory.</li>
+<li>Added canonical <code>Shortname</code> support to comment-header metadata. <code>sgnd_module_init_metadata</code> now uses the header Shortname when present and falls back to the normalized source filename when it is absent.</li>
+<li>Added metadata-driven current-script aliases so executable metadata such as Title, Description, Version and Build can be derived from canonical parsed header metadata instead of being repeated as hard-coded runtime literals.</li>
+<li>Added configurable <code>SGND_MENU_Q_EXIT</code> behavior to the reusable menu layer so applications can disable <code>Q/q</code> exit handling while preserving the historical default for other menu consumers.</li>
+<li>Added canonical <code>SGND_SHARE_DIR</code>, rebased as <code>$SGND_FRAMEWORK_ROOT/usr/local/share/&amp;lt;product&amp;gt;</code>, as the framework path for shared product data in installed and staged/development trees.</li>
+<li>Added framework-owned <code>sgnd-repair-permissions.sh</code>, which applies declarative ownership and mode rules from <code>permissions.dta</code> in <code>SGND_SHARE_DIR</code> by default. Rules support files or directories, exact targets, direct-child masks, recursive <code>**</code> selection, ordinary glob masks, and symbolic <code>operator</code> ownership.</li>
+<li>Added an initial <code>permissions.dta</code> policy covering SolidGroundUX <code>libexec</code> executables, public <code>sgnd*</code> command wrappers, and the operator-writable documentation cache.</li>
+</ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>Standardized product ZIPs as the release unit: acquisition may come from GitHub, the canonical local package store, or another directory, but all selected packages enter the same validation/install pipeline.</li>
+<li>Replaced the former bundled-release concept with a first-install transport package containing <code>sgnd-setup.sh</code> and normal product release ZIPs; the first-install package has its own Setup Version/Build identity.</li>
+<li>Rebalanced the Setup dashboard columns so full product names fit more naturally and Installed/Local/GitHub values display compact Version.Build identities instead of long release basenames.</li>
+<li>First install now discovers adjacent product ZIPs, admits them to the canonical package store, lets the operator select one or more products, installs through the normal package pipeline, and cleans temporary bootstrap files afterward.</li>
+<li>Successful product installs archive the original ZIP beneath the canonical releases archive while retaining extracted internal release history for rollback/removal.</li>
+<li>Package source paths are transient operation input and are no longer restored or persisted as product/repository state.</li>
+<li>Consolidated runtime metadata initialization around the existing comment-header parser and <code>sgnd_module_init_metadata</code>, retaining structural <code>SGND_SCRIPT_FILE</code>, <code>SGND_SCRIPT_DIR</code>, <code>SGND_SCRIPT_BASE</code>, and <code>SGND_SCRIPT_NAME</code> as executable-context identity while removing redundant duplicated metadata literals.</li>
+<li>Kept early bootstrap metadata initialization explicit for bootstrap/header-parser/definitions/environment files, while later framework libraries continue to self-initialize metadata once the parser is available.</li>
+<li>Changed first-install completion to offer <strong>Setup</strong>, <strong>Management Console</strong>, or <strong>Exit</strong>, with Exit as the default and <code>Esc</code> treated as Exit.</li>
+<li>Kept the first-install completion selector framework-independent so bootstrap/recovery operation does not depend on SolidGroundUX UI helpers before the framework is available.</li>
+<li>Management Console applications can now treat <code>Esc</code> as the canonical return/exit control while leaving reusable framework menu behavior configurable for other consumers.</li>
+<li>Shared product-data paths can now be derived from <code>SGND_SHARE_DIR</code> instead of repeating <code>/usr/local/share/solidgroundux</code> literals.</li>
+<li>Updated Framework-facing README, installation and Constitution documentation to reflect the <code>sgnd-setup</code> lifecycle and remove obsolete Release Manager references and stale documentation/image references.</li>
+</ul>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>Fixed comment-header parsing variable shadowing that could prevent parsed banner Product/Title values from propagating correctly into module metadata.</li>
+<li>Fixed non-interactive execution paths that could hang while rendering a title bar through <code>/dev/tty</code>; receiver-side execution can now suppress title rendering explicitly with <code>--no-title</code>.</li>
+<li>Fixed terminal-width detection fallbacks so framework UI code remains usable when no controlling terminal is available.</li>
+<li>Fixed repeated/non-interactive bootstrap behavior used by deployment receivers so framework startup no longer depends on terminal-only rendering paths.</li>
+</ul>
+<h2 id="release-212626712">Release 2.1.2626712</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li>Added configurable warning and error message delays to the Framework globals, with <code>saywarning</code> and <code>sayfail</code> consuming the configured defaults while allowing an explicit <code>--delay</code> override.</li>
+</ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>Standardized the warning/error delay policy at 0.5 seconds by default; <code>--delay 0</code> remains immediate and <code>--delay -1</code> waits for a keypress.</li>
+</ul>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>Restored the canonical <code>sgnd-smoketest</code> implementation and completed Framework ownership of the public smoke-test command after the product split.</li>
+</ul>
+<h2 id="release-212626612">Release 2.1.2626612</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li>Restored the canonical framework locator and library-guard templates lost during the product split.</li>
+<li>Updated the canonical framework locator so development executables can bootstrap <code>sgnd-exe-common.sh</code> from the installed Framework when it is not present in the active product overlay.</li>
+<li>Restored the comment-header parser required for module metadata and menu descriptions.</li>
+<li>Moved canonical normalization ownership into the Framework alongside the structures it maintains.</li>
+<li>Added the framework-owned <code>sgnd-smoketest</code> public command and standalone smoke-test implementation. The Framework owns framework installation validation and smoke tests; Management Console registration and module validation remain Management Console Modules concerns.</li>
+<li>Added <code>sgnd_framework_resolve_path</code> as the common resolver for Framework-owned resources used from Framework, SDK and Management Console development roots. Local Framework resources are preferred only when the contextual root actually contains a Framework; otherwise resolution falls back to the installed Framework.</li>
+</ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>Completed the product split: the Framework now owns runtime/bootstrap services, reusable APIs, canonical Framework resources and framework smoke testing. The Management Console host/modules are owned by Management Console Modules, while workspace, documentation and release tooling is owned by the SolidGroundUX SDK.</li>
+<li>Kept <code>SGND_FRAMEWORK_ROOT</code> as the contextual execution/development root; Framework resource fallback no longer mutates that context or reintroduces the removed application-root model.</li>
+<li>Canonical module metadata now uses the comment header as the source of truth for Version, Build and Description, removing duplicate runtime metadata.</li>
+<li>Framework-owned canonical templates and resources can now be consumed correctly by SDK/MCM tools running from separate non-root development trees.</li>
+</ul>
+<h3 id="removed">Removed</h3>
+<ul>
+<li>Removed Framework ownership of <code>management-console.sh</code>, <code>sgnd-console</code>, Management Console modules, and SDK development/release/documentation commands. Their history remains in earlier releases, but ongoing ownership is now recorded in their respective product changelogs.</li>
+</ul>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>Fixed bootstrap/UI resource resolution after the repository split, including style/palette and license lookup from non-Framework development roots.</li>
+<li>Added the missing bootstrap failure path used by early UI/bootstrap errors.</li>
+<li>Fixed canonical Framework resource fallback so an empty Framework-shaped directory in another product's staged tree is not mistaken for a local Framework installation.</li>
+<li>Fixed module metadata discovery so Management Console modules can remain lazily loaded while their canonical header metadata is still displayed and validated.</li>
+</ul>
+<h2 id="release-212626021">Release 2.1.2626021</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li>Added multi-product documentation collections to <code>doc-generator.sh</code>. Documentation runs can discover products beneath a development root, select one or more products, and designate a primary product as the lead product for ordering, defaults, and deterministic first-wins behavior.</li>
+<li>Added per-product documentation exclusions through <code>&amp;lt;product&amp;gt;.docignore</code>. User configuration takes precedence over system configuration; when neither exists, an example user ignore file can be created without overwriting existing configuration and without writing during dry-run.</li>
+<li>Added duplicate documentation-module detection across selected products. Duplicate module basenames are reported and later occurrences are skipped so combined collections remain deterministic.</li>
+<li>Added per-product documentation asset collection from each selected product's canonical <code>usr/local/assets</code> directory. Assets are merged into the generated site's <code>assets/images</code> directory, with duplicate filenames retaining the first selected product's asset and producing a warning.</li>
+<li>Added an explicit documentation collection/output model: collection name and output root can be persisted, while the final output directory is derived from a normalized lowercase collection slug and remains overridable per run.</li>
+<li>Added <code>. Table</code> / <code>. EndTable</code> as an explicit documentation table construct. Table cells are separated with <code>::</code>; the first row is rendered semantically as the table header and subsequent rows as table body rows. Documentation style hints remain applicable to table rows and are passed through to renderer styling where implemented. Blank-line table termination remains supported for backward compatibility.</li>
+<li>Added table syntax documentation to the Documentation Generator preface and expanded <code>doc-template.sh</code> with a compact documentation-dialect reference covering section indicators, documentation item/header indicators, style hints, image blocks, and table blocks.</li>
+<li>Added multi-product release preparation to <code>prepare-release.sh</code>. A release run can select multiple development products, choose a primary product, create individual product packages, and create a combined bundle from the same preparation workflow.</li>
+<li>Added per-product release metadata handling in <code>prepare-release.sh</code>: each selected product carries its own product identity, version, and Version/Build update policy. Version is entered per product; Build continues to use the standard day-of-year plus hour build number.</li>
+<li>Added product ownership collision detection while assembling bundles. Conflicting paths owned by different selected products now stop preparation with the primary product, companion product, and conflicting file reported explicitly.</li>
+<li>Added package discovery to <code>release-manager.sh</code>, allowing the Release Manager to select between bundled and individual product packages and to maintain project-specific release/archive state.</li>
+<li>Added GitHub release discovery for project packages using each project's configured repository.</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Added development-context indicators to <code>management-console</code>, showing the console host and console application as <code>DEV</code> when running from non-production roots while remaining hidden during normal production use.</li>
+<li>Added console application context detection to <code>management-console</code>.</li>
+<li>Introduced <code>SGND_CONSOLE_APP_ROOT</code>, derived from the active <code>--appcfg</code> path.</li>
+<li>Added application-local executable resolution so development console modules can use executables from the same staged project tree while continuing to use the installed SolidGroundUX framework runtime.</li>
+<li>Added development-context indicators to the console index when either the console host or console application is running from a non-production root; indicators remain hidden in normal production use.</li>
+</ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>Reworked the interactive documentation-generator workflow around product discovery, product selection, primary-product selection, generation mode, source selection, collection metadata, output location, and behavioral flags.</li>
+<li>Documentation source directories are now derived from the selected products rather than entered independently. The primary product is processed first and supplies the lead collection defaults while companion products retain their own identities.</li>
+<li>Documentation generation now distinguishes creating a Full collection from updating one: a new Full collection starts clean, while a Full update loads the existing cache and refreshes the selected products without clearing the collection. Selected and Changed modes update only affected cached modules; Render mode bypasses source parsing.</li>
+<li>Changed-mode documentation generation now uses Git changes relative to <code>HEAD</code>, including untracked matching files.</li>
+<li>Documentation image captions are being standardized as descriptive, unnumbered captions rather than manually maintained figure numbers.</li>
+<li>Updated the SDK Documentation Generator, SolidGroundUX framework, Deployment, and Management Console Modules prefaces for the current 2.1 architecture, including product-aware documentation/release workflows, framework ROOT/NON-ROOT behavior, and clearer Management Console module/action structure.</li>
+<li>Documentation assets are no longer assumed to live beneath a SolidGroundUX-specific library path; each selected product contributes assets from its own canonical <code>usr/local/assets</code> directory.</li>
+<li><code>prepare-release.sh</code> now derives bundle Version and Build from the primary product; bundle identity is never prompted or maintained separately.</li>
+<li>Product names used in generated release filenames are normalized to filesystem-safe names, including replacement of spaces with hyphens, while the human-readable Product value remains unchanged in package metadata and UI.</li>
+<li>Release Manager package selection uses package metadata rather than asking the operator to enter Version or Build values.</li>
+<li>Release Manager repository values are retained as project/package state and reused when that package is selected again.</li>
+<li>Release Manager project handling now supports both the SolidGroundUX framework and separately released SolidGroundUX applications such as Management Console Modules through the same lifecycle engine.</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Changed comment-header section parsing to terminate at the first empty comment line, preventing subsequent header sections from being included in multiline metadata such as <code>Description</code>.</li>
+<li>Changed <code>management-console</code> executable resolution to prefer the active console application's executable directories before falling back to framework-owned executable locations.</li>
+<li>Changed <code>create-workspace</code> to mark canonical templates copied into a new workspace with a caveat identifying them as workspace-local canonical starter templates that should only be changed deliberately.</li>
+<li>Kept the installed canonical template sources unchanged; the caveat is added only to the copies placed in the newly created workspace.</li>
+</ul>
+<h1 id="build-212625621">Build 2.1.2625621</h1>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>Executable rights granted on release-manager and motd</li>
+</ul>
+<h1 id="build-212624123">Build 2.1.2624123</h1>
+<h2 id="solidground-framework">SolidGround Framework</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li>Added canonical bootstrap source normalization for release preparation. Executable <code>_framework_locator</code> functions and reusable-library guard sections can now be materialized from canonical source fragments instead of being maintained independently across the tree.</li>
+<li>Added argument-parser support for extracting recognized framework built-ins while preserving script-specific options and positional arguments in their original order for the later script-level parse.</li>
+</ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>Simplified executable bootstrap root discovery for the 2.1 architecture. <code>SGND_FRAMEWORK_ROOT</code> is now derived directly from the physical script path using the last canonical top-level <code>usr</code>, <code>etc</code>, or <code>var</code> component, allowing the same bootstrap code to resolve both installed <code>/</code> and staged/development trees.</li>
+<li>Reworked bootstrap argument processing so framework built-ins and script-specific arguments may be freely intermixed; callers no longer need to place framework options before application options.</li>
+<li>Script argument parsing now continues across positional values, allowing valid options to occur later on the command line. The standard <code>--</code> marker remains the hard end-of-options boundary and everything following it is treated as positional data.</li>
+<li>Script command-line values are applied after configuration/state loading so explicit CLI values take precedence without a later parser pass resetting previously parsed framework flags.</li>
+<li>Updated bootstrap and argument-parser documentation to describe argument extraction, ordering independence, precedence, preservation behavior, and <code>--</code> semantics.</li>
+<li>Framework smoke-test utility actions now continue the numbered menu sequence instead of using <code>L</code>, <code>V</code>, and <code>A</code>, avoiding collisions with framework/console shortcut keys; the timed smoke-test reader now accepts multi-digit selections.</li>
+</ul>
+<h3 id="repaired">Repaired</h3>
+<ul>
+<li>Repaired project-specific GitHub release checks for separately packaged products after validating repository visibility and repository-specific release endpoints.</li>
+<li>Repaired project package identity so Version and Build are obtained from prepared package metadata rather than being treated as Release Manager input.</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Repaired canonical library-guard normalization so the next top-level source section is detected whether or not whitespace exists before its separator run, preventing sections such as <code>Minimal UI</code> from being consumed during normalization.</li>
+<li>Repaired canonical library guards for early bootstrap libraries by making metadata initialization conditional until <code>sgnd_module_init_metadata</code> is available.</li>
+<li>Repaired repeated argument parsing that could reset a previously recognized script flag such as <code>--auto</code> during bootstrap, causing unattended tools to fall back into interactive behavior.</li>
+</ul>
+<h2 id="development-tools">Development Tools</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li>Added optional canonical-source normalization to <code>prepare-release.sh</code>, executed before release metadata processing so generated bootstrap/guard fragments are normalized before checksums and release artifacts are produced.</li>
+</ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>Canonical normalization skips the canonical fragment directory itself, validates modified shell files with <code>bash -n</code>, and reports changes through checksum comparison.</li>
+<li><code>prepare-release.sh</code> invokes canonical normalization in unattended mode and propagates dry-run behavior when release preparation is running as a dry run.</li>
+</ul>
+<h2 id="release-management">Release Management</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li>Added project-aware release packages. Every release ZIP now carries a <code>release-package.info</code> shipping label containing package format, project slug, product, version, build, and release identity.</li>
+<li>Added generic project package support to <code>release-manager.sh</code>. Additional projects keep independent release and archive state beneath <code>/var/lib/solidgroundux/projects/&amp;lt;project&amp;gt;/</code>, while SolidGroundUX retains its existing release-state layout.</li>
+<li>Added standalone, stateful Release Manager parameters for target root, project, package source, release selector, repository, and state root. Accepted interactive values are reused as defaults on later runs.</li>
+<li>Added a standalone Release Manager UI fallback based on the SolidGroundUX default theme for bootstrap and recovery scenarios where the framework is not available.</li>
+<li>Added opportunistic use of the normal SolidGroundUX UI primitives and active theme when a healthy framework is available at the selected target root.</li>
+<li>Added project selection to the interactive Release Manager while retaining command-line actions for check, download, update, install, rollback, and removal.</li>
+<li>Added package-source installation support so a ZIP file or URL can be admitted and installed directly through the same release engine.</li>
+</ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li><code>prepare-release.sh</code> now resolves project identity from the project definitions file, updates version/build identity in the appropriate definitions file, and packages generic projects without bundling <code>release-manager.sh</code>.</li>
+<li>SolidGroundUX release ZIPs continue to include <code>release-manager.sh</code> as the first-install bootstrap entry point; generic project ZIPs rely on an already installed Release Manager.</li>
+<li>The ZIP-root Release Manager is now treated as a bootstrap runner rather than the authoritative installed copy. Installing the SolidGroundUX tar establishes <code>/var/lib/solidgroundux/release-manager.sh</code>.</li>
+<li>Release Manager startup no longer copies the currently executing script over the canonical installed manager merely because it is running from another path.</li>
+<li>Interactive Release Manager operation is parameter-driven and menu-based; non-interactive arguments select the same underlying menu actions rather than maintaining a separate workflow.</li>
+<li>The SolidGroundUX Management Console now delegates release lifecycle operations to a single <strong>Release manager</strong> menu item instead of duplicating check, download, update, install, rollback, and remove actions.</li>
+<li>Release preparation keeps build output in the workspace release directory instead of duplicating release artifacts into <code>target-root/var/lib/solidgroundux/releases</code>; the Release Manager admits package artifacts into managed release state when they are actually acquired or installed.</li>
+<li>Release Manager root handling now distinguishes the running bootstrap copy from the selected installation target. A bootstrap copy defaults the target root to <code>/</code> and asks explicitly in interactive mode; an installed canonical manager can derive the default target root from its location.</li>
+<li>The Release Manager remains usable when the framework is absent or damaged: standalone primitives are always available, and framework UI integration is strictly optional.</li>
+</ul>
+<h3 id="repaired">Repaired</h3>
+<ul>
+<li>Repaired Release Manager self-install behavior that could attempt to copy a development or bootstrap copy over <code>/var/lib/solidgroundux/release-manager.sh</code> and fail with permission errors.</li>
+<li>Repaired project-aware package admission so release artifacts are moved only after ZIP extraction into temporary staging, not as an unconditional startup side effect.</li>
+<li>Repaired Release Manager project-menu presentation and product-specific remove labeling after the project-aware refactor.</li>
+</ul>
+<h1 id="build-202623817">Build 2.0.2623817</h1>
+<h2 id="added">Added</h2>
+<ul>
+<li>Added root-only <strong>Module metadata</strong> (<code>M</code>) to the Management Console index. It shows metadata for modules that have actually been lazy-loaded in the current console session.</li>
+<li>Added reusable <code>--again</code> support to <code>ask_dlg_autocontinue</code>, allowing <strong>A</strong> to immediately repeat a workflow instead of waiting for the timeout.</li>
+<li>Added Samba share subdirectory management:</li>
+<li>Create subdirectories beneath selected shares.</li>
+<li>Accept relative paths such as <code>Files/Mark</code> and create intermediate directories.</li>
+<li>List subdirectories beneath selected shares.</li>
+<li>Remove selected subdirectories without allowing the share root itself to be removed.</li>
+<li>Reuse the current share selection; prompt for a share only when none is selected.</li>
+<li>Added Web Server site-management and publishing support:</li>
+<li>Create, enable, disable, remove, and list Nginx sites.</li>
+<li>Remove site content independently from site configuration.</li>
+<li>Publish content from a local directory or a remote machine.</li>
+<li>Persist publish-source answers as state.</li>
+<li>Configure a web address (<code>server_name</code>) separately from the site name/document-root directory.</li>
+<li>Publish generated SolidGroundUX documentation through the Web Server module.</li>
+<li>Register site hostnames in Active Directory DNS when requested.</li>
+<li>Added SQL Server configuration actions for storage, TCP network, memory, service management, firewall, tools, validation, and detailed status reporting.</li>
+</ul>
+<h2 id="changed">Changed</h2>
+<ul>
+<li>Improved Management Console numbering so single- and multi-digit selections remain aligned on both module pages and the top-level console index.</li>
+<li>Improved Management Console state-file handling so switching <strong>STANDARD → ROOT → STANDARD</strong> keeps console state owned by the invoking user and prevents root-owned <code>0600</code> state files from blocking later writes.</li>
+<li>Main-console and <strong>Manage visibility</strong> <code>Select option :</code> prompts now use the active theme label color; typed selections continue to use the active theme value color.</li>
+<li>Web Server management is organized around separate site configuration, site content publishing, and SolidGroundUX documentation publishing concerns.</li>
+<li>Web Server site creation now defaults the web address from the local hostname/FQDN rather than from the site name.</li>
+<li>Web Server publishing no longer treats removed site definitions as publishable targets; publish selections are rebuilt from the current live Nginx site configuration.</li>
+<li>Remote Web Server publishing now supports explicit source host, source user, and source directory values and uses SSH key-based non-interactive access.</li>
+<li>SQL Server storage configuration now shows the directory-selection menu correctly, identifies the actual directory in create confirmations, and asks once whether SQL Server should be restarted after applying all storage changes.</li>
+<li>SQL Server status now reads the persisted <code>/var/opt/mssql/mssql.conf</code> settings so configured data, log, backup, and memory values can be shown instead of generic defaults.</li>
+<li>Samba subdirectory creation now inherits the selected share's existing ownership/permission/ACL model instead of assigning ownership based on the directory name.</li>
+<li>Active Directory Management repeat workflows now support <strong>A = another</strong> in addition to the existing timeout repeat behavior.</li>
+<li>Renamed MOTD file to <code>95-solidgroundux</code>; <code>update-motd.d</code> filenames must be lowercase-compatible with <code>run-parts --lsbsysinit</code>, and the SolidGroundUX block is intentionally displayed near the end.</li>
+<li>Added option to create directories, allowing a name, a path, or a comma-separated list as input to the storage module. <em>DONE</em></li>
+<li><code>www</code> → create under the configured storage root, e.g. <code>/srv/storage/www</code></li>
+<li><code>/srv/storage/www</code> → use exactly that path</li>
+<li><code>www,logs,backup</code> → create all three under the configured storage root</li>
+<li><code>/srv/www,/srv/logs</code> → create the explicit paths as given</li>
+<li>Mixed input should work too</li>
+<li>Use <code>ask_selection</code> to list existing directories; allow manual entry, and offer to create the directory when the entered value does not exist</li>
+<li>Adapted the filters in <code>prepare-release.sh</code> to exclude state, configuration, logging, and archive data.</li>
+<li>Release Manager bootstrap/configuration writing now uses explicit <code>printf</code> output instead of a heredoc.</li>
+</ul>
+<h2 id="repaired">Repaired</h2>
+<ul>
+<li>Repaired SQL Server storage selection where the selection menu was being swallowed by command substitution and only a bare <code>Selection</code> prompt remained visible.</li>
+<li>Repaired SQL Server status reporting for configured storage paths and memory values under both ROOT and STANDARD console sessions.</li>
+<li>Repaired Web Server site creation where the site name was incorrectly reused as the default web address.</li>
+<li>Repaired Web Server publishing state so removed sites no longer remain in the publish-site selection.</li>
+<li>Repaired remote Web Server publishing diagnostics around SSH host verification, key authentication, source user, and source-directory availability.</li>
+<li>Repaired Samba subdirectory creation so an already selected share is used directly instead of unnecessarily returning to share selection.</li>
+<li>Repaired console action/module state ownership across privilege switching.</li>
+</ul>
+<h2 id="verified">Verified</h2>
+<ul>
+<li>Re-ran end-to-end provisioning from clean clones for <code>td-pdc</code>, <code>td-nas</code>, <code>td-sql</code>, and <code>td-web</code>; all four roles were configured successfully in approximately 34 minutes including unattended time, with the active work itself fitting within a sub-30-minute run.</li>
+<li>Verified generated SolidGroundUX documentation can be published through Nginx and reached through an Active Directory DNS hostname.</li>
+<li>Verified SQL Server 2025 installation and runtime status on Ubuntu 24.04, including active service, TCP 1433, configured memory limit, and configured data/log/backup paths.</li>
+</ul>
+<h1 id="build-202623404">Build 2.0.2623404</h1>
+<h2 id="verified">Verified</h2>
+<ul>
+<li>SolidGroundUX was developed on Ubunto 26.04, Ubuntu 24.04 LTS compatibility verified — SolidGroundUX 2.0 installed and ran successfully.</li>
+<li>SQL Server 2025 module verified end-to-end on Ubuntu 24.04 — repository configuration, engine installation/configuration, tools, validation and status all working; SQL Server active and listening on TCP 1433.</li>
+<li>nginx module verified end-to-end on Ubuntu 26.04 — installation, configuration, validation and HTTP serving working; site-management and publishing capabilities remain limited.</li>
+</ul>
+<h2 id="changed">Changed</h2>
+<ul>
+<li>Improved Samba File Server and share-management usability:</li>
+<li>Removed printer-share validation from the Samba file-server validation path.</li>
+<li>Added repeat-operation flows for creating and removing Samba shares.</li>
+<li>Added share selection when removing managed shares.</li>
+<li>Updated the Samba share manager to use <code>ask_selection</code> for share and Active Directory group selection.</li>
+<li>Active Directory groups are now discovered directly from the directory through LDAP instead of relying on NSS group enumeration.</li>
+<li>LDAP group discovery uses Kerberos/GSSAPI authentication and disables SASL hostname canonicalization so the registered domain-controller LDAP service principal is used correctly.</li>
+<li>Active Directory realm names are normalized to uppercase for Kerberos authentication while NSS group identities retain their resolvable <code>group@domain</code> form.</li>
+<li>The share manager now detects a missing Kerberos ticket and interactively authenticates an Active Directory user before querying directory groups.</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Added <code>R Reset</code> to the management console, allowing last-run result markers to be cleared for the current module page without affecting results on other pages.</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Moved manual console redraw from <code>R</code> to <code>Ctrl+R</code>; redraw continues to re-measure the terminal and invalidate layout-dependent caches.</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Updated the console key legend to show <code>R Reset</code> and <code>Ctrl+R Redraw</code>.</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Added a <code>--legend</code> argument to <code>ask_dlg_autocontinue</code>, allowing callers to replace the generic key legend with workflow-specific instructions.</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Improved Active Directory Management usability:</li>
+<li>Added consistent <code>Q</code> / Quit handling to framework-owned prompts.</li>
+<li>Added <code>--back</code> support to <code>ask</code> so free-text prompts can return cleanly without assigning or validating the entered value.</li>
+<li>Removed redundant confirmation prompts from user and group creation/deletion flows where choosing the action and selecting/entering the object already expresses intent.</li>
+<li>Added optional “password never expires” handling during user creation.</li>
+<li>Added a dedicated “Set password never expires” user action.</li>
+<li>Added repeat-operation loops for:</li>
+<li>Create user</li>
+<li>Delete user</li>
+<li>Remove user from groups</li>
+<li>Create group</li>
+<li>Add users to group</li>
+<li>Remove group members</li>
+<li>Delete group</li>
+<li>Repeat-operation dialogs now use custom legends so timeout and Enter behavior are described accurately.</li>
+<li>Disabled the normal menu post-action wait for actions that now manage their own repeat/return flow.</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Improved console width handling:</li>
+<li>Terminal width is re-measured on redraw.</li>
+<li>Rendering no longer relies on a separately cached menu width.</li>
+<li>Layout caches are invalidated on redraw so resized terminals are recalculated correctly.</li>
+<li>Non-interactive processes no longer fail when <code>/dev/tty</code> is unavailable.</li>
+</ul>
+<h2 id="repaired">Repaired</h2>
+<ul>
+<li>Repaired Storage provisioning confirmation handling:</li>
+<li>Fixed remaining Yes/No comparisons that expected mixed-case values instead of the canonical <code>YES</code> / <code>NO</code> responses returned by <code>ask_decision</code>.</li>
+<li>Verified storage provisioning now completes partitioning, filesystem creation, persistent <code>/etc/fstab</code> configuration, mounting, and creation of <code>/srv/storage/shares</code>.</li>
+<li>Verified storage status correctly reports the configured source, filesystem, UUID, mount state, persistence, read/write state, capacity, and available space.</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Repaired Samba File Server provisioning and validation:</li>
+<li>Removed validation of Samba printer shares, which are not part of the managed SolidGroundUX file-server configuration.</li>
+<li>Verified the Samba preparation sequence completes successfully against provisioned SolidGroundUX storage.</li>
+<li>Repaired managed share creation and removal workflows.</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Repaired Active Directory group handling in the Samba share manager:</li>
+<li>Fixed AD group discovery on realmd/SSSD domain members where <code>getent group</code> cannot enumerate directory groups even though direct qualified-name lookups work.</li>
+<li>Replaced unsuitable <code>samba-tool group list</code> discovery, which expects a local Active Directory database when run on a member server.</li>
+<li>Avoided <code>net ads group</code>, which requires Samba ADS membership configuration not present on the realmd/SSSD client.</li>
+<li>Added authenticated LDAP group discovery using the domain controller advertised through the Active Directory LDAP SRV record.</li>
+<li>Fixed Kerberos authentication failures caused by using a lowercase realm; authentication now uses the canonical uppercase realm such as <code>TESTADURA.HQ</code>.</li>
+<li>Fixed LDAP/GSSAPI service-ticket lookup by disabling SASL hostname canonicalization with <code>ldapsearch -N</code>.</li>
+<li>Verified LDAP group enumeration against the domain controller and NSS resolution of selected qualified AD groups.</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Repaired Computer Setup validation:</li>
+<li>Corrected the sudoers file path used for SolidGroundUX receiver access.</li>
+<li>Centralized the sudoers filename in <code>SGND_COMPUTER_SUDOERS_FILE</code>.</li>
+<li>Verified setup, status, and validation all reference the same sudoers policy file.</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Fully tested and repaired the Computer Setup workflow, including the automated preparation sequence.</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Fully tested and repaired Active Directory provisioning:</li>
+<li>Fixed <code>ask_decision</code> case handling where canonical responses are returned in uppercase.</li>
+<li>Restored the automated provisioning sequence so it continues beyond preflight validation.</li>
+<li>Verified the remaining provisioning steps can complete successfully.</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Repaired Active Directory Management confirmation handling:</li>
+<li>Fixed Yes/No comparisons so canonical <code>YES</code> / <code>NO</code> values are handled correctly.</li>
+<li>Fixed Quit handling so <code>Q</code> actually exits the current action instead of falling through.</li>
+<li>Fixed timeout handling in repeat-operation dialogs so timeout repeats the action instead of returning to the menu.</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Repaired terminal-width detection for non-interactive receiver execution:</li>
+<li>Fixed <code>/dev/tty</code> probing so receiver-side operations no longer emit <code>No such device or address</code>.</li>
+</ul>
+<h1 id="release-202623316">Release 2.0.2623316</h1>
+<h2 id="solidground-management-console">SolidGround Management Console</h2>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>Reordered automated Computer Setup to generate SSH host keys before enabling and starting SSH.</li>
+<li>Changed Yes/No prompts in console modules from <code>YES/NO</code> to <code>Yes/No</code>.</li>
+<li>Corrected heading levels in the changelog.</li>
+<li>Corrected <code>sgnd_print_sectionheader</code> width calculation to use visible render width consistently.</li>
+<li>Added consistent visual separation before <code>ask_dlg_continue</code> prompts.</li>
+<li>Added automatic label-column sizing to console menu pages and the management-console index.</li>
+</ul>
+<h3 id="added">Added</h3>
+<ul>
+<li>Added <code>ask_selection</code>, a reusable single- and multi-selection ask primitive.</li>
+<li>Migrated selection workflows in <code>prepare-release.sh</code> and <code>untar-it.sh</code> to <code>ask_selection</code>.</li>
+<li>Added <code>manage-samba-shares.sh</code> for assigning Active Directory group access to Samba shares.</li>
+<li>Added <code>27-active-directory-management.sh</code> for managing Active Directory users, groups, memberships, and computer accounts.</li>
+<li>Added <code>50-web-server.sh</code> for preparing, validating, and inspecting an Nginx web-server role.</li>
+<li>Added <code>60-sqlserver.sh</code> for preparing, validating, and inspecting a Microsoft SQL Server role.</li>
+<li>Added <code>50-SolidGroundUX</code> to display SolidGroundUX version, license, documentation, and management information in the system MOTD.</li>
+</ul>
+<h1 id="release-202623211">Release 2.0.2623211</h1>
+<h2 id="solidground-framework">SolidGround Framework</h2>
+<h3 id="changed">Changed</h3>
+<ul>
+<li><code>sgnd_style_samples</code> is now the canonical runtime showcase for the active</li>
+<li>Theme message samples now use <code>sgnd_print</code> directly with the corresponding</li>
+<li>The General UI Elements specimen now explicitly demonstrates</li>
+<li>The theme showcase now includes a non-interactive <code>ask</code> simulation using the</li>
+<li>The existing run-mode, state, validation, and progress specimens are retained</li>
+<li>The theme-color specimen now lists Message, Progress, and UI semantic color</li>
+</ul>
+<h2 id="solidground-management-console">SolidGround Management Console</h2>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>The Management Console host script was renamed to <code>management-console.sh</code></li>
+<li>The Management Console index now uses the same standard bottom control bar as</li>
+<li>Console selection handling is now more forgiving: invalid selections are</li>
+<li>Manage Visibility selection now reports invalid entries explicitly instead of</li>
+</ul>
+<h3 id="repaired">Repaired</h3>
+<ul>
+<li>Numeric menu selections are interpreted explicitly as base-10 values,</li>
+<li>Console dispatch no longer treats an empty or invalid user selection as a</li>
+<li>Post-action wait state is cleared before a new selection is dispatched so an</li>
+</ul>
+<h2 id="development-tools">Development Tools</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li>Added <code>sync-repository.sh</code> for synchronizing the development repository from</li>
+<li>Repository synchronization settings for destination machine, user, and</li>
+</ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>Repository synchronization now stages the incoming copy in a temporary</li>
+<li><code>sync-repository.sh</code> now records a lightweight source-tree signature and the</li>
+<li>Added a force option to repository synchronization for explicitly refreshing</li>
+</ul>
+<h1 id="release-202623201">Release 2.0.2623201</h1>
+<h2 id="solidground-framework">SolidGround Framework</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li><code>sync-repository.sh</code> was added to facilitate cloning reporsitories to (backup) machines</li>
+<li><code>doc-generator</code> now supports comma-separated source masks, with the default</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Added an optional documentation <code>Subgroup</code> level beneath Group. Modules</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Added persistent renderer export data beneath the documentation output so</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Added <strong>Render existing data</strong> as generation mode 4 and CLI mode</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Added generated-site branding support to the Python renderer, including</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Added functional documentation branding asset names:</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Added generated semantic theme specimens for documented SolidGroundUX style</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Added <code>cls:</code> as a first-class documentation item marker for Python classes.</li>
+</ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>Added public <code>sgnd_menu_dispatch</code> support so standalone framework tools can</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Added optional menu chrome control so consumers such as</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li><code>framework-smoketest.sh</code> now builds, renders, reads, and dispatches its test</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>The framework smoke-test progress demo now uses genuinely nested stacked</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Shared console-internal helpers used by more than one module or framework</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li><code>doc-generator</code> now derives clean-output behavior from the selected generation</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Documentation file matching now uses one comma-separated mask contract across</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>The documentation hierarchy now supports Group → optional Subgroup → Module,</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li><code>sgnd_doc_renderer.py</code> is now documented as part of the</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Renderer exports are no longer purely temporary: successful parse modes</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Documentation branding assets are copied into the generated site so the HTML</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>The documentation dialect is now shared between Bash and Python: both use</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Documentation page branding now acts as a sticky page header and remains</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Documentation diagrams are being moved from ASCII-only prose toward</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>The default UI palette now uses explicit 24-bit truecolor values instead of</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Width-aware UI primitives now delegate their default width policy to</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li><code>SGND_MAX_RENDER_WIDTH</code> is now an optional global render cap: when unset or</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li><code>sgnd_print_titlebar</code>, <code>sgnd_print_sectionheader</code>, <code>sgnd_print_fill</code>,</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li><code>sgnd_print_sectionheader</code> now extends full-width or trailing borders to the</li>
+</ul>
+<h3 id="repaired">Repaired</h3>
+<ul>
+<li>Fixed documentation navigation depth for modules inside a subgroup so module</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Corrected the SolidGround Management Console preface grouping so its</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Renderer-only generation now fails explicitly when no valid persisted render</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li><code>deploy-workspace.sh</code> could fail when the remote receiver required <code>sudo</code></li>
+</ul>
+<h2 id="solidground-management-console">SolidGround Management Console</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li>Added a lightweight main index page that discovers available console pages</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Added lazy page loading: a console module is sourced only when its page is</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Added root-only <strong>Manage visibility</strong> (<code>V</code>) on the main index page. Module</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Added a dedicated <strong>SolidGroundUX</strong> page containing framework information,</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Added <strong>Storage</strong> and <strong>Storage Access</strong> as dedicated Management Console</li>
+</ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>Management Console startup now loads only lightweight page metadata. Detailed</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Previously loaded pages remain resident for the lifetime of the console</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li><code>Esc</code> now returns from a loaded page to the main index, allowing direct page</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>The main index now follows the standard console title and menu-row visual</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Removed the separate Console Settings page in favor of the existing direct</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Normal menu actions now restore the interruptible post-action auto-continue</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Shared helpers required by multiple lazy-loaded console modules are now</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>The Management Console preface was rewritten for the current index-based,</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Moved the paging indicator from the bottom-right corner to a centered position above</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>The <code>Q</code> legend is now context-aware: <code>Quit</code> is shown in the root console and <code>Back</code></li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Removed the experimental role-aware menu filtering/toggle from the current</li>
+</ul>
+<h3 id="repaired">Repaired</h3>
+<ul>
+<li>Fixed cross-module helper dependencies exposed by lazy loading, including DNS</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Fixed the lazy-page event loop no longer honoring registered post-action wait</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Fixed smoke-test menu selections being lost because the timed input helper</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Fixed standalone public-menu consumers failing on <code>_sgnd_flag_is_on</code> because</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Fixed the Storage Access group visibility value being accidentally changed</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>The Samba Active Directory package installation now explicitly includes</li>
+</ul>
+<h1 id="build-192622402-2026-08-12">Build 1.9.2622402 - 2026-08-12</h1>
+<h2 id="solidground-framework">SolidGround Framework</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li>Added <code>sgnd_clear</code> to the shared UI layer as the canonical screen-clear</li>
+<li><code>sgnd_exe_start</code> now supports <code>--no-title</code>, allowing executable scripts such</li>
+<li>Generic executable title bars now include the executing script's own</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Added <code>sgnd-definitions.sh</code> as the canonical source for</li>
+<li>Added <code>sgnd_print_labeledmultivalue</code>, a multiline variant of</li>
+<li><code>sgnd_print_labeledmultivalue</code> accepts either:</li>
+<li>A single string, optionally wrapped to a configurable value</li>
+<li>An array of values, with each item rendered on a separate</li>
+<li>Added <code>ask_datetime</code>, a datetime-aware variant of <code>ask</code> that accepts</li>
+<li>Added the following datetime shortcuts:</li>
+<li><code>N</code> -- Current date and time.</li>
+<li><code>D</code> -- Today at the start of the day.</li>
+<li><code>s</code> -- Seconds.</li>
+<li><code>m</code> -- Minutes.</li>
+<li><code>h</code> -- Hours.</li>
+<li><code>d</code> -- Days.</li>
+<li><code>M</code> -- Months.</li>
+<li><code>y</code> -- Years.</li>
+<li>Relative expressions such as <code>-2m</code>, <code>-2h</code>, <code>+30m</code>, <code>-1d</code>, <code>-3M</code>,</li>
+<li>Relative datetime expressions are resolved immediately and returned</li>
+<li><code>ask_datetime</code> now displays the resolved absolute timestamp when a</li>
+<li>Added an interactive <code>ask_datetime</code> test to the framework smoke</li>
+</ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li><code>sgnd_print</code> and <code>sgnd_print_single</code> now calculate alignment and automatic</li>
+<li><code>sgnd_print</code> wrapping behavior is now explicit and consistent: long text</li>
+<li>The standard clear-screen sequence was deliberately reduced to cursor-home</li>
+</ul>
+<h2 id="solidground-management-console">SolidGround Management Console</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li>Added persistent console-module visibility state, with module</li>
+<li>Added <strong>Manage modules</strong> to <strong>Console Session</strong>, allowing console</li>
+<li>Added role-aware console visibility so Active Directory server,</li>
+<li>Added the executing machine hostname to the Management Console title</li>
+<li>Added transient console initialization/progress feedback while</li>
+<li>Added <code>Shift+S</code> as an immediate shortcut for opening an interactive child</li>
+<li>Added <code>Ctrl+R</code> as an immediate console restart shortcut. Restart uses <code>exec</code></li>
+<li>Added an on-screen shortcut legend for shell, restart, quit, and page</li>
+</ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>Consolidated all package-related actions into a dedicated \<em>\</em>Package</li>
+<li>Console module load control now follows SolidGroundUX</li>
+<li>Disabled console modules are no longer sourced; modules without an</li>
+<li>Console screen clearing now uses an explicit ANSI</li>
+<li>Increased the console menu label-width allowance to improve</li>
+<li>Management Console startup now suppresses the generic executable title bar</li>
+<li>The Management Console title now shows the executing script Version and</li>
+<li>The footer layout now separates runtime state from direct actions and page</li>
+<li>Console legend/page text now uses the same value/italic visual treatment as</li>
+</ul>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>Fixed the duplicate top separator line that could appear in the</li>
+<li>Fixed hidden console groups still allowing their menu items to</li>
+<li>Fixed console redraw width calculations so ANSI-styled text is measured by</li>
+<li>Removed scrollback erase (<code>ESC[3J]</code>) from the shared clear-screen behavior</li>
+</ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li><code>sgnd-bootstrap-env.sh</code> now consumes canonical definitions from</li>
+<li><code>prepare-release.sh</code> now updates framework version/build identity in</li>
+</ul>
+<h2 id="machine-and-network-configuration">Machine and Network Configuration</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li>Added DNS search-domain support to <code>set-identity.sh</code>.</li>
+<li>Added an interactive <strong>DNS search domain</strong> prompt alongside the DNS</li>
+<li>Added <code>--DNS-search</code> support for non-interactive and DNS-only</li>
+<li>DNS search-domain values now participate in persistent script state.</li>
+<li>Netplan generation now writes the configured DNS search domain</li>
+</ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>DNS configuration now treats the DNS server and DNS search domain as</li>
+<li>Active Directory provisioning and domain join now use the generic</li>
+<li>Management console now has a state variable SGND_CONSOLE_ROLE_AWARE</li>
+</ul>
+<h2 id="active-directory">Active Directory</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li>Added an <strong>Active Directory DNS</strong> console group.</li>
+<li>Added DNS-zone listing and host-record query actions.</li>
+<li>Added actions to create and delete IPv4 host records in Samba Active</li>
+<li>Added an action to rerun DNS registration for the local domain</li>
+<li>Added client-side actions to manually add or remove the current</li>
+<li>Domain join now registers the joining machine's IPv4 host record in</li>
+<li>Domain join now configures the Active Directory DNS server and</li>
+</ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li><strong>Show membership</strong> now provides a consolidated client-domain status</li>
+<li>Machine FQDN.</li>
+<li>Machine IPv4 address.</li>
+<li>Joined realm.</li>
+<li>Domain membership state.</li>
+<li>Active Directory DNS server.</li>
+<li>DNS host-record registration state.</li>
+<li>Registered DNS A-record address.</li>
+<li>Kerberos SRV availability.</li>
+<li>LDAP SRV availability.</li>
+<li>Domain join now explicitly configures and validates the machine FQDN</li>
+<li>Active Directory DNS registration checks now query the authoritative</li>
+<li>DNS host-record creation and deletion use shared non-interactive</li>
+</ul>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>Fixed joined clients retaining only a short hostname instead of the</li>
+<li>Fixed DNS-registration status reporting false positives caused by</li>
+<li>Fixed DNS helper variable scoping that could reduce a host FQDN to a</li>
+<li>Fixed domain-joined Linux clients being unable to resolve short AD</li>
+<li>Fixed the domain-join chain so a successful join results in a</li>
+</ul>
+<h2 id="storage">Storage</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li>Added storage provisioning for an unused disk, including:</li>
+<li>GPT partition creation.</li>
+<li>EXT4 or XFS filesystem creation.</li>
+<li>Persistent <code>/etc/fstab</code> configuration.</li>
+<li>Mounting at <code>/srv/storage</code>.</li>
+<li>Creation of the standard <code>/srv/storage/shares</code> directory.</li>
+<li>Added actions to mount, unmount, and expand configured storage.</li>
+<li>Added <strong>Validate storage provisioning</strong>, which verifies:</li>
+<li>The storage filesystem is mounted.</li>
+<li>The filesystem is mounted read/write.</li>
+<li>The configured source matches the active mount source.</li>
+<li>The persistent <code>/etc/fstab</code> entry is valid.</li>
+<li>The expected filesystem label is present.</li>
+<li><code>/srv/storage</code> exists.</li>
+<li><code>/srv/storage/shares</code> exists.</li>
+<li>Added a separate <strong>Storage Access</strong> menu group for managing the</li>
+<li><code>/srv/storage</code></li>
+<li><code>/srv/storage/shares</code></li>
+<li>Added actions to:</li>
+<li>Show storage ownership and permissions.</li>
+<li>Set the storage owner.</li>
+<li>Set the storage group.</li>
+<li>Set storage permissions.</li>
+<li>Restore canonical storage permissions.</li>
+<li>Canonical storage permissions can now be restored to:</li>
+<li><code>/srv/storage</code> -- <code>root:root</code>, mode <code>0755</code>.</li>
+<li><code>/srv/storage/shares</code> -- <code>root:root</code>, mode <code>0770</code>.</li>
+</ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li><strong>Show storage status</strong> now reports:</li>
+<li>Mount source.</li>
+<li>Filesystem.</li>
+<li>Filesystem label.</li>
+<li>UUID.</li>
+<li>Mounted state.</li>
+<li>Persistent configuration state.</li>
+<li><code>/etc/fstab</code> validity.</li>
+<li>Whether the active mount source matches the configured source.</li>
+<li>Whether the filesystem is mounted read/write.</li>
+<li>Storage-root and shares-root availability.</li>
+<li>Capacity and available space.</li>
+<li>Replaced the misleading <strong>Storage root writable</strong> status with</li>
+<li>Storage configuration now performs <code>systemctl daemon-reload</code> after</li>
+</ul>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>Fixed storage mount detection incorrectly treating <code>/srv/storage</code> as</li>
+<li>Fixed storage status showing the capacity of the system root instead</li>
+<li>Fixed storage provisioning stopping after filesystem creation</li>
+</ul>
+<h2 id="samba-file-server">Samba File Server</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li>Added Samba file-server package installation.</li>
+<li>Added managed Samba share creation beneath <code>/srv/storage/shares</code>.</li>
+<li>Added actions to list and remove managed Samba shares.</li>
+<li>Share creation now:</li>
+<li>Creates the backing directory.</li>
+<li>Adds a managed section to <code>smb.conf</code>.</li>
+<li>Validates the configuration with <code>testparm</code>.</li>
+<li>Reloads Samba.</li>
+<li>Restores the previous configuration if validation fails.</li>
+<li>Added file-server validation for:</li>
+<li>Samba tooling.</li>
+<li>Samba configuration.</li>
+<li><code>smbd</code> service state.</li>
+<li>Mounted storage.</li>
+<li>The managed share root.</li>
+<li>Configured share backing directories.</li>
+<li>Added a dedicated <code>manage-samba-shares.sh</code> executable for</li>
+<li>The share manager supports:</li>
+<li>Listing all managed shares.</li>
+<li>Selecting one or more shares by number.</li>
+<li>Comma-separated selections.</li>
+<li>Numeric ranges.</li>
+<li>Selecting all shares.</li>
+<li>Keeping the selected collection active while applying multiple</li>
+<li>Added share-management actions to:</li>
+<li>Show share details.</li>
+<li>Set owner.</li>
+<li>Set group.</li>
+<li>Set Unix permissions.</li>
+<li>Restore default permissions.</li>
+<li>Validate selected shares.</li>
+</ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>Replaced the separate share-permission menu actions with a single</li>
+<li>Share ownership and permission management is now handled by the</li>
+<li>The Samba module now delegates detailed share-management workflows</li>
+</ul>
+<h2 id="installation-and-release-management">Installation and Release Management</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li>Added the standalone <code>release-manager.sh</code> as the canonical</li>
+<li>Added filesystem-based release state:</li>
+<li><code>/var/lib/solidgroundux/releases</code> contains releases available</li>
+<li><code>/var/lib/solidgroundux/archive/&amp;lt;release&amp;gt;</code> contains installed</li>
+<li>The highest archived version represents the currently installed</li>
+<li>Added interactive archived-release selection for reinstallation and</li>
+<li>Added GitHub latest-release discovery and download support.</li>
+<li>Added release acquisition through temporary staging, extraction,</li>
+<li>Added bootstrap installation from a GitHub release ZIP containing</li>
+<li>Added automatic creation of the SolidGroundUX release-management</li>
+<li>Added automatic installation of a valid release set found beside the</li>
+<li>Added automatic installation of the release manager itself at</li>
+<li>Added safe cleanup of known bootstrap files after a successful</li>
+<li>Added command-line operations for checking, downloading, installing,</li>
+</ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>Release-manager identity now follows the same canonical per-script</li>
+<li>First-install extraction and copy handling now accounts for target</li>
+<li>First-time installation no longer requires manually creating the</li>
+<li>Release bundles now act as self-contained bootstrap packages: they</li>
+<li>Updates now install complete release archives and process the</li>
+<li>Rollback now reinstalls a complete archived release and returns</li>
+<li>Removal now uses release manifests to remove framework-owned files</li>
+<li>Release-manager UI is self-contained and framework-independent while</li>
+<li>Updated deployment and installation documentation to describe the</li>
+</ul>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>Fixed the fresh-machine bootstrap path so running <code>release-manager.sh</code> from</li>
+<li>Fixed bootstrap handling so the release manager can relocate itself to</li>
+<li>Tightened first-run release discovery and staging so a release extracted in</li>
+</ul>
+<h3 id="removed">Removed</h3>
+<ul>
+<li>The separate installer/updater/uninstaller architecture is</li>
+<li>Removed the requirement for installation metadata or a separate</li>
+</ul>
+<h2 id="development-tools">Development Tools</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li>Added <code>create-wrappers.sh</code>, an interactive development utility for</li>
+<li>Wrapper generation supports source directory, filename or shell-style</li>
+<li>Generated wrapper names conventionally use <code>sgnd-&amp;lt;scriptname&amp;gt;</code> without</li>
+<li>Generated wrappers resolve user-specific and system-wide SolidGroundUX</li>
+<li>Wrapper script targets are variable rather than tied to</li>
+<li>Added <strong>Create wrappers</strong> to the Management Console Development Tools</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li><code>prepare-release.sh</code> now verifies that executable scripts directly</li>
+<li>Added optional automatic creation of missing public command wrappers</li>
+<li><code>create-workspace.sh</code> now copies the canonical SolidGroundUX</li>
+</ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li><code>prepare-release.sh</code> now supports selecting a historical release</li>
+<li>Release preparation now writes the complete prepared release artifact</li>
+<li>Missing canonical source headers encountered during release preparation</li>
+<li>Consolidated release metadata maintenance into <code>prepare-release.sh</code>,</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Version and Build metadata policies in <code>prepare-release.sh</code> now</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Changed-file detection for release metadata uses the canonical</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Checksums are refreshed automatically for changed files and whenever</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Version and Build policy prompts now use constrained SolidGroundUX</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Corrected the <code>prepare-release.sh</code> argument specifications so <code>C</code> is</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Workspace creation now follows the repository-shaped <code>target-root</code></li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li><code>sgnd_doc_renderer.py</code> now renders \\ marked entries only for</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li><code>deploy-workspace.sh</code> now ends with a redo/continue prompt: Continue</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li><code>deploy-workspace.sh</code> now uses <code>ask_datetime</code> for the \<em>\</em>Changed</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>The deployment filter now accepts SolidGroundUX relative date/time</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li><code>deploy-workspace.sh</code> now displays a deployment summary after a</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>The deployment summary reports:</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Result.</li>
+<li>Transport.</li>
+<li>Source root.</li>
+<li>Destination.</li>
+<li>Receiver.</li>
+<li>Start and finish timestamps.</li>
+<li>Every transferred file.</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>The deployment summary now uses <code>sgnd_print_labeledmultivalue</code>,</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li><code>prepare-release.sh</code> now ensures that every regular file directly</li>
+</ul>
+<p>&lt;!-- --&gt;</p>
+<ul>
+<li>Dry-run mode reports which executable permissions would be corrected</li>
+</ul>
+<h1 id="version-18-build-182621804">Version 1.8 (Build 1.8.2621804)</h1>
+<h2 id="changed">Changed</h2>
+<h3 id="active-directory">Active Directory</h3>
+<ul>
+<li>Active Directory provisioning now automatically configures the</li>
+<li>Refined the provisioning workflow with a clearer separation between</li>
+<li>Active Directory provisioning now prompts for the Administrator</li>
+<li>Completed and fully validated the end-to-end Active Directory</li>
+</ul>
+<h3 id="development-tools">Development Tools</h3>
+<ul>
+<li><code>deploy-workspace.sh</code> now supports comma-separated filenames and</li>
+<li>Deployment settings are now persisted automatically between</li>
+<li>Added support for incremental deployments based on the last</li>
+<li><code>deploy-workspace.sh</code> now offers an interactive \<em>\</em>Since last</li>
+<li>When <strong>Since last deployment</strong> is selected, the stored deployment</li>
+<li>When <strong>Since last deployment</strong> is not selected, the \<em>\</em>Changed</li>
+<li>Streamlined deployment prompts and selection workflow for a faster</li>
+<li>Significantly improved incremental documentation generation by</li>
+</ul>
+<h2 id="resolved">Resolved</h2>
+<h3 id="active-directory">Active Directory</h3>
+<ul>
+<li>Fixed domain provisioning to correctly configure the required Fully</li>
+<li>Fixed DNS listener detection during Active Directory verification.</li>
+<li>Fixed Kerberos configuration and verification workflow.</li>
+<li>Fixed Active Directory verification to correctly validate DNS,</li>
+<li>Fixed Administrator account configuration to support non-expiring</li>
+</ul>
+<h3 id="development-tools">Development Tools</h3>
+<ul>
+<li>Fixed deployment state persistence in <code>deploy-workspace.sh</code>.</li>
+<li>Fixed deployment selection to correctly process multiple filename</li>
+</ul>
+<h1 id="version-18-build-2621612">Version 1.8 (Build 2621612)</h1>
+<h2 id="solidground-management-console">SolidGround Management Console</h2>
+<h3 id="added">Added</h3>
+<h4 id="computer-setup">Computer Setup</h4>
+<ul>
+<li>Machine status overview.</li>
+<li>Machine identity and network configuration.</li>
+<li>Machine ID generation.</li>
+<li>SSH service configuration.</li>
+<li>SSH host key generation.</li>
+<li>VM template preparation.</li>
+<li>Ubuntu package management.</li>
+<li>Ubuntu base package installation.</li>
+</ul>
+<h4 id="active-directory">Active Directory</h4>
+<ul>
+<li>Samba Active Directory package installation.</li>
+<li>Active Directory domain provisioning.</li>
+<li>Active Directory status overview.</li>
+<li>Active Directory user management.</li>
+<li>Active Directory group management.</li>
+<li>Active Directory client installation.</li>
+<li>Domain join and leave support.</li>
+</ul>
+<h4 id="samba-file-server">Samba File Server</h4>
+<ul>
+<li>Samba File Server installation.</li>
+</ul>
+<h4 id="optional-roles">Optional Roles</h4>
+<ul>
+<li>Docker installation.</li>
+<li>XRDP installation.</li>
+<li>Framework for future optional server roles.</li>
+</ul>
+<h4 id="solidgroundux">SolidGroundUX</h4>
+<ul>
+<li>Framework configuration management.</li>
+<li>Framework state management.</li>
+<li>Framework logging tools.</li>
+<li>Framework diagnostics.</li>
+<li>SolidGroundUX installation, update, and removal.</li>
+</ul>
+<h4 id="development-tools">Development Tools</h4>
+<ul>
+<li>Workspace creation.</li>
+<li>Workspace deployment through <code>deploy-workspace.sh</code>.</li>
+<li>Workspace archiving.</li>
+<li>Workspace restoration.</li>
+<li>Release preparation.</li>
+<li>Metadata editor.</li>
+<li>Documentation generator.</li>
+<li><code>receive-files.sh</code> for receiving streamed deployments.</li>
+<li><code>tar-it.sh</code> for archive creation.</li>
+<li><code>untar-it.sh</code> for archive restoration.</li>
+</ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>Reorganized the SolidGround Management Console into dedicated</li>
+<li>Simplified the overall console navigation.</li>
+<li>Console actions that invoke external scripts now resolve those</li>
+<li>Completely redesigned <code>deploy-workspace.sh</code>.</li>
+<li>Added support for local and remote workspace deployment over SSH.</li>
+<li>Added support for deploying complete workspaces or filtered file</li>
+<li><code>deploy-workspace.sh</code> now creates a tar stream that is processed by</li>
+<li>Simplified deployment selection by combining directory, filename or</li>
+</ul>
+<h3 id="removed">Removed</h3>
+<ul>
+<li>Replaced the previous console modules with the new functional module</li>
+<li><code>10-sgnd-config.sh</code></li>
+<li><code>20-machine-config.sh</code></li>
+<li><code>30-role-provisioning.sh</code></li>
+</ul>
+<h2 id="solidground-framework">SolidGround Framework</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li>Global variable SGND_COMMON_EXE this is weher Solidground's</li>
+</ul>
+<h1 id="version-18-build-182621804">Version 1.8 (Build 1.8.2621804)</h1>
+<h2 id="changed">Changed</h2>
+<h3 id="active-directory">Active Directory</h3>
+<ul>
+<li>Active Directory provisioning now automatically configures the</li>
+<li>Refined the provisioning workflow with a clearer separation between</li>
+<li>Active Directory provisioning now prompts for the Administrator</li>
+<li>Completed and fully validated the end-to-end Active Directory</li>
+</ul>
+<h3 id="development-tools">Development Tools</h3>
+<ul>
+<li><code>deploy-workspace.sh</code> now supports comma-separated filenames and</li>
+<li>Deployment settings are now persisted automatically between</li>
+<li>Added support for incremental deployments based on the last</li>
+<li><code>deploy-workspace.sh</code> now offers an interactive \<em>\</em>Since last</li>
+<li>When <strong>Since last deployment</strong> is selected, the stored deployment</li>
+<li>When <strong>Since last deployment</strong> is not selected, the \<em>\</em>Changed</li>
+<li>Streamlined deployment prompts and selection workflow for a faster</li>
+<li>Significantly improved incremental documentation generation by</li>
+</ul>
+<h2 id="resolved">Resolved</h2>
+<h3 id="active-directory">Active Directory</h3>
+<ul>
+<li>Fixed domain provisioning to correctly configure the required Fully</li>
+<li>Fixed DNS listener detection during Active Directory verification.</li>
+<li>Fixed Kerberos configuration and verification workflow.</li>
+<li>Fixed Active Directory verification to correctly validate DNS,</li>
+<li>Fixed Administrator account configuration to support non-expiring</li>
+</ul>
+<h3 id="development-tools">Development Tools</h3>
+<ul>
+<li>Fixed deployment state persistence in <code>deploy-workspace.sh</code>.</li>
+<li>Fixed deployment selection to correctly process multiple filename</li>
+</ul>
+<h1 id="version-18-build-2621612">Version 1.8 (Build 2621612)</h1>
+<h2 id="solidground-management-console">SolidGround Management Console</h2>
+<h3 id="added">Added</h3>
+<h4 id="computer-setup">Computer Setup</h4>
+<ul>
+<li>Machine status overview.</li>
+<li>Machine identity and network configuration.</li>
+<li>Machine ID generation.</li>
+<li>SSH service configuration.</li>
+<li>SSH host key generation.</li>
+<li>VM template preparation.</li>
+<li>Ubuntu package management.</li>
+<li>Ubuntu base package installation.</li>
+</ul>
+<h4 id="active-directory">Active Directory</h4>
+<ul>
+<li>Samba Active Directory package installation.</li>
+<li>Active Directory domain provisioning.</li>
+<li>Active Directory status overview.</li>
+<li>Active Directory user management.</li>
+<li>Active Directory group management.</li>
+<li>Active Directory client installation.</li>
+<li>Domain join and leave support.</li>
+</ul>
+<h4 id="samba-file-server">Samba File Server</h4>
+<ul>
+<li>Samba File Server installation.</li>
+</ul>
+<h4 id="optional-roles">Optional Roles</h4>
+<ul>
+<li>Docker installation.</li>
+<li>XRDP installation.</li>
+<li>Framework for future optional server roles.</li>
+</ul>
+<h4 id="solidgroundux">SolidGroundUX</h4>
+<ul>
+<li>Framework configuration management.</li>
+<li>Framework state management.</li>
+<li>Framework logging tools.</li>
+<li>Framework diagnostics.</li>
+<li>SolidGroundUX installation, update, and removal.</li>
+</ul>
+<h4 id="development-tools">Development Tools</h4>
+<ul>
+<li>Workspace creation.</li>
+<li>Workspace deployment through <code>deploy-workspace.sh</code>.</li>
+<li>Workspace archiving.</li>
+<li>Workspace restoration.</li>
+<li>Release preparation.</li>
+<li>Metadata editor.</li>
+<li>Documentation generator.</li>
+<li><code>receive-files.sh</code> for receiving streamed deployments.</li>
+<li><code>tar-it.sh</code> for archive creation.</li>
+<li><code>untar-it.sh</code> for archive restoration.</li>
+</ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>Reorganized the SolidGround Management Console into dedicated</li>
+<li>Simplified the overall console navigation.</li>
+<li>Console actions that invoke external scripts now resolve those</li>
+<li>Completely redesigned <code>deploy-workspace.sh</code>.</li>
+<li>Added support for local and remote workspace deployment over SSH.</li>
+<li>Added support for deploying complete workspaces or filtered file</li>
+<li><code>deploy-workspace.sh</code> now creates a tar stream that is processed by</li>
+<li>Simplified deployment selection by combining directory, filename or</li>
+</ul>
+<h3 id="removed">Removed</h3>
+<ul>
+<li>Replaced the previous console modules with the new functional module</li>
+<li><code>10-sgnd-config.sh</code></li>
+<li><code>20-machine-config.sh</code></li>
+<li><code>30-role-provisioning.sh</code></li>
+</ul>
+<h2 id="solidground-framework">SolidGround Framework</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li>Global variable SGND_COMMON_EXE this is weher Solidground's</li>
+</ul>
+<h1 id="version-18-build-2621300">Version 1.8 (Build 2621300)</h1>
+<h2 id="solidgroundux-framework">SolidGroundUX Framework</h2>
+<h3 id="resolved">Resolved</h3>
+<ul>
+<li>All print primitives in ui.sh now respect SGND_CONSOLE_WIDTH</li>
+</ul>
+<h3 id="added">Added</h3>
+<ul>
+<li>Themed color constants SGND_UI_BOLD, SGND_UI_FAINT, SGND_UI_ITALIC</li>
+<li>Incremental update options for doc-generator</li>
+<li>Added Appendix 0 to documentation (Both for Dev's as well as AI)</li>
+</ul>
+<h2 id="solidgroundux-management-studio">SolidGroundUX Management Studio</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li>Added sshd verification to 20-machine-config.sh</li>
+<li>Added new module 30-role-provisioning.sh with samba ad provisoning</li>
+</ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>Warning when opening shell nows displays regardless of loglevel</li>
+</ul>
+<h1 id="version-18-build-2621022">Version 1.8 (Build 2621022)</h1>
+<h2 id="solidgroundux-management-studio">SolidGroundUX Management Studio</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li>Added a Machine Configuration action to enable or disable the SSH</li>
+<li>Added a Console Session action to open a child shell.</li>
+</ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>Updated <code>set-identity.sh</code> to use the current machine configuration</li>
+<li>Added automatic availability checks for static IPv4 addresses before</li>
+</ul>
+<h2 id="solidgroundux-framework">SolidGroundUX Framework</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li>Added dedicated style variables for title and section rendering,</li>
+</ul>
+<h1 id="version-18-build-2620810">Version 1.8 (Build 2620810)</h1>
+<h2 id="resolved">Resolved</h2>
+<ul>
+<li>Fixed various machine configuration issues in the Management</li>
+<li>Fixed an issue where state variables were not being saved by</li>
+<li>Fixed documentation grouping issues caused by inconsistent script</li>
+</ul>
+<h2 id="added">Added</h2>
+<ul>
+<li>Added framework global <code>SGND_CONSOLE_WIDTH</code> to define the preferred</li>
+<li>Added framework global <code>SGND_MAX_RENDER_WIDTH</code> to define the maximum</li>
+<li>Added documentation summary sections (<code>var:</code> blocks) to the</li>
+</ul>
+<h2 id="changed">Changed</h2>
+<ul>
+<li>Updated all UI rendering primitives to respect the framework console</li>
+<li>Changed HTML documentation rendering so consecutive non-empty lines</li>
+<li>Updated <code>prepare-release.sh</code> to synchronize the selected version</li>
+<li>Improved documentation generation for style configuration variables.</li>
+</ul>
+<h1 id="version-18-build-2620423">Version 1.8 (Build 2620423)</h1>
+<h2 id="resolved">Resolved</h2>
+<ul>
+<li>Fixed an issue where <code>sgnd-install.sh</code> could overwrite ownership and</li>
+</ul>
+<h2 id="changed">Changed</h2>
+<ul>
+<li>Updated <code>sgnd-install.sh</code> to preserve metadata of existing target</li>
+<li>Updated <code>prepare-release.sh</code> to package repository directories with</li>
+</ul>
+<h1 id="version-18-build-2620413">Version 1.8 (Build 2620413)</h1>
+<h2 id="added">Added</h2>
+<ul>
+<li>Introduced the <strong>SolidGroundUX Management Console</strong>, a module-driven</li>
+<li>Added ordered console-module loading through numeric filename</li>
+<li>Added the <code>10-sgnd-config.sh</code> module for:</li>
+<li>Developer tools</li>
+<li>SolidGroundUX installation and maintenance</li>
+<li>Framework configuration</li>
+<li>Framework state</li>
+<li>Framework logging</li>
+<li>Framework diagnostics</li>
+<li>Added the <code>20-machine-config.sh</code> module for machine identity,</li>
+<li>Added direct bottom-bar controls for:</li>
+<li>Dry-run or commit mode</li>
+<li>Console log level</li>
+<li>File log level</li>
+<li>Active theme</li>
+<li>Screen clearing</li>
+<li>Added reverse cycling for console log level, file log level, and</li>
+<li>Added framework configuration actions for viewing effective settings</li>
+<li>Added framework logging actions for viewing, following, filtering,</li>
+<li>Added <code>sgnd-update.sh</code> to download the latest SolidGroundUX release</li>
+<li>Added public command wrappers for install, uninstall, and update</li>
+<li>Added cached console menu models and cached page layouts to make</li>
+</ul>
+<h2 id="changed">Changed</h2>
+<ul>
+<li>Redesigned <code>sgnd-console</code> as a reusable console engine rather than a</li>
+<li>Moved the visible console identity from the host into the first</li>
+<li>Replaced implicit module discovery order with deterministic filename</li>
+<li>Reworked the console module contract around:</li>
+<li><code>SGND_MODULE_ID</code></li>
+<li><code>SGND_MODULE_NAME</code></li>
+<li><code>SGND_MODULE_VERSION</code></li>
+<li><code>SGND_MODULE_DESC</code></li>
+<li>Separated public commands from module-private helper scripts.</li>
+<li>Merged the former Developer Tools and Framework State modules into</li>
+<li>Moved SolidGroundUX installation actions into the SolidGroundUX</li>
+<li>Renamed the <code>vm-config</code> module and helper directory to</li>
+<li>Replaced the individual framework smoke-test menu entries with a</li>
+<li>Reused <code>framework-smoketest.sh --show env</code> as the effective</li>
+<li>Updated console rendering to reuse cached datatable data instead of</li>
+<li>Updated console and module documentation for the new Management</li>
+<li>Made style sequence fixed so forward and back actually work</li>
+</ul>
+<h2 id="removed">Removed</h2>
+<ul>
+<li>Removed the old <code>console-devtools.sh</code> module.</li>
+<li>Removed the old <code>console-framework-state.sh</code> module.</li>
+<li>Removed the old <code>vm-config.sh</code> module name and <code>vm-config/</code> helper</li>
+<li>Removed the prompt-based console and file log-level selectors from</li>
+<li>Removed the prompt-based theme selector from the Console Session</li>
+<li>Removed the individual in-process framework smoke-test menu actions.</li>
+</ul>
+<hr>
+<h1 id="version-17-build-2620012-2026-07-19">Version 1.7 (Build 2620012) 2026-07-19</h1>
+<h2 id="removed">Removed</h2>
+<ul>
+<li>Removed motd file, but archaic and cumbersome, and doesn't really</li>
+</ul>
+<h2 id="added">Added</h2>
+<ul>
+<li>Added images to documentation, do-generator now supports image tag</li>
+</ul>
+<hr>
+<p>\\ Version 1.7 (Build</p>
+<ol>
+<li>\- 2026-07-14</li>
+</ol>
+<p>\\# Fixed - sgnd-console didn't handle --appcfg well, corrected so it works as intended - updated style files with SGND_UI_ON and SGND_UI_OFF</p>
+<p>\\ Version 1.7 (Build</p>
+<ol>
+<li>\- 2026-07-14</li>
+</ol>
+<p>\\# Added</p>
+<p>\\ Added Appendix F to the generated documentation containing the framework license. - Introduced persistent framework settings between sessions. - Added persistent console session settings. - Added interactive console customization for: - Theme selection - File log level - Menu lines per page</p>
+<p>\\# Changed</p>
+<p>\\ Reorganized <code>sgnd-console</code> and <code>sgnd-console-menu</code> into logical sections for improved maintainability.</p>
+<p>\\# Fixed</p>
+<p>\\ Framework settings are now correctly restored when scripts are started outside the console. - Restored menu page height is now applied before the first console render.</p>
+<hr>
+<h1 id="version-16-build-2618912-2026-07-02">Version 1.6 (Build 2618912) - 2026-07-02</h1>
+<h2 id="added">Added</h2>
+<ul>
+<li>Introduced configurable console log levels, including the new</li>
+<li>Added extensive smoke tests for logging and progress bars.</li>
+<li>Added a framework styled MOTD.</li>
+<li>Introduced progress update intervals to improve performance.</li>
+</ul>
+<h2 id="changed">Changed</h2>
+<ul>
+<li>Refactored executable bootstrap architecture by introducing</li>
+<li>Redesigned the first-time installation process.</li>
+<li>Updated the installation guide and generated documentation.</li>
+</ul>
+<h2 id="fixed">Fixed</h2>
+<ul>
+<li>Prevented recursive backup of <code>/var</code> during installation.</li>
+<li>Corrected progress bar cursor positioning.</li>
+<li>Fixed multi-level progress bar rendering.</li>
+<li>Improved progress bar performance for large jobs.</li>
+<li>Corrected framework license acceptance recording.</li>
+<li>Fixed precedence of command-line log level over configuration.</li>
+<li>Corrected clean installation defaults and startup sequence.</li>
+</ul>
+<h2 id="software-development-kit">Software Development Kit</h2>
+<p><strong>Source:</strong> <code>CHANGELOG.md</code></p>
+<h1 id="changelog">Changelog</h1>
+<p>All notable changes to SolidGroundUX SDK are documented in this file.</p>
+<h2 id="unreleased">Unreleased</h2>
+<h2 id="release-212627801">Release 2.1.2627801</h2>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>Reworked release preparation around a single product-package model: every selected product is now emitted as its own product release ZIP; multi-product bundled releases are no longer produced.</li>
+<li>Removed the redundant primary-product selection from multi-product release preparation; selected products remain peers and are prepared in the operator-selected order.</li>
+<li>First-install packages now replace the former bundled-release role and use the independent Version/Build identity of <code>sgnd-setup.sh</code> rather than borrowing a selected product's release identity.</li>
+<li>Product <code>tar.gz</code> payloads and their checksum sidecars are now treated as ZIP-internal staging artifacts and are removed after successful product packaging/export instead of being retained as standalone release outputs.</li>
+<li>Added a separate first-install transport ZIP containing <code>sgnd-setup.sh</code> plus the selected product release ZIPs, keeping bootstrap transport distinct from installable product packages.</li>
+<li>Updated release package metadata to format 3 with <code>SGND_PACKAGE_TYPE=product</code>.</li>
+<li>Added a configurable release output-directory prompt to <code>prepare-release</code>, persisted as state for reuse on subsequent runs.</li>
+<li>Release preparation now reports the final destination path of the generated release artifacts explicitly.</li>
+<li>Changed documentation generation modes so <strong>Full</strong>, <strong>Selected</strong>, and <strong>Changed</strong> control source parsing only; after parsing, the renderer always rebuilds the complete generated site.</li>
+<li>Moved persistent documentation parser and renderer caches out of the generated website tree to <code>usr/local/share/doc-sources/.cache/&amp;lt;site-slug&amp;gt;/parser</code> and <code>usr/local/share/doc-sources/.cache/&amp;lt;site-slug&amp;gt;/renderer</code> beneath the active framework root.</li>
+<li>Changed local documentation publication to render into a fresh <code>&amp;lt;site&amp;gt;.new</code> staging tree and replace the previous generated site only after a successful complete render.</li>
+<li>Changed Git documentation publication to stage a complete fresh copy and replace the previous published tree only after staging succeeds, with restoration of the previous tree if final replacement fails.</li>
+<li>Clarified the documentation-generator UI that generation mode applies to source parsing, renamed the remaining behavior group to <strong>Parser options</strong>, and removed the redundant always-on “Fresh full site render” status line.</li>
+<li>Corrected SDK convenience-template metadata so the SDK documentation, executable and library templates are grouped under <strong>SDK -&gt; Templates</strong> rather than the former Deployment grouping.</li>
+</ul>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>Fixed non-interactive <code>receive-files.sh</code> execution hanging during workspace deployment by suppressing title rendering for the receiver path, avoiding terminal/titlebar probing when no controlling TTY is available.</li>
+<li>Restored normal <code>deploy-workspace</code> completion after the receiver/confirmation handling regression; development-to-production streaming again returns cleanly after transfer.</li>
+<li>Fixed release output cleanup so intermediate <code>tar.gz</code>, manifest, removal-manifest, and checksum artifacts remain staging-only and are removed after successful packaging; the release output directory now contains only the final product release ZIPs and first-install ZIP.</li>
+<li>Fixed release preparation cleanup so packaging metadata and checksum sidecars are retained inside their owning product ZIPs without leaking duplicate loose artifacts into the final release directory.</li>
+<li>Fixed incremental documentation runs leaving stale generated pages behind after source pages were renamed or removed by making every render a fresh complete-site rebuild.</li>
+<li>Fixed parser/renderer cache data being coupled to the generated website output tree; cache state is now kept separately from publishable documentation content.</li>
+</ul>
+<h2 id="release-212626712">Release 2.1.2626712</h2>
+<h3 id="changed">Changed</h3>
+<ul>
+<li><code>prepare-release</code> now synchronizes existing literal <code>SGND_*_MODULE_VERSION</code> and <code>SGND_*_MODULE_BUILD</code> assignments when the corresponding canonical header Version or Build is updated, without creating metadata variables that are not already present.</li>
+<li>Remote multi-product deployment now establishes one shared SSH connection for the deployment session and prepares remote receiver sudo access once before streaming products, limiting interactive authentication to at most one SSH password and one remote sudo password regardless of the number of selected products.</li>
+<li>Standardized public executable wrappers on the current canonical wrapper template, including framework-root discovery and target resolution instead of fixed installed or development paths.</li>
+</ul>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>Removed a stale development-machine path from the Release Manager public wrapper by resolving the installed Release Manager through the canonical wrapper target mechanism.</li>
+</ul>
+<h2 id="release-212626612">Release 2.1.2626612</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li>Established SolidGroundUX SDK as the owner of development, workspace, deployment, documentation and release tooling separated from the SolidGroundUX Framework.</li>
+<li>Added multi-product documentation collections with product discovery/selection, a primary product, product-specific <code>.docignore</code> configuration, deterministic duplicate-module handling and merged product assets.</li>
+<li>Added explicit documentation collection/output handling and documentation table syntax support.</li>
+<li>Added multi-product release preparation with per-product Version/Build policy, primary-product bundle identity, product ownership collision detection and per-product removal-baseline selection.</li>
+<li>Added release-package discovery and product-aware release/removal handling, including manifest-based removal and ownership-based removal paths.</li>
+<li>Added a declarative <code>workspace-layout.cfg</code> used by <code>create-workspace</code> to instantiate the complete canonical target-root tree, including system/user configuration and state locations, MOTD, runtime, share and var directories.</li>
+<li>Added optional project Description input to <code>create-workspace</code>; the description is stored in project definitions and reused by generated repository material.</li>
+<li>Added generated project README, changelog, license placeholder, default SolidGroundUX icon and Git placeholders for otherwise-empty canonical workspace directories.</li>
+</ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>Made <code>deploy-workspace</code> product-aware: product repositories can now be discovered beneath a product root and deployed individually or together.</li>
+<li>Added product selection, including an <code>All products</code> option, while retaining explicit single-source deployment compatibility.</li>
+<li>Deployment filtering and reporting now operate per selected product.</li>
+<li>Moved <code>create-workspace</code>, <code>deploy-workspace</code>, <code>prepare-release</code>, release management, documentation generation/rendering/processing, wrapper generation and canonical normalization into the SDK product boundary.</li>
+<li><code>create-workspace</code> now derives generated README identity from project definitions: Title, Version.Build, Copyright, project name and Description. Generated README navigation points to installed documentation, changelog and license and no longer embeds Framework-specific marketing captions.</li>
+<li><code>create-workspace</code> now creates the full canonical workspace tree even when individual directories are not initially used; empty directories are retained in Git with placeholders that are excluded from release content.</li>
+<li>Convenience templates are discovered by product ownership and copied into workspace-local templates for project use. Starter scripts receive the new project identity and canonical Version/Build defaults.</li>
+<li><code>doc-generator</code> now treats duplicate module basenames across products as deterministic first-wins collisions: the duplicate is warned about and skipped rather than overwriting or aborting the collection.</li>
+<li><code>prepare-release</code> now treats product identity independently from repository identity and keeps release metadata/baseline state with each selected product. Bundles inherit Version/Build from the primary product.</li>
+<li>SDK executables running from a non-root SDK development tree now resolve Framework-owned resources through the Framework resolver while preserving their own SDK development context.</li>
+</ul>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>Fixed <code>create-workspace</code> prematurely aborting after starter-script generation when the final selected template was non-executable; subsequent definitions, MOTD, README, changelog, license and placeholder generation now runs normally.</li>
+<li>Fixed <code>normalize-canon</code> assuming canonical Framework fragments existed beneath the SDK development root; canonical fragments now resolve from the actual local or installed Framework.</li>
+<li>Fixed <code>prepare-release</code> product identity updates for canonically indented <code>*_VERSION</code> and <code>*_BUILD</code> assignments and improved failure reporting for identity/header/checksum update failures.</li>
+<li>Fixed release baseline discovery so the Framework product-name prefix does not absorb similarly named companion products such as Management Console Modules.</li>
+<li>Fixed documentation output behavior so duplicate modules and assets are reported without silently replacing previously collected product content.</li>
+</ul>
+<h2 id="management-console-modules">Management Console Modules</h2>
+<p><strong>Source:</strong> <code>CHANGELOG.md</code></p>
+<h1 id="changelog">Changelog</h1>
+<p>All notable changes to SolidGroundUX Management Console Modules are documented in this file.</p>
+<p>The format is inspired by <em>Keep a Changelog</em> while remaining focused on practical framework development.</p>
+<h2 id="backlog">Backlog</h2>
+<h3 id="ad-server-module">AD Server module</h3>
+<ul>
+<li><strong>Pending live validation:</strong> Additional writable DC joining must be tested on a disposable existing domain, including failed join recovery, DNS/resolver transition, and replication convergence.</li>
+</ul>
+<h3 id="solidgroundux">SolidGroundUX</h3>
+<h2 id="unreleased">Unreleased</h2>
+<h3 id="active-directory-pending-live-validation">Active Directory (pending live validation)</h3>
+<ul>
+<li>Added a separate <strong>Join existing domain as additional DC</strong> workflow with DNS/LDAP/Kerberos discovery, interactive Samba DC join, generated Kerberos configuration, resolver cutover, service/DNS registration and DRS replication status checks. Existing first-DC provisioning remains unchanged.</li>
+<li>Added tracked child actions to report the first failing additional-DC stage. The workflow refuses to overwrite an existing smb.conf and requires the system resolver to discover the existing domain before joining. Live join and failure recovery are not tested.</li>
+</ul>
+<h3 id="framework-diagnostics">Framework diagnostics</h3>
+<ul>
+<li>Added <strong>Inspect / repair permissions</strong> to Framework Diagnostics, invoking the Framework-owned policy engine in dry-run first and requiring explicit confirmation before applying its policy.</li>
+</ul>
+<h3 id="database-server-management-pending-live-validation">Database-server management (pending live validation)</h3>
+<ul>
+<li>Added module <code>61-postgresql.sh</code> with <code>manage-postgresql.sh</code> and <code>sgnd-manage-postgresql</code>, following the SQL Server host-management lifecycle for Ubuntu 24.04/26.04.</li>
+<li>Added module <code>62-mariadb.sh</code> with <code>manage-mariadb.sh</code> and <code>sgnd-manage-mariadb</code>, using stock Ubuntu packages and a dedicated MariaDB configuration override.</li>
+<li>Both modules register tracked preparation substeps, service, network, memory, firewall, storage inspection, status and validation actions. Automatic relocation of existing database directories is intentionally disabled to avoid damaging populated servers.</li>
+<li><strong>Testing pending:</strong> no live PostgreSQL/MariaDB installation, service, storage, or restart integration test has yet been performed.</li>
+</ul>
+<ul>
+<li>Markdown image sizes: optional <code>width</code> and <code>height</code> (pixels) for inline Markdown images and <code>td-image-text</code>, including images nested in tiles and galleries; no change to featured-card sizing defaults.</li>
+</ul>
+<h3 id="web-content-management-21-final-workflow-and-authoring-updates">Web Content Management 2.1 — final workflow and authoring updates</h3>
+<ul>
+<li>Consolidated the Incoming workflow around <strong>Retrieve Incoming</strong>, <strong>Import local files to Incoming</strong>, and <strong>Review and ingest Incoming package</strong>, including ZIP packages with Markdown and local resources.</li>
+<li>Added automatic movement of successfully ingested packages to <code>incoming/archive/</code>; failed or conflicting packages remain available for review.</li>
+<li>Added <code>featured_order</code> front-matter ordering for the homepage Featured slider: numbered items first (ascending), followed by unnumbered items alphabetically; <code>nav_order</code> remains independent.</li>
+<li>Documented the front-matter Featured workflow, the remaining legacy <code>featured.cfg</code> override, and the separate <code>featured-slider.cfg</code> autoplay setting.</li>
+<li>Updated the Web Content Manager preface and repository authoring instructions to reflect the current Incoming and Featured workflows.</li>
+</ul>
+<h3 id="added">Added</h3>
+<ul>
+<li>Added the new <strong>Web Content Management</strong> module (<code>55-web-content-management</code>) with the <code>manage-web-content.sh</code> management executable and supporting Python package under <code>usr/local/lib/solidgroundux/py/webcontent</code>.</li>
+<li>Added Markdown-based static-site generation from site configuration, content, templates, CSS, and assets, including multilingual routes and language-aware navigation.</li>
+<li>Added content hierarchy support based on the website content tree, with section landing pages, nested subpages, breadcrumbs, and automatically generated <strong>In deze sectie</strong> child-page indexes.</li>
+<li>Added interactive Markdown ingestion from the canonical site <code>incoming/</code> directory, with support for an operator-supplied directory or <code>--ingest-dir</code> override.</li>
+<li>Added metadata-assisted ingestion that uses metadata already present in a Markdown file, derives safe defaults where possible, and interactively asks only for missing or ambiguous values.</li>
+<li>Added batch ingestion with remembered defaults for repeated metadata such as language, content type, and parent section, allowing subsequent files to accept the previous choices with Enter.</li>
+<li>Added archival of successfully ingested source Markdown under <code>ingested/YYYY-MM-DD/</code>, preserving the original input while writing normalized canonical content into the website content tree.</li>
+<li>Added safe page deletion with multi-select support, translation-aware handling, recursive section deletion confirmation, protected section roots, and archival under <code>deleted/YYYY-MM-DD/</code> rather than immediate destruction.</li>
+<li>Added Testadura Markdown component extensions, including nested <code>:::</code> component blocks, responsive <code>td-grid</code> / <code>td-tile</code> layouts, callouts, inline/image classes, and native scroll-snap image galleries.</li>
+<li>Added configurable featured-content support through <code>featured.cfg</code>, allowing product pages or articles to be curated independently of the site navigation and resolved per language by the generator.</li>
+<li>Added website-source validation for content metadata, duplicate generated routes, optional section-index structure, component CSS references, featured-content targets, and other generation-time consistency checks.</li>
+<li>Added section management for creating, renaming/moving, and removing website sections, including configurable section index pages and explicit choices for moving, archiving, or deleting contained content.</li>
+<li>Added interactive page-metadata editing and management of publication status, with draft/preview output separated from the public website.</li>
+<li>Added website publication destinations stored as reusable profiles, including SSH/rsync targets and <strong>Update</strong> versus <strong>Mirror</strong> synchronization previews with explicit confirmation.</li>
+<li>Added remote Nginx-site provisioning from Web Content Management: check the destination host and document root, offer to create missing sites, and refuse silently changing conflicting existing site configurations.</li>
+<li>Added assisted SSH authentication recovery for remote publication, including agent detection, fallback to the fixed SolidGroundUX socket, key unlocking, public-key installation, and retry.</li>
+<li>Added remote publication-directory preparation and permission checks, with confirmed remediation for the publishing account while keeping the site readable by Nginx.</li>
+<li>Added optional internal DNS A-record registration and post-publication DNS/HTTP verification as part of the website-deployment workflow.</li>
+<li>Added optional DNS A-record cleanup to <strong>Web Server Management → Manage Sites → Remove site</strong>, limited to a record matching the local web-server address and requiring explicit confirmation.</li>
+<li>Added a documentation content comparison to <strong>Documentation status</strong>, with a confirmed <strong>Update published documentation</strong> operation using an rsync checksum preview.</li>
+<li>Added favicon rendering/support through the Python site renderer so published sites can serve <code>favicon.ico</code> as a static asset; no separate Nginx management action is required.</li>
+<li>Added optional per-site HTTPS configuration in <strong>Web Server Management → Manage Sites</strong>, supporting existing certificates or self-signed test certificates and optional HTTP-to-HTTPS redirection, with Nginx configuration validation and rollback.</li>
+<li>Added per-site private URL-section management using Nginx HTTP Basic Authentication, bcrypt password hashes stored outside the document root, and optional on-demand installation of <code>apache2-utils</code> (<code>htpasswd</code>).</li>
+<li>Added an HTTPS-only Markdown upload receiver behind Nginx Basic Authentication, accepting up to ten <code>.md</code> files per request, with per-file limits and storage outside the public document root.</li>
+<li>Added a drag-and-drop Markdown upload page and a separate authenticated upload endpoint; the website can publish the upload page without exposing the receiver publicly.</li>
+<li>Added <strong>Retrieve Incoming</strong> in Web Content Management, with persistently configurable SSH source host, account, port, and remote incoming directory, selection of multiple files, and post-transfer remote archiving of successfully retrieved files.</li>
+<li>Added multi-file selection to <strong>Ingest</strong>, alongside the existing ingest-all workflow.</li>
+<li>Added automatically generated, expandable sidebar navigation for nested sections and subpages, using configured main-section labels and Markdown page titles, with support for sections without index pages.</li>
+<li>Added <code>hidden</code> navigation behavior and <code>ShowHidden</code>/<code>HideHidden</code> browsing controls, including preservation across internal navigation; private-page metadata is checked against configured protected URL prefixes at generation time.</li>
+<li>Added content-hash versioning of local CSS and JavaScript asset references to reduce stale browser asset caching.</li>
+</ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>Changed website generation so the filesystem content tree is authoritative for page hierarchy while <code>navigation.cfg</code> remains focused on the main site navigation.</li>
+<li>Changed non-listing section child pages to render as normal pages by default while article/listing sections retain article behavior.</li>
+<li>Changed multilingual generation so navigation and language-switch links are emitted only for translations that actually exist in the generated output.</li>
+<li>Changed Web Content Management action status handling so a successful ingest or delete operation that changes website source marks <strong>Generate website</strong> as warning until the site is regenerated successfully.</li>
+<li>Changed page-deletion UX to use multi-selection and the standard SolidGroundUX auto-continue flow, with <strong>Enter</strong> returning to the menu and <strong>A</strong> offering another deletion pass.</li>
+<li>Changed Web Content Management publishing from a configuration-file-only operation into an interactive, destination-based deployment flow while retaining preview and cancellation controls.</li>
+<li>Changed remote hosting operations to execute the canonical Web Server Management executable under the existing constrained SolidGroundUX sudo policy rather than assuming general passwordless sudo.</li>
+<li>Changed SSH helper loading to use <code>SGND_USING=(sgnd-ssh-deployment.sh)</code> and its Framework-owned common library, rather than a hand-maintained set of library search paths.</li>
+<li>Changed Computer Setup into a thin console orchestrator with separate computer/identity and SSH-access management executables; added per-user SSH key-generation, remote installation, agent-unlock, and authentication-test actions.</li>
+<li>Changed the installed-documentation source path in Web Server Management to <code>/usr/local/share/doc/solidgroundux-codex</code>, with an override through <code>SGND_WEB_DOC_INSTALLED_ROOT</code> or <code>web-server.cfg</code>.</li>
+<li>Changed content validation to permit missing language variants and optional section index pages; an untranslated or index-less intermediate directory no longer blocks generation solely because its index is absent.</li>
+<li>Changed the site navigation from flat top-level links to a recursive hierarchy; hidden section nodes suppress their descendants in ordinary navigation but can be revealed with <code>ShowHidden</code>.</li>
+<li>Changed the upload-page generation to include the required JavaScript explicitly and fail if the expected upload script is unavailable; the script and other JavaScript assets now publish from <code>www/js/</code> rather than <code>www/images/</code>.</li>
+<li>Changed the web-content publishing flow to distinguish successful rsync publication from subsequent HTTP verification warnings; an HTTP-to-HTTPS <code>301</code> is still reported as a pending verification rather than a publishing failure.</li>
+</ul>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>Fixed language-switch generation that could previously expose links to untranslated pages when only a subset of configured languages was generated.</li>
+<li>Fixed nested Testadura Markdown component parsing so nested <code>:::</code> blocks are handled correctly without being confused by fenced code blocks containing the same marker.</li>
+<li>Fixed reversed SSH username/hostname parameters during remote publishing authentication checks.</li>
+<li>Fixed remote Web Server executable resolution to use the canonical MCM <code>libexec</code> path rather than nonexistent <code>mcm</code> subdirectories.</li>
+<li>Fixed remote provisioning's incompatible <code>sudo -n true</code> precheck and aligned privileged site setup with the configured SolidGroundUX executable sudo rule.</li>
+<li>Fixed a publishing-script regression that restored obsolete manual SSH-helper sourcing and argument ordering.</li>
+<li>Fixed managed Basic Auth password-file directory and file permissions so the Nginx worker can read credentials without exposing them publicly.</li>
+<li>Fixed Markdown upload setup to recognize existing managed HTTPS and Basic Auth configuration and avoid rewriting a functioning TLS-protected site.</li>
+<li>Fixed <code>ShowHidden</code> behavior across page navigation, including support for hidden subsection navigation in the generated HTML.</li>
+<li>Fixed the upload page silently losing its drag-and-drop interface when the external JavaScript reference was missing from generated HTML.</li>
+<li>Fixed upload-script path handling after relocating <code>markdown-upload.js</code> from <code>images/</code> to <code>js/</code>.</li>
+</ul>
+<h3 id="known-limitations">Known limitations</h3>
+<ul>
+<li>HTTP verification after publication still reports an intentional <code>301</code> redirect to HTTPS as pending; follow the redirect and validate HTTPS with an appropriate certificate trust policy in a future refinement.</li>
+<li><code>private: true</code> is publication metadata, not access control: server-side Nginx authentication must be configured and tested independently for each protected URL and upload endpoint.</li>
+</ul>
+<h2 id="release-212627801">Release 2.1.2627801</h2>
+<h3 id="solidgroundux-setup">SolidGroundUX setup</h3>
+<ul>
+<li>Renamed the SolidGroundUX lifecycle entry in the Management Console from <strong>Release manager</strong> to <strong>Setup</strong> and switched it to the canonical <code>/var/lib/solidgroundux/sgnd-setup.sh</code> entry point, with the former release-manager path retained as a transition fallback.</li>
+</ul>
+<h3 id="management-console">Management Console</h3>
+<ul>
+<li>Added a loaded-module registry view under <strong>SolidGroundUX -&gt; Framework Diagnostics</strong>, showing module Shortname, Title, Type, Version, Build, load timestamp, and source, with selectable detailed metadata including Description.</li>
+<li>Expanded the loaded-module registry schema and registration flow to retain canonical header identity for modules loaded during the current console session.</li>
+<li>Changed console navigation so <code>Esc</code> is the canonical return/exit key: <code>Esc</code> returns from a module page to the main index and, on the main index, asks for confirmation before exiting.</li>
+<li>Removed <code>Q/q</code> as a Management Console exit shortcut and made the footer/help text context-aware (<code>Esc Previous menu</code> on module pages and <code>Esc Exit</code> on the main index).</li>
+<li>Standardized end-of-action behavior across console modules so actions that immediately return/redraw do not add a redundant completion wait.</li>
+<li>Made lazy module loading transactional so registrations created during a failed module load are rolled back before returning, preventing duplicate groups/items when the module is retried.</li>
+</ul>
+<h3 id="storage-module">Storage module</h3>
+<ul>
+<li>Corrected the indentation of the <strong>Unmount storage</strong> and <strong>Expand storage</strong> menu entries.</li>
+</ul>
+<h3 id="samba-file-server">Samba file server</h3>
+<ul>
+<li>Added dedicated <code>manage-samba-users.sh</code> ownership for standalone Samba user/group administration, separating identity management from share/directory management.</li>
+<li>Added a single <strong>Manage users and groups</strong> entry beneath Samba Shares and removed standalone identity CRUD from the share manager.</li>
+<li>Added a comprehensive standalone Samba identity overview including user group memberships.</li>
+<li>Fixed <strong>Add user(s) to local group</strong> so the second selector lists Samba users rather than local groups.</li>
+<li>Added the required datatable dependency to the standalone Samba user/group manager.</li>
+<li>Verified fresh Active Directory mode end-to-end, including AD join, Samba preparation, share publication, access configuration, validation, and Windows client access.</li>
+<li>Verified fresh standalone mode end-to-end and verified both standalone -&gt; AD and AD -&gt; standalone authentication-mode transitions.</li>
+</ul>
+<h3 id="docker-module">Docker module</h3>
+<ul>
+<li>Fixed the malformed first line in <code>manage-docker-server.sh</code> so the script has a valid shebang/header boundary.</li>
+</ul>
+<h3 id="storage-module">Storage module</h3>
+<ul>
+<li>Added recovery for restored or reattached <code>SGND_STORAGE</code> volumes whose filesystem UUID no longer matches the SolidGroundUX-managed <code>/etc/fstab</code> entry; persistence reconciliation can identify an unambiguous managed volume, confirm the repair, update persistent configuration, and remount it without reprovisioning.</li>
+<li>Added completion-status propagation for composite storage configuration so completed storage subtasks are reflected by their Management Console status icons.</li>
+</ul>
+<h3 id="ad-server-module">AD Server module</h3>
+<ul>
+<li>Added tracked subtask reporting for the composite domain-provisioning workflow so each underlying provisioning action is reflected in the Management Console after <strong>Provision domain</strong> completes.</li>
+<li>Verified fresh Active Directory Domain Controller provisioning end-to-end, including DNS, Kerberos, LDAP, registration, validation, and status.</li>
+</ul>
+<h3 id="ad-management">AD Management</h3>
+<ul>
+<li>Added multi-select user/group management for bulk Active Directory actions and completed the current 2.1 management workflow validation.</li>
+</ul>
+<h3 id="ad-client-module">AD Client module</h3>
+<ul>
+<li>Added tracked subtask reporting for the composite domain-join workflow so completed, failed, warning, and unexecuted join steps are reflected correctly in Management Console status.</li>
+<li>Changed an already-joined domain preflight result from failure to warning, preventing an existing membership from being presented as an error.</li>
+<li>Added host Kerberos keytab validation to AD client join and validation.</li>
+<li>Expanded AD client reconciliation to detect and repair a missing or invalid <code>/etc/krb5.keytab</code> before restarting SSSD, allowing an existing valid realm membership to be repaired without a leave/rejoin cycle.</li>
+<li>Fixed domain leave so a single leave operation immediately clears realm membership and deactivates SSSD; verified with repeated join/leave testing against <code>testadura2.hq</code>.</li>
+</ul>
+<h3 id="samba-file-server">Samba file server</h3>
+<ul>
+<li>Simplified Samba authentication preparation so the server derives its mode from host Active Directory membership: AD members are configured for ADS integration and non-members for standalone operation, leaving domain membership ownership with the AD Client module.</li>
+<li>Completed Samba ADS integration and validation around Samba machine trust, Winbind domain state, NETLOGON connectivity, SSSD-backed host membership, and DNS verification.</li>
+<li>Improved Samba share-root preparation and validation so managed share paths remain traversable by authorized identities.</li>
+<li>Expanded <strong>Show shares</strong> into the consolidated share/access overview, including authentication mode, backing path and directory state, path traversal, explicit group access, and access-configuration state; removed the now-redundant <strong>Show access</strong> action.</li>
+<li>Added multiple-selection support for Active Directory groups when granting share access, applying the selected access level to every selected group and share.</li>
+<li>Improved share creation so the managed share root is displayed, the backing directory defaults to the share name but can be overridden with a relative path, and an existing suitable backing directory is reused rather than treated as an error.</li>
+<li>Added optional immediate access configuration after creating a share and kept new shares secure until explicit access is assigned.</li>
+<li>Added standalone Samba identity management for local Samba users and groups while keeping those actions unavailable in Active Directory mode.</li>
+<li>Added access-identity reconciliation support for managed shares.</li>
+<li>Fixed share-root traversal permissions that could allow Samba share discovery while filesystem traversal still denied authorized AD users.</li>
+<li>Fixed multi-group access assignment where only one selected Active Directory group could receive the requested rights.</li>
+<li>Fixed composite Samba preparation so completed child actions report their status to the Management Console.</li>
+<li>Added dedicated Samba directory management, separating filesystem directory lifecycle and ACL management from Samba share management, with share-root protection, multi-directory selection, explicit/default ACL inspection, and independently selectable Read, Write, and Traverse permissions.</li>
+<li>Added stateful default share access group and access level, with authentication-mode-aware group selection and support for clearing the saved default.</li>
+<li>Improved standalone local-group selection by excluding <code>nogroup</code> and user-private primary groups while retaining deliberate Samba access groups.</li>
+<li>Fixed share access reconciliation to use the authentication-aware single-group selector and correctly propagate Samba access synchronization failures.</li>
+<li>Improved Samba authentication reconfiguration with visible current/target mode reporting and progress through the transition steps.</li>
+<li>Fixed standalone-to-AD Samba transitions where Winbind retained stale machine-account credentials by synchronizing Samba machine-account data from the valid host AD membership before trust validation.</li>
+<li>Improved directory access reporting to use the same compact principal-to-rights presentation as share management, including explicit and default ACLs for both users and groups.</li>
+<li>Fixed Active Directory directory-ACL assignment and display on subdirectories by resolving AD identities reliably before applying ACLs and verifying immediate/default ACL writes.</li>
+<li>Verified Samba directory management and standalone &lt;-&gt; Active Directory transitions end-to-end.</li>
+</ul>
+<h3 id="webserver-module">Webserver module</h3>
+<ul>
+<li>Added completion status reporting for web-server preparation steps, including separate status for Nginx installation and web-service startup.</li>
+<li>Changed composite web-server preparation to persist child action results in the Management Console, matching the tracked workflow behavior used by other compound modules.</li>
+<li>Standardized web-server action endings and removed redundant menu wait times for actions that handle their own continuation dialogs.</li>
+<li>Improved web-content and SolidGroundUX documentation publishing to resolve and validate the actual source web root, preventing nested publication directories that could result in HTTP 403 responses.</li>
+<li>Added site document-root management, allowing the document root of an existing Nginx site to be changed.</li>
+<li>Verified the Web Server and publishing workflows end-to-end, including site management, content publishing, documentation publishing, validation, and status.</li>
+</ul>
+<h3 id="sql-server-module">SQL Server module</h3>
+<ul>
+<li>Added persistent child-action progress reporting for <strong>Prepare SQL Server</strong>, covering repository configuration, engine installation, SQL Server setup, and SQL Server tools installation.</li>
+<li>Reordered the SQL Server menu so <strong>Install SQL Server tools</strong> is grouped with the other <strong>Prepare SQL Server</strong> child actions, keeping menu order aligned with the compound workflow.</li>
+</ul>
+<h2 id="release-212626712">Release 2.1.2626712</h2>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>Samba share creation now selects a storage location immediately below the configured SolidGroundUX storage root before asking for the share name; the share path is derived from that location and existing backing directories can be reused.</li>
+<li>Standardized Management Console public management wrappers on the current canonical wrapper template rather than direct fixed <code>/usr/local/libexec</code> execution.</li>
+</ul>
+<h3 id="removed">Removed</h3>
+<ul>
+<li>Removed remaining references to the superseded <code>sgnd-framework-smoketest</code> command and stale <code>framework-smoketest.sh</code> implementation; Framework testing uses the Framework-owned <code>sgnd-smoketest</code> command.</li>
+</ul>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>Fixed Active Directory shared management code so it invokes the canonical identity-management executable directly instead of depending on the Management Console's private module-script runner.</li>
+<li>Fixed Active Directory server provisioning so resolver handoff waits for IPv4 DNS port 53 to become available before starting Samba, preventing intermittent DNS-listener failures during fresh domain-controller provisioning.</li>
+<li>Fixed Active Directory Management module metadata formatting that caused lazy-load metadata validation to fail and subsequent retries to produce duplicate menu registrations.</li>
+<li>Fixed Samba managed-share discovery and validation so shares can reside beneath selected top-level storage locations rather than being restricted to <code>/srv/storage/shares</code>.</li>
+</ul>
+<h3 id="verified">Verified</h3>
+<ul>
+<li>Verified fresh Active Directory Domain Controller provisioning end-to-end on Ubuntu 24.04, with all provisioning, DNS, Kerberos, LDAP, registration, validation and status steps completing successfully.</li>
+<li>Verified Active Directory Client workflow on a fresh Ubuntu system joining an existing known-good Active Directory domain.</li>
+</ul>
+<h2 id="release-212626523">Release 2.1.2626523</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li>Added the canonical per-module validation contract: <code>validate_module_&amp;lt;module-id-with-hyphens-replaced-by-underscores&amp;gt;</code>, <code>SGND_MODULE_VALIDATION_MESSAGE</code>, and standard Passed/Failed/Warning/Skipped return states.</li>
+<li>Added Framework Test orchestration that combines Framework-owned smoke/installation tests with Management Console-owned registration and module validation.</li>
+<li>Added metadata discovery from canonical module headers so the console can show ID, Version/Build, Description, Visibility and Source without sourcing modules.</li>
+<li>Added explicit development-context reporting for the console host and console application when either runs from a non-production root.</li>
+</ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>Completed ownership of the SolidGround Management Console host (<code>management-console.sh</code>) and public <code>sgnd-console</code> command in this product. The reusable runtime and <code>sgnd-menu</code> API remain Framework-owned.</li>
+<li>Framework smoke-test ownership moved to the SolidGroundUX Framework; Management Console Modules invokes the public <code>sgnd-smoketest</code> command rather than shipping a duplicate smoke-test executable.</li>
+<li>Module applicability is determined by each module's canonical validator; the Framework Test runner no longer hardcodes server-role knowledge.</li>
+<li>The Management Console module template is owned by this product; generic executable/library/documentation/wrapper templates are no longer treated as MCM-owned.</li>
+<li>Standardized corrected module/action presentation around SolidGroundUX section headers, spacing, current-state display and return-flow conventions.</li>
+<li>Continued the module/executable split so console modules remain presentation/orchestration layers and persistent operations are delegated to management executables.</li>
+<li>Development-root console execution now consumes the installed Framework when no local Framework is present, while application-local MCM executables and modules continue to resolve from the MCM development tree.</li>
+</ul>
+<h3 id="removed">Removed</h3>
+<ul>
+<li>Removed the former Management Console-owned <code>framework-smoketest.sh</code> and <code>sgnd-framework-smoketest</code> wrapper; these are superseded by Framework-owned <code>sgnd-smoketest</code>.</li>
+<li>Removed duplicated runtime Version/Description module metadata in favor of canonical comment-header metadata.</li>
+</ul>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>Fixed framework/module test integration after the product split, including console registration validation, module validator dispatch, smoke-test menu behavior and public-command execution.</li>
+<li>Fixed cross-module helper ownership exposed by lazy loading by moving shared helpers to their appropriate Framework or subject-specific libraries.</li>
+<li>Fixed Active Directory, Storage, Samba, Web Server, SQL Server and Docker module validation/presentation issues found during the 2.1 correction pass.</li>
+<li>Fixed Management Console development startup against an installed Framework after the repository split, including Framework bootstrap, UI style/palette and license resolution.</li>
+<li>Fixed duplicate/development module registration issues encountered while separating the SDK tooling from the Management Console product.</li>
+</ul>
+<h2 id="release-122626021">Release 1.2.2626021</h2>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>Moved all existing console management modules and their dependencies to a separate repository, to be released as a separate product.</li>
+<li>Defined Management Console Modules as an independently versioned and distributable product, while allowing tested compatible module releases to be bundled with full SolidGroundUX framework releases.</li>
+<li>Kept <code>90-development.sh</code> as a thin integration module over the existing public <code>sgnd-*</code> development commands, with no additional management executable required.</li>
+<li>Refactored console modules toward a presentation-and-orchestration role, moving persistent management operations into dedicated management executables.</li>
+<li>Refactored <code>40-solidgroundux.sh</code> to separate Management Console presentation and orchestration from persistent framework-management operations.</li>
+<li>Preserved runtime-sensitive framework state operations within the console module, with local DRYRUN protection.</li>
+<li>Propagated console DRYRUN mode to delegated management executables and release-management actions.</li>
+<li>Refactored SolidGroundUX framework testing into a thin console orchestration module, preparing framework-owned smoke testing and Management Console-owned registration/module validation to be separated cleanly.</li>
+<li>Refactored <code>30-samba-file-server.sh</code> to separate Samba File Server presentation and orchestration from persistent Samba management operations.</li>
+<li>Refactored <code>15-storage.sh</code> to separate Storage console presentation and orchestration from persistent storage-management operations.</li>
+<li>Standardized DRYRUN reporting for management actions, using <code>DRYRUN: Would ...</code> during previews and an explicit retrospective completion message.</li>
+<li>Improved Samba selection-dialog presentation with caller-owned section headers, spacing, and option layout.</li>
+<li>Refactored Active Directory Server, Client, and Directory Management modules into thin console presentation and orchestration modules backed by dedicated management executables.</li>
+<li>Consolidated shared Active Directory discovery, validation, addressing, and domain-state helpers into <code>active-directory-management.sh</code>.</li>
+<li>Refactored <code>50-web-server.sh</code> into a thin console module backed by dedicated web-server management and publishing executables.</li>
+<li>Separated Nginx server/site configuration from web-content publishing, keeping web-server management responsible for how content is served and publishing responsible for how content is deployed.</li>
+<li>Generalized web-content publishing so ordinary Nginx sites can be published from local directories, remote machines, or Git repositories; SolidGroundUX documentation remains a specialized publishing workflow.</li>
+<li>Refactored <code>60-sqlserver.sh</code> into a thin console module backed by <code>manage-sqlserver.sh</code>, preserving the existing SQL Server host-management scope.</li>
+<li>Added the initial <code>70-docker-server.sh</code> console module with separate Docker host and container-management executables.</li>
+</ul>
+<h3 id="added">Added</h3>
+<ul>
+<li>Added <code>manage-solidgroundux.sh</code> for persistent framework configuration management and logfile rotation.</li>
+<li>Added consistent DRYRUN handling to SolidGroundUX management actions, including detailed previews of intended persistent changes.</li>
+<li>Added the Framework Test console page and the initial validation/smoke-test orchestration used during the product split.</li>
+<li>Added <code>manage-samba-file-server.sh</code> for Samba File Server installation, preparation, service management, validation, and status operations.</li>
+<li>Added dedicated Samba share-management support for creating, removing, structuring, validating, and assigning access to managed shares.</li>
+<li>Added <code>manage-storage.sh</code> for persistent storage provisioning, mounting, expansion, access management, validation, and status operations.</li>
+<li>Added storage configuration reconciliation to detect an existing <code>SGND_STORAGE</code> volume and repair stale SolidGroundUX <code>storage.cfg</code> state without reprovisioning the volume.</li>
+<li>Added storage persistence reconciliation to detect and remove stale SolidGroundUX-managed <code>/etc/fstab</code> entries while preserving the active storage volume.</li>
+<li>Added reconciliation checks to storage provisioning validation, including configured-versus-detected storage state and managed <code>fstab</code> consistency.</li>
+<li>Added <code>manage-active-directory-server.sh</code> for Active Directory Domain Controller provisioning, preparation, validation, and status operations.</li>
+<li>Added <code>manage-active-directory-client.sh</code> for Active Directory client joining, reconciliation, validation, status, and leave operations.</li>
+<li>Added <code>manage-active-directory.sh</code> for Active Directory user, group, and computer management.</li>
+<li>Added Active Directory client reconciliation for repairing DNS, machine identity, SSSD state, and client DNS registration without silently rejoining the domain.</li>
+<li>Expanded Active Directory validation to cover domain membership, Kerberos and LDAP discovery, SSSD, DNS configuration and registration, and directory enumeration.</li>
+<li>Added <code>manage-web-server.sh</code> for Nginx installation, content-root configuration, site lifecycle, service and firewall management, documentation-site configuration, validation, and status.</li>
+<li>Added <code>publish-web-content.sh</code> for generic Nginx content publishing from local directories, remote machines, and Git repositories.</li>
+<li>Added reusable Git repository publishing with branch/tag and repository-subdirectory selection for ordinary web sites.</li>
+<li>Preserved SolidGroundUX documentation publishing as a specialized workflow using installed documentation, local or remote sources, or a Git repository.</li>
+<li>Added <code>manage-sqlserver.sh</code> for SQL Server repository setup, engine and tools installation, storage, network, memory, service, firewall, validation, and status operations.</li>
+<li>Added <code>manage-docker-server.sh</code> for Docker Engine installation, host storage configuration, service management, validation, and status.</li>
+<li>Added <code>manage-docker-containers.sh</code> for basic container and image lifecycle operations, including create, start, stop, restart, remove, inspect, logs, image listing, and image pulls.</li>
+</ul>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>Fixed delegated executable argument parsing so framework built-in options such as <code>--dryrun</code> are parsed correctly.</li>
+<li>Fixed Samba File Server management action declaration so enum action values are correctly registered with the SolidGroundUX argument parser.</li>
+<li>Fixed framework smoke-test validation to load all console modules before validating registered console handlers.</li>
+<li>Fixed storage recovery when an existing <code>SGND_STORAGE</code> volume is valid but <code>storage.cfg</code> points to a stale mount point.</li>
+<li>Fixed validation coverage for stale SolidGroundUX-managed <code>/etc/fstab</code> storage entries.</li>
+<li>Fixed Samba management dependence on stale storage configuration by consistently consuming the reconciled SolidGroundUX storage configuration.</li>
+<li>Fixed Active Directory shared-library loading so application-owned AD helpers resolve correctly from the Management Modules development or production tree.</li>
+<li>Fixed stale private Active Directory helper references introduced during the module/executable split and restored client context collection using the shared AD helpers.</li>
+<li>Fixed web publishing DRYRUN behavior so publishing state, SSH setup, Git checkout activity, and destination content are not persistently changed during preview.</li>
+<li>Fixed malformed enum argument specifications in <code>framework-smoketest.sh</code>, <code>manage-solidgroundux.sh</code>, and <code>set-identity.sh</code> so allowed values are registered correctly.</li>
+<li>Fixed a stray token in <code>framework-smoketest.sh</code> that prevented the script from parsing.</li>
+</ul>
+</main>
+<footer class="doc-footer">2026 — SolidGroundUX Full documentation</footer>
+
+</div>
+</div>
+<script src="../../js/sgnd-doc-sidebar.js?v=30134a4d3a36" defer></script>
+</body>
+</html>
