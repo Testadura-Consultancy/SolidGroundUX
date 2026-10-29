@@ -1,0 +1,6 @@
+# SolidGroundUX setup product catalog (plain data, not shell code)
+# project|product|github release URL|default version|default build
+# Keep URL empty for products without a configured GitHub release source.
+solidgroundux|SolidGroundUX|https://github.com/Testadura-Mark/SolidGroundUX/releases|2.1|
+solidground-management-console-modules|SolidGroundUX Management Console Modules|https://github.com/Testadura-Consultancy/solidgrond-management-modules/releases|2.1|
+solidgroundux-sdk|SolidGroundUX SDK||2.1|

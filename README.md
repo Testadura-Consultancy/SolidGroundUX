@@ -362,6 +362,22 @@ prepare-release
                 +--> remove
 ```
 
+## Setup product catalog
+
+`sgnd-setup` reads its known products from an editable, plain-data catalog at
+`/var/lib/solidgroundux/sgnd-setup.cfg`. The Framework release ships a default
+catalog as `/usr/local/share/solidgroundux/sgnd-setup.cfg.default`;
+Setup copies it to the editable location when needed and does not overwrite
+local changes. A `sgnd-setup.cfg` placed beside a standalone bootstrap script
+also takes precedence, so the script does not need an installed Framework.
+
+Each catalog row uses `project|product|GitHub-release-URL|version|build`.
+A missing URL leaves the GitHub source unconfigured rather than guessing one.
+The interactive Remove product action uses the active release manifest when
+available (without asking the operator to select one), falling back to a
+header-only ownership scan when the manifest is missing. Release manifests
+remain essential for complete removal, updates and rollback.
+
 ## Filesystem-based release state
 
 Release state remains filesystem-based and project-aware rather than depending on an opaque current-version database.

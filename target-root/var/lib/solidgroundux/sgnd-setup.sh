@@ -22,7 +22,7 @@
 #     - Installs a first release by verifying and extracting its complete tar archive
 #     - Updates an existing installation and applies the incoming .removed manifest
 #     - Rolls back by making the installed filesystem match a selected archived release
-#     - Removes the selected project while preserving release packages for later reinstall
+#     - Removes selected products using active release manifests, with ownership-scan recovery
 #     - Provides root-scoped nuclear cleanup yields for state/log cleanup, code removal,
 #       or complete SolidGroundUX eradication without requiring a working framework
 #     - Queries GitHub for the latest published release and downloads it only when needed
@@ -55,11 +55,11 @@ set -uo pipefail
 # --- Defaults -----------------------------------------------------------------------
     SGND_RELEASE_PROJECT="solidgroundux"
     SGND_RELEASE_PRODUCT="SolidGroundUX"
-    SGND_RELEASE_GITHUB_REPO="Testadura-Mark/SolidGroundUX"
-    SGND_MANAGEMENT_MODULES_GITHUB_REPO="Testadura-Consultancy/solidgrond-management-modules"
+    # Product/repository defaults are read from sgnd-setup.cfg, not hardcoded here.
+    SGND_RELEASE_GITHUB_REPO=""
     SGND_RELEASE_LINE="2.1"
     SGND_RELEASE_BUILD=""
-    SGND_RELEASE_API_URL="https://api.github.com/repos/Testadura-Mark/SolidGroundUX/releases/latest"
+    SGND_RELEASE_API_URL=""
     SGND_RELEASE_CONFIG_FILE=""
     SGND_RELEASE_VARIANT="individual"
 
@@ -855,6 +855,7 @@ set -uo pipefail
             "/usr/local/lib/solidgroundux"
             "/usr/local/libexec/solidgroundux"
             "/usr/local/share/testadura/solidgroundux"
+            "/usr/local/share/solidgroundux"
             "/usr/local/share/doc/solidgroundux-codex"
             "/var/lib/solidgroundux/sgnd-setup.sh"
             "/var/lib/solidgroundux/release-manager.sh"
@@ -1317,52 +1318,136 @@ set -uo pipefail
         printf '%s\n' "$url"
     }
 
-    # fn: _release_package_catalog - List release packages known to this target
+    # fn: _setup_catalog_source - Locate the external product catalog for this target
         # . Purpose
-        #   Build the selectable package catalog from installed product definitions, with
-        #   bootstrap defaults for products that may not yet be installed on a clean target.
+        #   Resolve an operator-provided catalog, a persisted setup catalog, or the
+        #   packaged defaults without requiring an installed Framework.
+        # . Returns
+        #   0 with an existing, readable path; 1 when no catalog is available.
+        # . Usage
+        #   catalog="$(_setup_catalog_source)"
+    _setup_catalog_source() {
+        local path=""
+        local -a candidates=(
+            "$SCRIPT_DIR/sgnd-setup.cfg"
+            "${VAL_STATE_ROOT%/}/sgnd-setup.cfg"
+            "${VAL_TARGET_ROOT%/}/usr/local/share/solidgroundux/sgnd-setup.cfg.default"
+            "$SCRIPT_DIR/sgnd-setup.cfg.default"
+        )
+        for path in "${candidates[@]}"; do
+            [[ -r "$path" && -f "$path" ]] || continue
+            printf '%s\n' "$path"
+            return 0
+        done
+        return 1
+    }
+
+    # fn: _ensure_setup_catalog - Persist packaged catalog defaults for local customization
+        # . Purpose
+        #   Seed the editable sgnd-setup.cfg once; never overwrite user changes.
+        #   The packaged .default file is distributable despite the release policy
+        #   excluding runtime *.cfg files.
+        # . Returns
+        #   0 when present/created/no defaults exist; non-zero on copying failure.
+        # . Usage
+        #   _ensure_setup_catalog
+    _ensure_setup_catalog() {
+        local target="${VAL_STATE_ROOT%/}/sgnd-setup.cfg"
+        local source=""
+        [[ -f "$target" ]] && return 0
+        source="$(_setup_catalog_source 2>/dev/null || true)"
+        [[ -n "$source" && "$source" != "$target" ]] || return 0
+        if (( FLAG_DRYRUN )); then
+            _release_info "Would create product catalog: $target"
+            return 0
+        fi
+        mkdir -p -- "$(dirname -- "$target")" || return 1
+        cp -- "$source" "$target" || return 1
+        chmod 0644 -- "$target" || return 1
+    }
+
+    # fn: _release_package_catalog - List setup products from the external catalog
+        # . Purpose
+        #   Read project|product|release-url|version|build records as plain data,
+        #   supplemented by installed product definitions for current build metadata.
+        #   Additional installed products not in the catalog remain discoverable.
+        #   No shell code is sourced from the catalog.
         # . Output
-        #   Writes project|product|variant|release-url|version|build records.
+        #   project|product|variant|release-url|version|build records.
         # . Usage
         #   mapfile -t packages < <(_release_package_catalog)
     _release_package_catalog() {
         local globals="${VAL_TARGET_ROOT%/}/usr/local/lib/solidgroundux/globals"
-        local file="" product="" version="" build="" url="" product_var="" version_var="" build_var=""
-        local modules_seen=0 framework_seen=0
-
-        if [[ -f "$globals/sgnd-definitions.sh" ]]; then
-            product="$(_release_definition_value "$globals/sgnd-definitions.sh" SGND_PRODUCT 2>/dev/null || true)"
-            version="$(_release_definition_value "$globals/sgnd-definitions.sh" SGND_VERSION 2>/dev/null || true)"
-            build="$(_release_definition_value "$globals/sgnd-definitions.sh" SGND_BUILD 2>/dev/null || true)"
-            url="$(_release_definition_value "$globals/sgnd-definitions.sh" SGND_RELEASE_URL 2>/dev/null || true)"
-            printf 'solidgroundux|%s|individual|%s|%s|%s\n' "${product:-SolidGroundUX}" "${url:-https://github.com/$SGND_RELEASE_GITHUB_REPO/releases}" "${version:-2.1}" "$build"
-            framework_seen=1
-        fi
+        local cfg="" line="" project="" product="" url="" version="" build="" extra=""
+        local file="" product_var="" version_var="" build_var="" installed_project=""
+        local -A installed_version=() installed_build=() installed_url=() installed_project_by_product=() seen=()
 
         if [[ -d "$globals" ]]; then
             while IFS= read -r -d '' file; do
-                [[ "$(basename -- "$file")" == "sgnd-definitions.sh" ]] && continue
-                product_var="$(sed -n -E 's/^[[:space:]]*(SGND_[A-Za-z0-9_]+_PRODUCT)[[:space:]]*=.*$/\1/p' "$file" | head -n 1)"
-                [[ -n "$product_var" ]] || continue
+                if [[ "$(basename -- "$file")" == "sgnd-definitions.sh" ]]; then
+                    product_var="SGND_PRODUCT"
+                    installed_project="solidgroundux"
+                else
+                    product_var="$(sed -n -E 's/^[[:space:]]*(SGND_[A-Za-z0-9_]+_PRODUCT)[[:space:]]*=.*$/\1/p' "$file" | head -n 1)"
+                    [[ -n "$product_var" ]] || continue
+                    installed_project="$(basename -- "$file" -definitions.sh)"
+                fi
                 version_var="${product_var%_PRODUCT}_VERSION"
                 build_var="${product_var%_PRODUCT}_BUILD"
+                [[ "$product_var" == "SGND_PRODUCT" ]] && { version_var="SGND_VERSION"; build_var="SGND_BUILD"; }
                 product="$(_release_definition_value "$file" "$product_var" 2>/dev/null || true)"
-                version="$(_release_definition_value "$file" "$version_var" 2>/dev/null || true)"
-                build="$(_release_definition_value "$file" "$build_var" 2>/dev/null || true)"
-                url="$(_release_definition_value "$file" "${product_var%_PRODUCT}_RELEASE_URL" 2>/dev/null || true)"
-                if [[ "$product" == "SolidGroundUX Management Console Modules" ]]; then
-                    modules_seen=1
-                    [[ -n "$url" ]] || url="https://github.com/$SGND_MANAGEMENT_MODULES_GITHUB_REPO/releases"
-                fi
-                [[ -n "$url" ]] || continue
-                printf '%s|%s|individual|%s|%s|%s\n' "$(basename -- "$file" -definitions.sh)" "$product" "$url" "$version" "$build"
+                [[ -n "$product" ]] || continue
+                installed_version["$product"]="$(_release_definition_value "$file" "$version_var" 2>/dev/null || true)"
+                installed_build["$product"]="$(_release_definition_value "$file" "$build_var" 2>/dev/null || true)"
+                installed_url["$product"]="$(_release_definition_value "$file" "${product_var%_PRODUCT}_RELEASE_URL" 2>/dev/null || true)"
+                [[ "$product_var" == "SGND_PRODUCT" ]] && installed_url["$product"]="$(_release_definition_value "$file" SGND_RELEASE_URL 2>/dev/null || true)"
+                installed_project_by_product["$product"]="$installed_project"
             done < <(find "$globals" -maxdepth 1 -type f -name '*-definitions.sh' -print0 2>/dev/null | sort -z)
         fi
 
-        (( framework_seen )) || {
-            printf 'solidgroundux|SolidGroundUX|individual|https://github.com/%s/releases|2.1|\n' "$SGND_RELEASE_GITHUB_REPO"
-        }
-        (( modules_seen )) || printf 'solidground-management-console-modules|SolidGroundUX Management Console Modules|individual|https://github.com/%s/releases|1.1|\n' "$SGND_MANAGEMENT_MODULES_GITHUB_REPO"
+        cfg="$(_setup_catalog_source 2>/dev/null || true)"
+        if [[ -n "$cfg" ]]; then
+            while IFS='|' read -r project product url version build extra || [[ -n "$project$product$url$version$build$extra" ]]; do
+                [[ "$project" == '' || "$project" == \#* ]] && continue
+                if [[ ! "$project" =~ ^[a-z0-9][a-z0-9._-]*$ || -z "$product" || -n "$extra" ]]; then
+                    _release_warn "Ignoring malformed product catalog row: $project" >&2
+                    continue
+                fi
+                [[ -n "${seen[$project]+x}" ]] && continue
+                seen["$project"]=1
+                [[ -n "${installed_version[$product]-}" ]] && version="${installed_version[$product]}"
+                [[ -n "${installed_build[$product]-}" ]] && build="${installed_build[$product]}"
+                [[ -z "$url" && -n "${installed_url[$product]-}" ]] && url="${installed_url[$product]}"
+                printf '%s|%s|individual|%s|%s|%s\n' "$project" "$product" "$url" "$version" "$build"
+            done < "$cfg"
+        fi
+
+        # Continue to recognize installed products not explicitly listed in the defaults.
+        for product in "${!installed_project_by_product[@]}"; do
+            project="${installed_project_by_product[$product]}"
+            [[ -n "${seen[$project]+x}" ]] && continue
+            printf '%s|%s|individual|%s|%s|%s\n' "$project" "$product" "${installed_url[$product]-}" "${installed_version[$product]-}" "${installed_build[$product]-}"
+        done
+    }
+
+    # fn: _setup_catalog_framework_defaults - Derive the compatibility repo from the catalog
+        # . Purpose
+        #   Keep legacy standalone release settings without embedding a GitHub owner/repo
+        #   in the setup script. Per-product sources remain in the product catalog.
+        # . Usage
+        #   _setup_catalog_framework_defaults
+    _setup_catalog_framework_defaults() {
+        local row="" project="" product="" variant="" url="" version="" build="" repo=""
+        while IFS= read -r row; do
+            IFS='|' read -r project product variant url version build <<< "$row"
+            [[ "$project" == "solidgroundux" && -n "$url" ]] || continue
+            repo="$(_release_repo_from_url "$url" 2>/dev/null || true)"
+            [[ -n "$repo" ]] || continue
+            SGND_RELEASE_GITHUB_REPO="$repo"
+            SGND_RELEASE_API_URL="https://api.github.com/repos/${repo}/releases/latest"
+            return 0
+        done < <(_release_package_catalog)
+        return 0
     }
 
     # fn: _release_select_package_interactive - Select a product package and derive its context
@@ -1645,7 +1730,8 @@ set -uo pipefail
 
         # shellcheck disable=SC1090
         source "$cfg"
-        : "${SGND_RELEASE_GITHUB_REPO:=Testadura-Mark/SolidGroundUX}"
+        # The product catalog supplies the fallback repository, not hardcoded defaults.
+        : "${SGND_RELEASE_GITHUB_REPO:=${VAL_GITHUB_REPO:-}}"
         : "${SGND_RELEASE_LINE:=2.1}"
         : "${SGND_RELEASE_API_URL:=https://api.github.com/repos/${SGND_RELEASE_GITHUB_REPO}/releases/latest}"
         VAL_GITHUB_REPO="${VAL_GITHUB_REPO:-$SGND_RELEASE_GITHUB_REPO}"
@@ -3665,102 +3751,9 @@ EOF
         printf '%s\n' "${products[$(( choice - 1 ))]}"
     }
 
-    # fn: _list_product_manifests - List archived manifests for a product and release variant
-        # . Purpose
-        #   Find manifests by exact product artifact identity without prefix collisions.
-        # . Returns
-        #   0 after emitting matching manifest paths in version order.
-        # . Usage
-        #   _list_product_manifests "$product" individual
-    _list_product_manifests() {
-        local product="${1:?missing product}"
-        local variant="${2:-individual}"
-        local artifact_product=""
-        local dir=""
-        local base=""
-        local remainder=""
-        local manifest=""
-        local -a rows=()
-
-        artifact_product="$(_release_product_artifact_name "$product")"
-        [[ -d "$VAL_ARCHIVE_ROOT" ]] || return 0
-        while IFS= read -r dir; do
-            base="$(basename -- "$dir")"
-            if [[ "$variant" == "bundle" ]]; then
-                [[ "$base" == "${artifact_product}-bundled-"* ]] || continue
-                remainder="${base#${artifact_product}-bundled-}"
-            else
-                [[ "$base" == "${artifact_product}-"* && "$base" != "${artifact_product}-bundled-"* ]] || continue
-                remainder="${base#${artifact_product}-}"
-            fi
-            # Release identities begin with the numeric version. This rejects longer product
-            # names that merely share the requested product's filename prefix.
-            [[ "$remainder" =~ ^[0-9] ]] || continue
-            manifest="${dir%/}/${base}.manifest"
-            [[ -f "$manifest" ]] && rows+=("$base|$manifest")
-        done < <(find "$VAL_ARCHIVE_ROOT" -mindepth 1 -maxdepth 1 -type d -name "${artifact_product}-*" -print 2>/dev/null)
-
-        (( ${#rows[@]} > 0 )) || return 0
-        printf '%s\n' "${rows[@]}" | LC_ALL=C sort -t'|' -k1,1V | cut -d'|' -f2-
-    }
-
-    # fn: _select_removal_manifest_for - Select an archived manifest for a product/variant
-        # . Purpose
-        #   Present matching archived manifests from new to old.
-        # . Returns
-        #   0 with the selected manifest path on stdout; 1 when returning/cancelling.
-        # . Usage
-        #   manifest="$(_select_removal_manifest_for "$product" individual)"
-    _select_removal_manifest_for() {
-        local product="${1:?missing product}"
-        local variant="${2:-individual}"
-        local manifest=""
-        local choice=""
-        local i=0
-        local -a manifests=()
-
-        mapfile -t manifests < <(_list_product_manifests "$product" "$variant")
-        (( ${#manifests[@]} > 0 )) || {
-            _release_fail "No archived ${variant} manifests found for $product"
-            return 1
-        }
-
-        printf '\n%sRemoval manifests: %s%s\n' "$_RL_BRIGHT_WHITE" "$product" "$_RL_RESET" > /dev/tty
-        _release_line "─" > /dev/tty
-        printf "${_RL_ITALIC}  Manifests listed from new to old. Only the selected manifest is used.\n${_RL_RESET}" > /dev/tty
-        printf '\n' > /dev/tty
-        for (( i=${#manifests[@]}-1; i>=0; i-- )); do
-            manifest="${manifests[$i]}"
-            printf '  %s%d)%s %s%s%s\n' "$_RL_UI_PROMPT" "$(( ${#manifests[@]} - i ))" "$_RL_RESET" "$_RL_DARK_WHITE" "$(basename -- "$manifest")" "$_RL_RESET" > /dev/tty
-        done
-        printf '  %sQ)%s %sReturn%s\n' "$_RL_UI_PROMPT" "$_RL_RESET" "$_RL_UI_TEXT" "$_RL_RESET" > /dev/tty
-        printf '\n' > /dev/tty
-        _release_line "─" > /dev/tty
-        printf '%sSelect manifest: %s' "$_RL_UI_PROMPT" "$_RL_UI_INPUT" > /dev/tty
-        read -r choice < /dev/tty
-        printf '%s' "$_RL_RESET" > /dev/tty
-
-        case "${choice^^}" in Q|"") return 1 ;; esac
-        [[ "$choice" =~ ^[0-9]+$ ]] || return 1
-        (( choice >= 1 && choice <= ${#manifests[@]} )) || return 1
-        i=$(( ${#manifests[@]} - choice ))
-        printf '%s\n' "${manifests[$i]}"
-    }
-
-    # fn: _select_removal_manifest - Select an archived manifest for the active package
-        # . Purpose
-        #   Preserve the individual-package path while delegating to the generic selector.
-        # . Returns
-        #   0 with the selected manifest path on stdout; 1 when returning/cancelling.
-        # . Usage
-        #   manifest="$(_select_removal_manifest)"
-    _select_removal_manifest() {
-        _select_removal_manifest_for "$SGND_RELEASE_PRODUCT" "${VAL_VARIANT:-${SGND_RELEASE_VARIANT:-individual}}"
-    }
-
     # fn: _select_archived_release - Select an archived release from a submenu
         # . Purpose
-        #   Select an archived release or the remove operation from a submenu.
+        #   Select an archived release from the available release history.
         # . Returns
         #   0 with the selected target on stdout; 1 when returning/cancelling.
         # . Usage
@@ -3843,9 +3836,7 @@ EOF
 ' "$_RL_UI_PROMPT" "$_RL_RESET" "$_RL_UI_TEXT" "$_RL_RESET"
             printf '    %s4)%s %sInstall archived version%s
 ' "$_RL_UI_PROMPT" "$_RL_RESET" "$_RL_UI_TEXT" "$_RL_RESET"
-            printf '    %s5)%s %sRemove using manifest%s
-' "$_RL_UI_PROMPT" "$_RL_RESET" "$_RL_UI_TEXT" "$_RL_RESET"
-            printf '    %s6)%s %sRemove product by ownership scan%s
+            printf '    %s5)%s %sRemove product%s
 ' "$_RL_UI_PROMPT" "$_RL_RESET" "$_RL_UI_TEXT" "$_RL_RESET"
             printf '    %sQ)%s %sQuit%s
 
@@ -3876,18 +3867,15 @@ EOF
                     IFS='|' read -r project product url version build <<< "${selected[0]}"
                     _set_project_context "$project" || { _pause; continue; }
                     SGND_RELEASE_PRODUCT="$product"
-                    target="$(_select_removal_manifest_for "$product" individual 2>/dev/tty)" || continue
-                    _confirm "Remove files listed by $(basename -- "$target")?" && _remove_by_manifest "$target"
-                    _pause
-                    ;;
-                6)
-                    mapfile -t products < <(_product_catalog)
-                    mapfile -t selected < <(_select_product_records "Select product" "${products[@]}") || continue
-                    (( ${#selected[@]} == 1 )) || { _release_warn "Ownership removal currently accepts one product at a time"; _pause; continue; }
-                    IFS='|' read -r project product url version build <<< "${selected[0]}"
-                    _set_project_context "$project" || { _pause; continue; }
-                    SGND_RELEASE_PRODUCT="$product"
-                    _confirm "Scan managed trees and remove files whose headers identify $product?" && _remove_by_product_scan "$product"
+                    target="$(_current_release 2>/dev/null || true)"
+                    if [[ -n "$target" && -f "${VAL_ARCHIVE_ROOT%/}/${target}/${target}.manifest" ]]; then
+                        # The active manifest covers assets and symlinks missing from header scans.
+                        _action_remove
+                    else
+                        # Recovery only: scans cannot find files without product headers.
+                        _release_warn "No active release manifest for $product; recovery removal is limited to header-owned text files"
+                        _confirm "Scan and remove header-owned files for $product?" && _remove_by_product_scan "$product"
+                    fi
                     _pause
                     ;;
                 Q) return 0 ;;
@@ -4173,6 +4161,7 @@ EOF
         # for the settings/menu. Otherwise the design-time default fallback remains.
         _release_try_framework_ui
 
+        _setup_catalog_framework_defaults
         _load_release_manager_config
 
         # In interactive mode parameters are questions; in --auto mode state/CLI/defaults win.
@@ -4193,12 +4182,17 @@ EOF
         _require_command mktemp || return 1
 
         _ensure_manager_directories || return 1
+        _ensure_setup_catalog || return 1
         _ensure_release_manager_config || return 1
 
         # First install discovers product ZIPs beside sgnd-setup and installs through
         # the same package pipeline used by normal local/GitHub actions.
         if [[ -z "$ACTION" ]]; then
             _bootstrap_first_install_packages || return $?
+            # A first-install transport may have supplied only product ZIPs. Now
+            # that the Framework payload is present, seed its packaged catalog.
+            _ensure_setup_catalog || return 1
+            _setup_catalog_framework_defaults
         fi
 
         if [[ -z "$ACTION" && -n "${BOOTSTRAP_RELEASE_BASE:-}" ]]; then
