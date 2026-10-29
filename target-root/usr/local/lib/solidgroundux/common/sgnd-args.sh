@@ -68,7 +68,9 @@ set -uo pipefail
         #   Exits with code 2 when executed instead of sourced.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_lib_guard
+        #   ```
     _sgnd_lib_guard() {
         local lib_base=""
         local guard=""
@@ -115,7 +117,9 @@ set -uo pipefail
         #   0 always.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_arg_split "example"
+        #   ```
     _sgnd_arg_split() {
         local spec="$1"
         IFS='|' read -r _sgnd_name _sgnd_short _sgnd_type _sgnd_var _sgnd_help _sgnd_default _sgnd_choices <<< "$spec"
@@ -144,7 +148,9 @@ set -uo pipefail
         #   1 when no matching specification exists.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_arg_find_spec "example" "example-2"
+        #   ```
     _sgnd_arg_find_spec() {
         local wanted="$1"
         local spec
@@ -178,7 +184,9 @@ set -uo pipefail
         #   1 when the value is not allowed.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_arg_validate_enum "dark" "2026-07-31" && printf 'Success\n' || printf 'Failed\n'
+        #   ```
     _sgnd_arg_validate_enum() {
         local value="$1"
         local choices_csv="$2"
@@ -223,7 +231,9 @@ set -uo pipefail
         #   0 always.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_arg_init_defaults both
+        #   ```
     _sgnd_arg_init_defaults() {
         local source="${1:-both}"
         local -a args=()
@@ -344,7 +354,9 @@ set -uo pipefail
         #   0 on success unless the called command returns a different status.
         #
         # . Usage
+        #   ```bash
         #   sgnd_show_help "example-0" "example"
+        #   ```
     sgnd_show_help() {
         local include_builtins="${1:-1}"
         local script_name="${SGND_SCRIPT_NAME:-$(basename "${SGND_SCRIPT_FILE:-$0}")}"
@@ -492,8 +504,10 @@ set -uo pipefail
         #   or malformed argument specifications.
         #
         # . Usage
+        #   ```bash
         #   SGND_ARGS_SOURCE=builtins sgnd_parse_args --preserve-unknown "$@"
         #   SGND_ARGS_SOURCE=script sgnd_parse_args "${SGND_POSITIONAL[@]}"
+        #   ```
     sgnd_parse_args() {
 
         local stop_at_unknown=0
@@ -700,7 +714,9 @@ set -uo pipefail
         #   Non-zero when validation, resolution, user cancellation, or execution fails.
         #
         # . Usage
+        #   ```bash
         #   sgnd_builtinarg_handler
+        #   ```
     sgnd_builtinarg_handler(){
         local show_target="${ARG_SHOW:-}"
         local loglevel="${ARG_LOGLEVEL:-}"

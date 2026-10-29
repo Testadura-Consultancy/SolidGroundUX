@@ -68,7 +68,9 @@ set -uo pipefail
         #   Exits with code 2 when executed instead of sourced.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_lib_guard
+        #   ```
     _sgnd_lib_guard() {
         local lib_base=""
         local guard=""
@@ -112,7 +114,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   sgnd_have "bash" && printf 'bash is available\n'
+            #   ```
         sgnd_have() { command -v "$1" >/dev/null 2>&1; }
         # fn: sgnd_need_cmd - Need cmd
             # . Purpose
@@ -135,7 +139,9 @@ set -uo pipefail
             #   Non-zero when validation, resolution, user cancellation, or execution fails.
             #
             # . Usage
+            #   ```bash
             #   sgnd_need_cmd "bash"
+            #   ```
         sgnd_need_cmd() { sgnd_have "$1" || { printf 'Missing required command: %s\n' "$1" >&2; exit 1; }; }
         # fn: sgnd_need_bash - Need bash
             # . Purpose
@@ -158,7 +164,9 @@ set -uo pipefail
             #   Non-zero when validation, resolution, user cancellation, or execution fails.
             #
             # . Usage
+            #   ```bash
             #   sgnd_need_bash "${4}"
+            #   ```
         sgnd_need_bash() { (( BASH_VERSINFO[0] >= ${1:-4} )) || { printf 'Bash %s+ required.\n' "${1:-4}" >&2; exit 1; }; }
         # fn: sgnd_need_tty - Need tty
             # . Purpose
@@ -178,7 +186,9 @@ set -uo pipefail
             #   Non-zero when validation, resolution, user cancellation, or execution fails.
             #
             # . Usage
+            #   ```bash
             #   sgnd_need_tty
+            #   ```
         sgnd_need_tty() { [[ -t 1 ]] || { printf 'No TTY attached.\n' >&2; return 1; }; }
     # -- Filesystem and paths ----------------------------------------------------------
         # fn: sgnd_can_append - Can append
@@ -199,7 +209,9 @@ set -uo pipefail
             #   Non-zero when validation, resolution, user cancellation, or execution fails.
             #
             # . Usage
+            #   ```bash
             #   sgnd_can_append "example" && printf 'Success\n' || printf 'Failed\n'
+            #   ```
         sgnd_can_append() {
             local f="$1"
             local d
@@ -238,7 +250,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   sgnd_ensure_dir "/tmp/sgnd-example"
+            #   ```
         sgnd_ensure_dir() {
             local dir="${1:-}"
             [[ -n "$dir" ]] || return 2
@@ -261,7 +275,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   sgnd_abs_path "/tmp"
+            #   ```
         sgnd_abs_path() {
             if sgnd_have readlink; then
                 readlink -f -- "$1" 2>/dev/null && return 0
@@ -288,7 +304,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   sgnd_mktemp_dir
+            #   ```
         sgnd_mktemp_dir() { mktemp -d 2>/dev/null || TMPDIR=${TMPDIR:-/tmp} mktemp -d "${TMPDIR%/}/XXXXXX"; }
         # fn: sgnd_mktemp_file - Mktemp file
             # . Purpose
@@ -301,7 +319,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   temp_file="$(sgnd_mktemp_file)"; printf '%s\n' "$temp_file"
+            #   ```
         sgnd_mktemp_file() { TMPDIR=${TMPDIR:-/tmp} mktemp "${TMPDIR%/}/XXXXXX"; }
     # -- Values and variables ---------------------------------------------------------
         # fn: sgnd_slugify - Slugify
@@ -321,7 +341,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   sgnd_slugify "solidgroundux-example"
+            #   ```
         sgnd_slugify() {
             local s="${1:-}"
 
@@ -356,7 +378,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   sgnd_hash_sha256_file "/tmp/sgnd-example.txt" "/tmp/sgnd-example.txt" && printf 'Success\n' || printf 'Failed\n'
+            #   ```
         sgnd_hash_sha256_file() {
             local file="$1"
             local out
@@ -396,7 +420,9 @@ set -uo pipefail
             #   Non-zero when validation, resolution, user cancellation, or execution fails.
             #
             # . Usage
+            #   ```bash
             #   sgnd_safe_replace_file "/tmp/sgnd-example.txt" "/tmp/sgnd-example.txt"
+            #   ```
         sgnd_safe_replace_file() {
             local src="${1:?missing source}"
             local dst="${2:?missing destination}"
@@ -421,7 +447,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   SGND_EXAMPLE="enabled"; sgnd_is_set "SGND_EXAMPLE" && printf 'Variable is set\n'
+            #   ```
         sgnd_is_set() { [[ -v "$1" ]]; }
         # fn: sgnd_default - Default
             # . Purpose
@@ -438,7 +466,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   sgnd_default "example" "example-2"
+            #   ```
         sgnd_default() {
             local name="$1"
             local default="${2-}"
@@ -460,7 +490,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   sgnd_is_number "42" && printf 'Valid number\n'
+            #   ```
         sgnd_is_number() { [[ "$1" =~ ^[0-9]+$ ]]; }
         # fn: sgnd_array_has_items - Array has items
             # . Purpose
@@ -480,7 +512,9 @@ set -uo pipefail
             #   Non-zero when validation, resolution, user cancellation, or execution fails.
             #
             # . Usage
+            #   ```bash
             #   sgnd_array_has_items "example" && printf 'Success\n' || printf 'Failed\n'
+            #   ```
         sgnd_array_has_items() {
             declare -p "$1" &>/dev/null || return 1
             local -n _arr="$1"
@@ -498,7 +532,9 @@ set -uo pipefail
             #   Non-zero when validation, resolution, user cancellation, or execution fails.
             #
             # . Usage
+            #   ```bash
             #   sgnd_is_true "yes" && printf 'Value is true\n'
+            #   ```
         sgnd_is_true() {
             case "${1,,}" in
                 y|yes|1|true) return 0 ;;
@@ -523,7 +559,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   sgnd_proc_exists "sshd" && printf 'sshd is running\n'
+            #   ```
         sgnd_proc_exists() { pgrep -x "$1" &>/dev/null; }
         # fn: sgnd_wait_for_exit - Wait for exit
             # . Purpose
@@ -540,7 +578,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   sgnd_wait_for_exit "sshd" 1
+            #   ```
         sgnd_wait_for_exit() {
             local name="$1"
             local interval="${2:-0.5}"
@@ -566,7 +606,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   sgnd_kill_if_running "sgnd-example-process"
+            #   ```
         sgnd_kill_if_running() { pkill -x "$1" &>/dev/null || true; }
     # -- Diagnostics and execution ----------------------------------------------------
         # fn: sgnd_caller_id - Caller id
@@ -586,7 +628,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   sgnd_caller_id "example"
+            #   ```
         sgnd_caller_id() {
             local depth="${1:-1}"
             local file="${BASH_SOURCE[$depth]}"
@@ -609,7 +653,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   sgnd_stack_trace
+            #   ```
         sgnd_stack_trace() {
             local i
             for (( i=1; i<${#FUNCNAME[@]}; i++ )); do
@@ -630,7 +676,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   sgnd_has_tty
+            #   ```
         sgnd_has_tty() { [[ -r /dev/tty && -w /dev/tty ]]; }
         # fn: sgnd_is_ui_mode - Is ui mode
             # . Purpose
@@ -644,7 +692,9 @@ set -uo pipefail
             #   Non-zero when validation, resolution, user cancellation, or execution fails.
             #
             # . Usage
+            #   ```bash
             #   sgnd_is_ui_mode
+            #   ```
         sgnd_is_ui_mode() {
             # Explicit overrides first (future-proof)
             (( ${FLAG_NOUI:-0} ))   && return 1
@@ -666,7 +716,9 @@ set -uo pipefail
             #   Non-zero when validation, resolution, user cancellation, or execution fails.
             #
             # . Usage
+            #   ```bash
             #   sgnd_is_desktop_mode
+            #   ```
         sgnd_is_desktop_mode() {
             [[ -n "${DISPLAY:-}" ]] && return 0
             [[ -n "${WAYLAND_DISPLAY:-}" ]] && return 0
@@ -692,7 +744,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   sgnd_internal_call_guard "example" "example-2"
+            #   ```
         sgnd_internal_call_guard() {
             local func="${1:?missing function name}"
 
@@ -722,7 +776,9 @@ set -uo pipefail
             #   Non-zero when validation, resolution, user cancellation, or execution fails.
             #
             # . Usage
+            #   ```bash
             #   sgnd_show_vars_by_prefix "example" "example-2"
+            #   ```
         sgnd_show_vars_by_prefix() {
             local prefix="${1:-}"
             local assume_debug="${2:-0}"
@@ -762,7 +818,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   sgnd_version_ge "1.8.0" "1.7.9" && printf 'Version requirement met\n'
+            #   ```
         sgnd_version_ge() { [[ "$(printf '%s\n' "$2" "$1" | sort -V | head -n1)" == "$2" ]]; }
         # fn: sgnd_timestamp - Timestamp
             # . Purpose
@@ -775,7 +833,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   sgnd_timestamp
+            #   ```
         sgnd_timestamp() { date +"%Y-%m-%d %H:%M:%S"; }
         # fn: sgnd_retry - Retry
             # . Purpose
@@ -796,7 +856,9 @@ set -uo pipefail
             #   Non-zero when validation, resolution, user cancellation, or execution fails.
             #
             # . Usage
+            #   ```bash
             #   sgnd_retry "example" "example-2"
+            #   ```
         sgnd_retry() {
             local n="$1"
             local d="$2"
@@ -831,7 +893,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   sgnd_join "example"
+            #   ```
         sgnd_join() {
             local IFS="$1"
             shift
@@ -855,7 +919,9 @@ set -uo pipefail
             #   Non-zero when validation, resolution, user cancellation, or execution fails.
             #
             # . Usage
+            #   ```bash
             #   sgnd_array_union "example"
+            #   ```
         sgnd_array_union() {
             local dest_name="$1"
             local src_name
@@ -898,7 +964,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   sgnd_trim "   SolidGroundUX example   "
+            #   ```
         sgnd_trim() {
             local v="${*:-}"
             v="${v#"${v%%[![:space:]]*}"}"
@@ -925,7 +993,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   sgnd_string_repeat "example" "example-2" "example-3"
+            #   ```
         sgnd_string_repeat() {
             local s="${1- }"
             local n="${2-0}"
@@ -962,7 +1032,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   sgnd_fill_left "/tmp/sgnd-example.txt" "example-2" "example-3"
+            #   ```
         sgnd_fill_left() {
             local source="${1-}"
             local maxlength="${2-20}"
@@ -996,7 +1068,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   sgnd_fill_right "/tmp/sgnd-example.txt" "example-2" "example-3"
+            #   ```
         sgnd_fill_right() {
             local source="${1-}"
             local maxlength="${2-20}"
@@ -1030,7 +1104,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   sgnd_fill_center "/tmp/sgnd-example.txt" "example-2" "example-3"
+            #   ```
         sgnd_fill_center() {
             local source="${1-}"
             local maxlength="${2-20}"
@@ -1068,7 +1144,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   sgnd_visible_length "SolidGroundUX example"
+            #   ```
         sgnd_visible_length() {
             local text="${1-}"
 
@@ -1093,7 +1171,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   sgnd_terminal_width
+            #   ```
         sgnd_terminal_width() {
             local term_width=80
             local max_render_width="${SGND_MAX_RENDER_WIDTH:-140}"
@@ -1126,7 +1206,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   sgnd_padded_visible "SolidGroundUX example" 20
+            #   ```
         sgnd_padded_visible() {
             local text="${1-}"
             local width="${2:-0}"
@@ -1157,7 +1239,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   sgnd_wrap_words "example" "example-2"
+            #   ```
         sgnd_wrap_words() {
             local width=80
             local text=""
@@ -1208,7 +1292,9 @@ set -uo pipefail
         #   Non-zero when validation, resolution, user cancellation, or execution fails.
         #
         # . Usage
+        #   ```bash
         #   sgnd_validate_ipv4 "192.168.0.10" && printf 'Success\n' || printf 'Failed\n'
+        #   ```
     sgnd_validate_ipv4() {
         local ip="$1"
         local IFS='.'
@@ -1240,7 +1326,9 @@ set -uo pipefail
         #   1 when the value is invalid.
         #
         # . Usage
+        #   ```bash
         #   sgnd_validate_yesno "yes" && printf 'Valid yes/no value\n'
+        #   ```
     sgnd_validate_yesno() { [[ "$1" =~ ^[YyNn]$ ]]; }
     # fn: sgnd_validate_int - Validate int
         # . Purpose
@@ -1257,7 +1345,9 @@ set -uo pipefail
         #   1 when the value is invalid.
         #
         # . Usage
+        #   ```bash
         #   sgnd_validate_int "42" && printf 'Valid integer\n'
+        #   ```
     sgnd_validate_int() { [[ "$1" =~ ^-?[0-9]+$ ]]; }
     # fn: sgnd_validate_numeric - Validate numeric
         # . Purpose
@@ -1274,7 +1364,9 @@ set -uo pipefail
         #   1 when the value is invalid.
         #
         # . Usage
+        #   ```bash
         #   sgnd_validate_numeric "42.5" && printf 'Valid numeric value\n'
+        #   ```
     sgnd_validate_numeric() { [[ "$1" =~ ^-?[0-9]+([.][0-9]+)?$ ]]; }
     # fn: sgnd_validate_text - Validate text
         # . Purpose
@@ -1291,7 +1383,9 @@ set -uo pipefail
         #   1 when the value is invalid.
         #
         # . Usage
+        #   ```bash
         #   sgnd_validate_text "SolidGroundUX" && printf 'Valid text\n'
+        #   ```
     sgnd_validate_text() { [[ -n "$1" ]]; }
     # fn: sgnd_validate_bool - Validate bool
         # . Purpose
@@ -1305,7 +1399,9 @@ set -uo pipefail
         #   Non-zero when validation, resolution, user cancellation, or execution fails.
         #
         # . Usage
+        #   ```bash
         #   sgnd_validate_bool "true" && printf 'Valid Boolean\n'
+        #   ```
     sgnd_validate_bool() {
         case "${1,,}" in
             y|yes|n|no|true|false|1|0) return 0 ;;
@@ -1327,7 +1423,9 @@ set -uo pipefail
         #   1 when the value is invalid.
         #
         # . Usage
+        #   ```bash
         #   sgnd_validate_date "2026-07-31" && printf 'Valid date\n'
+        #   ```
     sgnd_validate_date() { [[ "$1" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; }
     # fn: sgnd_validate_cidr - Validate cidr
         # . Purpose
@@ -1344,7 +1442,9 @@ set -uo pipefail
         #   1 when the value is invalid.
         #
         # . Usage
+        #   ```bash
         #   sgnd_validate_cidr "192.168.0.0/24" && printf 'Valid CIDR\n'
+        #   ```
     sgnd_validate_cidr() { [[ "$1" =~ ^([0-9]|[12][0-9]|3[0-2])$ ]]; }
     # fn: sgnd_validate_slug - Validate slug
         # . Purpose
@@ -1361,7 +1461,9 @@ set -uo pipefail
         #   1 when the value is invalid.
         #
         # . Usage
+        #   ```bash
         #   sgnd_validate_slug "solidgroundux-example" && printf 'Valid slug\n'
+        #   ```
     sgnd_validate_slug() { [[ "$1" =~ ^[a-z0-9._-]+$ ]]; }
     # fn: sgnd_validate_fs_name - Validate fs name
         # . Purpose
@@ -1378,7 +1480,9 @@ set -uo pipefail
         #   1 when the value is invalid.
         #
         # . Usage
+        #   ```bash
         #   sgnd_validate_fs_name "solidgroundux-example" && printf 'Valid filesystem name\n'
+        #   ```
     sgnd_validate_fs_name() { [[ "$1" =~ ^[A-Za-z0-9._-]+$ ]]; }
     # fn: sgnd_validate_file_exists - Validate file exists
         # . Purpose
@@ -1395,7 +1499,9 @@ set -uo pipefail
         #   1 when the value is invalid.
         #
         # . Usage
+        #   ```bash
         #   sgnd_validate_file_exists "/tmp/sgnd-example" && printf 'Success\n' || printf 'Failed\n'
+        #   ```
     sgnd_validate_file_exists() {
         local path="$1"
         [[ -f "$path" ]]
@@ -1415,7 +1521,9 @@ set -uo pipefail
         #   1 when the value is invalid.
         #
         # . Usage
+        #   ```bash
         #   sgnd_validate_path_exists "/tmp" && printf 'Path exists\n'
+        #   ```
     sgnd_validate_path_exists() { [[ -e "$1" ]]; }
     # fn: sgnd_validate_dir_exists - Validate dir exists
         # . Purpose
@@ -1432,7 +1540,9 @@ set -uo pipefail
         #   1 when the value is invalid.
         #
         # . Usage
+        #   ```bash
         #   sgnd_validate_dir_exists "/tmp" && printf 'Directory exists\n'
+        #   ```
     sgnd_validate_dir_exists() { [[ -d "$1" ]]; }
     # fn: sgnd_validate_executable - Validate executable
         # . Purpose
@@ -1449,7 +1559,9 @@ set -uo pipefail
         #   1 when the value is invalid.
         #
         # . Usage
+        #   ```bash
         #   sgnd_validate_executable "/bin/bash" && printf 'Executable found\n'
+        #   ```
     sgnd_validate_executable() { [[ -x "$1" ]]; }
     # fn: sgnd_validate_file_not_exists - Validate file not exists
         # . Purpose
@@ -1466,5 +1578,7 @@ set -uo pipefail
         #   1 when the value is invalid.
         #
         # . Usage
+        #   ```bash
         #   sgnd_validate_file_not_exists "/tmp/sgnd-new-file" && printf 'Path is available\n'
+        #   ```
     sgnd_validate_file_not_exists() { [[ ! -f "$1" ]]; }

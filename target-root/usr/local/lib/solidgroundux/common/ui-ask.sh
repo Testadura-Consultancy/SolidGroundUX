@@ -64,7 +64,9 @@ set -uo pipefail
         #   Exits with code 2 when executed instead of sourced.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_lib_guard
+        #   ```
     _sgnd_lib_guard() {
         local lib_base=""
         local guard=""
@@ -110,7 +112,9 @@ set -uo pipefail
         #   0 after processing the supplied specification.
         #
         # . Usage
+        #   ```bash
         #   mapfile -t choices < <(_ask_expand_choices "A-D,Q")
+        #   ```
     _ask_expand_choices() {
         local spec="$1"
         local -a out=()
@@ -166,7 +170,9 @@ set -uo pipefail
         #   1 if invalid
         #
         # . Usage
+        #   ```bash
         #   _ask_choice_is_valid "yes" "yes,no,cancel" && printf 'Valid choice\n'
+        #   ```
     _ask_choice_is_valid() {
         local value="${1-}"
         local choices="${2-}"
@@ -209,7 +215,9 @@ set -uo pipefail
         #   0 when the prompt string was written.
         #
         # . Usage
+        #   ```bash
         #   prompt="$(_ask_build_prompt "User name" 25 2 $'\e[36m' $'\e[37m' both)"; printf '%s\n' "$prompt"
+        #   ```
     _ask_build_prompt() {
         local label="$1"
         local labelwidth="$2"
@@ -278,7 +286,9 @@ set -uo pipefail
         #   Non-zero when the validator rejects the value.
         #
         # . Usage
+        #   ```bash
         #   _ask_validate "42" sgnd_validate_int && printf 'Valid integer\n'
+        #   ```
     _ask_validate() {
         local fn="${1-}"
         local value="${2-}"
@@ -307,7 +317,9 @@ set -uo pipefail
         #   0 after processing the supplied specification.
         #
         # . Usage
+        #   ```bash
         #   _ask_decision_expand_choices "YES|Y,NO|N"
+        #   ```
     _ask_decision_expand_choices() {
         local spec="${1-}"
         local group=""
@@ -355,7 +367,9 @@ set -uo pipefail
         #   1 when the value could not be normalized.
         #
         # . Usage
+        #   ```bash
         #   decision="$(_ask_decision_normalize "y" "YES|Y,NO|N" "NO")"
+        #   ```
     _ask_decision_normalize() {
         local value="${1-}"
         local choices="${2-}"
@@ -392,7 +406,9 @@ set -uo pipefail
         #   0 always.
         #
         # . Usage
+        #   ```bash
         #   _ask_decision_display "YES|Y,NO|N,CANCEL|C"
+        #   ```
     _ask_decision_display() {
         local spec="${1-}"
         local group=""
@@ -434,7 +450,9 @@ set -uo pipefail
         #   1 when the return code cannot be mapped to the supplied choices.
         #
         # . Usage
+        #   ```bash
         #   decision="$(_ask_decision_map_dlg_rc 0 "YES|Y,NO|N,CANCEL|C" "YES")"; printf '%s\n' "$decision"
+        #   ```
     _ask_decision_map_dlg_rc() {
         local rc="${1-}"
         local choices="${2-}"
@@ -490,7 +508,9 @@ set -uo pipefail
         #   0 when the specification was parsed.
         #
         # . Usage
+        #   ```bash
         #   _ask_parse_fieldspec "TARGET_DIR|Target directory|/tmp|sgnd_validate_dir_exists"
+        #   ```
     _ask_parse_fieldspec() {
         local spec="${1-}"
 
@@ -514,7 +534,9 @@ set -uo pipefail
         #   1 if invalid
         #
         # . Usage
+        #   ```bash
         #   _ask_is_ident "TARGET_DIR" && printf 'Valid identifier\n'
+        #   ```
     _ask_is_ident() {
         [[ "${1-}" =~ ^[A-Za-z_][A-Za-z0-9_]*$ ]]
     }
@@ -544,7 +566,9 @@ set -uo pipefail
         #   1 when the value is empty or invalid.
         #
         # . Usage
+        #   ```bash
         #   normalized="$(_ask_datetime_normalize "-2h30m")"
+        #   ```
     _ask_datetime_normalize() {
         local value="${1-}"
         local sign=""
@@ -672,7 +696,9 @@ set -uo pipefail
         #   2 when /dev/tty is not available.
         #
         # . Usage
+        #   ```bash
         #   ask --label "Target directory" --var TARGET_DIR --default "/tmp" --validate sgnd_validate_dir_exists
+        #   ```
     ask() {
         local label=""
         local var_name=""
@@ -822,7 +848,9 @@ set -uo pipefail
         #   2 when /dev/tty is unavailable through ask.
         #
         # . Usage
+        #   ```bash
         #   ask_datetime --label "Changed after" --var CHANGED_AFTER --default "-2h"
+        #   ```
     ask_datetime() {
         local label=""
         local var_name=""
@@ -945,10 +973,12 @@ set -uo pipefail
         #   0 when a canonical decision was stored.
         #
         # . Usage
+        #   ```bash
         #   ask_decision --label "Install now" \
         #       --choices "YES|Y,NO|N,CANCEL|C" \
         #       --default "YES" \
         #       --var decision
+        #   ```
     ask_decision() {
         local label=""
         local choices=""
@@ -1071,7 +1101,9 @@ set -uo pipefail
         #   3 when the user requests redo/again.
         #
         # . Usage
+        #   ```bash
         #   ask_dlg_autocontinue --seconds 10 --message "Continuing deployment" --redo --cancel --pause
+        #   ```
     ask_dlg_autocontinue() {
         local seconds=5
         local message=""
@@ -1250,8 +1282,10 @@ set -uo pipefail
         #   2 when no items are supplied or --var is not a valid shell identifier.
         #
         # . Usage
+        #   ```bash
         #   options=("Default" "Dark" "Testadura")
         #   ask_selection --label "Theme" --var theme --items "${options[@]}"
+        #   ```
         #
         #   groups=("Domain Admins" "File Server Users" "Accounting")
         #   ask_selection --label "Groups" --var selected_groups --multi --items "${groups[@]}"
@@ -1415,7 +1449,9 @@ set -uo pipefail
         #   0 after storing the selected or accepted value.
         #
         # . Usage
+        #   ```bash
         #   ask_choose --label "Select action" --choices "A-D,Q" --var action
+        #   ```
     ask_choose() {
         local label=""
         local choices=""
@@ -1533,7 +1569,9 @@ set -uo pipefail
         #   1 when reading from /dev/tty fails.
         #
         # . Usage
+        #   ```bash
         #   ask_choose_immediate --label "Menu" --choices "1-9,Q" --instantchoices "1-9,Q" --var menu_choice
+        #   ```
     ask_choose_immediate() {
         local label=""
         local choices=""
@@ -1717,9 +1755,11 @@ set -uo pipefail
         #   0 after all valid fields have been prompted.
         #
         # . Usage
+        #   ```bash
         #   ask_prompt_form --autoalign \
         #       "TARGET_DIR|Target directory|/tmp|sgnd_validate_dir_exists" \
         #       "RETRY_COUNT|Retry count|3|sgnd_validate_int"
+        #   ```
     ask_prompt_form() {
         local labelwidth=0
         local autoalign=0

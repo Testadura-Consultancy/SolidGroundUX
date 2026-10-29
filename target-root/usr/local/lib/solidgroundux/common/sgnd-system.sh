@@ -66,7 +66,9 @@ set -uo pipefail
         #   Exits with code 2 when executed instead of sourced.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_lib_guard
+        #   ```
     _sgnd_lib_guard() {
         local lib_base=""
         local guard=""
@@ -112,7 +114,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   sgnd_need_root "example-0"
+            #   ```
         sgnd_need_root() {
             sayinfo "Script requires root permissions"
 
@@ -139,7 +143,9 @@ set -uo pipefail
             #   Non-zero when validation, resolution, user cancellation, or execution fails.
             #
             # . Usage
+            #   ```bash
             #   sgnd_cannot_root
+            #   ```
         sgnd_cannot_root() {
             sayinfo "Script requires NOT having root permissions"
 
@@ -161,7 +167,9 @@ set -uo pipefail
             #   Non-zero when validation, resolution, user cancellation, or execution fails.
             #
             # . Usage
+            #   ```bash
             #   sgnd_need_systemd
+            #   ```
         sgnd_need_systemd() { sgnd_have systemctl || { sayfail "Systemd not available."; exit 1; }; }
         # fn: sgnd_need_writable - Need writable
             # . Purpose
@@ -179,7 +187,9 @@ set -uo pipefail
             #   Non-zero when validation, resolution, user cancellation, or execution fails.
             #
             # . Usage
+            #   ```bash
             #   sgnd_need_writable "/tmp"
+            #   ```
         sgnd_need_writable() { [[ -w "$1" ]] || { sayfail "Not writable: $1"; exit 1; }; }
         # fn: sgnd_is_active - Is active
             # . Purpose
@@ -195,7 +205,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   sgnd_is_active "ssh" && printf 'SSH service is active\n'
+            #   ```
         sgnd_is_active() { systemctl is-active --quiet "$1"; }
         # fn: sgnd_ensure_writable_dir - Ensure writable dir
             # . Purpose
@@ -217,7 +229,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   sgnd_ensure_writable_dir "/tmp/sgnd-example" "/tmp"
+            #   ```
         sgnd_ensure_writable_dir() {
             local dir="${1:-}"
             local created=0
@@ -261,7 +275,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   sgnd_get_primary_nic
+            #   ```
         sgnd_get_primary_nic() { ip route show default 2>/dev/null | awk 'NR==1 {print $5}'; }
         # fn: sgnd_ping_ok - Ping ok
             # . Purpose
@@ -280,7 +296,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   sgnd_ping_ok "127.0.0.1" && printf 'Loopback responds\n'
+            #   ```
         sgnd_ping_ok() { ping -c1 -W1 "$1" &>/dev/null; }
         # fn: sgnd_port_open - Port open
             # . Purpose
@@ -300,7 +318,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   sgnd_port_open "example" "example-2"
+            #   ```
         sgnd_port_open() {
             local h="$1"
             local p="$2"
@@ -331,7 +351,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   sgnd_get_ip "lo"
+            #   ```
         sgnd_get_ip() { hostname -I 2>/dev/null | awk '{print $1}'; }
     # -- User context and ownership ---------------------------------------------------
         # fn: sgnd_real_user - Real user
@@ -348,7 +370,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   sgnd_real_user
+            #   ```
         sgnd_real_user() {
             if [[ -n "${SUDO_USER-}" && "${SUDO_USER}" != "root" ]]; then
                 printf '%s\n' "${SUDO_USER}"
@@ -367,7 +391,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   sgnd_real_home
+            #   ```
         sgnd_real_home() {
             local user
             user="$(sgnd_real_user)"
@@ -384,7 +410,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   sgnd_run_as_real_user printf '%s\n' "Running as the real user"
+            #   ```
         sgnd_run_as_real_user() {
             local user
             user="$(sgnd_real_user)"
@@ -412,7 +440,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   sgnd_fix_ownership "/tmp/sgnd-example"
+            #   ```
         sgnd_fix_ownership() {
             local path="$1"
             local user
@@ -439,7 +469,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   sgnd_fix_permissions "/tmp/sgnd-example"
+            #   ```
         sgnd_fix_permissions() {
             local path="$1"
 
@@ -458,7 +490,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   sgnd_get_os
+            #   ```
         sgnd_get_os() { grep -E '^ID=' /etc/os-release | cut -d= -f2 | tr -d '"'; }
         # fn: sgnd_get_os_version - Get os version
             # . Purpose
@@ -471,7 +505,9 @@ set -uo pipefail
             #   0 on success unless the called command returns a different status.
             #
             # . Usage
+            #   ```bash
             #   sgnd_get_os_version
+            #   ```
         sgnd_get_os_version() { grep -E '^VERSION_ID=' /etc/os-release | cut -d= -f2 | tr -d '"'; }
     # -- Failure and command execution ------------------------------------------------
     # fn: sgnd_die - Die
@@ -490,7 +526,9 @@ set -uo pipefail
         #   0 on success unless the called command returns a different status.
         #
         # . Usage
+        #   ```bash
         #   sgnd_die "example" "example-2"
+        #   ```
     sgnd_die() {
         local msg="${1-}"
         local rc="${2-1}"
@@ -516,7 +554,9 @@ set -uo pipefail
         #   0 on success unless the called command returns a different status.
         #
         # . Usage
+        #   ```bash
         #   sgnd_require test -d "/tmp"
+        #   ```
     sgnd_require() {
         "$@"
         local rc=$?
@@ -538,7 +578,9 @@ set -uo pipefail
         #   0 on success unless the called command returns a different status.
         #
         # . Usage
+        #   ```bash
         #   sgnd_must mkdir -p "/tmp/sgnd-example"
+        #   ```
     sgnd_must() {
         "$@"
         local rc=$?

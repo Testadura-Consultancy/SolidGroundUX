@@ -67,7 +67,9 @@ set -uo pipefail
         #   Exits with code 2 when executed instead of sourced.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_lib_guard
+        #   ```
     _sgnd_lib_guard() {
         local lib_base=""
         local guard=""
@@ -126,7 +128,9 @@ set -uo pipefail
         #   0 always.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_minimal_say_normalize_log_level "example"
+        #   ```
     _sgnd_minimal_say_normalize_log_level() {
         case "${1,,}" in
             off|none|silent) printf '%s\n' 'silent' ;;
@@ -155,7 +159,9 @@ set -uo pipefail
         #   1 if the message should be suppressed.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_minimal_say_should_print_console "example"
+        #   ```
     _sgnd_minimal_say_should_print_console() {
         local type="${1^^}"
         local level=""
@@ -216,7 +222,9 @@ set -uo pipefail
         #   0 always.
         #
         # . Usage
+        #   ```bash
         #   say "example"
+        #   ```
     say() {
         local type="${1^^}"
         local label=""
@@ -242,85 +250,125 @@ set -uo pipefail
         printf '%s%-6s%s\t%s\n' "$color" "$label" "${RESET-}" "$*" >&2
     }
 
-    # saystart
+    # fn: saystart - Send a START message through the shared say formatter
         # . Purpose
-        #   Saystart.
+        #   Send a START message through the shared say formatter.
+        #
+        # . Arguments
+        #   MESSAGE...  Message text passed to say.
         #
         # . Returns
-        #   Returns the underlying command or workflow status.
+        #   The status returned by say.
         #
         # . Usage
-        #   saystart "Starting SolidGroundUX example"
+        #   ```bash
+        #   saystart "Starting operation"
+        #   ```
     saystart()   { say START "$@"; }
-    # sayinfo
+    # fn: sayinfo - Send a INFO message through the shared say formatter
         # . Purpose
-        #   Sayinfo.
+        #   Send a INFO message through the shared say formatter.
+        #
+        # . Arguments
+        #   MESSAGE...  Message text passed to say.
         #
         # . Returns
-        #   Returns the underlying command or workflow status.
+        #   The status returned by say.
         #
         # . Usage
-        #   sayinfo "SolidGroundUX example"
+        #   ```bash
+        #   sayinfo "Processing input"
+        #   ```
     sayinfo()    { say INFO "$@"; }
-    # sayok
+    # fn: sayok - Send a OK message through the shared say formatter
         # . Purpose
-        #   Sayok.
+        #   Send a OK message through the shared say formatter.
+        #
+        # . Arguments
+        #   MESSAGE...  Message text passed to say.
         #
         # . Returns
-        #   Returns the underlying command or workflow status.
+        #   The status returned by say.
         #
         # . Usage
+        #   ```bash
         #   sayok "Operation completed"
+        #   ```
     sayok()      { say OK "$@"; }
-    # saywarning
+    # fn: saywarning - Send a WARN message through the shared say formatter
         # . Purpose
-        #   Saywarning.
+        #   Send a WARN message through the shared say formatter.
+        #
+        # . Arguments
+        #   MESSAGE...  Message text passed to say.
         #
         # . Returns
-        #   Returns the underlying command or workflow status.
+        #   The status returned by say.
         #
         # . Usage
-        #   saywarning "Example warning"
+        #   ```bash
+        #   saywarning "Invalid setting"
+        #   ```
     saywarning() { say WARN "$@"; }
-    # sayfail
+    # fn: sayfail - Send a FAIL message through the shared say formatter
         # . Purpose
-        #   Sayfail.
+        #   Send a FAIL message through the shared say formatter.
+        #
+        # . Arguments
+        #   MESSAGE...  Message text passed to say.
         #
         # . Returns
-        #   Returns the underlying command or workflow status.
+        #   The status returned by say.
         #
         # . Usage
-        #   sayfail "Example failure"
+        #   ```bash
+        #   sayfail "Operation failed"
+        #   ```
     sayfail()    { say FAIL "$@"; }
-    # saydebug
+    # fn: saydebug - Send a DEBUG message through the shared say formatter
         # . Purpose
-        #   Saydebug.
+        #   Send a DEBUG message through the shared say formatter.
+        #
+        # . Arguments
+        #   MESSAGE...  Message text passed to say.
         #
         # . Returns
-        #   Returns the underlying command or workflow status.
+        #   The status returned by say.
         #
         # . Usage
-        #   saydebug "Example debug message"
+        #   ```bash
+        #   saydebug "Resolved target root"
+        #   ```
     saydebug()   { say DEBUG "$@"; }
-    # saycancel
+    # fn: saycancel - Send a CANCEL message through the shared say formatter
         # . Purpose
-        #   Saycancel.
+        #   Send a CANCEL message through the shared say formatter.
+        #
+        # . Arguments
+        #   MESSAGE...  Message text passed to say.
         #
         # . Returns
-        #   Returns the underlying command or workflow status.
+        #   The status returned by say.
         #
         # . Usage
-        #   saycancel "Operation cancelled"
+        #   ```bash
+        #   saycancel "Action cancelled"
+        #   ```
     saycancel()  { say CANCEL "$@"; }
-    # sayend
+    # fn: sayend - Send a END message through the shared say formatter
         # . Purpose
-        #   Sayend.
+        #   Send a END message through the shared say formatter.
+        #
+        # . Arguments
+        #   MESSAGE...  Message text passed to say.
         #
         # . Returns
-        #   Returns the underlying command or workflow status.
+        #   The status returned by say.
         #
         # . Usage
-        #   sayend "SolidGroundUX example complete"
+        #   ```bash
+        #   sayend "Operation finished"
+        #   ```
     sayend()     { say END "$@"; }
 
 # - Framework path resolution --------------------------------------------------------
@@ -343,7 +391,9 @@ set -uo pipefail
         #   126 when the path cannot be resolved.
         #
         # . Usage
+        #   ```bash
         #   sgnd_framework_resolve_path "usr/local/lib/solidgroundux/common/sgnd-bootstrap.sh" resolved_path
+        #   ```
     sgnd_framework_resolve_path() {
         local relative_path="${1#/}"
         local out_var="$2"
@@ -384,7 +434,9 @@ set -uo pipefail
         #   126 when the bootstrap library is unreadable.
         #
         # . Usage
+        #   ```bash
         #   _load_bootstrapper || return $?
+        #   ```
     _load_bootstrapper(){
         local bootstrap=""
 
@@ -434,8 +486,10 @@ set -uo pipefail
         #   0 when startup completed and script-specific logic may continue.
         #
         # . Usage
+        #   ```bash
         #   sgnd_exe_start "$@"
         #   sgnd_exe_start --no-title "$@"
+        #   ```
     sgnd_exe_start() {
         local rc=0
         local show_title=1

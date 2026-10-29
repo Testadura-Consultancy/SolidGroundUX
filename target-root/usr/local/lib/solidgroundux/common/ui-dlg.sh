@@ -66,7 +66,9 @@ set -uo pipefail
         #   Exits with code 2 when executed instead of sourced.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_lib_guard
+        #   ```
     _sgnd_lib_guard() {
         local lib_base=""
         local guard=""
@@ -111,7 +113,9 @@ set -uo pipefail
         #   Non-zero when validation, resolution, I/O, or user cancellation fails.
         #
         # . Usage
+        #   ```bash
         #   _dlg_keymap "example" "example-2"
+        #   ```
     _dlg_keymap(){
         local choices="$1"
         local keymap=""
@@ -157,7 +161,9 @@ set -uo pipefail
         #   Non-zero when validation, resolution, I/O, or user cancellation fails.
         #
         # . Usage
+        #   ```bash
         #   sgnd_decision_expand_choices "example"
+        #   ```
     sgnd_decision_expand_choices() {
         local spec="${1-}"
         local group=""
@@ -205,7 +211,9 @@ set -uo pipefail
         #   Non-zero when validation, resolution, I/O, or user cancellation fails.
         #
         # . Usage
+        #   ```bash
         #   sgnd_decision_normalize "dark" "example-2" "dark"
+        #   ```
     sgnd_decision_normalize() {
         local value="${1-}"
         local choices="${2-}"
@@ -250,7 +258,9 @@ set -uo pipefail
         #   Non-zero when validation, resolution, I/O, or user cancellation fails.
         #
         # . Usage
+        #   ```bash
         #   sgnd_decision_display_choices "example"
+        #   ```
     sgnd_decision_display_choices() {
         local spec="${1-}"
         local group=""
@@ -294,7 +304,9 @@ set -uo pipefail
         #   Non-zero when validation, resolution, I/O, or user cancellation fails.
         #
         # . Usage
+        #   ```bash
         #   sgnd_decision_from_dialog_rc "example" "example-2" "dark"
+        #   ```
     sgnd_decision_from_dialog_rc() {
         local rc="${1:-}"
         local choices="${2-}"
@@ -354,7 +366,9 @@ set -uo pipefail
         #   Non-zero when validation, resolution, I/O, or user cancellation fails.
         #
         # . Usage
+        #   ```bash
         #   sgnd_dlg_autocontinue "example" "example-2" "example-3"
+        #   ```
     sgnd_dlg_autocontinue() {
         local seconds="${1:-5}"
         local msg="${2:-}"
@@ -410,7 +424,9 @@ set -uo pipefail
             #   Non-zero when validation, resolution, I/O, or user cancellation fails.
             #
             # . Usage
+            #   ```bash
             #   sgnd_dlg_custom_rc_for_key "example"
+            #   ```
         sgnd_dlg_custom_rc_for_key() {
             local pressed="${1:-}"
             local j=0
@@ -578,7 +594,9 @@ set -uo pipefail
         #   Non-zero when validation, resolution, I/O, or user cancellation fails.
         #
         # . Usage
+        #   ```bash
         #   sgnd_prompt_fromlist --labelwidth --autoalign --colorize
+        #   ```
     sgnd_prompt_fromlist() {
         local labelwidth=0
         local autoalign=0
@@ -698,7 +716,9 @@ set -uo pipefail
         #   Non-zero when validation, resolution, I/O, or user cancellation fails.
         #
         # . Usage
+        #   ```bash
         #   sgnd_ask_decision "example" "example-2"
+        #   ```
     sgnd_ask_decision() {
         local label=""
         local choices=""

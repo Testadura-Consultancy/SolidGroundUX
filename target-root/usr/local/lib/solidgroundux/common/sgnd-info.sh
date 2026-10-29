@@ -67,7 +67,9 @@ set -uo pipefail
         #   Exits with code 2 when executed instead of sourced.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_lib_guard
+        #   ```
     _sgnd_lib_guard() {
         local lib_base=""
         local guard=""
@@ -113,7 +115,9 @@ set -uo pipefail
         #   0 on success unless the called command returns a different status.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_print_arg_spec_entry "example"
+        #   ```
     _sgnd_print_arg_spec_entry() {
         local entry="${1-}"
         local name=""
@@ -160,7 +164,9 @@ set -uo pipefail
         #   0 on success unless the called command returns a different status.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_print_arg_spec_list "example" "example-2"
+        #   ```
     _sgnd_print_arg_spec_list() {
         local header="${1:?missing header}"
         local array_name="${2:?missing array name}"
@@ -196,7 +202,9 @@ set -uo pipefail
         #   0 on success unless the called command returns a different status.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_print_cfg_pass "SolidGroundUX example" "example-2"
+        #   ```
     _sgnd_print_cfg_pass() {
         local header_text="${1:?missing header text}"
         local array_name="${2:?missing array name}"
@@ -249,7 +257,9 @@ set -uo pipefail
         #   Non-zero when validation, resolution, user cancellation, or execution fails.
         #
         # . Usage
+        #   ```bash
         #   sgnd_print_cfg "example" "example-2"
+        #   ```
     sgnd_print_cfg() {
         local array_name="${1:?missing spec array name}"
         local filter="${2:-both}"
@@ -282,7 +292,9 @@ set -uo pipefail
         #   0 on success unless the called command returns a different status.
         #
         # . Usage
+        #   ```bash
         #   sgnd_print_framework_metadata
+        #   ```
     sgnd_print_framework_metadata() {
         sgnd_print_sectionheader --text "Framework metadata" --padleft "$_section_indent"
         sgnd_print_labeledvalue "Product"      "$SGND_PRODUCT" --pad "$_items_indent"
@@ -306,7 +318,9 @@ set -uo pipefail
         #   0 on success unless the called command returns a different status.
         #
         # . Usage
+        #   ```bash
         #   sgnd_print_metadata
+        #   ```
     sgnd_print_metadata() {
         sgnd_print_sectionheader --text "Script metadata" --padleft "$_section_indent"
         sgnd_print_labeledvalue "File"               "$SGND_SCRIPT_FILE" --pad "$_items_indent"
@@ -331,7 +345,9 @@ set -uo pipefail
         #   0 on success unless the called command returns a different status.
         #
         # . Usage
+        #   ```bash
         #   sgnd_print_args
+        #   ```
     sgnd_print_args() {
         sgnd_print
         _sgnd_print_arg_spec_list "Script arguments" "SGND_ARGS_SPEC"
@@ -363,7 +379,9 @@ set -uo pipefail
         #   0 on success unless the called command returns a different status.
         #
         # . Usage
+        #   ```bash
         #   sgnd_print_state
+        #   ```
     sgnd_print_state() {
         sgnd_state_list_keys | {
             local printed_header=0
@@ -394,7 +412,9 @@ set -uo pipefail
         #   0 on success unless the called command returns a different status.
         #
         # . Usage
+        #   ```bash
         #   sgnd_print_license
+        #   ```
     sgnd_print_license() {
         local license_file="${SGND_LICENSE_FILE}"
         
@@ -441,7 +461,9 @@ set -uo pipefail
         #   0 on success unless the called command returns a different status.
         #
         # . Usage
+        #   ```bash
         #   sgnd_print_readme
+        #   ```
     sgnd_print_readme() {
         local readme_file="$SGND_DOCS_DIR/README.md"
 
@@ -462,7 +484,9 @@ set -uo pipefail
         #   0 on success unless the called command returns a different status.
         #
         # . Usage
+        #   ```bash
         #   sgnd_showenvironment
+        #   ```
     sgnd_showenvironment() {
         sgnd_print_titlebar
         sgnd_print

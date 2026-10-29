@@ -71,7 +71,9 @@ set -uo pipefail
         #   Exits with code 2 when executed instead of sourced.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_lib_guard
+        #   ```
     _sgnd_lib_guard() {
         local lib_base=""
         local guard=""
@@ -115,7 +117,9 @@ set -uo pipefail
         #   Non-zero when validation, resolution, user cancellation, or execution fails.
         #
         # . Usage
+        #   ```bash
         #   sgnd_header_read "/tmp/sgnd-example.txt"
+        #   ```
     sgnd_header_read() {
         local file="${1:?missing file}"
         local line=""
@@ -167,7 +171,9 @@ set -uo pipefail
         #   Non-zero when validation, resolution, user cancellation, or execution fails.
         #
         # . Usage
+        #   ```bash
         #   sgnd_header_load_section_to_dt "/tmp/sgnd-example.txt" "example-2" "example-3" "example-4"
+        #   ```
     sgnd_header_load_section_to_dt() {
         local file="${1:?missing file}"
         local section="${2:?missing section}"
@@ -223,7 +229,9 @@ set -uo pipefail
         #   Non-zero when validation, resolution, user cancellation, or execution fails.
         #
         # . Usage
+        #   ```bash
         #   sgnd_header_is_section_header "example" && printf 'Success\n' || printf 'Failed\n'
+        #   ```
     sgnd_header_is_section_header() {
         local line="${1-}"
 
@@ -250,7 +258,9 @@ set -uo pipefail
         #   Non-zero when validation, resolution, user cancellation, or execution fails.
         #
         # . Usage
+        #   ```bash
         #   sgnd_header_buffer_load "/tmp/sgnd-example.txt" "example-2"
+        #   ```
     sgnd_header_buffer_load() {
         local file="${1:?missing file}"
 
@@ -276,7 +286,9 @@ set -uo pipefail
         #   Non-zero when validation, resolution, user cancellation, or execution fails.
         #
         # . Usage
+        #   ```bash
         #   sgnd_header_buffer_get_section "example" "example-2"
+        #   ```
     sgnd_header_buffer_get_section() {
         local section="${1:?missing section}"
         local _outvar="${2:?missing outvar}"
@@ -302,7 +314,9 @@ set -uo pipefail
         #   Non-zero when validation, resolution, user cancellation, or execution fails.
         #
         # . Usage
+        #   ```bash
         #   sgnd_header_calc_checksum "/tmp/sgnd-example.txt" "example-2"
+        #   ```
     sgnd_header_calc_checksum() {
         local file="${1:?missing file}"
 
@@ -339,7 +353,9 @@ set -uo pipefail
         #   Non-zero when validation, resolution, user cancellation, or execution fails.
         #
         # . Usage
+        #   ```bash
         #   sgnd_header_bump_version "/tmp/sgnd-example.txt" "normal"
+        #   ```
     sgnd_header_bump_version() {
         local file="${1:?missing file}"
         local mode="${2:-none}"
@@ -438,7 +454,9 @@ set -uo pipefail
         #   0 on success unless the called command returns a different status.
         #
         # . Usage
+        #   ```bash
         #   sgnd_header_get_section "/tmp/sgnd-example.txt" "example-2" "example-3"
+        #   ```
     sgnd_header_get_section() {
         local file="${1:?missing file}"
         local section="${2:?missing section}"
@@ -494,7 +512,9 @@ set -uo pipefail
         #   0 on success unless the called command returns a different status.
         #
         # . Usage
+        #   ```bash
         #   sgnd_header_get_section_from_text "SolidGroundUX example" "example-2" "example-3"
+        #   ```
     sgnd_header_get_section_from_text() {
         local text="${1-}"
         local section="${2:?missing section}"
@@ -553,7 +573,9 @@ set -uo pipefail
         #   Non-zero when validation, resolution, user cancellation, or execution fails.
         #
         # . Usage
+        #   ```bash
         #   sgnd_header_get_banner_parts_from_text "SolidGroundUX example" "example-2" "SolidGroundUX example"
+        #   ```
     sgnd_header_get_banner_parts_from_text() {
         local text="${1-}"
         local _product_var="${2:?missing product var}"
@@ -614,7 +636,9 @@ set -uo pipefail
         #   Non-zero when validation, resolution, user cancellation, or execution fails.
         #
         # . Usage
+        #   ```bash
         #   sgnd_header_parse_banner_line "example" "example-2" "SolidGroundUX example"
+        #   ```
     sgnd_header_parse_banner_line() {
         local line="${1-}"
         local _product_var="${2:?missing product var}"
@@ -661,7 +685,9 @@ set -uo pipefail
         #   Non-zero when validation, resolution, user cancellation, or execution fails.
         #
         # . Usage
+        #   ```bash
         #   sgnd_header_get_field "/tmp/sgnd-example.txt" "example-2" "example-3" "example-4"
+        #   ```
     sgnd_header_get_field() {
         local file="${1:?missing file}"
         local section="${2:?missing section}"
@@ -725,7 +751,9 @@ set -uo pipefail
         #   0 on success unless the called command returns a different status.
         #
         # . Usage
+        #   ```bash
         #   sgnd_header_get_field_value "/tmp/sgnd-example.txt" "example-2" "example-3"
+        #   ```
     sgnd_header_get_field_value() {
         local file="$1"
         local section="$2"
@@ -755,7 +783,9 @@ set -uo pipefail
         #   Non-zero when validation, resolution, user cancellation, or execution fails.
         #
         # . Usage
+        #   ```bash
         #   sgnd_header_get_banner_parts "/tmp/sgnd-example.txt" "example-2" "SolidGroundUX example"
+        #   ```
     sgnd_header_get_banner_parts() {
         local file="${1:?missing file}"
         local _product_var="${2:?missing product var}"
@@ -814,7 +844,9 @@ set -uo pipefail
         #   0 on success unless the called command returns a different status.
         #
         # . Usage
+        #   ```bash
         #   sgnd_section_get_field_value "example" "example-2"
+        #   ```
     sgnd_section_get_field_value() {
         local section="${1-}"
         local field="${2:?missing field}"
@@ -867,7 +899,9 @@ set -uo pipefail
         #   Non-zero when validation, resolution, user cancellation, or execution fails.
         #
         # . Usage
+        #   ```bash
         #   sgnd_header_add_field "/tmp/sgnd-example.txt" "example-2" "example-3" "dark"
+        #   ```
     sgnd_header_add_field() {
         local file="${1:?missing file}"
         local section="${2:?missing section}"
@@ -945,7 +979,9 @@ set -uo pipefail
         #   0 on success unless the called command returns a different status.
         #
         # . Usage
+        #   ```bash
         #   sgnd_header_upsert_field "/tmp/sgnd-example.txt" "example-2" "example-3" "dark"
+        #   ```
     sgnd_header_upsert_field() {
         local file="${1:?missing file}"
         local section="${2:?missing section}"
@@ -987,7 +1023,9 @@ set -uo pipefail
         #   Non-zero when validation, resolution, user cancellation, or execution fails.
         #
         # . Usage
+        #   ```bash
         #   sgnd_header_set_field "/tmp/sgnd-example.txt" "example-2" "example-3" "dark"
+        #   ```
     sgnd_header_set_field() {
         local file="${1:?missing file}"
         local section="${2:?missing section}"
@@ -1098,7 +1136,9 @@ set -uo pipefail
         #   1 when arguments are invalid, the file is unreadable, or an update fails.
         #
         # . Usage
+        #   ```bash
         #   sgnd_framework_set_version "/tmp/sgnd-example.txt" "1.8.0" "1.7.9"
+        #   ```
     sgnd_framework_set_version() {
         local file="${1:-}"
         local version="${2:-}"

@@ -68,7 +68,9 @@ set -uo pipefail
         #   Exits with code 2 when executed instead of sourced.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_lib_guard
+        #   ```
     _sgnd_lib_guard() {
         local lib_base=""
         local guard=""
@@ -114,7 +116,9 @@ set -uo pipefail
         #   0 always.
         #
         # . Usage
+        #   ```bash
         #   _parse_bootstrap_args "$@"
+        #   ```
     _parse_bootstrap_args() {
         exe_state=0
         exe_root=0
@@ -187,7 +191,9 @@ set -uo pipefail
         #   Non-zero when sourcing, metadata initialization, path setup, or directory creation fails.
         #
         # . Usage
+        #   ```bash
         #   _init_bootstrap
+        #   ```
     _init_bootstrap() {
         sayinfo "Sourcing bootstrap environment"
         SGND_BOOTSTRAP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -255,7 +261,9 @@ set -uo pipefail
         #   Non-zero when a sourced library fails.
         #
         # . Usage
+        #   ```bash
         #   _source_corelibs
+        #   ```
     _source_corelibs(){
         sayinfo "Loading core libraries..."  
         sgnd_rebase_directories
@@ -292,7 +300,9 @@ set -uo pipefail
         #   Non-zero when a sourced library fails.
         #
         # . Usage
+        #   ```bash
         #   _source_usinglibs
+        #   ```
     _source_usinglibs() {
         local lib path
 
@@ -337,7 +347,9 @@ set -uo pipefail
         #   The original shell exit status captured on entry.
         #
         # . Usage
+        #   ```bash
         #   trap '_sgnd_on_exit_run' EXIT
+        #   ```
     _sgnd_on_exit_run() {
         local rc=$?
         local i cmd
@@ -371,7 +383,9 @@ set -uo pipefail
         #   The original shell exit status captured on entry.
         #
         # . Usage
+        #   ```bash
         #   sgnd_on_exit_add "_sgnd_save_state_dispatch"
+        #   ```
     _sgnd_save_state_dispatch() {
         local rc=$?   # capture immediately!
 
@@ -409,7 +423,9 @@ set -uo pipefail
         #   Non-zero when validation, resolution, user cancellation, or execution fails.
         #
         # . Usage
+        #   ```bash
         #   sgnd_script_init_metadata "/usr/local/libexec/solidgroundux/management-console.sh"
+        #   ```
     sgnd_script_init_metadata() {
         local metadata=""
         local attribution=""
@@ -484,7 +500,9 @@ set -uo pipefail
         #   Non-zero when validation, resolution, user cancellation, or execution fails.
         #
         # . Usage
+        #   ```bash
         #   sgnd_module_init_metadata "/tmp/sgnd-example.txt"
+        #   ```
     sgnd_module_init_metadata() {
         local file="${1:-${BASH_SOURCE[1]}}"
         local abs_file=""
@@ -597,7 +615,9 @@ set -uo pipefail
         #   0 on success unless the called command returns a different status.
         #
         # . Usage
+        #   ```bash
         #   sgnd_on_exit_install
+        #   ```
     sgnd_on_exit_install() {
         # Install once
         [[ "${_SGND_ON_EXIT_INSTALLED-0}" -eq 1 ]] && return 0
@@ -618,7 +638,9 @@ set -uo pipefail
         #   0 on success unless the called command returns a different status.
         #
         # . Usage
+        #   ```bash
         #   sgnd_parse_statespec "example"
+        #   ```
     sgnd_parse_statespec() {
         local spec="${1-}"
         _statekey="" _statelabel="" _statedefault="" _statevalidate="" _statecolorize=""
@@ -639,7 +661,9 @@ set -uo pipefail
         #   0 on success unless the called command returns a different status.
         #
         # . Usage
+        #   ```bash
         #   sgnd_enable_save_state
+        #   ```
     sgnd_enable_save_state(){
         SGND_STATE_SAVE=1
     }
@@ -658,7 +682,9 @@ set -uo pipefail
         #   0 on success unless the called command returns a different status.
         #
         # . Usage
+        #   ```bash
         #   sgnd_disable_save_state
+        #   ```
     sgnd_disable_save_state(){
         SGND_STATE_SAVE=0
     }
@@ -675,7 +701,9 @@ set -uo pipefail
         #   0 on success unless the called command returns a different status.
         #
         # . Usage
+        #   ```bash
         #   sgnd_save_state
+        #   ```
     sgnd_save_state(){
 
         (( ! SGND_STATE_SAVE )) && return 0
@@ -715,7 +743,9 @@ set -uo pipefail
         #   0 on success unless the called command returns a different status.
         #
         # . Usage
+        #   ```bash
         #   sgnd_on_exit_add
+        #   ```
     sgnd_on_exit_add() {
         # store as one string per handler: "fn arg1 arg2 ..."
         SGND_ON_EXIT_HANDLERS+=( "$*" )
@@ -743,7 +773,9 @@ set -uo pipefail
         #   Non-zero when validation, resolution, user cancellation, or execution fails.
         #
         # . Usage
+        #   ```bash
         #   sgnd_check_license
+        #   ```
     sgnd_check_license() {
         local license_file="$SGND_LICENSE_FILE"
         local license_name="${SGND_LICENSE_FILE##*/}"
@@ -850,7 +882,9 @@ set -uo pipefail
         #   Returns the supplied status, defaulting to 1.
         #
         # . Usage
+        #   ```bash
         #   _boot_fail "Failed to load core libraries" 126
+        #   ```
     _boot_fail() {
         local message="${1:-Bootstrap failed}"
         local rc="${2:-1}"
@@ -878,7 +912,9 @@ set -uo pipefail
         #   Non-zero when validation, resolution, user cancellation, or execution fails.
         #
         # . Usage
+        #   ```bash
         #   sgnd_load_ui_style
+        #   ```
     sgnd_load_ui_style() {
         local style_path="${SGND_UI_STYLE:-00-style-default.sh}"
         local palette_path="$SGND_UI_PALETTE"
@@ -951,7 +987,9 @@ set -uo pipefail
         #   Non-zero when validation, resolution, user cancellation, or execution fails.
         #
         # . Usage
+        #   ```bash
         #   sgnd_bootstrap --state --log normal
+        #   ```
     sgnd_bootstrap() {
         # Definitions
             : "${SGND_UI_COMMIT:=$(printf '\e[38;5;214m')}"
