@@ -7,7 +7,7 @@
 #   Checksum    : 604cde2e529df69dd8fa5c14531bb1b3fe5641ef49e9c8485edb5735fc037598
 #   Source      : sgnd-definitions.sh
 #   Type        : library
-#   Group       : Bootstrap
+#   Group       : Globals
 #   Purpose     : Define canonical SolidGroundUX framework globals and defaults
 #
 # Description:
@@ -76,6 +76,7 @@ set -uo pipefail
         sgnd_module_init_metadata "${BASH_SOURCE[0]}"
     fi
 # - Framework identity --------------------------------------------------------------
+    # def: Framework identity
     SGND_PRODUCT="SolidGroundUX"
     SGND_VERSION="2.1"
     SGND_BUILD="2630201"
@@ -87,8 +88,10 @@ set -uo pipefail
     SGND_ONLINE_DOC="https://testadura-consultancy.github.io/SolidGroundUX/"
     SGND_DOCUMENTATION="$SGND_ONLINE_DOC"
     SGND_APPENDICES="attribution,glossary,integrity,globals,enums,license,changelog,install,canonical"
+    # def$
 
 # - Framework defaults --------------------------------------------------------------
+    # def: Framework defaults
     SGND_DEFAULT_FRAMEWORK_ROOT="/"
 
     SGND_DEFAULT_LOG_MAX_BYTES=$((25 * 1024 * 1024))
@@ -112,8 +115,10 @@ set -uo pipefail
 
     SGND_DEFAULT_CONSOLE_WIDTH=80
     SGND_DEFAULT_MAX_RENDER_WIDTH=140
+    # def$
 
 # - Framework metadata --------------------------------------------------------------
+    # def: Configurable framework globals
     SGND_FRAMEWORK_GLOBALS=(
         "system|SGND_SYSCFG_DIR|Framework-wide system configuration directory|"
         "system|SGND_DOCS_DIR|Framework-wide documentation directory|"
@@ -142,6 +147,7 @@ set -uo pipefail
         "both|SGND_MAX_RENDER_WIDTH|Render width upper limit|"
     )
 
+    # def$
     # var: SGND_CORE_LIBS - Ordered core library list
         # . Purpose
         #   Define the core libraries that sgnd-bootstrap loads in fixed order.
@@ -149,6 +155,7 @@ set -uo pipefail
         # Notes:
         #   - Ordering is part of the bootstrap contract.
         #   - Earlier libraries may be required by later ones.
+    # def: Ordered core libraries
     SGND_CORE_LIBS=(
         sgnd-args.sh
         sgnd-info.sh
@@ -162,6 +169,8 @@ set -uo pipefail
     )
 
 
+    # def$
+    # def: Runtime globals
     SGND_RUNTIME_GLOBALS=(
         "both|SGND_FRAMEWORK_ROOT|Root path used as the base for framework filesystem locations.|"
         "both|SGND_COMMON_LIB|Directory containing common SolidGroundUX library files.|"
@@ -200,6 +209,8 @@ set -uo pipefail
         "user|SGND_FRAMEWORK_STATEFILE|User-specific framework runtime state file.|"
     )
 
+    # def$
+    # def: Framework state variables
     SGND_FRAMEWORK_STATE=(
         SGND_CONSOLE_LOG_LEVEL
         SGND_FILE_LOG_LEVEL
@@ -207,3 +218,4 @@ set -uo pipefail
         SGND_UI_PALETTE
         SAY_DATE_FORMAT
     )
+    # def$
