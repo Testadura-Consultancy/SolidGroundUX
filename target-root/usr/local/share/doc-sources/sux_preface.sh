@@ -46,7 +46,7 @@
 # > I hope this framework makes someone's life a little easier. If you have suggestions for improvements,
 # > discover a bug, or would like to contribute, feel free to reach out.
 #  
-# ~  What's in a name?
+# -- What's in a name? ---------------------------------------------------------
 #
 # > The name SolidGround originates from a .NET ETL orchestration framework that I have been developing over
 # > the past ten years. That product is currently awaiting its adaptation to Linux and the Avalonia UI
@@ -64,14 +64,11 @@
 #
 # > Version 2.1 separates that runtime from two products built around it:
 # >
-# >     SolidGroundUX Framework
-# >         Runtime, bootstrap, common libraries, configuration/state, UI, and reusable APIs.
+# > - **`SolidGroundUX Framework`** — Runtime, bootstrap, common libraries, configuration/state, UI, and reusable APIs.
 # >
-# >     SolidGroundUX Management Console Modules (MCM)
-# >         The `sgnd-console` host and the server-management modules that run in it.
+# > - **`SolidGroundUX Management Console Modules (MCM)`** — The `sgnd-console` host, server-management modules, documentation bundles, Markdown generation and WCM publishing workflows.
 # >
-# >     SolidGroundUX SDK
-# >         Workspace, deployment, documentation, packaging, and release tooling.
+# > - **`SolidGroundUX SDK`** — Workspace creation, development deployment, packaging, release preparation, and SDK templates.
 # >
 # > MCM and SDK both depend on the Framework. They are sibling products and do not depend
 # > on each other. This boundary keeps the installed runtime small while allowing management
@@ -115,8 +112,9 @@
 # -- Products built on the Framework ------------------------------------------------
 # > The Management Console Modules product owns the management-console host, public
 # > `sgnd-console` command, module discovery/lazy loading, and server-management modules.
-# > The SDK owns project/workspace tooling, documentation generation, deployment tooling,
-# > release preparation, release management, and development templates.
+# > The SDK owns project/workspace tooling, development deployment, release preparation
+# > and development templates. Documentation bundle management and generation now belong
+# > to MCM; the installed release lifecycle belongs to Framework setup.
 #
 # - Architecture --------------------------------------------------------------------
 #
@@ -150,13 +148,15 @@
 #
 # > Startup deliberately has a small pre-bootstrap boundary:
 # >
-# >     executable
-# >         -> _framework_locator
-# >         -> sgnd-exe-common
-# >         -> sgnd-bootstrap
-# >         -> bootstrap environment/configuration/state
-# >         -> requested libraries
-# >         -> application main
+# > ```text
+# > executable
+# >     -> _framework_locator
+# >     -> sgnd-exe-common
+# >     -> sgnd-bootstrap
+# >     -> bootstrap environment/configuration/state
+# >     -> requested libraries
+# >     -> application main
+# > ```
 # >
 # > The locator and executable-common layer must work before the full Framework runtime
 # > exists. Once bootstrap has completed, applications should use normal Framework APIs
@@ -184,7 +184,7 @@
 # > One of the primary design goals of SolidGroundUX is reducing repetitive code.
 #   
 # > Common functionality such as argument processing, configuration loading, state
-# > management, user interaction, documentation generation, and deployment support
+# > management, user interaction, metadata extraction, and deployment support
 # > are implemented once and reused throughout the framework.
 #   
 # > Developers remain free to override framework behavior when necessary, but most

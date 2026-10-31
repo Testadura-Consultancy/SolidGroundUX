@@ -67,7 +67,9 @@ set -uo pipefail
         #   Exits with code 2 when executed instead of sourced.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_lib_guard
+        #   ```
     _sgnd_lib_guard() {
         local lib_base=""
         local guard=""
@@ -92,70 +94,12 @@ set -uo pipefail
         && declare -F sgnd_header_buffer_load >/dev/null 2>&1; then
         sgnd_module_init_metadata "${BASH_SOURCE[0]}"
     fi
-# - Glyph variable reference ------------------------------------------------------
-    # var: Glyph variables - Console glyph constants
-        # . Purpose
-        #   Document the glyph constants exposed by this module.
-        #
-        # ! Line drawing characters:
-        #   LN_H = ─
-        #   LN_V = │
-        #   LN_TL = ┌
-        #   LN_TR = ┐
-        #   LN_BL = └
-        #   LN_BR = ┘
-        #   LN_T = ┬
-        #   LN_B = ┴
-        #   LN_L = ├
-        #   LN_R = ┤
-        #   LN_X = ┼
-        #   DL_H = ═
-        #   DL_V = ║
-        #   DL_TL = ╔
-        #   DL_TR = ╗
-        #   DL_BL = ╚
-        #   DL_BR = ╝
-        #   DL_T = ╦
-        #   DL_B = ╩
-        #   DL_L = ╠
-        #   DL_R = ╣
-        #   DL_X = ╬
-        #
-        # ! Symbols:        
-        #   CH_DEG = °
-        #   CH_COPY = ©
-        #   CH_TM = ™
-        #   CH_REG = ®
-        #   CH_BULLET = •
-        #   CH_ARROW = →
-        #   CH_ELLIPSIS = …
-        #   CH_SQRT = √
-        #   CH_GE = ≥
-        #   CH_LE = ≤
-        #   CH_NE = ≠
-        #   CH_APPROX = ≈
-        #   CH_INF = ∞
-        #
-        # ! Navigation:
-        #   KY_ENTER = ↵
-        #   KY_UP = ↑
-        #   KY_DOWN = ↓
-        #   KY_LEFT = ←
-        #   KY_RIGHT = →
-        #
-        # ! Greek letters:
-        #   GR_ALPHA = α
-        #   GR_BETA = β
-        #   GR_GAMMA = γ
-        #   GR_DELTA = Δ
-        #   GR_PI = π
-        #   GR_OMEGA = Ω
-        #
-        # Notes:
-        #   These variables are display constants only; rendering and color handling live in UI modules.
+# - Glyph definitions --------------------------------------------------------------
+    # These variables are display constants only; rendering and color handling
+    # live in UI modules. Values are documented from their Bash assignments.
+    #
+    # def: Glyphs — Light line drawing
 
-    
-# - Light line drawing ------------------------------------------------------------
     LN_H="─"
     LN_V="│"
 
@@ -171,7 +115,7 @@ set -uo pipefail
     LN_X="┼"
 
 
-# - Double line drawing -----------------------------------------------------------
+    # def: Glyphs — Double line drawing
     DL_H="═"
     DL_V="║"
 
@@ -186,7 +130,7 @@ set -uo pipefail
     DL_R="╣"
     DL_X="╬"
 
-# - Common characters -------------------------------------------------------------
+    # def: Glyphs — Common characters
     CH_DEG="°"
     CH_COPY="©"
     CH_TM="™"
@@ -196,7 +140,7 @@ set -uo pipefail
     CH_ARROW="→"
     CH_ELLIPSIS="…"
 
-# - Math / comparison -------------------------------------------------------------
+    # def: Glyphs — Math / comparison
     CH_SQRT="√"
     CH_GE="≥"
     CH_LE="≤"
@@ -204,14 +148,14 @@ set -uo pipefail
     CH_APPROX="≈"
     CH_INF="∞"
 
-# - Keyboard hints ----------------------------------------------------------------
+    # def: Glyphs — Keyboard hints
     KY_ENTER="↵"
     KY_UP="↑"
     KY_DOWN="↓"
     KY_LEFT="←"
     KY_RIGHT="→"
 
-# - Greek letters -----------------------------------------------------------------
+    # def: Glyphs — Greek letters
     GR_ALPHA="α"
     GR_BETA="β"
     GR_GAMMA="γ"
@@ -219,4 +163,4 @@ set -uo pipefail
     GR_PI="π"
     GR_OMEGA="Ω"
 
-
+    # def$

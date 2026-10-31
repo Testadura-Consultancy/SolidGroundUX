@@ -78,11 +78,12 @@
 #
 # -- Documentation Generation --------------------------------------------------------
 #
-# > The SDK documentation generator can extract documentation directly from these source files.
+# > MCM manages documentation bundles and generates Markdown documentation directly
+# > from structured source comments in the repositories.
 #   
 # > Product information, architecture descriptions, API documentation, appendices,
 # > glossaries, and implementation notes are all maintained close to the source
-# > code and transformed into a navigable HTML documentation set.
+# > code; MCM produces the Markdown documentation that WCM renders as a navigable site.
 #  
 # > This approach helps ensure that documentation remains synchronized with the
 # > implementation and reduces the risk of documentation becoming outdated.

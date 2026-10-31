@@ -5,7 +5,7 @@
 #   Version     : 2.1
 #   Build       : 2627501
 #   Checksum    : 972145c454a220bae6ca501ee7c88a10a96c24138cad7722502264a0d1332be1
-#   Source      : sux-bootstrap-preface.sh
+#   Source      : sux-bootstrap_preface.sh
 #   Type        : documentation
 #   Group       : Bootstrap
 #   Purpose     : Group preface
@@ -31,14 +31,16 @@
 #
 # > Startup proceeds in this order:
 # >
-# >     executable
-# >         -> _framework_locator
-# >         -> sgnd-exe-common
-# >         -> sgnd-bootstrap
-# >         -> bootstrap environment
-# >         -> configuration and state
-# >         -> libraries declared in SGND_USING
-# >         -> application main
+# > ```text
+# > executable
+# >     -> _framework_locator
+# >     -> sgnd-exe-common
+# >     -> sgnd-bootstrap
+# >     -> bootstrap environment
+# >     -> configuration and state
+# >     -> libraries declared in SGND_USING
+# >     -> application main
+# > ```
 # >
 # > `_framework_locator` is intentionally self-contained. It runs before the normal
 # > Framework libraries are available and locates `sgnd-exe-common.sh`. The executable
@@ -122,7 +124,9 @@
 # > framework state file. The file is identified by `SGND_FRAMEWORK_STATEFILE` and is
 # > normally resolved as:
 #   
-# >     $SGND_USRCFG_DIR/framework.state
+# > ```text
+# > $SGND_USRCFG_DIR/framework.state
+# > ```
 #   
 # > After the normal framework configuration has been loaded, bootstrap recalculates
 # > this filename from the effective user configuration directory. If the file exists,
@@ -154,7 +158,9 @@
 # > terminal. `SGND_FILE_LOG_LEVEL` controls which messages are appended to the
 # > resolved logfile. Both settings support the levels:
 #   
-# >     silent, quiet, normal, verbose, debug, trace
+# > ```text
+# > silent, quiet, normal, verbose, debug, trace
+# > ```
 #   
 # > A message can therefore be suppressed on screen while still being recorded in the
 # > logfile, or displayed on screen while file logging is effectively disabled. Setting

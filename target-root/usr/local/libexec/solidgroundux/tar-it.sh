@@ -16,6 +16,19 @@
 #   framework root. Archive entries are stored relative to that root so they can later
 #   be restored beneath any compatible target root by un-tar-it.sh.
 #
+# Usage:
+#   Run the executable from its shell command (or installed wrapper):
+#   ```bash
+#   tar-it
+#   tar-it --auto --source /home/sysadmin/dev/SolidGroundUX/target-root
+#   ```
+#
+#   Script-specific options:
+#   - `--auto`, `-a`: Create the archive without prompting.
+#   - `--source VALUE`, `-s`: Root of the tree to archive.
+#   - `--archive-dir VALUE`, `-d`: Directory in which archives are stored.
+#   - `--name VALUE`, `-n`: Archive filename, with or without .tar.gz.
+#
 # Attribution:
 #   Developers  : Mark Fieten
 #   Company     : Testadura Consultancy
@@ -26,13 +39,6 @@
 set -uo pipefail
 
 # - Bootstrap ----------------------------------------------------------------------
-    # fn: _framework_locator - Locate and load the SolidGroundUX executable bootstrap context
-        # . Returns
-        #   0 when the executable common library was loaded.
-        #   126 or 127 when bootstrap configuration cannot be resolved.
-        #
-        # . Usage
-        #   _framework_locator || return $?
     # fn$ _framework_locator - Resolve and load the active SolidGroundUX framework
         # . Purpose
         #   Determine the filesystem root of the currently executing SolidGroundUX tree
@@ -64,7 +70,9 @@ set -uo pipefail
         #   be found, or the executable common library is unreadable.
         #
         # . Usage
+        #   ```bash
         #   _framework_locator || return $?
+        #   ```
     _framework_locator() {
         local script_file=""
         local path_without_root=""
@@ -188,7 +196,9 @@ set -uo pipefail
         #   0 always.
         #
         # . Usage
+        #   ```bash
         #   _scan_cli_args "$@"
+        #   ```
     _scan_cli_args() {
         local arg=""
         local expect=""
@@ -219,7 +229,9 @@ set -uo pipefail
         #   0 for a safe basename; 1 otherwise.
         #
         # . Usage
+        #   ```bash
         #   name="$(_normalize_archive_name "$ARCHIVE_NAME")"
+        #   ```
     _normalize_archive_name() {
         local name="$1"
 
@@ -234,7 +246,9 @@ set -uo pipefail
         #   0 when all settings are usable; 1 otherwise.
         #
         # . Usage
+        #   ```bash
         #   _validate_parameters || return $?
+        #   ```
     _validate_parameters() {
         [[ -d "$ARCHIVE_SOURCE_ROOT" ]] || {
             sayfail "Archive source root not found: $ARCHIVE_SOURCE_ROOT"
@@ -257,7 +271,9 @@ set -uo pipefail
         #   0 when settings are valid and confirmed; 1 on cancellation.
         #
         # . Usage
+        #   ```bash
         #   _getparameters || return $?
+        #   ```
     _getparameters() {
         local reply=0
 
@@ -308,7 +324,9 @@ set -uo pipefail
         #   0 after successful archive creation; non-zero on failure.
         #
         # . Usage
+        #   ```bash
         #   _create_archive
+        #   ```
     _create_archive() {
         local archive_path="${ARCHIVE_DIRECTORY%/}/$ARCHIVE_NAME"
         local source_real=""
@@ -368,7 +386,9 @@ set -uo pipefail
         #   Workflow exit status.
         #
         # . Usage
+        #   ```bash
         #   main "$@"
+        #   ```
     main() {
         _scan_cli_args "$@"
         _framework_locator || exit $?

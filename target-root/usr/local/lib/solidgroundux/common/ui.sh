@@ -67,7 +67,9 @@ set -uo pipefail
         #   Exits with code 2 when executed instead of sourced.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_lib_guard
+        #   ```
     _sgnd_lib_guard() {
         local lib_base=""
         local guard=""
@@ -92,53 +94,23 @@ set -uo pipefail
         && declare -F sgnd_header_buffer_load >/dev/null 2>&1; then
         sgnd_module_init_metadata "${BASH_SOURCE[0]}"
     fi
-# - Compatibility overrides --------------------------------------------------------
-    # Shims to integrate with legacy helpers if present (say/ask), with safe fallbacks.
-    # These overrides are intentionally small and policy-free.
-
-    # _sh_err
-        # . Purpose
-        #   Compatibility shim for legacy "_sh_err" error reporting.
-        #
-        # . Behavior
-        #   - If say() exists, emits a FAIL message via say --type FAIL.
-        #   - Otherwise prints the message directly to stderr.
-        #
-        # . Arguments
-        #   $*  MESSAGE
-        #       Error text to report.
-        #
-        # . Side effects
-        #   - Writes one error line to stderr, directly or via say().
-        #
-        # . Returns
-        #   0 always.
-        #
-        # . Usage
-        #   _sh_err "SolidGroundUX example error"
-        #
-        # Examples:
-        #   _sh_err "Palette file missing"
     # fn: _sh_err - Sh err
         # . Purpose
-        #   Write an error message through say when available, otherwise stderr.
-        #
-        # . Behavior
-        #   - Preserves the existing SolidGroundUX console/UI behavior.
-        #   - Uses current palette, style, runtime, or logging globals where applicable.
+        #   Write an error message through say when available, otherwise to stderr.
         #
         # . Arguments
-        #   $@ - Values consumed by the helper. See usage for the expected call shape.
+        #   Message text as positional arguments.
         #
         # . Output
-        #   Writes formatted text or computed values to stdout unless the function targets /dev/tty.
+        #   Writes the formatted failure message.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, I/O, or user cancellation fails.
+        #   Status of the selected output helper.
         #
         # . Usage
-        #   _sh_err "$value"
+        #   ```bash
+        #   _sh_err "Configuration file not found"
+        #   ```
     _sh_err() {
         if declare -f say >/dev/null 2>&1; then
             say --type FAIL "$*"
@@ -146,24 +118,23 @@ set -uo pipefail
             printf '%s\n' "${*:-(no message)}" >&2
         fi
     }
-
     # fn: confirm - Confirm
         # . Purpose
-        #   Ask the user for a yes/no confirmation and return success for yes.
-        #
-        # . Behavior
-        #   - Preserves the existing SolidGroundUX console/UI behavior.
-        #   - Uses current palette, style, runtime, or logging globals where applicable.
+        #   Ask for a Yes/No response, defaulting to No.
         #
         # . Arguments
-        #   $@ - Values consumed by the helper. See usage for the expected call shape.
+        #   Optional $1: prompt label (default: Are you sure?).
+        #
+        # . Output
+        #   Prompts on the terminal.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, I/O, or user cancellation fails.
+        #   0 for Yes; nonzero for No or an input error.
         #
         # . Usage
-        #   confirm "example"
+        #   ```bash
+        #   if confirm "Delete selected file?"; then echo "Confirmed"; fi
+        #   ```
     confirm() {
         if declare -f ask >/dev/null 2>&1; then
             local _ans
@@ -183,31 +154,23 @@ set -uo pipefail
             [[ "$_a" =~ ^[Yy]$ ]]
         fi
     }
-
-# - Helpers ------------------------------------------------------------------------
     # fn: _sgnd_ui_resolve_theme_file - Ui resolve theme file
         # . Purpose
-        #   Resolve a palette or style name to a readable theme file path.
-        #
-        # . Behavior
-        #   - Preserves the existing SolidGroundUX console/UI behavior.
-        #   - Uses current palette, style, runtime, or logging globals where applicable.
+        #   Resolve a theme palette or style specification to a readable shell file.
         #
         # . Arguments
-        #   $@ - Values consumed by the helper. See usage for the expected call shape.
+        #   $1: kind (palette or style); $2: file path or theme name.
         #
         # . Output
-        #   Writes formatted text or computed values to stdout unless the function targets /dev/tty.
-        #
-        # Outputs (globals):
-        #   Updates SolidGroundUX UI/runtime globals documented by the function body.
+        #   Prints the resolved file path on success.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, I/O, or user cancellation fails.
+        #   0 if found; nonzero if the specification cannot be resolved.
         #
         # . Usage
-        #   _sgnd_ui_resolve_theme_file "/tmp/sgnd-example.txt" "/tmp/sgnd-example.txt"
+        #   ```bash
+        #   _sgnd_ui_resolve_theme_file palette dark
+        #   ```
     _sgnd_ui_resolve_theme_file() {
         local kind="$1"
         local spec="$2"
@@ -247,86 +210,65 @@ set -uo pipefail
         printf 'UI theme %s "%s" not found at: %s\n' "$kind" "$spec" "$file" >&2
         return 5
     }
-
-# - Public API ---------------------------------------------------------------------
- # -- Public helpers --------------------------------------------------------------
     # fn: sgnd_strip_ansi - Strip ansi
         # . Purpose
-        #   Remove ANSI escape sequences from text.
-        #
-        # . Behavior
-        #   - Preserves the existing SolidGroundUX console/UI behavior.
-        #   - Uses current palette, style, runtime, or logging globals where applicable.
+        #   Remove terminal ANSI control sequences from one text argument.
         #
         # . Arguments
-        #   $@ - Values consumed by the helper. See usage for the expected call shape.
+        #   $1: text potentially containing ANSI escapes.
         #
         # . Output
-        #   Writes formatted text or computed values to stdout unless the function targets /dev/tty.
+        #   Prints text without supported ANSI escape sequences, followed by a newline.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, I/O, or user cancellation fails.
+        #   Exit status of sed.
         #
         # . Usage
-        #   sgnd_strip_ansi "example"
+        #   ```bash
+        #   sgnd_strip_ansi "${SGND_UI_TEXT}Hello${RESET}"
+        #   ```
     sgnd_strip_ansi() {
         sed -r $'s/\x1B\\[[0-9;?]*[[:alpha:]]//g' <<<"$1"
     }
-
     # fn: sgnd_visible_len - Visible len
         # . Purpose
-        #   Return the visible character length of text after ANSI escape sequences are removed.
-        #
-        # . Behavior
-        #   - Preserves the existing SolidGroundUX console/UI behavior.
-        #   - Uses current palette, style, runtime, or logging globals where applicable.
+        #   Calculate the visible character count after removing ANSI sequences.
         #
         # . Arguments
-        #   $@ - Values consumed by the helper. See usage for the expected call shape.
+        #   $1: text to measure.
         #
         # . Output
-        #   Writes formatted text or computed values to stdout unless the function targets /dev/tty.
+        #   Prints the visible character count without a trailing newline.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, I/O, or user cancellation fails.
+        #   0 when the length is printed.
         #
         # . Usage
-        #   sgnd_visible_len "example"
+        #   ```bash
+        #   sgnd_visible_len "${SGND_UI_TEXT}Hello${RESET}"
+        #   ```
     sgnd_visible_len() {
         local plain
         plain="$(sgnd_strip_ansi "$1")"
         printf '%s' "${#plain}"
     }
-
- # -- Theme loading ---------------------------------------------------------------
     # fn: sgnd_ui_set_theme - Ui set theme
         # . Purpose
-        #   Load a SolidGroundUX UI palette and style into the current shell session.
+        #   Load and apply a UI palette and style for the current shell.
         #
-        # . Behavior
-        #   - Preserves the existing SolidGroundUX console/UI behavior.
-        #   - Uses current palette, style, runtime, or logging globals where applicable.
-        #
-        # . options
-        #   --palette VALUE
-        #   --style VALUE
-        #   --default VALUE
-        #   --help VALUE
+        # . Arguments
+        #   Options: --palette NAME|PATH, --style NAME|PATH, --default, --help.
         #
         # . Output
-        #   Writes formatted text or computed values to stdout unless the function targets /dev/tty.
-        #
-        # Outputs (globals):
-        #   Updates SolidGroundUX UI/runtime globals documented by the function body.
+        #   Updates theme and palette variables for the current process.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, I/O, or user cancellation fails.
+        #   0 on success; nonzero if a theme or its resources cannot be loaded.
         #
         # . Usage
-        #   sgnd_ui_set_theme "example" "example-2"
+        #   ```bash
+        #   sgnd_ui_set_theme --palette dark --style dark
+        #   ```
     sgnd_ui_set_theme() {
         local palette_spec=""
         local style_spec=""
@@ -445,9 +387,11 @@ set -uo pipefail
         #   2 when invalid arguments are supplied.
         #
         # . Usage
+        #   ```bash
         #   sgnd_theme
         #   sgnd_theme dark
         #   sgnd_theme fantasy --save
+        #   ```
     sgnd_theme() {
         local theme=""
         local save=0
@@ -558,49 +502,43 @@ set -uo pipefail
 
         return 0
     }
-
     # fn: sgnd_ui_set_default_theme - Ui set default theme
         # . Purpose
-        #   Load the default SolidGroundUX UI palette and style.
-        #
-        # . Behavior
-        #   - Preserves the existing SolidGroundUX console/UI behavior.
-        #   - Uses current palette, style, runtime, or logging globals where applicable.
+        #   Reload the Framework default theme.
         #
         # . Arguments
-        #   $@ - Values consumed by the helper. See usage for the expected call shape.
+        #   No arguments.
+        #
+        # . Output
+        #   Changes active UI variables to the default palette and style.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, I/O, or user cancellation fails.
+        #   Status of sgnd_ui_set_theme.
         #
         # . Usage
-        #   sgnd_ui_set_default_theme "steelblue"
+        #   ```bash
+        #   sgnd_ui_set_default_theme
+        #   ```
     sgnd_ui_set_default_theme() {
         sgnd_ui_set_theme --default
     }
-
- # -- Styling helpers -------------------------------------------------------------
     # fn: sgnd_sgr - Sgr
         # . Purpose
-        #   Build an ANSI SGR escape sequence from numeric codes or existing SGR fragments.
-        #
-        # . Behavior
-        #   - Preserves the existing SolidGroundUX console/UI behavior.
-        #   - Uses current palette, style, runtime, or logging globals where applicable.
+        #   Compose a terminal SGR escape sequence from foreground, background and effects.
         #
         # . Arguments
-        #   $@ - Values consumed by the helper. See usage for the expected call shape.
+        #   Positional SGR color or effect tokens; empty tokens are skipped.
         #
         # . Output
-        #   Writes formatted text or computed values to stdout unless the function targets /dev/tty.
+        #   Prints a terminal escape sequence.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, I/O, or user cancellation fails.
+        #   0 when the sequence is printed.
         #
         # . Usage
-        #   style="$(sgnd_sgr 97 44 1)"; printf '%bSolidGroundUX%b\n' "$style" "${RESET:-$'\e[0m'}"
+        #   ```bash
+        #   sgnd_sgr "$BRIGHT_BLUE" "" "$FX_BOLD"
+        #   ```
     sgnd_sgr() {
         local -a parts=()
         local -a subparts=()
@@ -651,27 +589,23 @@ set -uo pipefail
 
         printf $'\e[%sm' "$(IFS=';'; echo "${parts[*]}")"
     }
-
     # fn: sgnd_fg - Fg
         # . Purpose
-        #   Build a foreground-color SGR sequence.
-        #
-        # . Behavior
-        #   - Preserves the existing SolidGroundUX console/UI behavior.
-        #   - Uses current palette, style, runtime, or logging globals where applicable.
+        #   Build a foreground color sequence with optional text effects.
         #
         # . Arguments
-        #   $@ - Values consumed by the helper. See usage for the expected call shape.
+        #   $1: foreground color; following arguments: optional effects.
         #
         # . Output
-        #   Writes formatted text or computed values to stdout unless the function targets /dev/tty.
+        #   Prints the SGR escape sequence.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, I/O, or user cancellation fails.
+        #   Status of sgnd_sgr.
         #
         # . Usage
-        #   sgnd_fg "example"
+        #   ```bash
+        #   sgnd_fg "$BRIGHT_BLUE" "$FX_BOLD"
+        #   ```
     sgnd_fg() {  # fn: sgnd_fg <fg> [fx...]
         local fg="${1:-}"
         shift || true
@@ -686,7 +620,9 @@ set -uo pipefail
         #   Returns the underlying command or workflow status.
         #
         # . Usage
+        #   ```bash
         #   sgnd_bg 24
+        #   ```
     sgnd_bg() {  # fn: sgnd_bg <bg> [fx...]
         local bg="${1:-}"
         shift || true
@@ -702,7 +638,9 @@ set -uo pipefail
         #   Returns the underlying command or workflow status.
         #
         # . Usage
+        #   ```bash
         #   sgnd_update_runmode
+        #   ```
     sgnd_update_runmode() {
         if (( FLAG_DRYRUN )); then
             RUN_MODE="$(sgnd_runmode_color)DRYRUN${RESET}"
@@ -710,27 +648,23 @@ set -uo pipefail
             RUN_MODE="$(sgnd_runmode_color)COMMIT${RESET}"
         fi
     }
-
     # fn: sgnd_runmode_color - Runmode color
         # . Purpose
-        #   Return the UI color associated with the current or supplied run mode.
-        #
-        # . Behavior
-        #   - Preserves the existing SolidGroundUX console/UI behavior.
-        #   - Uses current palette, style, runtime, or logging globals where applicable.
+        #   Select the color assigned to dry-run or commit mode.
         #
         # . Arguments
-        #   $@ - Values consumed by the helper. See usage for the expected call shape.
+        #   No arguments; reads FLAG_DRYRUN.
         #
         # . Output
-        #   Writes formatted text or computed values to stdout unless the function targets /dev/tty.
+        #   Prints SGND_UI_DRYRUN or SGND_UI_COMMIT.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, I/O, or user cancellation fails.
+        #   0 when printed.
         #
         # . Usage
+        #   ```bash
         #   sgnd_runmode_color
+        #   ```
     sgnd_runmode_color() {
         (( FLAG_DRYRUN )) && printf '%s' "$SGND_UI_DRYRUN" || printf '%s' "$SGND_UI_COMMIT"
     }
@@ -754,7 +688,9 @@ set -uo pipefail
         #   0 always.
         #
         # . Usage
+        #   ```bash
         #   sgnd_terminal_width
+        #   ```
     sgnd_terminal_width() {
         local width=""
         local tty_fd=""
@@ -804,8 +740,10 @@ set -uo pipefail
         #   0 always.
         #
         # . Usage
+        #   ```bash
         #   sgnd_render_width
         #   sgnd_render_width 120
+        #   ```
     sgnd_render_width() {
         local requested="${1:-0}"
         local terminal_width
@@ -822,37 +760,23 @@ set -uo pipefail
             printf '%s\n' "$terminal_width"
         fi
     }
-
     # fn: sgnd_print_labeledvalue - Print labeledvalue
         # . Purpose
-        #   Print a formatted label/value row.
+        #   Print an aligned label/value pair with theme-aware colors.
         #
-        # . Behavior
-        #   - Preserves the existing SolidGroundUX console/UI behavior.
-        #   - Uses current palette, style, runtime, or logging globals where applicable.
-        #
-        # . options
-        #   --label VALUE
-        #   --value VALUE
-        #   --sep VALUE
-        #   --labelwidth VALUE
-        #   --maxwidth VALUE
-        #   --pad VALUE
-        #   --labelclr VALUE
-        #   --valueclr VALUE
+        # . Arguments
+        #   Options include --label and --value; see function option parser for formatting controls.
         #
         # . Output
-        #   Writes formatted text or computed values to stdout unless the function targets /dev/tty.
+        #   Writes a formatted label/value line.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, I/O, or user cancellation fails.
+        #   Status of the formatting/output operations.
         #
         # . Usage
-        #   labelwidth="$(printf '%s\n' "Hostname" "Primary IPv4" "SolidGround sudo" | awk '{ if (length > max) max = length } END { print max }')"
-        #   sgnd_print_labeledvalue --label "Hostname" --value "$hostname" --labelwidth "$labelwidth"
-        #   sgnd_print_labeledvalue --label "Primary IPv4" --value "$primary_ip" --labelwidth "$labelwidth"
-        #   sgnd_print_labeledvalue --label "SolidGround sudo" --value "$sudo_state" --labelwidth "$labelwidth"
+        #   ```bash
+        #   sgnd_print_labeledvalue --label "Host" --value "td-dev"
+        #   ```
     sgnd_print_labeledvalue() {
         local label=""
         local value=""
@@ -979,11 +903,13 @@ set -uo pipefail
         #   2 when no label is supplied or a numeric option is invalid.
         #
         # . Usage
+        #   ```bash
         #   labelwidth="$(printf '%s\n' "Changed files" "Warnings" "Description" | awk '{ if (length > max) max = length } END { print max }')"
         #   sgnd_print_labeledmultivalue \
         #       --label "Changed files" \
         #       --labelwidth "$labelwidth" \
         #       --items "file-one.sh" "file-two.sh"
+        #   ```
         #
         #   sgnd_print_labeledmultivalue \
         #       --label "Description" \
@@ -1057,6 +983,23 @@ set -uo pipefail
 
         printf -v continuation_prefix '%*s' "$continuation_width" ''
 
+        # fn: _sgnd_labeledmultivalue_emit - Render one labeled or continuation value line
+            # . Purpose
+            #   Render one labeled or continuation value line.
+            #
+            # . Arguments
+            #   $1  One already wrapped value line.
+            #
+            # . Side effects
+            #   Updates enclosing renderer variables first_output and emitted; writes formatted text to stdout.
+            #
+            # . Returns
+            #   0 after rendering the line.
+            #
+            # . Usage
+            #   ```bash
+            #   _sgnd_labeledmultivalue_emit "$line"
+            #   ```
         _sgnd_labeledmultivalue_emit() {
             local line="$1"
 
@@ -1110,35 +1053,23 @@ set -uo pipefail
         unset -f _sgnd_labeledmultivalue_emit
         return 0
     }
-
     # fn: sgnd_print_fill - Print fill
         # . Purpose
-        #   Print a left/right line filled to a target width.
+        #   Print left and right text separated by fill characters.
         #
-        # . Behavior
-        #   - Preserves the existing SolidGroundUX console/UI behavior.
-        #   - Uses current palette, style, runtime, or logging globals where applicable.
-        #   - Uses the current terminal width when --maxwidth is omitted.
-        #
-        # . options
-        #   --left VALUE
-        #   --right VALUE
-        #   --padleft VALUE
-        #   --padright VALUE
-        #   --maxwidth VALUE
-        #   --fillchar VALUE
-        #   --leftclr VALUE
-        #   --rightclr VALUE
+        # . Arguments
+        #   Options include --left, --right, --padleft, --padright and --maxwidth.
         #
         # . Output
-        #   Writes formatted text or computed values to stdout unless the function targets /dev/tty.
+        #   Writes one padded line to the terminal.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, I/O, or user cancellation fails.
+        #   Status of the output operation.
         #
         # . Usage
-        #   sgnd_print_fill "example" "example-2"
+        #   ```bash
+        #   sgnd_print_fill --left "Source" --right "Destination"
+        #   ```
     sgnd_print_fill() {
         local left="" right=""
         local padleft=2 padright=1 maxwidth=""
@@ -1198,37 +1129,23 @@ set -uo pipefail
             "${rightclr}${right}${RESET}" \
             ""
     }
-
     # fn: sgnd_print_titlebar - Print titlebar
         # . Purpose
-        #   Print the standard SolidGroundUX title bar.
+        #   Render the application title bar with current version and run-mode metadata.
         #
-        # . Behavior
-        #   - Preserves the existing SolidGroundUX console/UI behavior.
-        #   - Uses current palette, style, runtime, or logging globals where applicable.
+        # . Arguments
+        #   Optional title-bar options and values handled by the function.
         #
-        # . options
-        #   --left VALUE
-        #   --leftclr VALUE
-        #   --right VALUE
-        #   --rightclr VALUE
-        #   --sub VALUE
-        #   --subclr VALUE
-        #   --subjust VALUE
-        #   --border VALUE
-        #   --borderclr VALUE
-        #   --padleft VALUE
-        #   --maxwidth VALUE
-        #
-        # Outputs (globals):
-        #   Updates SolidGroundUX UI/runtime globals documented by the function body.
+        # . Output
+        #   Displays the title bar using active theme settings.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, I/O, or user cancellation fails.
+        #   Status of the output operation.
         #
         # . Usage
-        #   sgnd_print_titlebar "example" "example-2"
+        #   ```bash
+        #   sgnd_print_titlebar --left "Smoke tests"
+        #   ```
     sgnd_print_titlebar() {
 
         local left="${SGND_SCRIPT_TITLE:-$SGND_SCRIPT_BASE}"
@@ -1308,33 +1225,23 @@ set -uo pipefail
             --borderclr "$borderclr" \
             --maxwidth "$maxwidth"
     }
-
     # fn: sgnd_print_sectionheader - Print sectionheader
         # . Purpose
-        #   Print a section header or horizontal border line.
+        #   Render a themed section heading and optional border.
         #
-        # . Behavior
-        #   - Preserves the existing SolidGroundUX console/UI behavior.
-        #   - Uses current palette, style, runtime, or logging globals where applicable.
-        #
-        # . options
-        #   --text VALUE
-        #   --textclr VALUE
-        #   --border VALUE
-        #   --borderclr VALUE
-        #   --padleft VALUE
-        #   --padend VALUE
-        #   --maxwidth VALUE
+        # . Arguments
+        #   Options include --text, --textclr, --border, --borderclr and --maxwidth.
         #
         # . Output
-        #   Writes formatted text or computed values to stdout unless the function targets /dev/tty.
+        #   Writes the formatted section heading.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, I/O, or user cancellation fails.
+        #   Status of the output operation.
         #
         # . Usage
-        #   sgnd_print_sectionheader "example" "example-2"
+        #   ```bash
+        #   sgnd_print_sectionheader --text "Network settings"
+        #   ```
     sgnd_print_sectionheader() {
         local text=""
         local textclr="${SGND_SECTION_TEXTCLR:-$(sgnd_sgr "$SGND_UI_TEXT" "" "$FX_BOLD")}"
@@ -1414,33 +1321,23 @@ set -uo pipefail
 
         printf '%s\n' "$fnl"
     }
-
     # fn: sgnd_print - Print
         # . Purpose
-        #   Print styled, optionally padded, wrapped, or justified text.
+        #   Print themed console text with optional padding, alignment and wrapping.
         #
-        # . Behavior
-        #   - Preserves the existing SolidGroundUX console/UI behavior.
-        #   - Uses current palette, style, runtime, or logging globals where applicable.
-        #   - Automatically wraps text when its visible width exceeds the available width.
-        #   - --wrap 1 forces wrapping; --wrap 0 disables wrapping.
-        #   - Ignores ANSI escape sequences when measuring text for wrapping and justification.
+        # . Arguments
+        #   Options include --text, --textclr, --justify, --pad, --wrap and --maxwidth.
         #
-        # . options
-        #   --text VALUE
-        #   --textclr VALUE
-        #   --justify VALUE
-        #   --wrap VALUE
-        #   --pad VALUE
-        #   --rightmargin VALUE
-        #   --maxwidth VALUE
+        # . Output
+        #   Writes the formatted text to the console.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, I/O, or user cancellation fails.
+        #   Status of the output operation.
         #
         # . Usage
-        #   sgnd_print "example" "example-2"
+        #   ```bash
+        #   sgnd_print --text "Ready" --pad 2
+        #   ```
     sgnd_print() {
         local text=""
         local textclr="${SGND_UI_TEXT:-}"
@@ -1512,31 +1409,23 @@ set -uo pipefail
                 --maxwidth "$maxwidth"
         fi
     }
-
     # fn: sgnd_print_single - Print single
         # . Purpose
-        #   Print a single styled line without wrapping.
+        #   Print one themed text line with optional alignment and padding.
         #
-        # . Behavior
-        #   - Preserves the existing SolidGroundUX console/UI behavior.
-        #   - Uses current palette, style, runtime, or logging globals where applicable.
-        #
-        # . options
-        #   --text VALUE
-        #   --textclr VALUE
-        #   --justify VALUE
-        #   --pad VALUE
-        #   --maxwidth VALUE
+        # . Arguments
+        #   Options include --text, --textclr, --justify, --pad and --maxwidth.
         #
         # . Output
-        #   Writes formatted text or computed values to stdout unless the function targets /dev/tty.
+        #   Writes one formatted text line.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, I/O, or user cancellation fails.
+        #   Status of the output operation.
         #
         # . Usage
-        #   sgnd_print_single "example" "example-2"
+        #   ```bash
+        #   sgnd_print_single --text "Ready"
+        #   ```
     sgnd_print_single() {
         local text=""
         local textclr="${SGND_UI_TEXT:-}"
@@ -1608,27 +1497,23 @@ set -uo pipefail
 
         printf "%b\n" "${textclr}${line}${RESET}"
     }
-
     # fn: sgnd_print_file - Print file
         # . Purpose
-        #   Print the contents of a file using sgnd_print formatting.
-        #
-        # . Behavior
-        #   - Preserves the existing SolidGroundUX console/UI behavior.
-        #   - Uses current palette, style, runtime, or logging globals where applicable.
+        #   Display a readable text file, using a pager for interactive terminals when available.
         #
         # . Arguments
-        #   $@ - Values consumed by the helper. See usage for the expected call shape.
+        #   $1: path to a readable file.
         #
         # . Output
-        #   Writes formatted text or computed values to stdout unless the function targets /dev/tty.
+        #   Writes file content to a pager or standard output.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, I/O, or user cancellation fails.
+        #   0 on success; 2 for missing or unreadable files; other statuses depend on the pager.
         #
         # . Usage
-        #   sgnd_print_file "/tmp/sgnd-example.txt"
+        #   ```bash
+        #   sgnd_print_file "/etc/hosts"
+        #   ```
     sgnd_print_file() {
         local file="$1"
         
@@ -1689,27 +1574,23 @@ set -uo pipefail
             cat -- "$file"
         fi
     }
-    
     # fn: sgnd_print_cell - Print cell
         # . Purpose
-        #   Print a fixed-width styled cell without a trailing newline.
-        #
-        # . Behavior
-        #   - Preserves the existing SolidGroundUX console/UI behavior.
-        #   - Uses current palette, style, runtime, or logging globals where applicable.
+        #   Pad a string to the requested visible column width.
         #
         # . Arguments
-        #   $@ - Values consumed by the helper. See usage for the expected call shape.
+        #   $1: width in characters; $2: text (may contain ANSI styling).
         #
         # . Output
-        #   Writes formatted text or computed values to stdout unless the function targets /dev/tty.
+        #   Prints the string followed by sufficient spaces; never truncates it.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, I/O, or user cancellation fails.
+        #   0 when printed.
         #
         # . Usage
-        #   sgnd_print_cell 20 "example-2"
+        #   ```bash
+        #   sgnd_print_cell 20 "Host"
+        #   ```
     sgnd_print_cell() {
         local width="$1"
         local s="$2"
@@ -1724,30 +1605,23 @@ set -uo pipefail
 
         printf '%s%*s' "$s" "$pad" ""
     }
-
     # fn: sgnd_module_show_metadata - Module show metadata
         # . Purpose
-        #   Print the metadata registered for the current module or script.
-        #
-        # . Behavior
-        #   - Preserves the existing SolidGroundUX console/UI behavior.
-        #   - Uses current palette, style, runtime, or logging globals where applicable.
+        #   Display metadata registered for a module or script.
         #
         # . Arguments
-        #   $@ - Values consumed by the helper. See usage for the expected call shape.
+        #   $1: module prefix or source file reference.
         #
         # . Output
-        #   Writes formatted text or computed values to stdout unless the function targets /dev/tty.
-        #
-        # Outputs (globals):
-        #   Updates SolidGroundUX UI/runtime globals documented by the function body.
+        #   Writes resolved metadata fields to the console.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, I/O, or user cancellation fails.
+        #   Status of metadata lookup and output.
         #
         # . Usage
-        #   sgnd_module_show_metadata "example"
+        #   ```bash
+        #   sgnd_module_show_metadata "$SGND_SCRIPT_FILE"
+        #   ```
     sgnd_module_show_metadata() {
         local module_ref="${1:?missing module prefix or file}"
         local prefix=""
@@ -1850,33 +1724,30 @@ set -uo pipefail
         #       0 always.
         #
         #     . Usage
+        #   ```bash
         #       sgnd_clear
+        #   ```
     sgnd_clear() {
         #printf '\033[H\033[2J\033[3J'
         printf '\033[H\033[2J'
     }
- # -- Externals -------------------------------------------------------------------
- # -- Sample/demo renderers -------------------------------------------------------
     # fn: sgnd_color_samples - Color samples
         # . Purpose
-        #   Print sample output for the currently loaded color palette.
-        #
-        # . Behavior
-        #   - Preserves the existing SolidGroundUX console/UI behavior.
-        #   - Uses current palette, style, runtime, or logging globals where applicable.
+        #   Print a preview of the configured foreground colors and text effects.
         #
         # . Arguments
-        #   $@ - Values consumed by the helper. See usage for the expected call shape.
+        #   No arguments.
         #
         # . Output
-        #   Writes formatted text or computed values to stdout unless the function targets /dev/tty.
+        #   Writes a color/effect demonstration to the console.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, I/O, or user cancellation fails.
+        #   Status of output.
         #
         # . Usage
+        #   ```bash
         #   sgnd_color_samples
+        #   ```
     sgnd_color_samples(){
         printf '\n%s\n\n' "---- Available foreground colors & effects in SolidGroundUX ----"
 
@@ -1895,27 +1766,23 @@ set -uo pipefail
         sgnd_sample_row	YELLOW	BRIGHT_YELLOW	DARK_YELLOW	    BG_YELLOW	BG_DARK_YELLOW
 
     }
-
     # fn: sgnd_sample_row - Sample row
         # . Purpose
-        #   Print one sample row for the style sample output.
-        #
-        # . Behavior
-        #   - Preserves the existing SolidGroundUX console/UI behavior.
-        #   - Uses current palette, style, runtime, or logging globals where applicable.
+        #   Print sample foreground/background colors and effects for named palette variables.
         #
         # . Arguments
-        #   $@ - Values consumed by the helper. See usage for the expected call shape.
+        #   One or more existing color variable names.
         #
         # . Output
-        #   Writes formatted text or computed values to stdout unless the function targets /dev/tty.
+        #   Writes a sample row to the terminal.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, I/O, or user cancellation fails.
+        #   Status of output.
         #
         # . Usage
-        #   sgnd_sample_row "Status" "Operational"
+        #   ```bash
+        #   sgnd_sample_row BLUE BRIGHT_BLUE DARK_BLUE
+        #   ```
     sgnd_sample_row(){
         local clr name val
 
@@ -1980,7 +1847,9 @@ set -uo pipefail
         #   0 always.
         #
         # . Usage
+        #   ```bash
         #   color_name="$(_sgnd_style_color_description "$SGND_UI_BORDER")"
+        #   ```
     _sgnd_style_color_description() {
         local color_value="${1:-}"
         local palette_name=""
@@ -2055,7 +1924,9 @@ set -uo pipefail
         #   0 on success.
         #
         # . Usage
+        #   ```bash
         #   sgnd_style_samples
+        #   ```
     sgnd_style_samples() {
         local current_theme="${SGND_UI_STYLE##*/}"
         local message_type=""

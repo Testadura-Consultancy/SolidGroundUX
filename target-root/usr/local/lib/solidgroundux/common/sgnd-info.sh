@@ -67,7 +67,9 @@ set -uo pipefail
         #   Exits with code 2 when executed instead of sourced.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_lib_guard
+        #   ```
     _sgnd_lib_guard() {
         local lib_base=""
         local guard=""
@@ -97,23 +99,18 @@ set -uo pipefail
     : "${_items_indent:=4}"
     # fn: _sgnd_print_arg_spec_entry - Print arg spec entry
         # . Purpose
-        #   Internal helper for print arg spec entry.
-        #
-        # . Behavior
-        #   - Supports the module implementation; not intended as a public framework API.
-        #   - Uses framework UI/output conventions for terminal or dialog interaction.
+        #   Print one parsed argument specification and its current variable value.
         #
         # . Arguments
-        #   $1  ENTRY - Positional value used by this function.
-        #
-        # . Side effects
-        #   May update files, directories, runtime state, or process state required by the workflow.
+        #   $1 - Specification entry in NAME|SHORT|TYPE|VARIABLE|HELP|CHOICES format.
         #
         # . Returns
-        #   0 on success unless the called command returns a different status.
+        #   Status of sgnd_print_labeledvalue.
         #
         # . Usage
-        #   _sgnd_print_arg_spec_entry "example"
+        #   ```bash
+        #   _sgnd_print_arg_spec_entry "dryrun|d|flag|FLAG_DRYRUN|Dry run|"
+        #   ```
     _sgnd_print_arg_spec_entry() {
         local entry="${1-}"
         local name=""
@@ -143,24 +140,19 @@ set -uo pipefail
     }
     # fn: _sgnd_print_arg_spec_list - Print arg spec list
         # . Purpose
-        #   Internal helper for print arg spec list.
-        #
-        # . Behavior
-        #   - Supports the module implementation; not intended as a public framework API.
-        #   - Uses framework UI/output conventions for terminal or dialog interaction.
+        #   Print a labeled list of argument specifications and their current values.
         #
         # . Arguments
-        #   $1  HEADER - Positional value used by this function.
-        #   $2  ARRAY_NAME - Variable, field, or item name.
-        #
-        # . Side effects
-        #   May update files, directories, runtime state, or process state required by the workflow.
+        #   $1 - Heading to display.
+        #   $2 - Name of the specification array.
         #
         # . Returns
-        #   0 on success unless the called command returns a different status.
+        #   0 when the array is absent or empty; otherwise the final rendering status.
         #
         # . Usage
-        #   _sgnd_print_arg_spec_list "example" "example-2"
+        #   ```bash
+        #   _sgnd_print_arg_spec_list "Script arguments" SGND_ARGS_SPEC
+        #   ```
     _sgnd_print_arg_spec_list() {
         local header="${1:?missing header}"
         local array_name="${2:?missing array name}"
@@ -182,21 +174,20 @@ set -uo pipefail
     }
     # fn: _sgnd_print_cfg_pass - Print cfg pass
         # . Purpose
-        #   Internal helper for print cfg pass.
-        #
-        # . Behavior
-        #   - Supports the module implementation; not intended as a public framework API.
-        #   - Uses framework UI/output conventions for terminal or dialog interaction.
+        #   Render a named configuration array, filtered by the accepted scope values.
         #
         # . Arguments
-        #   $1  HEADER_TEXT - Text value.
-        #   $2  ARRAY_NAME - Variable, field, or item name.
+        #   $1 - Section heading.
+        #   $2 - Specification array name.
+        #   $@ - Accepted scopes, after the first two arguments.
         #
         # . Returns
-        #   0 on success unless the called command returns a different status.
+        #   Status of the final UI output operation.
         #
         # . Usage
-        #   _sgnd_print_cfg_pass "SolidGroundUX example" "example-2"
+        #   ```bash
+        #   _sgnd_print_cfg_pass "User globals" SGND_SCRIPT_GLOBALS user both
+        #   ```
     _sgnd_print_cfg_pass() {
         local header_text="${1:?missing header text}"
         local array_name="${2:?missing array name}"
@@ -236,20 +227,17 @@ set -uo pipefail
         # . Purpose
         #   Print effective configuration values for diagnostics.
         #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
-        #   - Uses framework UI/output conventions for terminal or dialog interaction.
-        #
         # . Arguments
-        #   $1  ARRAY_NAME - Variable, field, or item name.
-        #   $2  FILTER - Positional value used by this function.
+        #   $1 - Name of a configuration specification array.
+        #   $2 - Scope filter: system, user, or both (default).
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, user cancellation, or execution fails.
-        #
+        #   1 for an unsupported scope filter; otherwise the status of the final output helper.
+                #
         # . Usage
-        #   sgnd_print_cfg "example" "example-2"
+        #   ```bash
+        #   sgnd_print_cfg SGND_SCRIPT_GLOBALS both
+        #   ```
     sgnd_print_cfg() {
         local array_name="${1:?missing spec array name}"
         local filter="${2:-both}"
@@ -273,16 +261,13 @@ set -uo pipefail
         # . Purpose
         #   Print framework metadata values.
         #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
-        #   - Reads or updates SolidGroundUX runtime, metadata, configuration, or UI globals as needed.
-        #   - Uses framework UI/output conventions for terminal or dialog interaction.
-        #
         # . Returns
-        #   0 on success unless the called command returns a different status.
+        #   Returns the status of the final UI output operation.
         #
         # . Usage
+        #   ```bash
         #   sgnd_print_framework_metadata
+        #   ```
     sgnd_print_framework_metadata() {
         sgnd_print_sectionheader --text "Framework metadata" --padleft "$_section_indent"
         sgnd_print_labeledvalue "Product"      "$SGND_PRODUCT" --pad "$_items_indent"
@@ -297,16 +282,13 @@ set -uo pipefail
         # . Purpose
         #   Print active script or module metadata.
         #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
-        #   - Reads or updates SolidGroundUX runtime, metadata, configuration, or UI globals as needed.
-        #   - Uses framework UI/output conventions for terminal or dialog interaction.
-        #
         # . Returns
-        #   0 on success unless the called command returns a different status.
+        #   Returns the status of the final UI output operation.
         #
         # . Usage
+        #   ```bash
         #   sgnd_print_metadata
+        #   ```
     sgnd_print_metadata() {
         sgnd_print_sectionheader --text "Script metadata" --padleft "$_section_indent"
         sgnd_print_labeledvalue "File"               "$SGND_SCRIPT_FILE" --pad "$_items_indent"
@@ -319,19 +301,13 @@ set -uo pipefail
         # . Purpose
         #   Print parsed argument values.
         #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
-        #   - Reads or updates SolidGroundUX runtime, metadata, configuration, or UI globals as needed.
-        #   - Uses framework UI/output conventions for terminal or dialog interaction.
-        #
-        # . Side effects
-        #   May update files, directories, runtime state, or process state required by the workflow.
-        #
         # . Returns
-        #   0 on success unless the called command returns a different status.
+        #   Returns the status of the final UI output operation.
         #
         # . Usage
+        #   ```bash
         #   sgnd_print_args
+        #   ```
     sgnd_print_args() {
         sgnd_print
         _sgnd_print_arg_spec_list "Script arguments" "SGND_ARGS_SPEC"
@@ -355,15 +331,13 @@ set -uo pipefail
         # . Purpose
         #   Print current state-domain values.
         #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
-        #   - Uses framework UI/output conventions for terminal or dialog interaction.
-        #
         # . Returns
-        #   0 on success unless the called command returns a different status.
+        #   Returns the status of the state-listing/display pipeline.
         #
         # . Usage
+        #   ```bash
         #   sgnd_print_state
+        #   ```
     sgnd_print_state() {
         sgnd_state_list_keys | {
             local printed_header=0
@@ -385,16 +359,13 @@ set -uo pipefail
         # . Purpose
         #   Print active license information.
         #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
-        #   - Reads or updates SolidGroundUX runtime, metadata, configuration, or UI globals as needed.
-        #   - Uses framework UI/output conventions for terminal or dialog interaction.
-        #
         # . Returns
-        #   0 on success unless the called command returns a different status.
+        #   Returns the status of the final command executed; an unreadable or absent license file is silently skipped.
         #
         # . Usage
+        #   ```bash
         #   sgnd_print_license
+        #   ```
     sgnd_print_license() {
         local license_file="${SGND_LICENSE_FILE}"
         
@@ -432,16 +403,13 @@ set -uo pipefail
         # . Purpose
         #   Print the active script README section.
         #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
-        #   - Reads or updates SolidGroundUX runtime, metadata, configuration, or UI globals as needed.
-        #   - Uses framework UI/output conventions for terminal or dialog interaction.
-        #
         # . Returns
-        #   0 on success unless the called command returns a different status.
+        #   Returns the print-file status when readable; otherwise completes without printing.
         #
         # . Usage
+        #   ```bash
         #   sgnd_print_readme
+        #   ```
     sgnd_print_readme() {
         local readme_file="$SGND_DOCS_DIR/README.md"
 
@@ -453,16 +421,13 @@ set -uo pipefail
         # . Purpose
         #   Print a combined SolidGroundUX environment overview.
         #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
-        #   - Reads or updates SolidGroundUX runtime, metadata, configuration, or UI globals as needed.
-        #   - Uses framework UI/output conventions for terminal or dialog interaction.
-        #
         # . Returns
-        #   0 on success unless the called command returns a different status.
+        #   Returns the status of the final section-header rendering operation.
         #
         # . Usage
+        #   ```bash
         #   sgnd_showenvironment
+        #   ```
     sgnd_showenvironment() {
         sgnd_print_titlebar
         sgnd_print

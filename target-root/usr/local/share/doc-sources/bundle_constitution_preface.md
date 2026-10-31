@@ -1,3 +1,8 @@
+---
+title: "SolidGroundUX Constitution"
+nav_order: 20
+---
+
 # Preamble
 
 Every framework begins with code.

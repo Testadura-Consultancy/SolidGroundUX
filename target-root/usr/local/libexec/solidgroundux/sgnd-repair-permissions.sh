@@ -45,6 +45,17 @@
 #   - Creating missing regular files or masked search roots.
 #   - Inferring ownership or modes that are not declared in the policy file.
 #
+# Usage:
+#   Run the executable from its shell command (or installed wrapper):
+#   ```bash
+#   sgnd-repair-permissions
+#   sgnd-repair-permissions --file /path/to/permissions.dta
+#   sgnd-repair-permissions --dryrun
+#   ```
+#
+#   Script-specific options:
+#   - `--file VALUE`, `-f`: Permission policy file; defaults to SGND_SHARE_DIR/permissions.dta.
+#
 # Attribution:
 #   Developers  : Mark Fieten
 #   Company     : Testadura Consultancy
@@ -86,7 +97,9 @@ set -uo pipefail
         #   be found, or the executable common library is unreadable.
         #
         # . Usage
+        #   ```bash
         #   _framework_locator || return $?
+        #   ```
     _framework_locator() {
         local script_file=""
         local path_without_root=""
@@ -197,7 +210,9 @@ set -uo pipefail
         #   0 always.
         #
         # . Usage
+        #   ```bash
         #   value="$(_trim "$value")"
+        #   ```
     _trim() {
         local value="${1:-}"
         value="${value#"${value%%[![:space:]]*}"}"
@@ -225,7 +240,9 @@ set -uo pipefail
         #   1 when the framework shared-data directory was not initialized.
         #
         # . Usage
+        #   ```bash
         #   _init_defaults
+        #   ```
     _init_defaults() {
         [[ -n "${SGND_SHARE_DIR:-}" ]] || {
             sayfail "SGND_SHARE_DIR is not initialized by the framework."
@@ -254,7 +271,9 @@ set -uo pipefail
         #   1 when no non-root operator can be identified.
         #
         # . Usage
+        #   ```bash
         #   _resolve_operator
+        #   ```
     _resolve_operator() {
         local operator_user=""
         local operator_group=""
@@ -295,7 +314,9 @@ set -uo pipefail
         #   1 when operator resolution fails.
         #
         # . Usage
+        #   ```bash
         #   owner="$(_resolve_identity "$owner" owner)"
+        #   ```
     _resolve_identity() {
         local value="${1:-}"
         local kind="${2:-owner}"
@@ -331,7 +352,9 @@ set -uo pipefail
         #   1 for an empty target or the filesystem root itself.
         #
         # . Usage
+        #   ```bash
         #   target="$(_resolve_target_path "usr/local/share/solidgroundux/.cache")"
+        #   ```
     _resolve_target_path() {
         local raw="${1:-}"
         local target=""
@@ -357,7 +380,9 @@ set -uo pipefail
         #   0 for three- or four-digit octal modes; 1 otherwise.
         #
         # . Usage
+        #   ```bash
         #   _validate_mode "0755"
+        #   ```
     _validate_mode() {
         [[ "${1:-}" =~ ^[0-7]{3,4}$ ]]
     }
@@ -384,7 +409,9 @@ set -uo pipefail
         #   2 when a declared object is absent and creation is not permitted.
         #
         # . Usage
+        #   ```bash
         #   _apply_target_permissions "d" "$target" "$owner" "$group" "0755" 3 1
+        #   ```
     _apply_target_permissions() {
         local kind="${1:-}"
         local target="${2:-}"
@@ -515,7 +542,9 @@ set -uo pipefail
         #   2 when an exact declared file is absent; this is reported as a warning.
         #
         # . Usage
+        #   ```bash
         #   _apply_policy_row "d" "usr/local/share/solidgroundux/.cache" "operator" "operator" "0755" "**" 3
+        #   ```
     _apply_policy_row() {
         local kind="${1:-}"
         local raw_path="${2:-}"
@@ -625,7 +654,9 @@ set -uo pipefail
         #   1 when one or more rows failed.
         #
         # . Usage
+        #   ```bash
         #   _apply_policy_file "$VAL_PERMISSION_FILE"
+        #   ```
     _apply_policy_file() {
         local policy_file="${1:-}"
         local line=""
@@ -703,7 +734,9 @@ set -uo pipefail
         #   Non-zero when startup, validation, or filesystem changes fail.
         #
         # . Usage
+        #   ```bash
         #   main "$@"
+        #   ```
     main() {
         _framework_locator || exit $?
         sgnd_exe_start --needroot -- "$@"

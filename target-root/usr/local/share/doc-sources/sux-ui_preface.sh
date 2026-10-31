@@ -33,20 +33,15 @@
 #
 # > The UI group is divided into small layers with distinct responsibilities:
 #
-# >     ui-glyphs.sh
-# >         Shared symbols, separators, arrows, and fallback characters
+# > - **`ui-glyphs.sh`** — Shared symbols, separators, arrows, and fallback characters
 # >
-# >     ui.sh
-# >         Core rendering, colors, themes, widths, title bars, sections, and values
+# > - **`ui.sh`** — Core rendering, colors, themes, widths, title bars, sections, and values
 # >
-# >     ui-say.sh
-# >         Message semantics, log-level filtering, console output, and file logging
+# > - **`ui-say.sh`** — Message semantics, log-level filtering, console output, and file logging
 # >
-# >     ui-ask.sh
-# >         Typed prompts, choices, validation, forms, and direct terminal input
+# > - **`ui-ask.sh`** — Typed prompts, choices, validation, forms, and direct terminal input
 # >
-# >     ui-dlg.sh
-# >         Higher-level decisions and dialog-oriented interaction flows
+# > - **`ui-dlg.sh`** — Higher-level decisions and dialog-oriented interaction flows
 #
 # > The lower layers do not depend on application-specific behavior. Higher layers
 # > build on the rendering and input primitives below them. This keeps formatting,
@@ -66,14 +61,14 @@
 #
 # > Frequently used rendering functions include:
 #
-# >     sgnd_print_titlebar
-# >     sgnd_print_sectionheader
-# >     sgnd_print_labeledvalue
-# >     sgnd_print_fill
-# >     sgnd_print
-# >     sgnd_print_single
-# >     sgnd_print_file
-# >     sgnd_print_cell
+# > - `sgnd_print_titlebar`
+# > - `sgnd_print_sectionheader`
+# > - `sgnd_print_labeledvalue`
+# > - `sgnd_print_fill`
+# > - `sgnd_print`
+# > - `sgnd_print_single`
+# > - `sgnd_print_file`
+# > - `sgnd_print_cell`
 #
 # > Application code should prefer these helpers over local `printf` formatting when
 # > the output represents a standard SolidGroundUX UI element.
@@ -84,6 +79,11 @@
 # > while themes determine how those roles are applied by the rendering functions.
 # > This prevents consuming scripts from embedding ANSI codes or hard-coded color
 # > choices.
+# >
+# > DataTable rendering has separate theme defaults for header rules
+# > (`SGND_DT_HEADERLINE_CLR`), column headings (`SGND_DT_COLUMNNAME_CLR`),
+# > and data text (`SGND_DT_DATACOLOR_CLR`). Callers can still pass explicit
+# > header and data colors when printing a particular table.
 #
 # . Images
 #   sux-theme-showcase.png :: UI Theme Showcase
@@ -124,12 +124,12 @@
 #
 # > Principal functions include:
 #
-# >     ask
-# >     ask_decision
-# >     ask_dlg_autocontinue
-# >     ask_choose
-# >     ask_choose_immediate
-# >     ask_prompt_form
+# > - `ask`
+# > - `ask_decision`
+# > - `ask_dlg_autocontinue`
+# > - `ask_choose`
+# > - `ask_choose_immediate`
+# > - `ask_prompt_form`
 #
 # > Prompt functions normalize common interaction patterns so applications do not
 # > need to reproduce terminal handling, label formatting, default-value behavior, or
@@ -176,13 +176,13 @@
 #
 # > A SolidGroundUX application should generally follow these rules:
 #
-# >     - Use `say` functions for user-facing status and diagnostic messages.
-# >     - Use rendering helpers for standard titles, sections, labels, and tables.
-# >     - Use prompt and dialog helpers for interactive decisions.
-# >     - Do not embed ANSI escape sequences in application code.
-# >     - Do not duplicate glyphs or terminal-width calculations locally.
-# >     - Keep machine-readable output separate from styled human-readable output.
-# >     - Respect non-interactive, quiet, debug, and dry-run execution modes.
+# > - Use `say` functions for user-facing status and diagnostic messages.
+# > - Use rendering helpers for standard titles, sections, labels, and tables.
+# > - Use prompt and dialog helpers for interactive decisions.
+# > - Do not embed ANSI escape sequences in application code.
+# > - Do not duplicate glyphs or terminal-width calculations locally.
+# > - Keep machine-readable output separate from styled human-readable output.
+# > - Respect non-interactive, quiet, debug, and dry-run execution modes.
 #
 # > Following these conventions gives command-line tools a shared appearance and,
 # > more importantly, shared behavior. Users can learn one interaction model and

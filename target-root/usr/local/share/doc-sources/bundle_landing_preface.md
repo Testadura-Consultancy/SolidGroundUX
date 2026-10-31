@@ -1,4 +1,7 @@
-# SolidGroundUX @ Heart
+---
+title: "SolidGroundUX @ Heart"
+nav_order: 10
+---
 
 SolidGroundUX at heart is a Bash framework for building, documenting, and standardizing Bash scripts.
 
@@ -38,8 +41,10 @@ During release testing, SolidGroundUX was used to configure a complete small-bus
 
 - a primary domain controller
 - a NAS
-- a web server
+- a web server (nginx)
 - a SQL server
+- a PostgrSQL server
+- a MariaDB server
 - a Docker host
 
 That included configuring the machines and installing their respective roles.

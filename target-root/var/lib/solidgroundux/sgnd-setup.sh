@@ -171,7 +171,9 @@ set -uo pipefail
 
     # fn: _release_framework_root_for_target - Resolve the framework root for the selected target
         # . Usage
+        #   ```bash
         #   _release_framework_root_for_target
+        #   ```
     _release_framework_root_for_target() {
         if [[ "$VAL_TARGET_ROOT" == "/" ]]; then
             printf '%s\n' "/"
@@ -190,7 +192,9 @@ set -uo pipefail
         #     or cannot complete bootstrap.
         #   - Keeps setup business logic behind _release_* UI adapters.
         # . Usage
+        #   ```bash
         #   _release_try_framework_ui
+        #   ```
     _release_try_framework_ui() {
         local root=""
         local exe_common=""
@@ -245,7 +249,9 @@ set -uo pipefail
 
     # fn: _release_print - Print a line through the active UI implementation
         # . Usage
+        #   ```bash
         #   _release_print "<args...>"
+        #   ```
     _release_print() {
         if [[ "$RELEASE_UI_MODE" == "framework" ]] && declare -F sgnd_print >/dev/null 2>&1; then
             sgnd_print "$@"
@@ -256,7 +262,9 @@ set -uo pipefail
 
     # fn: _release_section_header - Render a section header through the active UI
         # . Usage
+        #   ```bash
         #   _release_section_header "<title>"
+        #   ```
     _release_section_header() {
         local title="${1:-}"
         if [[ "$RELEASE_UI_MODE" == "framework" ]] && declare -F sgnd_print_sectionheader >/dev/null 2>&1; then
@@ -273,7 +281,9 @@ set -uo pipefail
         # Arguments:
         #   $1 label, $2 variable name, $3 default
         # . Usage
+        #   ```bash
         #   _release_ask "<label>" "<var_name>" "<default>"
+        #   ```
     _release_ask() {
         local label="${1:-Value}"
         local var_name="${2:?missing variable name}"
@@ -300,7 +310,9 @@ set -uo pipefail
 
     # fn: _release_ask_yesno - Ask a yes/no question with a default
         # . Usage
+        #   ```bash
         #   _release_ask_yesno "<label>" "<default>"
+        #   ```
     _release_ask_yesno() {
         local label="${1:-Continue?}"
         local default="${2:-Y}"
@@ -376,7 +388,9 @@ set -uo pipefail
         # . Returns
         #   0 and the trimmed field value when found; 1 otherwise.
         # . Usage
+        #   ```bash
         #   version="$(_release_metadata_field "Version")"
+        #   ```
     _release_metadata_field() {
         local field="${1:-}"
         local value=""
@@ -400,7 +414,9 @@ set -uo pipefail
         # . Returns
         #   0 always.
         # . Usage
+        #   ```bash
         #   _release_title
+        #   ```
     _release_title() {
         local width=80
         local manager_version=""
@@ -468,7 +484,9 @@ set -uo pipefail
         # . Returns
         #   0 always.
         # . Usage
+        #   ```bash
         #   _release_info "message"
+        #   ```
     _release_info() {
         (( FLAG_VERBOSE )) || return 0
         printf '%sINFO%s  %s\n' "$_RL_MSG_INFO" "$_RL_RESET" "$*" >&2
@@ -480,7 +498,9 @@ set -uo pipefail
         # . Returns
         #   0 always.
         # . Usage
+        #   ```bash
         #   _release_ok "message"
+        #   ```
     _release_ok() {
         printf '%sOK%s    %s\n' "$_RL_MSG_OK" "$_RL_RESET" "$*" >&2
     }
@@ -491,7 +511,9 @@ set -uo pipefail
         # . Returns
         #   0 always.
         # . Usage
+        #   ```bash
         #   _release_warn "message"
+        #   ```
     _release_warn() {
         printf '%sWARN%s  %s\n' "$_RL_MSG_WARN" "$_RL_RESET" "$*" >&2
     }
@@ -502,7 +524,9 @@ set -uo pipefail
         # . Returns
         #   0 always.
         # . Usage
+        #   ```bash
         #   _release_fail "message"
+        #   ```
     _release_fail() {
         printf '%sFAIL%s  %s\n' "$_RL_MSG_FAIL" "$_RL_RESET" "$*" >&2
     }
@@ -513,7 +537,9 @@ set -uo pipefail
         # . Returns
         #   The executed command status, or 0 in dry-run mode.
         # . Usage
+        #   ```bash
         #   _release_run mkdir -p /tmp/example
+        #   ```
     _release_run() {
         if (( FLAG_DRYRUN )); then
             printf '[DRYRUN]'
@@ -561,7 +587,9 @@ set -uo pipefail
         # . Returns
         #   0 always.
         # . Usage
+        #   ```bash
         #   print_usage
+        #   ```
     print_usage() {
         printf '%s\n' \
             'Usage:' \
@@ -614,7 +642,9 @@ set -uo pipefail
         # . Returns
         #   0 on success; 1 when conflicting actions are supplied.
         # . Usage
+        #   ```bash
         #   _set_action update
+        #   ```
     _set_action() {
         local requested="${1:?missing action}"
         if [[ -n "$ACTION" && "$ACTION" != "$requested" ]]; then
@@ -630,7 +660,9 @@ set -uo pipefail
         # . Returns
         #   0 on success; non-zero on invalid arguments.
         # . Usage
+        #   ```bash
         #   parse_args "$@"
+        #   ```
     parse_args() {
         while (( $# > 0 )); do
             case "$1" in
@@ -720,7 +752,9 @@ set -uo pipefail
         # . Returns
         #   0 when the root is absolute; 1 otherwise.
         # . Usage
+        #   ```bash
         #   root="$(_normalize_root "/")"
+        #   ```
     _normalize_root() {
         local root="${1:-/}"
         [[ "$root" == /* ]] || return 1
@@ -750,7 +784,9 @@ set -uo pipefail
         #   0 when the framework root can be resolved; 126 otherwise.
         #
         # . Usage
+        #   ```bash
         #   _release_locate_framework_root
+        #   ```
     _release_locate_framework_root() {
         local script_file=""
         local path_without_root=""
@@ -1120,16 +1156,11 @@ set -uo pipefail
         return 0
     }
 
-    # fn: init_paths - Resolve target, state, release, and archive directories
-        # . Purpose
-        #   Resolve target, state, release, and archive directories.
-        # . Returns
-        #   0 on success; 1 when the target root is invalid.
-        # . Usage
-        #   init_paths
     # fn: _release_default_target_root - Derive target root only from canonical manager location
         # . Usage
+        #   ```bash
         #   _release_default_target_root
+        #   ```
     _release_default_target_root() {
         local suffix="/var/lib/solidgroundux/sgnd-setup.sh"
         local root=""
@@ -1145,6 +1176,23 @@ set -uo pipefail
         printf '%s\n' "/"
     }
 
+    # fn: init_paths - Resolve canonical setup paths from the selected target and state roots
+        # . Purpose
+        #   Resolve canonical setup paths from the selected target and state roots.
+        #
+        # . Description
+        #   Normalizes VAL_TARGET_ROOT, selects a state directory unless explicitly overridden, and derives manager/configuration paths.
+        #
+        # . Side effects
+        #   Sets VAL_TARGET_ROOT, VAL_STATE_ROOT, CANONICAL_MANAGER_PATH, SGND_RELEASE_CONFIG_FILE and RELEASE_STATE_FILE.
+        #
+        # . Returns
+        #   0 on success; 1 when the target root is not absolute.
+        #
+        # . Usage
+        #   ```bash
+        #   init_paths
+        #   ```
     init_paths() {
         VAL_TARGET_ROOT="$(_normalize_root "$VAL_TARGET_ROOT")" || {
             _release_fail "Target root must be absolute: $VAL_TARGET_ROOT"
@@ -1166,7 +1214,9 @@ set -uo pipefail
 
     # fn: _release_load_state - Load standalone parameter defaults
         # . Usage
+        #   ```bash
         #   _release_load_state
+        #   ```
     _release_load_state() {
         local file="${RELEASE_STATE_FILE:-}"
         local key="" value=""
@@ -1190,7 +1240,9 @@ set -uo pipefail
 
     # fn: _release_save_state - Persist accepted parameter values
         # . Usage
+        #   ```bash
         #   _release_save_state
+        #   ```
     _release_save_state() {
         local file="${RELEASE_STATE_FILE:-}"
 
@@ -1220,7 +1272,9 @@ set -uo pipefail
         # . Returns
         #   0 with the unquoted value on stdout; 1 when the key is absent.
         # . Usage
+        #   ```bash
         #   value="$(_release_definition_value "$file" "SGND_RELEASE_URL")"
+        #   ```
     _release_definition_value() {
         local file="${1:?missing definitions file}"
         local key="${2:?missing key}"
@@ -1325,7 +1379,9 @@ set -uo pipefail
         # . Returns
         #   0 with an existing, readable path; 1 when no catalog is available.
         # . Usage
+        #   ```bash
         #   catalog="$(_setup_catalog_source)"
+        #   ```
     _setup_catalog_source() {
         local path=""
         local -a candidates=(
@@ -1350,7 +1406,9 @@ set -uo pipefail
         # . Returns
         #   0 when present/created/no defaults exist; non-zero on copying failure.
         # . Usage
+        #   ```bash
         #   _ensure_setup_catalog
+        #   ```
     _ensure_setup_catalog() {
         local target="${VAL_STATE_ROOT%/}/sgnd-setup.cfg"
         local source=""
@@ -1375,7 +1433,9 @@ set -uo pipefail
         # . Output
         #   project|product|variant|release-url|version|build records.
         # . Usage
+        #   ```bash
         #   mapfile -t packages < <(_release_package_catalog)
+        #   ```
     _release_package_catalog() {
         local globals="${VAL_TARGET_ROOT%/}/usr/local/lib/solidgroundux/globals"
         local cfg="" line="" project="" product="" url="" version="" build="" extra=""
@@ -1435,7 +1495,9 @@ set -uo pipefail
         #   Keep legacy standalone release settings without embedding a GitHub owner/repo
         #   in the setup script. Per-product sources remain in the product catalog.
         # . Usage
+        #   ```bash
         #   _setup_catalog_framework_defaults
+        #   ```
     _setup_catalog_framework_defaults() {
         local row="" project="" product="" variant="" url="" version="" build="" repo=""
         while IFS= read -r row; do
@@ -1457,7 +1519,9 @@ set -uo pipefail
         # . Returns
         #   0 after package selection; 2 when manual override was selected; 1 on cancellation.
         # . Usage
+        #   ```bash
         #   _release_select_package_interactive
+        #   ```
     _release_select_package_interactive() {
         local choice="" row="" project="" product="" variant="" url="" version="" build="" repo="" i=0
         local -a packages=()
@@ -1532,7 +1596,9 @@ set -uo pipefail
         # . Purpose
         #   Resolve only the installation target. Product/package selection belongs to each action.
         # . Usage
+        #   ```bash
         #   _release_prompt_settings
+        #   ```
     _release_prompt_settings() {
         local target_before="$VAL_TARGET_ROOT"
         (( FLAG_AUTO )) && return 0
@@ -1551,7 +1617,9 @@ set -uo pipefail
         # . Purpose
         #   Parse a simple KEY=value field without sourcing package-controlled shell code.
         # . Usage
+        #   ```bash
         #   _package_info_value "<file>" "<key>"
+        #   ```
     _package_info_value() {
         local file="${1:?missing package info}"
         local key="${2:?missing key}"
@@ -1564,7 +1632,9 @@ set -uo pipefail
 
     # fn: _project_slug_safe - Validate a project slug used beneath the manager state root
         # . Usage
+        #   ```bash
         #   _project_slug_safe "<slug>"
+        #   ```
     _project_slug_safe() {
         local slug="${1:-}"
         [[ "$slug" =~ ^[a-z0-9][a-z0-9._-]*$ ]]
@@ -1572,7 +1642,9 @@ set -uo pipefail
 
     # fn: _load_project_info - Load persisted display identity for one project
         # . Usage
+        #   ```bash
         #   _load_project_info "<slug>"
+        #   ```
     _load_project_info() {
         local slug="${1:?missing project slug}"
         local info=""
@@ -1600,7 +1672,9 @@ set -uo pipefail
         #   - SolidGroundUX keeps its legacy state layout for backwards compatibility.
         #   - Other projects use /var/lib/solidgroundux/projects/<slug>/.
         # . Usage
+        #   ```bash
         #   _set_project_context "<slug>"
+        #   ```
     _set_project_context() {
         local slug="${1:-solidgroundux}"
 
@@ -1635,7 +1709,9 @@ set -uo pipefail
 
     # fn: _persist_project_info - Persist display identity for an admitted project package
         # . Usage
+        #   ```bash
         #   _persist_project_info "<package_info>"
+        #   ```
     _persist_project_info() {
         local package_info="${1:?missing package info}"
 
@@ -1653,7 +1729,9 @@ set -uo pipefail
 
     # fn: _list_known_projects - List locally known project slugs
         # . Usage
+        #   ```bash
         #   _list_known_projects
+        #   ```
     _list_known_projects() {
         local dir=""
         printf '%s\n' "solidgroundux"
@@ -1665,7 +1743,9 @@ set -uo pipefail
 
     # fn: _select_project_interactive - Select a locally known project
         # . Usage
+        #   ```bash
         #   _select_project_interactive "<command_name>"
+        #   ```
     _select_project_interactive() {
         local slug=""
         local choice=""
@@ -1702,7 +1782,9 @@ set -uo pipefail
         # . Returns
         #   0 when available; 1 otherwise.
         # . Usage
+        #   ```bash
         #   _require_command tar
+        #   ```
     _require_command() {
         local command_name="${1:?missing command}"
         command -v "$command_name" >/dev/null 2>&1 || {
@@ -1719,7 +1801,9 @@ set -uo pipefail
         # . Returns
         #   0 always; missing config is not an error.
         # . Usage
+        #   ```bash
         #   _load_release_manager_config
+        #   ```
     _load_release_manager_config() {
         local cfg="${SGND_RELEASE_CONFIG_FILE:-}"
         if [[ -z "$cfg" || ! -r "$cfg" ]]; then
@@ -1746,7 +1830,9 @@ set -uo pipefail
         # . Returns
         #   0 on success; non-zero on write failure.
         # . Usage
+        #   ```bash
         #   _ensure_release_manager_config
+        #   ```
     _ensure_release_manager_config() {
         local cfg="${SGND_RELEASE_CONFIG_FILE:?setup config path not initialized}"
         [[ -e "$cfg" ]] && return 0
@@ -1775,7 +1861,9 @@ set -uo pipefail
         # . Returns
         #   0 on success; non-zero when a required directory cannot be created.
         # . Usage
+        #   ```bash
         #   _ensure_manager_directories
+        #   ```
     _ensure_manager_directories() {
         _release_run mkdir -p -- "$VAL_STATE_ROOT" "$VAL_RELEASES_DIR" "$VAL_ARCHIVE_ROOT"
         if [[ "$SGND_RELEASE_PROJECT" != "solidgroundux" ]]; then
@@ -1789,7 +1877,9 @@ set -uo pipefail
         # . Returns
         #   0 on success; non-zero on filesystem failure.
         # . Usage
+        #   ```bash
         #   _install_setup_wrappers
+        #   ```
     _install_setup_wrappers() {
         local bin_dir="" wrapper=""
 
@@ -1821,7 +1911,9 @@ EOF
         # . Returns
         #   0 on success; non-zero on filesystem failure.
         # . Usage
+        #   ```bash
         #   _install_setup_self
+        #   ```
     _install_setup_self() {
         local source="$SCRIPT_FILE"
         [[ -n "$CANONICAL_MANAGER_PATH" ]] || return 1
@@ -1841,7 +1933,9 @@ EOF
         # . Returns
         #   0 on success; non-zero when the manager cannot be copied or made executable.
         # . Usage
+        #   ```bash
         #   _install_release_manager
+        #   ```
     _install_release_manager() {
         [[ -n "$CANONICAL_MANAGER_PATH" ]] || return 1
 
@@ -1866,7 +1960,9 @@ EOF
         # . Returns
         #   0 always unless removal of a known bootstrap file fails.
         # . Usage
+        #   ```bash
         #   _cleanup_bootstrap_files
+        #   ```
     _cleanup_bootstrap_files() {
         local base="${BOOTSTRAP_RELEASE_BASE:-}"
         local source_dir="${BOOTSTRAP_SOURCE_DIR:-$SCRIPT_DIR}"
@@ -1938,7 +2034,9 @@ EOF
         # . Returns
         #   0 after recording the selected action.
         # . Usage
+        #   ```bash
         #   _release_choose_post_install_action
+        #   ```
     _release_choose_post_install_action() {
         local choice=""
 
@@ -1980,7 +2078,9 @@ EOF
         # . Returns
         #   0 for a tar.gz archive; 1 otherwise.
         # . Usage
+        #   ```bash
         #   base="$(_release_base_from_archive "$archive")"
+        #   ```
     _release_base_from_archive() {
         local archive="${1:?missing archive}"
         local name="$(basename -- "$archive")"
@@ -1988,13 +2088,20 @@ EOF
         printf '%s\n' "${name%.tar.gz}"
     }
 
-    # fn: _release_matches - Test whether a release base matches an optional selector
+    # fn: _release_variant_matches - Check whether an archive matches the product individual-release naming scheme
         # . Purpose
-        #   Test whether a release base matches an optional selector.
+        #   Check whether an archive matches the product individual-release naming scheme.
+        #
+        # . Arguments
+        #   $1  Release archive base name.
+        #
         # . Returns
-        #   0 when it matches; 1 otherwise.
+        #   0 when it matches the individual release naming scheme; 1 otherwise.
+        #
         # . Usage
-        #   _release_matches "$base" "$VAL_RELEASE"
+        #   ```bash
+        #   _release_variant_matches "$base"
+        #   ```
     _release_variant_matches() {
         local base="${1:?missing base}"
         local variant="individual"
@@ -2006,6 +2113,21 @@ EOF
         fi
     }
 
+    # fn: _release_matches - Match an archive base to the optional requested release
+        # . Purpose
+        #   Match an archive base to the optional requested release.
+        #
+        # . Arguments
+        #   $1  Archive base name.
+        #   $2  Optional requested version or full release name.
+        #
+        # . Returns
+        #   0 when the product/variant and selector match; 1 otherwise.
+        #
+        # . Usage
+        #   ```bash
+        #   _release_matches "$base" "$VAL_RELEASE"
+        #   ```
     _release_matches() {
         local base="${1:?missing base}"
         local requested="${2:-}"
@@ -2024,7 +2146,9 @@ EOF
         # . Returns
         #   Status returned by sort.
         # . Usage
+        #   ```bash
         #   printf "%s\n" "$release" | _release_sort
+        #   ```
     _release_sort() {
         LC_ALL=C sort -V
     }
@@ -2035,7 +2159,9 @@ EOF
         # . Returns
         #   0 when an archived release exists; non-zero otherwise.
         # . Usage
+        #   ```bash
         #   current="$(_current_release)"
+        #   ```
     _current_release() {
         [[ -d "$VAL_ARCHIVE_ROOT" ]] || return 1
         _list_archived_releases | tail -n 1
@@ -2047,7 +2173,9 @@ EOF
         # . Returns
         #   0 when a previous release exists; non-zero otherwise.
         # . Usage
+        #   ```bash
         #   previous="$(_previous_release)"
+        #   ```
     _previous_release() {
         [[ -d "$VAL_ARCHIVE_ROOT" ]] || return 1
         _list_archived_releases | tail -n 2 | head -n 1
@@ -2059,7 +2187,9 @@ EOF
         # . Returns
         #   0 always.
         # . Usage
+        #   ```bash
         #   _list_archived_releases
+        #   ```
     _list_archived_releases() {
         [[ -d "$VAL_ARCHIVE_ROOT" ]] || return 0
         local base="" artifact_product="$(_release_product_artifact_name "$SGND_RELEASE_PRODUCT")"
@@ -2074,7 +2204,9 @@ EOF
         # . Returns
         #   0 always.
         # . Usage
+        #   ```bash
         #   _find_pending_archives
+        #   ```
     _find_pending_archives() {
         [[ -d "$VAL_RELEASES_DIR" ]] || return 0
         local archive="" base="" artifact_product="$(_release_product_artifact_name "$SGND_RELEASE_PRODUCT")"
@@ -2090,7 +2222,9 @@ EOF
         # . Returns
         #   0 when found; 1 otherwise.
         # . Usage
+        #   ```bash
         #   archive="$(_newest_pending_archive "$VAL_RELEASE")"
+        #   ```
     _newest_pending_archive() {
         local archive=""
         local base=""
@@ -2114,7 +2248,9 @@ EOF
         # . Returns
         #   0 when found; 1 otherwise.
         # . Usage
+        #   ```bash
         #   _find_archived_archive "$release"
+        #   ```
     _find_archived_archive() {
         local requested="${1:?missing release}"
         local base=""
@@ -2134,7 +2270,9 @@ EOF
         # . Returns
         #   0 when found; non-zero otherwise.
         # . Usage
+        #   ```bash
         #   _release_location "$release"
+        #   ```
     _release_location() {
         local requested="${1:?missing release}"
         local archive=""
@@ -2154,7 +2292,9 @@ EOF
         # . Returns
         #   0 when present; 1 otherwise.
         # . Usage
+        #   ```bash
         #   _pending_release_base_exists "$release"
+        #   ```
     _pending_release_base_exists() {
         local requested="${1:?missing release}"
         local archive=""
@@ -2168,7 +2308,9 @@ EOF
         # . Returns
         #   0 when present; 1 otherwise.
         # . Usage
+        #   ```bash
         #   _archived_release_base_exists "$release"
+        #   ```
     _archived_release_base_exists() {
         local requested="${1:?missing release}"
         _find_archived_archive "$requested" >/dev/null 2>&1
@@ -2181,7 +2323,9 @@ EOF
         # . Returns
         #   0 when valid; 1 on missing or mismatched data.
         # . Usage
+        #   ```bash
         #   _verify_sha256_sidecar "$file" "$file.sha256"
+        #   ```
     _verify_sha256_sidecar() {
         local file_path="${1:?missing file}"
         local sha_file="${2:?missing checksum}"
@@ -2212,7 +2356,9 @@ EOF
         # . Returns
         #   0 when safe; 1 for absolute or traversing paths.
         # . Usage
+        #   ```bash
         #   path="$(_safe_relative_path "$raw")"
+        #   ```
     _safe_relative_path() {
         local path="${1:-}"
         path="${path#./}"
@@ -2229,7 +2375,9 @@ EOF
         # . Returns
         #   0 when all paths are safe; 1 otherwise.
         # . Usage
+        #   ```bash
         #   _validate_tar_paths "$archive"
+        #   ```
     _validate_tar_paths() {
         local archive="${1:?missing archive}"
         local entry=""
@@ -2249,7 +2397,9 @@ EOF
         # . Returns
         #   0 when all paths are safe; 1 otherwise.
         # . Usage
+        #   ```bash
         #   _validate_manifest_paths "$manifest"
+        #   ```
     _validate_manifest_paths() {
         local manifest="${1:?missing manifest}"
         local raw=""
@@ -2273,7 +2423,9 @@ EOF
         # . Returns
         #   0 when the release set is valid; 1 otherwise.
         # . Usage
+        #   ```bash
         #   _verify_release_set "$archive"
+        #   ```
     _verify_release_set() {
         local archive="${1:?missing archive}"
         local base=""
@@ -2306,7 +2458,9 @@ EOF
         # . Returns
         #   0 after reading the manifest.
         # . Usage
+        #   ```bash
         #   _manifest_paths "$manifest"
+        #   ```
     _manifest_paths() {
         local manifest="${1:?missing manifest}"
         local raw=""
@@ -2328,7 +2482,9 @@ EOF
         # . Returns
         #   0 always.
         # . Usage
+        #   ```bash
         #   target="$(_target_path "$rel")"
+        #   ```
     _target_path() {
         local rel="${1:?missing relative path}"
         if [[ "$VAL_TARGET_ROOT" == "/" ]]; then
@@ -2344,7 +2500,9 @@ EOF
         # . Returns
         #   0 on success; non-zero when file removal fails.
         # . Usage
+        #   ```bash
         #   _manifest_paths "$manifest" | _remove_paths_from_stream
+        #   ```
     _remove_paths_from_stream() {
         local rel=""
         local target=""
@@ -2384,7 +2542,9 @@ EOF
         # . Returns
         #   0 when complete; non-zero on removal failure.
         # . Usage
+        #   ```bash
         #   _apply_removed_manifest "$removed"
+        #   ```
     _apply_removed_manifest() {
         local removed="${1:?missing removed manifest}"
         [[ -s "$removed" ]] || return 0
@@ -2397,7 +2557,9 @@ EOF
         # . Returns
         #   0 on success; non-zero on comparison/removal failure.
         # . Usage
+        #   ```bash
         #   _remove_release_difference "$current_manifest" "$target_manifest"
+        #   ```
     _remove_release_difference() {
         local from_manifest="${1:?missing from manifest}"
         local to_manifest="${2:?missing to manifest}"
@@ -2426,7 +2588,9 @@ EOF
         # . Returns
         #   0 on success; non-zero on filesystem failure.
         # . Usage
+        #   ```bash
         #   _archive_release_set "$archive"
+        #   ```
     _archive_release_set() {
         local archive="${1:?missing archive}"
         local base=""
@@ -2491,7 +2655,9 @@ EOF
         # . Returns
         #   0 on success; 1 when the destination exists or movement fails.
         # . Usage
+        #   ```bash
         #   _move_archive_dir_to_releases "$base"
+        #   ```
     _move_archive_dir_to_releases() {
         local base="${1:?missing release base}"
         local source="${VAL_ARCHIVE_ROOT%/}/${base}"
@@ -2513,7 +2679,9 @@ EOF
         # . Returns
         #   0 on success; non-zero on movement failure.
         # . Usage
+        #   ```bash
         #   _move_newer_archives_to_releases "$target_base"
+        #   ```
     _move_newer_archives_to_releases() {
         local target_base="${1:?missing target release}"
         local base=""
@@ -2532,7 +2700,9 @@ EOF
         # . Returns
         #   0 on success; non-zero on movement failure.
         # . Usage
+        #   ```bash
         #   _move_all_archives_to_releases
+        #   ```
     _move_all_archives_to_releases() {
         local base=""
         while IFS= read -r base; do
@@ -2564,7 +2734,9 @@ EOF
         # . Returns
         #   0 on success; non-zero when extraction fails.
         # . Usage
+        #   ```bash
         #   _extract_release "$archive"
+        #   ```
     _extract_release() {
         local archive="${1:?missing archive}"
         _release_run mkdir -p -- "$VAL_TARGET_ROOT" || return 1
@@ -2578,7 +2750,9 @@ EOF
         # . Returns
         #   0 on success; non-zero on verification or deployment failure.
         # . Usage
+        #   ```bash
         #   _install_pending_archive "$archive"
+        #   ```
     _install_pending_archive() {
         local archive="${1:?missing archive}"
         local base=""
@@ -2635,7 +2809,9 @@ EOF
         # . Returns
         #   0 on success; non-zero when rollback cannot be completed.
         # . Usage
+        #   ```bash
         #   _rollback_to_archived_release "$target_base"
+        #   ```
     _rollback_to_archived_release() {
         local target_base="${1:?missing target release}"
         local current=""
@@ -2670,7 +2846,9 @@ EOF
         # . Returns
         #   0 on success; non-zero when the manifest is invalid or removal fails.
         # . Usage
+        #   ```bash
         #   _remove_by_manifest "$manifest"
+        #   ```
     _remove_by_manifest() {
         local manifest="${1:?missing manifest}"
 
@@ -2692,7 +2870,9 @@ EOF
         # . Returns
         #   0 when the file positively identifies the requested product; 1 otherwise.
         # . Usage
+        #   ```bash
         #   _file_belongs_to_product "$path" "$SGND_RELEASE_PRODUCT"
+        #   ```
     _file_belongs_to_product() {
         local file="${1:?missing file}"
         local product="${2:?missing product}"
@@ -2721,7 +2901,9 @@ EOF
         # . Returns
         #   0 after scanning the available managed roots.
         # . Usage
+        #   ```bash
         #   _scan_product_owned_paths "$SGND_RELEASE_PRODUCT"
+        #   ```
     _scan_product_owned_paths() {
         local product="${1:?missing product}"
         local root="${VAL_TARGET_ROOT%/}"
@@ -2752,7 +2934,9 @@ EOF
         # . Returns
         #   0 on success; non-zero when removal fails.
         # . Usage
+        #   ```bash
         #   _remove_by_product_scan "$SGND_RELEASE_PRODUCT"
+        #   ```
     _remove_by_product_scan() {
         local product="${1:?missing product}"
         local matches=""
@@ -2782,7 +2966,9 @@ EOF
         # . Returns
         #   0 when every product scan succeeds; non-zero on the first failure.
         # . Usage
+        #   ```bash
         #   _remove_bundle_products_by_scan
+        #   ```
     _remove_bundle_products_by_scan() {
         local product=""
         local found=0
@@ -2807,7 +2993,9 @@ EOF
         # . Returns
         #   0 on success; non-zero on transfer failure.
         # . Usage
+        #   ```bash
         #   _download_to "$source" "$destination"
+        #   ```
     _download_to() {
         local source="${1:?missing source}"
         local dest="${2:?missing destination}"
@@ -2837,7 +3025,9 @@ EOF
         # . Returns
         #   0 and the release JSON on stdout; non-zero when lookup fails.
         # . Usage
+        #   ```bash
         #   json="$(_github_release_json)"
+        #   ```
     _github_release_json() {
         local url="${SGND_RELEASE_API_URL:?missing release API URL}"
         local temp_file=""
@@ -2892,7 +3082,9 @@ EOF
         # . Returns
         #   Prints "<release-base>|<download-url>" and returns 0 when found.
         # . Usage
+        #   ```bash
         #   row="$(_github_latest_asset)"
+        #   ```
     _github_latest_asset() {
         local json=""
         local url=""
@@ -2937,7 +3129,9 @@ EOF
         # . Returns
         #   0 on success; non-zero when GitHub lookup fails.
         # . Usage
+        #   ```bash
         #   _latest_online_release
+        #   ```
     _latest_online_release() {
         local row=""
         local asset_rc=0
@@ -2952,7 +3146,9 @@ EOF
         # . Returns
         #   0 on success; non-zero when GitHub lookup fails.
         # . Usage
+        #   ```bash
         #   url="$(_github_release_asset_url)"
+        #   ```
     _github_release_asset_url() {
         local row=""
         local asset_rc=0
@@ -2967,7 +3163,9 @@ EOF
         # . Returns
         #   0 when present locally; 1 otherwise.
         # . Usage
+        #   ```bash
         #   _release_is_local_or_installed "$base"
+        #   ```
     _release_is_local_or_installed() {
         local base="${1:?missing base}"
         _archived_release_base_exists "$base" && return 0
@@ -2981,7 +3179,9 @@ EOF
         # . Returns
         #   0 on success; non-zero when validation or movement fails.
         # . Usage
+        #   ```bash
         #   _admit_extracted_release "$root" "$expected_base"
+        #   ```
     _admit_extracted_release() {
         local extracted_root="${1:?missing extraction root}"
         local expected_base="${2:-}"
@@ -3084,7 +3284,9 @@ EOF
         # . Returns
         #   0 on success; non-zero on discovery, transfer, extraction, or validation failure.
         # . Usage
+        #   ```bash
         #   _acquire_release "$expected_base" "$source"
+        #   ```
     _acquire_release() {
         local expected_base="${1:-}"
         local source="${2:-}"
@@ -3645,7 +3847,9 @@ EOF
         # . Returns
         #   0 for confirmation; 1 for rejection or unavailable interaction.
         # . Usage
+        #   ```bash
         #   _confirm "Continue?"
+        #   ```
     _confirm() {
         local prompt="${1:-Continue?}"
 
@@ -3665,7 +3869,9 @@ EOF
         # . Returns
         #   0 and the metadata path when found; 1 otherwise.
         # . Usage
+        #   ```bash
         #   products_file="$(_bundle_products_file)"
+        #   ```
     _bundle_products_file() {
         local base=""
         local archive=""
@@ -3692,7 +3898,9 @@ EOF
         # . Returns
         #   0 when bundle metadata is available; 1 otherwise.
         # . Usage
+        #   ```bash
         #   mapfile -t products < <(_bundle_product_names)
+        #   ```
     _bundle_product_names() {
         local products_file=""
         local line=""
@@ -3714,7 +3922,9 @@ EOF
         # . Returns
         #   0 with product name or ALL on stdout; 1 when returning/cancelling.
         # . Usage
+        #   ```bash
         #   scope="$(_select_bundle_removal_scope "Removal scope")"
+        #   ```
     _select_bundle_removal_scope() {
         local title="${1:-Removal scope}"
         local choice=""
@@ -3757,7 +3967,9 @@ EOF
         # . Returns
         #   0 with the selected target on stdout; 1 when returning/cancelling.
         # . Usage
+        #   ```bash
         #   target="$(_select_archived_release)"
+        #   ```
     _select_archived_release() {
         local current=""
         local base=""
@@ -3889,7 +4101,9 @@ EOF
         # . Returns
         #   0 always.
         # . Usage
+        #   ```bash
         #   _pause
+        #   ```
     _pause() {
         [[ -t 0 && -t 1 ]] || return 0
         printf '\n%sPress Enter to continue...%s' "$_RL_UI_PROMPT" "$_RL_UI_INPUT" > /dev/tty
@@ -3904,7 +4118,9 @@ EOF
         # . Returns
         #   0 on success; non-zero when online discovery fails.
         # . Usage
+        #   ```bash
         #   _action_check
+        #   ```
     _action_check() {
         local latest=""
         local current=""
@@ -3959,7 +4175,9 @@ EOF
         # . Returns
         #   0 on success; non-zero on acquisition failure.
         # . Usage
+        #   ```bash
         #   _action_download
+        #   ```
     _action_download() {
         local latest=""
 
@@ -3979,7 +4197,9 @@ EOF
         # . Returns
         #   0 on success; 2 on cancellation; non-zero on failure.
         # . Usage
+        #   ```bash
         #   _action_update
+        #   ```
     _action_update() {
         local latest=""
         local current=""
@@ -4047,7 +4267,9 @@ EOF
         # . Returns
         #   0 on success; 2 on cancellation; non-zero on failure.
         # . Usage
+        #   ```bash
         #   _action_install
+        #   ```
     _action_install() {
         local archive=""
 
@@ -4078,7 +4300,9 @@ EOF
         # . Returns
         #   0 on success; 2 on cancellation; non-zero on failure.
         # . Usage
+        #   ```bash
         #   _action_rollback
+        #   ```
     _action_rollback() {
         local target="$VAL_RELEASE"
         local previous=""
@@ -4102,7 +4326,9 @@ EOF
         # . Returns
         #   0 on success; 2 on cancellation; non-zero on failure.
         # . Usage
+        #   ```bash
         #   _action_remove
+        #   ```
     _action_remove() {
         local current=""
         local manifest=""
@@ -4127,7 +4353,9 @@ EOF
         # . Returns
         #   Exit status of the selected interactive or command-line action.
         # . Usage
+        #   ```bash
         #   main "$@"
+        #   ```
     main() {
         local default_root=""
         local rc=0

@@ -68,7 +68,9 @@ set -uo pipefail
         #   Exits with code 2 when executed instead of sourced.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_lib_guard
+        #   ```
     _sgnd_lib_guard() {
         local lib_base=""
         local guard=""
@@ -115,7 +117,9 @@ set -uo pipefail
         #   0 always.
         #
         # . Usage
-        #   _sgnd_arg_split "example"
+        #   ```bash
+        #   _sgnd_arg_split "verbose|v|flag|FLAG_VERBOSE|Enable verbose output||"
+        #   ```
     _sgnd_arg_split() {
         local spec="$1"
         IFS='|' read -r _sgnd_name _sgnd_short _sgnd_type _sgnd_var _sgnd_help _sgnd_default _sgnd_choices <<< "$spec"
@@ -144,7 +148,9 @@ set -uo pipefail
         #   1 when no matching specification exists.
         #
         # . Usage
-        #   _sgnd_arg_find_spec "example" "example-2"
+        #   ```bash
+        #   _sgnd_arg_find_spec help
+        #   ```
     _sgnd_arg_find_spec() {
         local wanted="$1"
         local spec
@@ -178,7 +184,9 @@ set -uo pipefail
         #   1 when the value is not allowed.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_arg_validate_enum "dark" "2026-07-31" && printf 'Success\n' || printf 'Failed\n'
+        #   ```
     _sgnd_arg_validate_enum() {
         local value="$1"
         local choices_csv="$2"
@@ -223,7 +231,9 @@ set -uo pipefail
         #   0 always.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_arg_init_defaults both
+        #   ```
     _sgnd_arg_init_defaults() {
         local source="${1:-both}"
         local -a args=()
@@ -326,25 +336,25 @@ set -uo pipefail
     ) 
     # fn: sgnd_show_help - Show help
         # . Purpose
-        #   Print usage information generated from a SolidGroundUX argument specification.
+        #   Display command-line help using the current script and Framework argument specifications.
         #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
-        #   - Reads or updates SolidGroundUX runtime, metadata, configuration, or UI globals as needed.
-        #   - Uses framework UI/output conventions for terminal or dialog interaction.
+        # . Description
+        #   Prints script usage, description, options and optional built-in options and examples.
         #
         # . Arguments
-        #   $0  ARG0 - Positional value used by this function.
-        #   $1  INCLUDE_BUILTINS - Positional value used by this function.
+        #   $1 - Include built-in options and examples (1, default), or omit them (0).
         #
-        # . Side effects
-        #   May update files, directories, runtime state, or process state required by the workflow.
+        # . Output
+        #   Writes formatted help to the console through the Framework UI helpers.
         #
         # . Returns
-        #   0 on success unless the called command returns a different status.
+        #   Returns the status of the final section-header rendering call.
         #
         # . Usage
-        #   sgnd_show_help "example-0" "example"
+        #   ```bash
+        #   sgnd_show_help          # Include built-in options
+        #   sgnd_show_help 0        # Script options only
+        #   ```
     sgnd_show_help() {
         local include_builtins="${1:-1}"
         local script_name="${SGND_SCRIPT_NAME:-$(basename "${SGND_SCRIPT_FILE:-$0}")}"
@@ -492,8 +502,10 @@ set -uo pipefail
         #   or malformed argument specifications.
         #
         # . Usage
+        #   ```bash
         #   SGND_ARGS_SOURCE=builtins sgnd_parse_args --preserve-unknown "$@"
         #   SGND_ARGS_SOURCE=script sgnd_parse_args "${SGND_POSITIONAL[@]}"
+        #   ```
     sgnd_parse_args() {
 
         local stop_at_unknown=0
@@ -682,25 +694,24 @@ set -uo pipefail
     }
     # fn: sgnd_builtinarg_handler - Builtinarg handler
         # . Purpose
-        #   Handle built-in framework options such as help, debug, verbose, dry-run, logfile, and UI mode.
+        #   Apply built-in Framework options parsed from the command line.
         #
-        # . Behavior
-        #   - Provides a public SolidGroundUX helper or command entry point.
-        #   - Reads or updates SolidGroundUX runtime, metadata, configuration, or UI globals as needed.
-        #   - Uses framework UI/output conventions for terminal or dialog interaction.
+        # . Description
+        #   Applies log and theme settings, displays requested information and handles state reset. Help and show operations terminate the current script after displaying the requested information.
         #
-        # Outputs (globals):
-        #   May update SGND_* globals shown in the function body.
+        # . Inputs (globals)
+        #   FLAG_LOG, FLAG_HELP, FLAG_STATERESET, FLAG_DRYRUN, ARG_LOGLEVEL, ARG_THEME, ARG_SHOW.
         #
         # . Side effects
-        #   May update files, directories, runtime state, or process state required by the workflow.
+        #   May change logging/theme state or reset the saved state; information-only actions exit the script.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, user cancellation, or execution fails.
+        #   0 when normal processing completes; non-zero for invalid show targets or failed theme selection. Help/show actions exit with status 0.
         #
         # . Usage
+        #   ```bash
         #   sgnd_builtinarg_handler
+        #   ```
     sgnd_builtinarg_handler(){
         local show_target="${ARG_SHOW:-}"
         local loglevel="${ARG_LOGLEVEL:-}"

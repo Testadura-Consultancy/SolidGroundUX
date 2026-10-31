@@ -24,6 +24,18 @@
 #     invoked rather than duplicated here.
 #   - Test sections use one consistent finish and summary pattern.
 #
+# Usage:
+#   Run the executable from its shell command (or installed wrapper):
+#   ```bash
+#   sgnd-smoketest --suite smoke
+#   sgnd-smoketest --suite all
+#   sgnd-smoketest --view-log
+#   ```
+#
+#   Script-specific options:
+#   - `--suite NAME`, `-s`: Test suite to run (choices: `smoke`, `installation`, `all`).
+#   - `--view-log`: Display the active SolidGroundUX logfile and exit.
+#
 # Attribution:
 #   Developers  : Mark Fieten
 #   Company     : Testadura Consultancy
@@ -181,13 +193,13 @@ set -uo pipefail
         # . Purpose
         #   Run simple shell input tests.
         #
-        # . Behavior
-        #
         # . Returns
         #   Returns the underlying command or workflow status.
         #
         # . Usage
+        #   ```bash
         #   input_test
+        #   ```
     input_test() {
         sgnd_print
         ask_prompt_form --autoalign "${SGND_STATE_VARIABLES[@]}" 
@@ -207,7 +219,9 @@ set -uo pipefail
         #   0 after both selection tests complete or are cancelled.
         #
         # . Usage
+        #   ```bash
         #   ask_selection_test
+        #   ```
     ask_selection_test() {
         local selected_theme=""
         local -a selected_groups=()
@@ -263,13 +277,13 @@ set -uo pipefail
         # . Purpose
         #   Run interactive ask helper tests.
         #
-        # . Behavior
-        #
         # . Returns
         #   Returns the underlying command or workflow status.
         #
         # . Usage
+        #   ```bash
         #   ask_test
+        #   ```
     ask_test(){
         sgnd_print
         # -----------------------------------------------------------------------------
@@ -435,13 +449,13 @@ set -uo pipefail
         # . Purpose
         #   Run console message helper tests.
         #
-        # . Behavior
-        #
         # . Returns
         #   Returns the underlying command or workflow status.
         #
         # . Usage
+        #   ```bash
         #   say_test
+        #   ```
     say_test(){
         sgnd_print
         sgnd_print_sectionheader --text "Testing say*() helpers"
@@ -476,7 +490,9 @@ set -uo pipefail
         #   0 when the test sequence completes.
         #
         # . Usage
+        #   ```bash
         #   loglevel_test
+        #   ```
     loglevel_test() {
         sgnd_print
         sgnd_print_sectionheader --text "Testing loglevel visibility"
@@ -592,7 +608,9 @@ set -uo pipefail
         #   1 when no readable logfile can be resolved.
         #
         # . Usage
+        #   ```bash
         #   view_log
+        #   ```
     view_log() {
         local logfile=""
 
@@ -621,7 +639,9 @@ set -uo pipefail
         #   Returns the underlying command or workflow status.
         #
         # . Usage
+        #   ```bash
         #   motd_test
+        #   ```
     motd_test() {
         local motd_dir=""
         local motd_file=""
@@ -689,7 +709,9 @@ set -uo pipefail
         #   0 when the visual test sequence completes.
         #
         # . Usage
+        #   ```bash
         #   sayprogress_test
+        #   ```
     sayprogress_test() {
         local outer=0
         local middle=0
@@ -799,9 +821,36 @@ set -uo pipefail
         #   Returns the underlying command or workflow status.
         #
         # . Usage
+        #   ```bash
         #   show_colorchart
+        #   ```
     show_colorchart(){
         sgnd_color_samples
+    }
+
+    # fn: datatable_test - Preview the DataTable theme colors
+        # . Purpose
+        #   Display a sample table using the active theme defaults for header
+        #   rules, column names, and data text.
+        #
+        # . Returns
+        #   The return status of sgnd_dt_print_table.
+        #
+        # . Usage
+        #   ```bash
+        #   datatable_test
+        #   ```
+    datatable_test() {
+        local schema="Element|Theme variable|Sample"
+        local -a sample_rows=(
+            "Header lines|SGND_DT_HEADERLINE_CLR|Separator rules"
+            "Column headings|SGND_DT_COLUMNNAME_CLR|Column labels"
+            "Data values|SGND_DT_DATACOLOR_CLR|Row contents"
+        )
+
+        sgnd_print
+        sgnd_print_sectionheader --text "DataTable theme preview"
+        sgnd_dt_print_table "$schema" sample_rows
     }
 
     # fn: show_theme - Browse and preview installed UI themes
@@ -820,7 +869,9 @@ set -uo pipefail
         #   1 when no readable themes are found.
         #
         # . Usage
+        #   ```bash
         #   show_theme
+        #   ```
     show_theme() {
         local -a theme_files=()
         local -a theme_names=()
@@ -923,6 +974,24 @@ set -uo pipefail
     SGND_TEST_FAIL=0
     SGND_TEST_SKIP=0
 
+
+    # fn: _framework_test_root_path - Resolve an installed or staged Framework path
+        # . Purpose
+        #   Resolve an installed or staged Framework path.
+        #
+        # . Arguments
+        #   $1  Absolute Framework-relative path.
+        #
+        # . Output
+        #   Writes the resolved path to stdout.
+        #
+        # . Returns
+        #   0 after writing the resolved path.
+        #
+        # . Usage
+        #   ```bash
+        #   _framework_test_root_path "/usr/local/lib/solidgroundux/common/sgnd-core.sh"
+        #   ```
     _framework_test_root_path() {
         local relative="${1:?missing path}"
         local root="${SGND_FRAMEWORK_ROOT:-/}"
@@ -934,6 +1003,26 @@ set -uo pipefail
         fi
     }
 
+
+    # fn: _framework_test_result - Print a validation outcome and increment its counter
+        # . Purpose
+        #   Print a validation outcome and increment its counter.
+        #
+        # . Arguments
+        #   $1  Test label.
+        #   $2  PASS, SKIP or FAIL.
+        #   $3  Optional detail.
+        #
+        # . Side effects
+        #   Increments SGND_TEST_PASS, SGND_TEST_SKIP or SGND_TEST_FAIL and prints the result.
+        #
+        # . Returns
+        #   0 for PASS or SKIP; 1 for FAIL or unknown status.
+        #
+        # . Usage
+        #   ```bash
+        #   _framework_test_result "bootstrap" PASS
+        #   ```
     _framework_test_result() {
         local label="${1:?missing label}"
         local status="${2:?missing status}"
@@ -951,6 +1040,27 @@ set -uo pipefail
         return 1
     }
 
+
+    # fn: _framework_test_suite_summary - Summarize validation counters for a test area
+        # . Purpose
+        #   Summarize validation counters for a test area.
+        #
+        # . Arguments
+        #   $1  Area name.
+        #   $2  Initial PASS count.
+        #   $3  Initial FAIL count.
+        #   $4  Initial SKIP count.
+        #
+        # . Output
+        #   Prints pass/fail/skip counts and a summary message.
+        #
+        # . Returns
+        #   0 if no new FAIL results; 1 otherwise.
+        #
+        # . Usage
+        #   ```bash
+        #   _framework_test_suite_summary "Framework installation" "$pass_before" "$fail_before" "$skip_before"
+        #   ```
     _framework_test_suite_summary() {
         local title="${1:?missing title}"
         local pass_before="${2:-0}"
@@ -976,6 +1086,21 @@ set -uo pipefail
         return 1
     }
 
+
+    # fn: _framework_test_validate_installation - Check required Framework files and public command wrappers
+        # . Purpose
+        #   Check required Framework files and public command wrappers.
+        #
+        # . Side effects
+        #   Updates the global validation counters and prints results.
+        #
+        # . Returns
+        #   0 if all required components are present; 1 if any check fails.
+        #
+        # . Usage
+        #   ```bash
+        #   _framework_test_validate_installation
+        #   ```
     _framework_test_validate_installation() {
         local pass_before=$SGND_TEST_PASS
         local fail_before=$SGND_TEST_FAIL
@@ -1022,16 +1147,55 @@ set -uo pipefail
 # - Smoke test menu -----------------------------------------------------------------
     declare -A SGND_SMOKETEST_STATUS=()
 
+
+    # fn: _smoketest_show_license - Display the installed license
+        # . Purpose
+        #   Display the installed license.
+        #
+        # . Returns
+        #   Status returned by the license renderer.
+        #
+        # . Usage
+        #   ```bash
+        #   _smoketest_show_license
+        #   ```
     _smoketest_show_license() {
         saydebug "$SGND_DOCS_DIR/$SGND_LICENSE_FILE"
         sgnd_print_license
     }
 
+
+    # fn: _smoketest_finish_test - Print the separator following a smoke test
+        # . Purpose
+        #   Print the separator following a smoke test.
+        #
+        # . Returns
+        #   Status returned by the rendering helpers.
+        #
+        # . Usage
+        #   ```bash
+        #   _smoketest_finish_test
+        #   ```
     _smoketest_finish_test() {
         sgnd_print
         sgnd_print_sectionheader --border "$DL_H" --maxwidth "${SGND_MENU_RENDER_WIDTH:-$(sgnd_terminal_width)}"
     }
 
+
+    # fn: _smoketest_wait_for_return - Wait for one keypress on the controlling terminal
+        # . Purpose
+        #   Wait for one keypress on the controlling terminal.
+        #
+        # . Side effects
+        #   Reads /dev/tty and displays a return prompt.
+        #
+        # . Returns
+        #   0 when input is read; 1 if input fails.
+        #
+        # . Usage
+        #   ```bash
+        #   _smoketest_wait_for_return
+        #   ```
     _smoketest_wait_for_return() {
         local key=""
 
@@ -1041,6 +1205,24 @@ set -uo pipefail
         return 0
     }
 
+
+    # fn: _smoketest_status_icon - Return the colored icon for a completed smoke test
+        # . Purpose
+        #   Return the colored icon for a completed smoke test.
+        #
+        # . Arguments
+        #   $1  Smoke test identifier.
+        #
+        # . Output
+        #   Writes an ANSI-colored status icon or a space.
+        #
+        # . Returns
+        #   0 after rendering the icon or a blank indicator.
+        #
+        # . Usage
+        #   ```bash
+        #   icon="$(_smoketest_status_icon "$id")"
+        #   ```
     _smoketest_status_icon() {
         local status="${SGND_SMOKETEST_STATUS[$1]:-}"
         local color=""
@@ -1064,6 +1246,25 @@ set -uo pipefail
         printf '%s%s%s' "$color" "$icon" "${RESET:-}"
     }
 
+
+    # fn: _smoketest_run_one - Execute a smoke test and record its result
+        # . Purpose
+        #   Execute a smoke test and record its result.
+        #
+        # . Arguments
+        #   $1  Test identifier.
+        #   $2  Function name to invoke.
+        #
+        # . Side effects
+        #   Updates SGND_SMOKETEST_STATUS and waits for input outside Run All mode.
+        #
+        # . Returns
+        #   130 on cancellation; otherwise the test function status.
+        #
+        # . Usage
+        #   ```bash
+        #   _smoketest_run_one 1 ask_test
+        #   ```
     _smoketest_run_one() {
         local id="$1" fn="$2" rc=0
 
@@ -1090,6 +1291,18 @@ set -uo pipefail
         return "$rc"
     }
 
+
+    # fn: _smoketest_render_menu - Render the interactive smoke-test menu
+        # . Purpose
+        #   Render the interactive smoke-test menu.
+        #
+        # . Returns
+        #   Status returned by the final renderer.
+        #
+        # . Usage
+        #   ```bash
+        #   _smoketest_render_menu
+        #   ```
     _smoketest_render_menu() {
         local i icon
         local -a names=(
@@ -1105,6 +1318,7 @@ set -uo pipefail
             "Show theme"
             "File log level test"
             "View logfile"
+            "Show DataTable"
         )
         local -a desc=(
             "Exercise ask and dialog helpers"
@@ -1119,25 +1333,44 @@ set -uo pipefail
             "Browse installed SolidGroundUX themes"
             "Verify file log-level filtering"
             "Display the active SolidGroundUX logfile"
+            "Preview DataTable header, column and data colors"
         )
 
         sgnd_clear
         sgnd_print_titlebar --left "Framework Smoke Tests" --sub "Exercise SolidGroundUX UI and runtime helpers"
         sgnd_print
         sgnd_print_sectionheader --text "Smoke tests"
-        for i in {1..12}; do
+        for i in {1..13}; do
             icon="$(_smoketest_status_icon "$i")"
             sgnd_print --text "${icon} ${i}) ${names[$((i-1))]}" --text2 "${desc[$((i-1))]}" --pad 2
         done
         sgnd_print
         sgnd_print_sectionheader --text "Actions"
-        sgnd_print --text "${SGND_UI_SUCCESS:-${BRIGHT_GREEN:-}}▶${RESET:-} 13) Run all smoke tests" --text2 "Run the complete interactive smoke-test sequence" --pad 2
+        sgnd_print --text "${SGND_UI_SUCCESS:-${BRIGHT_GREEN:-}}▶${RESET:-} 14) Run all smoke tests" --text2 "Run the complete interactive smoke-test sequence" --pad 2
         sgnd_print --text "  X) Exit" --text2 "Return to console menu" --pad 2
         sgnd_print
         sgnd_print_sectionheader --border "$DL_H" --maxwidth "${SGND_MENU_RENDER_WIDTH:-$(sgnd_terminal_width)}"
         sgnd_print
     }
 
+
+    # fn: _smoketest_read_choice - Read and validate a smoke-test menu choice
+        # . Purpose
+        #   Read and validate a smoke-test menu choice.
+        #
+        # . Arguments
+        #   $1  Name of the output variable.
+        #
+        # . Side effects
+        #   Reads /dev/tty and assigns the selected value to the named variable.
+        #
+        # . Returns
+        #   0 for a valid choice; 1 when terminal input fails.
+        #
+        # . Usage
+        #   ```bash
+        #   _smoketest_read_choice choice
+        #   ```
     _smoketest_read_choice() {
         local output_var="${1:?missing output variable}"
         local value=""
@@ -1146,13 +1379,28 @@ set -uo pipefail
             IFS= read -r value </dev/tty || return 1
             case "${value^^}" in
                 X) printf -v "$output_var" '%s' 'X'; return 0 ;;
-                1|2|3|4|5|6|7|8|9|10|11|12|13)
+                1|2|3|4|5|6|7|8|9|10|11|12|13|14)
                     printf -v "$output_var" '%s' "$value"; return 0 ;;
-                *) saywarning "Choose 1-13 or X." ;;
+                *) saywarning "Choose 1-14 or X." ;;
             esac
         done
     }
 
+
+    # fn: _smoketest_dispatch_one - Dispatch a numbered smoke-test selection
+        # . Purpose
+        #   Dispatch a numbered smoke-test selection.
+        #
+        # . Arguments
+        #   $1  Selection number (1-12).
+        #
+        # . Returns
+        #   Status of the selected test, or 0 if no matching case.
+        #
+        # . Usage
+        #   ```bash
+        #   _smoketest_dispatch_one "$choice"
+        #   ```
     _smoketest_dispatch_one() {
         local choice="$1" rc=0
         case "$choice" in
@@ -1168,14 +1416,30 @@ set -uo pipefail
             10) _smoketest_run_one 10 show_theme || rc=$? ;;
             11) _smoketest_run_one 11 file_loglevel_test || rc=$? ;;
             12) _smoketest_run_one 12 view_log || rc=$? ;;
+            13) _smoketest_run_one 13 datatable_test || rc=$? ;;
         esac
         return "$rc"
     }
 
+
+    # fn: _smoketest_run_all_tests - Execute all interactive smoke tests and show their summary
+        # . Purpose
+        #   Execute all interactive smoke tests and show their summary.
+        #
+        # . Side effects
+        #   Temporarily sets SGND_SMOKETEST_RUN_ALL, records statuses and waits for a final keypress.
+        #
+        # . Returns
+        #   130 if a test is cancelled; otherwise 0 when all pass or 1 when any fail.
+        #
+        # . Usage
+        #   ```bash
+        #   _smoketest_run_all_tests
+        #   ```
     _smoketest_run_all_tests() {
         local i rc=0 failures=0
         SGND_SMOKETEST_RUN_ALL=1
-        for i in {1..12}; do
+        for i in {1..13}; do
             rc=0
             _smoketest_dispatch_one "$i" || rc=$?
             if (( rc == 130 )); then
@@ -1195,6 +1459,21 @@ set -uo pipefail
         (( failures == 0 ))
     }
 
+
+    # fn: _framework_test_run_smoke_menu - Run the interactive smoke-test selection loop
+        # . Purpose
+        #   Run the interactive smoke-test selection loop.
+        #
+        # . Side effects
+        #   Displays and operates the smoke-test menu.
+        #
+        # . Returns
+        #   0 when the user exits the menu.
+        #
+        # . Usage
+        #   ```bash
+        #   _framework_test_run_smoke_menu
+        #   ```
     _framework_test_run_smoke_menu() {
         local choice="" rc=0
         SGND_SMOKETEST_RUN_ALL=0
@@ -1203,7 +1482,7 @@ set -uo pipefail
             choice=""
             _smoketest_read_choice choice || break
             [[ "$choice" == "X" ]] && break
-            if [[ "$choice" == "13" ]]; then
+            if [[ "$choice" == "14" ]]; then
                 _smoketest_run_all_tests || true
             else
                 _smoketest_dispatch_one "$choice" || true
@@ -1213,6 +1492,22 @@ set -uo pipefail
     }
 
 # - Aggregate runner ---------------------------------------------------------------
+
+# - Aggregate runner ---------------------------------------------------------------
+    # fn: _framework_test_run_all - Run installation validation and the interactive smoke suite
+        # . Purpose
+        #   Run installation validation and the interactive smoke suite.
+        #
+        # . Side effects
+        #   Prints an aggregate result and updates validation counters.
+        #
+        # . Returns
+        #   0 if both areas pass; 1 otherwise.
+        #
+        # . Usage
+        #   ```bash
+        #   _framework_test_run_all
+        #   ```
     _framework_test_run_all() {
         local area_failures=0
         local smoke_rc=0
@@ -1242,6 +1537,22 @@ set -uo pipefail
     }
 
 # - Main ---------------------------------------------------------------------------
+
+# - Main ---------------------------------------------------------------------------
+    # fn: main - Bootstrap the test runner and dispatch the requested suite
+        # . Purpose
+        #   Bootstrap the test runner and dispatch the requested suite.
+        #
+        # . Arguments
+        #   $@  Framework and smoke-test command-line arguments.
+        #
+        # . Returns
+        #   Status of the selected suite or interactive workflow.
+        #
+        # . Usage
+        #   ```bash
+        #   main "$@"
+        #   ```
     main() {
         _framework_locator || exit $?
         sgnd_exe_start "$@"

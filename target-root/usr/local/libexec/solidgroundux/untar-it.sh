@@ -16,6 +16,21 @@
 #   staging directory, and restores files matching an optional directory and filename
 #   mask beneath a selected target root.
 #
+# Usage:
+#   Run the executable from its shell command (or installed wrapper):
+#   ```bash
+#   untar-it
+#   untar-it --archive solidgroundux-20260804T010000.tar.gz --directory usr/local/lib/solidgroundux/common --match '*.sh'
+#   ```
+#
+#   Script-specific options:
+#   - `--auto`, `-a`: Restore without prompting.
+#   - `--archive VALUE`, `-f`: Archive filename or absolute path.
+#   - `--archive-dir VALUE`, `-d`: Directory containing framework archives.
+#   - `--target VALUE`, `-t`: Filesystem root beneath which files are restored.
+#   - `--directory VALUE`: Optional directory within the archive.
+#   - `--match VALUE`, `-m`: Filename or shell-style file mask.
+#
 # Attribution:
 #   Developers  : Mark Fieten
 #   Company     : Testadura Consultancy
@@ -26,13 +41,6 @@
 set -uo pipefail
 
 # - Bootstrap ----------------------------------------------------------------------
-    # fn: _framework_locator - Locate and load the SolidGroundUX executable bootstrap context
-        # . Returns
-        #   0 when the executable common library was loaded.
-        #   126 or 127 when bootstrap configuration cannot be resolved.
-        #
-        # . Usage
-        #   _framework_locator || return $?
     # fn$ _framework_locator - Resolve and load the active SolidGroundUX framework
         # . Purpose
         #   Determine the filesystem root of the currently executing SolidGroundUX tree
@@ -64,7 +72,9 @@ set -uo pipefail
         #   be found, or the executable common library is unreadable.
         #
         # . Usage
+        #   ```bash
         #   _framework_locator || return $?
+        #   ```
     _framework_locator() {
         local script_file=""
         local path_without_root=""
@@ -199,7 +209,9 @@ set -uo pipefail
         #   0 always.
         #
         # . Usage
+        #   ```bash
         #   _scan_cli_args "$@"
+        #   ```
     _scan_cli_args() {
         local arg=""
         local expect=""
@@ -230,7 +242,9 @@ set -uo pipefail
         #   0 always.
         #
         # . Usage
+        #   ```bash
         #   _cleanup_staging
+        #   ```
     _cleanup_staging() {
         [[ -n "$STAGING_ROOT" && -d "$STAGING_ROOT" ]] && rm -rf -- "$STAGING_ROOT"
         return 0
@@ -241,7 +255,9 @@ set -uo pipefail
         #   0 when a readable archive is resolved; 1 otherwise.
         #
         # . Usage
+        #   ```bash
         #   _resolve_archive || return $?
+        #   ```
     _resolve_archive() {
         if [[ "$ARCHIVE_FILE" == /* ]]; then
             RESOLVED_ARCHIVE="$ARCHIVE_FILE"
@@ -267,7 +283,9 @@ set -uo pipefail
         #   0 when at least one archive is available; 1 otherwise.
         #
         # . Usage
+        #   ```bash
         #   _list_archives || return $?
+        #   ```
     _list_archives() {
         AVAILABLE_ARCHIVES=()
 
@@ -306,7 +324,9 @@ set -uo pipefail
         #   0 after a valid selection; non-zero when no archives are available.
         #
         # . Usage
+        #   ```bash
         #   _select_archive || return $?
+        #   ```
     _select_archive() {
         local selection=""
 
@@ -326,7 +346,9 @@ set -uo pipefail
         #   0 when every archive path is safe and relative; 1 otherwise.
         #
         # . Usage
+        #   ```bash
         #   _validate_archive_entries || return $?
+        #   ```
     _validate_archive_entries() {
         local entry=""
 
@@ -347,7 +369,9 @@ set -uo pipefail
         #   0 when settings and archive are usable; 1 otherwise.
         #
         # . Usage
+        #   ```bash
         #   _validate_parameters || return $?
+        #   ```
     _validate_parameters() {
         case "$ARCHIVE_DIRECTORY" in /*) ;; *) sayfail "Archive directory must be absolute."; return 1 ;; esac
         case "$RESTORE_TARGET_ROOT" in /*) ;; *) sayfail "Restore target root must be absolute."; return 1 ;; esac
@@ -376,7 +400,9 @@ set -uo pipefail
         #   0 when settings are valid and confirmed; 1 on cancellation.
         #
         # . Usage
+        #   ```bash
         #   _getparameters || return $?
+        #   ```
     _getparameters() {
         local reply=0
 
@@ -441,7 +467,9 @@ set -uo pipefail
         #   0 on success; non-zero on extraction failure.
         #
         # . Usage
+        #   ```bash
         #   _extract_staging || return $?
+        #   ```
     _extract_staging() {
         STAGING_ROOT="$(mktemp -d)" || return 1
         tar -xzf "$RESOLVED_ARCHIVE" -C "$STAGING_ROOT" --no-same-owner || {
@@ -459,7 +487,9 @@ set -uo pipefail
         #   0 when one or more files match; 1 otherwise.
         #
         # . Usage
+        #   ```bash
         #   _select_files || return $?
+        #   ```
     _select_files() {
         local search_root="$STAGING_ROOT"
         local file=""
@@ -493,7 +523,9 @@ set -uo pipefail
         #   0 after successful restoration; non-zero on failure.
         #
         # . Usage
+        #   ```bash
         #   _restore_files
+        #   ```
     _restore_files() {
         local rel=""
         local src=""
@@ -536,7 +568,9 @@ set -uo pipefail
         #   Workflow exit status.
         #
         # . Usage
+        #   ```bash
         #   main "$@"
+        #   ```
     main() {
         _scan_cli_args "$@"
         _framework_locator || exit $?

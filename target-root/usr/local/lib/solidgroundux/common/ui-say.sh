@@ -73,7 +73,9 @@ set -uo pipefail
         #   Exits with code 2 when executed instead of sourced.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_lib_guard
+        #   ```
     _sgnd_lib_guard() {
         local lib_base=""
         local guard=""
@@ -130,7 +132,9 @@ set -uo pipefail
         #   0 always.
         #
         # . Usage
-        #   _say_normalize_log_level "example"
+        #   ```bash
+        #   _say_normalize_log_level "warn"
+        #   ```
     _say_normalize_log_level() {
 
         case "${1,,}" in
@@ -187,7 +191,9 @@ set -uo pipefail
         #   1 if the message should be suppressed.
         #
         # . Usage
-        #   _say_should_print_console "example"
+        #   ```bash
+        #   _say_should_print_console WARN
+        #   ```
     _say_should_print_console() {
 
         local type="${1^^}"
@@ -269,7 +275,9 @@ set -uo pipefail
         #   1 when the message should be suppressed.
         #
         # . Usage
-        #   _say_should_write_log "example"
+        #   ```bash
+        #   _say_should_write_log DEBUG
+        #   ```
     _say_should_write_log() {
         local type="${1^^}"
         local level
@@ -294,27 +302,23 @@ set -uo pipefail
             *) return 1 ;;
         esac
     }
-
     # fn: _say_caller - Say caller
         # . Purpose
-        #   Determine the script or function context that emitted a say message.
-        #
-        # . Behavior
-        #   - Preserves the existing SolidGroundUX console/UI behavior.
-        #   - Uses current palette, style, runtime, or logging globals where applicable.
+        #   Find the first non-say caller in the current Bash function stack.
         #
         # . Arguments
-        #   $@ - Values consumed by the helper. See usage for the expected call shape.
+        #   No arguments; reads FUNCNAME, BASH_SOURCE and BASH_LINENO.
         #
         # . Output
-        #   Writes formatted text or computed values to stdout unless the function targets /dev/tty.
+        #   Prints caller function, file and line separated by tabs.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, I/O, or user cancellation fails.
+        #   0 when a caller is found.
         #
         # . Usage
-        #   _say_caller 1
+        #   ```bash
+        #   _say_caller
+        #   ```
     _say_caller() {
         local i
         for ((i=1; i<${#FUNCNAME[@]}; i++)); do
@@ -333,30 +337,23 @@ set -uo pipefail
         done
         printf '<main>\t<unknown>\t?'
     }
-
     # fn: _say_write_log - Say write log
         # . Purpose
-        #   Append a formatted say message to the active SolidGroundUX log file.
-        #
-        # . Behavior
-        #   - Preserves the existing SolidGroundUX console/UI behavior.
-        #   - Uses current palette, style, runtime, or logging globals where applicable.
+        #   Append an eligible structured message to the configured logfile.
         #
         # . Arguments
-        #   $@ - Values consumed by the helper. See usage for the expected call shape.
+        #   $1: message type; $2: text; $3: timestamp.
         #
         # . Output
-        #   Writes formatted text or computed values to stdout unless the function targets /dev/tty.
-        #
-        # Outputs (globals):
-        #   Updates SolidGroundUX UI/runtime globals documented by the function body.
+        #   Writes to the chosen logfile when the log level permits.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, I/O, or user cancellation fails.
+        #   0 when logging is skipped or completed; depends on filesystem operations on errors.
         #
         # . Usage
-        #   _say_write_log "example" "example-2" "2026-07-31"
+        #   ```bash
+        #   _say_write_log INFO "Service started" "$(date +%FT%T)"
+        #   ```
     _say_write_log() {
         local type="${1^^}"
         local msg="$2"
@@ -401,27 +398,23 @@ set -uo pipefail
 
         printf '%s\n' "$log_line" >>"$logfile" 2>/dev/null || true
     }
-
     # fn: _sgnd_rotate_logs - Rotate logs
         # . Purpose
-        #   Rotate log files when log retention settings require it.
-        #
-        # . Behavior
-        #   - Preserves the existing SolidGroundUX console/UI behavior.
-        #   - Uses current palette, style, runtime, or logging globals where applicable.
+        #   Rotate a logfile when it reaches the configured size threshold.
         #
         # . Arguments
-        #   $@ - Values consumed by the helper. See usage for the expected call shape.
+        #   $1: logfile path; reads SGND_LOG_MAX_BYTES and SGND_LOG_KEEP.
         #
-        # Outputs (globals):
-        #   Updates SolidGroundUX UI/runtime globals documented by the function body.
+        # . Output
+        #   Moves old logfiles to rotated suffixes, optionally compressing them.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, I/O, or user cancellation fails.
+        #   0 when rotation is unnecessary or completed; filesystem failures may be reported.
         #
         # . Usage
-        #   _sgnd_rotate_logs "/tmp/sgnd-example.txt"
+        #   ```bash
+        #   _sgnd_rotate_logs "$SGND_LOG_PATH"
+        #   ```
     _sgnd_rotate_logs() {
             # . Usage _sgnd_rotate_logs "/path/to/logfile"
             local logfile="$1"
@@ -456,27 +449,23 @@ set -uo pipefail
             # Trim oldest beyond keep
             rm -f -- "${logfile}.$((SGND_LOG_KEEP+1))" "${logfile}.$((SGND_LOG_KEEP+1)).gz" 2>/dev/null || true
     }
-
     # fn: _sgnd_logfile - Logfile
         # . Purpose
-        #   Resolve the active SolidGroundUX log file path.
-        #
-        # . Behavior
-        #   - Preserves the existing SolidGroundUX console/UI behavior.
-        #   - Uses current palette, style, runtime, or logging globals where applicable.
+        #   Select the first configured logfile that can be appended to.
         #
         # . Arguments
-        #   $@ - Values consumed by the helper. See usage for the expected call shape.
+        #   No arguments; reads SGND_LOG_PATH and SGND_ALTLOG_PATH.
         #
         # . Output
-        #   Writes formatted text or computed values to stdout unless the function targets /dev/tty.
+        #   Prints the selected logfile path without a newline.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, I/O, or user cancellation fails.
+        #   0 when a writable target is found; 1 otherwise.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_logfile
+        #   ```
     _sgnd_logfile() {
         
         # Determine logfile path according to priority:
@@ -494,30 +483,23 @@ set -uo pipefail
 
         return 1
     }
-
     # fn: _sayprogress_write_slot - Sayprogress write slot
         # . Purpose
-        #   Render one progress slot in the active sayprogress line.
-        #
-        # . Behavior
-        #   - Preserves the existing SolidGroundUX console/UI behavior.
-        #   - Uses current palette, style, runtime, or logging globals where applicable.
+        #   Update one line of the multi-slot terminal progress display.
         #
         # . Arguments
-        #   $@ - Values consumed by the helper. See usage for the expected call shape.
+        #   $1: zero-based progress slot; $2: rendered text.
         #
         # . Output
-        #   Writes formatted text or computed values to stdout unless the function targets /dev/tty.
-        #
-        # Outputs (globals):
-        #   Updates SolidGroundUX UI/runtime globals documented by the function body.
+        #   Writes cursor positioning and text to stderr.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, I/O, or user cancellation fails.
+        #   Status of terminal output.
         #
         # . Usage
-        #   _sayprogress_write_slot "example" "SolidGroundUX example"
+        #   ```bash
+        #   _sayprogress_write_slot 0 "Downloading packages"
+        #   ```
     _sayprogress_write_slot() {
         local slot="${1:-0}"
         local text="${2:-}"
@@ -541,30 +523,23 @@ set -uo pipefail
 
         SGND_LINEBREAK_PENDING=1
     }
-
     # fn: _sgnd_ensure_linebreak - Ensure linebreak
         # . Purpose
-        #   Ensure the next message starts on a clean line after progress output.
-        #
-        # . Behavior
-        #   - Preserves the existing SolidGroundUX console/UI behavior.
-        #   - Uses current palette, style, runtime, or logging globals where applicable.
+        #   Finish a pending terminal output line before printing another message.
         #
         # . Arguments
-        #   $@ - Values consumed by the helper. See usage for the expected call shape.
+        #   No arguments; reads and clears SGND_LINEBREAK_PENDING.
         #
         # . Output
-        #   Writes formatted text or computed values to stdout unless the function targets /dev/tty.
-        #
-        # Outputs (globals):
-        #   Updates SolidGroundUX UI/runtime globals documented by the function body.
+        #   Prints a newline on stderr only when a line break is pending.
         #
         # . Returns
-        #   0 on success.
-        #   Non-zero when validation, resolution, I/O, or user cancellation fails.
+        #   0 when completed.
         #
         # . Usage
-        #   _sgnd_ensure_linebreak "example"
+        #   ```bash
+        #   _sgnd_ensure_linebreak
+        #   ```
     _sgnd_ensure_linebreak() {
         if (( ${SGND_LINEBREAK_PENDING:-0} )); then
             printf '\n' >&2
@@ -633,10 +608,12 @@ set -uo pipefail
         #   0 always. Unknown message types are normalized to EMPTY.
         #
         # . Usage
+        #   ```bash
         #   say INFO "Starting workspace deployment"
         #   say --type WARN --date "Configuration file not found"
         #   say --show label,icon --colorize all OK "Deployment completed"
         #   say "Plain output without a message prefix"
+        #   ```
     say() {
       # -- Declarations
         local type="EMPTY"
@@ -917,7 +894,9 @@ set -uo pipefail
         #   1 when an unknown argument is supplied.
         #
         # . Usage
+        #   ```bash
         #   sayprogress_begin --slots 2
+        #   ```
     sayprogress_begin() {
         local slots=1
 
@@ -1001,7 +980,9 @@ set -uo pipefail
         #   1 when an unknown argument is supplied.
         #
         # . Usage
-        #   sayprogress "example" "example-2"
+        #   ```bash
+        #   sayprogress --current 5 --total 10 --label "Processing"
+        #   ```
     sayprogress() {
         local current=0
         local slot=0
@@ -1163,7 +1144,9 @@ set -uo pipefail
         #   0 always.
         #
         # . Usage
+        #   ```bash
         #   sayprogress_done "Package installation complete"
+        #   ```
     sayprogress_done() {
         local slots="${SGND_PROGRESS_RESERVED:-0}"
         local i
@@ -1199,7 +1182,9 @@ set -uo pipefail
                 #   0 when the message was handled.
                 #
                 # . Usage
+                #   ```bash
                 #   sayinfo "SolidGroundUX example"
+                #   ```
         sayinfo() {
             say INFO "$@"
         }
@@ -1218,7 +1203,9 @@ set -uo pipefail
                 #   0 when the message was handled.
                 #
                 # . Usage
+                #   ```bash
                 #   saystart "Starting SolidGroundUX example"
+                #   ```
         saystart() {
             say STRT "$@"
         }
@@ -1232,7 +1219,9 @@ set -uo pipefail
             #   - Defaults to SGND_UI_WARNING_DELAY (fallback 0.5); an explicit --delay supplied by the caller overrides it.
             #
             # . Usage
+            #   ```bash
             #   saywarning "Example warning"
+            #   ```
             #
             # Examples:
             #   saywarning "Configuration missing"
@@ -1258,7 +1247,9 @@ set -uo pipefail
                 #   0 when the message was handled.
                 #
                 # . Usage
+                #   ```bash
                 #   sayfail "Example failure"
+                #   ```
         sayfail() {
             say FAIL --delay "${SGND_UI_ERROR_DELAY:-0.5}" "$@"
         }
@@ -1277,7 +1268,9 @@ set -uo pipefail
                 #   0 when the message was handled.
                 #
                 # . Usage
+                #   ```bash
                 #   saycancel "Operation cancelled"
+                #   ```
         saycancel() {
             say CNCL "$@"
         }
@@ -1296,7 +1289,9 @@ set -uo pipefail
                 #   0 when the message was handled.
                 #
                 # . Usage
+                #   ```bash
                 #   sayok "Operation completed"
+                #   ```
         sayok() {
             say OK "$@"
         }
@@ -1315,7 +1310,9 @@ set -uo pipefail
                 #   0 when the message was handled.
                 #
                 # . Usage
+                #   ```bash
                 #   sayend "SolidGroundUX example complete"
+                #   ```
         sayend() {
             say END "$@"
         }
@@ -1328,7 +1325,9 @@ set -uo pipefail
             #   - Prints directly to stdout.
             #
             # . Usage
+            #   ```bash
             #   justsay "Hello world"
+            #   ```
             #
             # Examples:
             #   justsay "Raw output"
@@ -1346,7 +1345,9 @@ set -uo pipefail
                 #   0 when the message was handled.
                 #
                 # . Usage
+                #   ```bash
                 #   justsay "Raw status line"
+                #   ```
         justsay() {
             printf '%s\n' "$@"
         }
@@ -1365,7 +1366,9 @@ set -uo pipefail
                 #   0 when the message was ignored or handled.
                 #
                 # . Usage
+                #   ```bash
                 #   saydebug "Example debug message"
+                #   ```
         saydebug() {
             local src="${BASH_SOURCE[1]##*/}"
             local func="${FUNCNAME[1]}"

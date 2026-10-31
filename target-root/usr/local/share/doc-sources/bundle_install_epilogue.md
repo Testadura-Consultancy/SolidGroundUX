@@ -1,3 +1,8 @@
+---
+title: "Install and update"
+nav_order: 10
+---
+
 # Installing SolidGroundUX
 
 SolidGroundUX uses the standalone `sgnd-setup.sh` tool for installation, update,

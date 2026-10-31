@@ -19,6 +19,17 @@
 #   library or console module. Files containing neither target are skipped; files
 #   containing both are rejected.
 #
+# Usage:
+#   Run the executable from its shell command (or installed wrapper):
+#   ```bash
+#   normalize-canon /path/to/file.sh
+#   normalize-canon '/path/to/project/**/*.sh'
+#   normalize-canon '/path/to/project/usr/local/lib/**/*.sh'
+#   ```
+#
+#   Script-specific options:
+#   - `--auto`, `-a`: Run using command-line inputs or saved parameters.
+#
 # Attribution:
 #   Developers  : Mark Fieten
 #   Company     : Testadura Consultancy
@@ -60,7 +71,9 @@ set -uo pipefail
         #   be found, or the executable common library is unreadable.
         #
         # . Usage
+        #   ```bash
         #   _framework_locator || return $?
+        #   ```
     _framework_locator() {
         local script_file=""
         local path_without_root=""
@@ -169,7 +182,9 @@ set -uo pipefail
         #   0 after command-line inputs have been collected.
         #
         # . Usage
+        #   ```bash
         #   _collect_cli_inputs "$@"
+        #   ```
     _collect_cli_inputs() {
         local arg=""
 
@@ -213,7 +228,9 @@ set -uo pipefail
         #   0 when usable input has been resolved; 2 when auto mode has no usable input.
         #
         # . Usage
+        #   ```bash
         #   _get_parameters
+        #   ```
     _get_parameters() {
         local cli_default=""
 
@@ -270,7 +287,9 @@ set -uo pipefail
         #   0 when both canonical fragments are readable; 1 otherwise.
         #
         # . Usage
+        #   ```bash
         #   _resolve_canon_files
+        #   ```
     _resolve_canon_files() {
         local canon_directory=""
 
@@ -306,7 +325,9 @@ set -uo pipefail
         #   1 when both mutually exclusive target functions are present.
         #
         # . Usage
+        #   ```bash
         #   _detect_canonical_target "$file" target
+        #   ```
     _detect_canonical_target() {
         local file="${1:?missing file}"
         local output_var="${2:?missing output variable}"
@@ -344,7 +365,9 @@ set -uo pipefail
         #   0 when replacement succeeds; non-zero on malformed input or write failure.
         #
         # . Usage
+        #   ```bash
         #   _replace_framework_locator "$file"
+        #   ```
     _replace_framework_locator() {
         local file="${1:?missing file}"
         local temp_file=""
@@ -450,7 +473,9 @@ set -uo pipefail
         #   0 when replacement succeeds; non-zero when the section is malformed.
         #
         # . Usage
+        #   ```bash
         #   _replace_library_guard "$file"
+        #   ```
     _replace_library_guard() {
         local file="${1:?missing file}"
         local temp_file=""
@@ -517,7 +542,9 @@ set -uo pipefail
         #   0 when at least one file matches; 1 otherwise.
         #
         # . Usage
+        #   ```bash
         #   _expand_input "$input"
+        #   ```
     _expand_input() {
         local input="${1:?missing input}"
         local match=""
@@ -545,7 +572,9 @@ set -uo pipefail
         #   0 for replaced or skipped files; non-zero on structural failure.
         #
         # . Usage
+        #   ```bash
         #   _normalize_file "$file"
+        #   ```
     _normalize_file() {
         local file="${1:?missing file}"
         local target=""
@@ -603,7 +632,9 @@ set -uo pipefail
         #   0 when all matching files were processed successfully; non-zero otherwise.
         #
         # . Usage
+        #   ```bash
         #   main "$@"
+        #   ```
     main() {
         local input=""
         local file=""

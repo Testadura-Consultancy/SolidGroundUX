@@ -67,7 +67,9 @@ set -uo pipefail
         #   Exits with code 2 when executed instead of sourced.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_lib_guard
+        #   ```
     _sgnd_lib_guard() {
         local lib_base=""
         local guard=""
@@ -102,7 +104,9 @@ set -uo pipefail
         #   1 otherwise.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_flag_is_on "${FLAG_DRYRUN:-0}"
+        #   ```
     _sgnd_flag_is_on() {
         case "${1:-}" in
             1|true|TRUE|yes|YES|on|ON) return 0 ;;
@@ -129,7 +133,9 @@ set -uo pipefail
         #   0 after rendering.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_console_toggleword "MODE" "M" 1 "$SGND_UI_ON" "$SGND_UI_OFF"
+        #   ```
     _sgnd_console_toggleword() {
         local word="${1:?missing word}"
         local hotkey="${2:?missing hotkey}"
@@ -183,7 +189,9 @@ set -uo pipefail
         #   0 after rendering.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_console_statusword "MODE" "DRY-RUN" "$SGND_UI_DRYRUN" "M"
+        #   ```
     _sgnd_console_statusword() {
         local label="${1:?missing label}"
         local value="${2:?missing value}"
@@ -217,7 +225,9 @@ set -uo pipefail
         #   0 after rendering.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_console_onoff "$FLAG_DRYRUN" "$SGND_UI_DRYRUN" "$SGND_UI_COMMIT"
+        #   ```
     _sgnd_console_onoff() {
         local value="${1:-0}"
         local onclr="${2:-$SGND_UI_ON}"
@@ -238,7 +248,9 @@ set -uo pipefail
         #   0 after rendering.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_console_label_clearonrender
+        #   ```
     _sgnd_console_label_clearonrender() {
         : "${SGND_CLEAR_ONRENDER:=1}"
         printf 'Clear screen: %s' "$(_sgnd_console_onoff "$SGND_CLEAR_ONRENDER")"
@@ -251,7 +263,9 @@ set -uo pipefail
         #   0 after rendering.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_console_label_dryrun
+        #   ```
     _sgnd_console_label_dryrun() {
         : "${FLAG_DRYRUN:=0}"
         printf 'Dry-run: %s' "$(_sgnd_console_onoff "$FLAG_DRYRUN" "$SGND_UI_DRYRUN" "$SGND_UI_COMMIT")"
@@ -264,7 +278,9 @@ set -uo pipefail
         #   0 after rendering.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_console_label_debug
+        #   ```
     _sgnd_console_label_debug() {
         : "${FLAG_DEBUG:=0}"
         printf 'Debug: %s' "$(_sgnd_console_onoff "$FLAG_DEBUG")"
@@ -277,7 +293,9 @@ set -uo pipefail
         #   0 after rendering.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_console_label_verbose
+        #   ```
     _sgnd_console_label_verbose() {
         : "${FLAG_VERBOSE:=0}"
         printf 'Verbose: %s' "$(_sgnd_console_onoff "$FLAG_VERBOSE")"
@@ -290,7 +308,9 @@ set -uo pipefail
         #   0 after rendering.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_console_label_logfile
+        #   ```
     _sgnd_console_label_logfile() {
         : "${SGND_LOGFILE_ENABLED:=0}"
         printf 'Logfile: %s' "$(_sgnd_console_onoff "$SGND_LOGFILE_ENABLED")"
@@ -307,7 +327,9 @@ set -uo pipefail
         #   0 after toggling.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_console_toggle_clearonrender
+        #   ```
     _sgnd_console_toggle_clearonrender() {
         : "${SGND_CLEAR_ONRENDER:=1}"
 
@@ -330,7 +352,9 @@ set -uo pipefail
         #   Status returned by sgnd_update_runmode.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_console_toggle_debug
+        #   ```
     _sgnd_console_toggle_debug() {
         : "${FLAG_DEBUG:=0}"
 
@@ -354,7 +378,9 @@ set -uo pipefail
         #   0 after toggling.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_console_toggle_verbose
+        #   ```
     _sgnd_console_toggle_verbose() {
         : "${FLAG_VERBOSE:=0}"
 
@@ -378,7 +404,9 @@ set -uo pipefail
         #   0 after rendering.
         #
         # . Usage
+        #   ```bash
         #   theme="$(_sgnd_console_theme_name)"
+        #   ```
     _sgnd_console_theme_name() {
         local style="${SGND_UI_STYLE##*/}"
 
@@ -403,7 +431,9 @@ set -uo pipefail
         #   0 on success; non-zero on cancellation or invalid input.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_console_set_lines_per_page
+        #   ```
     _sgnd_console_set_lines_per_page() {
         local lines="${SGND_PAGE_MAX_ROWS:-25}"
 
@@ -428,7 +458,9 @@ set -uo pipefail
         #   0; the host loop redraws the menu on the next iteration.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_console_redraw
+        #   ```
     _sgnd_console_redraw() {
         # Force layout-dependent caches to be recalculated on the next draw.
         # Terminal width itself is re-read from /dev/tty by sgnd_terminal_width.
@@ -441,7 +473,9 @@ set -uo pipefail
         #   200, the menu termination sentinel.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_console_quit
+        #   ```
     _sgnd_console_quit() {
         return 200
     }
@@ -457,7 +491,9 @@ set -uo pipefail
         #   0 after applying navigation.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_console_nextpage
+        #   ```
     _sgnd_console_nextpage() {
         _sgnd_console_build_pages
 
@@ -475,7 +511,9 @@ set -uo pipefail
         #   0 after applying navigation.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_console_prevpage
+        #   ```
     _sgnd_console_prevpage() {
         if (( SGND_PAGE_INDEX > 0 )); then
             SGND_PAGE_INDEX=$(( SGND_PAGE_INDEX - 1 ))
@@ -500,7 +538,9 @@ set -uo pipefail
         #   0 after rebuilding or when the cache is already current.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_console_refresh_model_cache
+        #   ```
     _sgnd_console_refresh_model_cache() {
         local group_count="${#SGND_GROUP_ROWS[@]}"
         local item_count="${#SGND_ITEM_ROWS[@]}"
@@ -597,7 +637,9 @@ set -uo pipefail
         #   0 after collecting indexes.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_console_collect_group_render_indexes
+        #   ```
     _sgnd_console_collect_group_render_indexes() {
         _sgnd_console_refresh_model_cache
 
@@ -663,7 +705,9 @@ set -uo pipefail
         #   0 after collecting indexes.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_console_collect_visible_item_indexes
+        #   ```
     _sgnd_console_collect_visible_item_indexes() {
         _sgnd_console_refresh_model_cache
 
@@ -729,7 +773,9 @@ set -uo pipefail
         #   0 after counting.
         #
         # . Usage
+        #   ```bash
         #   count="$(_sgnd_console_visible_item_count)"
+        #   ```
     _sgnd_console_visible_item_count() {
         printf '%s\n' "${#SGND_VISIBLE_ITEM_INDEXES[@]}"
     }
@@ -744,7 +790,9 @@ set -uo pipefail
         #   0 when resolved; 1 when the position is out of range.
         #
         # . Usage
+        #   ```bash
         #   row="$(_sgnd_console_get_visible_row_index 0)"
+        #   ```
     _sgnd_console_get_visible_row_index() {
         local visible_index="${1:?missing visible index}"
 
@@ -764,7 +812,9 @@ set -uo pipefail
         # . Output
         #   Numeric chapter identifier. Sources without a numeric prefix use chapter 0.
         # . Usage
+        #   ```bash
         #   _sgnd_menu_module_chapter "<source>"
+        #   ```
     _sgnd_menu_module_chapter() {
         local source="${1:-}"
         local module_number=""
@@ -792,7 +842,9 @@ set -uo pipefail
         #   0 when the row is visible; 1 otherwise.
         #
         # . Usage
+        #   ```bash
         #   number="$(_sgnd_console_get_visible_display_number "$row_index")"
+        #   ```
     _sgnd_console_get_visible_display_number() {
         local row_index="${1:?missing row index}"
         local i
@@ -830,7 +882,9 @@ set -uo pipefail
         #   0 when found; 1 when the row is not visible.
         #
         # . Usage
+        #   ```bash
         #   pos="$(_sgnd_console_find_visible_pos_for_row "$row_index")"
+        #   ```
     _sgnd_console_find_visible_pos_for_row() {
         local row_index="${1:?missing row index}"
         local i
@@ -853,7 +907,9 @@ set -uo pipefail
         #   0 when another visible row belongs to GROUP_KEY; 1 otherwise.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_console_group_continues_after_visible_pos "storage" 4
+        #   ```
     _sgnd_console_group_continues_after_visible_pos() {
         local group_key="${1:?missing group key}"
         local last_visible_pos="${2:?missing visible position}"
@@ -884,7 +940,9 @@ set -uo pipefail
         #   0 after calculating the height.
         #
         # . Usage
+        #   ```bash
         #   height="$(_sgnd_console_body_height)"
+        #   ```
     _sgnd_console_body_height() {
         local body_height="${SGND_PAGE_MAX_ROWS:-25}"
 
@@ -902,7 +960,9 @@ set -uo pipefail
         #   0 after measuring.
         #
         # . Usage
+        #   ```bash
         #   lines="$(_sgnd_console_measure_item_lines "$row_index")"
+        #   ```
     _sgnd_console_measure_item_lines() {
         local row_index="${1:?missing row index}"
         local desc=""
@@ -940,7 +1000,9 @@ set -uo pipefail
         #   0 after rendering the value.
         #
         # . Usage
+        #   ```bash
         #   lines="$(_sgnd_console_measure_group_header_lines)"
+        #   ```
     _sgnd_console_measure_group_header_lines() {
         # group label + underline
         printf '2\n'
@@ -955,7 +1017,9 @@ set -uo pipefail
         # . Returns
         #   0 after calculating the width.
         # . Usage
+        #   ```bash
         #   _sgnd_console_display_key_width
+        #   ```
     _sgnd_console_display_key_width() {
         local row_index=0
         local display_key=""
@@ -990,7 +1054,9 @@ set -uo pipefail
         #   0 after calculating or returning the cached value.
         #
         # . Usage
+        #   ```bash
         #   width="$(_sgnd_console_calc_label_width)"
+        #   ```
     _sgnd_console_calc_label_width() {
         _sgnd_console_collect_visible_item_indexes
 
@@ -1069,7 +1135,9 @@ set -uo pipefail
         #   0 after building or reusing the page layout.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_console_build_pages
+        #   ```
     _sgnd_console_build_pages() {
         local body_height=0
         local term_width=80
@@ -1189,7 +1257,9 @@ set -uo pipefail
         #   0 after rendering.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_console_render_menu
+        #   ```
     _sgnd_console_render_menu() {
         _sgnd_console_refresh_model_cache
         local idx=""
@@ -1230,7 +1300,9 @@ set -uo pipefail
         #   0 after rendering.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_console_render_menu_title
+        #   ```
     _sgnd_console_render_menu_title() {
         sgnd_clear
 
@@ -1293,7 +1365,9 @@ set -uo pipefail
         #   0 after rendering or when no page indicator is required.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_console_render_page_header
+        #   ```
     _sgnd_console_render_page_header() {
         local page_count=0
         local page_text=""
@@ -1334,7 +1408,9 @@ set -uo pipefail
         #   0 after rendering or when there are no visible items.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_console_render_menu_body_paged
+        #   ```
     _sgnd_console_render_menu_body_paged() {
         local visible_count=0
         local page_row_offset=0
@@ -1396,7 +1472,9 @@ set -uo pipefail
         #   0 after rendering.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_console_render_page_rows page_groups page_rows
+        #   ```
     _sgnd_console_render_page_rows() {
         local -n _page_groups="$1"
         local -n _page_rows="$2"
@@ -1545,7 +1623,9 @@ set -uo pipefail
         #   0 when rendered or when the group has nothing renderable.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_console_render_group "runtime"
+        #   ```
     _sgnd_console_render_group() {
         local group_key="${1:?missing group key}"
         local _tpad=3
@@ -1709,7 +1789,9 @@ set -uo pipefail
         #   0 after rendering.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_console_render_togglebar
+        #   ```
     _sgnd_console_render_togglebar() {
         local render_width=80
         local pad=3
@@ -1798,7 +1880,9 @@ set -uo pipefail
         #   0 after resetting the menu model.
         #
         # . Usage
+        #   ```bash
         #   sgnd_menu_create "Storage Management" "Manage disks and pools"
+        #   ```
     sgnd_menu_create() {
         SGND_CONSOLE_TITLE="${1:-${SGND_SCRIPT_TITLE:-SolidGroundUX}}"
         SGND_CONSOLE_DESC="${2:-${SGND_SCRIPT_DESC:-}}"
@@ -1869,7 +1953,9 @@ set -uo pipefail
         #   0 when registered or already present; non-zero on datatable failure.
         #
         # . Usage
+        #   ```bash
         #   sgnd_menu_register_group "storage" "Storage" "Manage local storage" 0 1 10
+        #   ```
     sgnd_menu_register_group() {
         local key="${1:?missing group key}"
         local label="${2-}"
@@ -1908,7 +1994,9 @@ set -uo pipefail
         #   0 when registered; non-zero on validation, duplicate-key, or handler errors.
         #
         # . Usage
+        #   ```bash
         #   sgnd_menu_register_item "status" "system" "Show status" "show_status" "Display current status" 0 15 1 0
+        #   ```
     sgnd_menu_register_item() {
         local key="${1:?missing key}"
         local group="${2:-main}"
@@ -1965,7 +2053,9 @@ set -uo pipefail
         #   0 when updated; 1 when the item does not exist or status is invalid.
         #
         # . Usage
+        #   ```bash
         #   sgnd_menu_set_item_status "storage-status" "success"
+        #   ```
     sgnd_menu_set_item_status() {
         local item_key="${1:?missing item key}"
         local status="${2:-}"
@@ -2000,7 +2090,9 @@ set -uo pipefail
         #   0 after rendering.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_menu_status_text "success" "$label_style"
+        #   ```
     _sgnd_menu_status_text() {
         local status="${1:-}"
         local label_style="${2:-}"
@@ -2031,8 +2123,10 @@ set -uo pipefail
         #   0 after rendering.
         #
         # . Usage
+        #   ```bash
         #   SGND_MENU_SHOW_TOGGLEBAR=0
         #   sgnd_menu_show_menu
+        #   ```
     sgnd_menu_show_menu() {
         _sgnd_console_render_menu
     }
@@ -2045,7 +2139,9 @@ set -uo pipefail
         #   Status returned by sgnd_menu_register_group.
         #
         # . Usage
+        #   ```bash
         #   sgnd_console_register_group "storage" "Storage" "Manage local storage" 0 1 10
+        #   ```
     sgnd_console_register_group() { sgnd_menu_register_group "$@"; }
 
     # fn: sgnd_console_register_item - Compatibility alias for sgnd_menu_register_item
@@ -2053,7 +2149,9 @@ set -uo pipefail
         #   Status returned by sgnd_menu_register_item.
         #
         # . Usage
+        #   ```bash
         #   sgnd_console_register_item "status" "system" "Show status" "show_status" "Display current status" 0 15 1 0
+        #   ```
     sgnd_console_register_item() { sgnd_menu_register_item "$@"; }
 
 # - Menu input and dispatch --------------------------------------------------------
@@ -2080,7 +2178,9 @@ set -uo pipefail
         #   0 on input; non-zero when /dev/tty cannot be read.
         #
         # . Usage
+        #   ```bash
         #   sgnd_menu_read_choice choice
+        #   ```
     sgnd_menu_read_choice() {
         local output_var="${1:?missing output variable}"
         local key=""
@@ -2160,7 +2260,9 @@ set -uo pipefail
         #   Status returned by the selected menu action or navigation operation.
         #
         # . Usage
+        #   ```bash
         #   sgnd_menu_dispatch "$choice"
+        #   ```
     sgnd_menu_dispatch() {
         _sgnd_console_dispatch "$@"
     }
@@ -2177,7 +2279,9 @@ set -uo pipefail
         #   0 after building the list.
         #
         # . Usage
+        #   ```bash
         #   choices="$(_sgnd_console_valid_choices_csv)"
+        #   ```
     _sgnd_console_valid_choices_csv() {
         local i
         local out=""
@@ -2223,7 +2327,9 @@ set -uo pipefail
         # . Returns
         #   Exit status from the host executor or registered handler.
         # . Usage
+        #   ```bash
         #   _sgnd_menu_execute_item "<item_key>" "<handler>" "<builtin>"
+        #   ```
     _sgnd_menu_execute_item() {
         local item_key="${1:?missing item key}"
         local handler="${2:?missing handler}"
@@ -2253,7 +2359,9 @@ set -uo pipefail
         #   Exit status from the navigation operation or selected item; 1 for invalid choices.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_console_dispatch "3"
+        #   ```
     _sgnd_console_dispatch() {
         _sgnd_console_refresh_model_cache
 

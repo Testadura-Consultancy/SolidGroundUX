@@ -50,30 +50,28 @@
 #
 # > The SDK owns the development side of deployment:
 # >
-# >     prepare-release.sh
-# >         Builds and validates distributable product release packages.
+# > - **`prepare-release.sh`** — Builds and validates distributable product release packages.
 # >
-# >     deploy-workspace.sh
-# >         Transfers a development workspace into a target root for testing. It is not
-# >         an installer and does not define installed-release lifecycle state.
+# > - **`deploy-workspace.sh`** — Transfers a development workspace into a target root for testing. It is not an installer and does not define installed-release lifecycle state.
 # >
-# >     Documentation Generator
-# >         Regenerates the documentation shipped or published with a release.
 #
-# > The SDK Deployment section documents those tools together with the Setup workflow
-# > they feed. Framework reference pages document the installed scripts and APIs
-# > themselves.
+# > Documentation bundles and Markdown generation belong to MCM. The SDK Deployment
+# > section documents development deployment and release preparation, which produce
+# > release artifacts consumed by Framework setup. Framework reference pages describe
+# > installed scripts and APIs.
 #
 # -- Mental Model -------------------------------------------------------------------
 #
 # > The intended flow is:
 # >
-# >     source workspace
-# >         -> SDK development/test deployment
-# >         -> SDK release preparation
-# >         -> product release ZIPs
-# >         -> sgnd-setup
-# >         -> installed products
+# > ```text
+# > source workspace
+# >     -> SDK development/test deployment
+# >     -> SDK release preparation
+# >     -> product release ZIPs
+# >     -> sgnd-setup
+# >     -> installed products
+# > ```
 #
 # > Development deployment and installed-product lifecycle deliberately remain separate.
 # > A workspace can be copied repeatedly during development without creating release
@@ -81,6 +79,6 @@
 #
 # -- Where to Continue --------------------------------------------------------------
 #
-# > For release creation, first installation, command-line Setup examples, GitHub
-# > acquisition, workspace deployment, rollback, and recovery, continue with the
-# > SolidGroundUX SDK Deployment documentation.
+# > For workspace deployment and release preparation, continue with the SDK
+# > documentation. For installation, GitHub release acquisition, updates, rollback,
+# > recovery, and product removal, consult the Framework setup documentation.

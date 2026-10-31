@@ -17,6 +17,19 @@
 #   settings also used by the Management Console. It can show or change console logging,
 #   file logging, and the active UI theme without maintaining a separate configuration.
 #
+# Usage:
+#   Run the executable from its shell command (or installed wrapper):
+#   ```bash
+#   sgnd
+#   sgnd consoleloglevel quiet
+#   sgnd fileloglevel verbose
+#   sgnd theme mono-blue
+#   sgnd theme monoblue
+#   sgnd --dryrun consoleloglevel debug
+#   ```
+#
+#   Positional settings commands are shown in the examples above.
+#
 # Attribution:
 #   Developers  : Mark Fieten
 #   Company     : Testadura Consultancy
@@ -58,7 +71,9 @@ set -uo pipefail
         #   be found, or the executable common library is unreadable.
         #
         # . Usage
+        #   ```bash
         #   _framework_locator || return $?
+        #   ```
     _framework_locator() {
         local script_file=""
         local path_without_root=""
@@ -159,7 +174,9 @@ set -uo pipefail
         #   0 for silent, quiet, normal, verbose, debug, or trace; otherwise 1.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_preference_valid_loglevel quiet
+        #   ```
     _sgnd_preference_valid_loglevel() {
         case "${1:-}" in
             silent|quiet|normal|verbose|debug|trace) return 0 ;;
@@ -182,7 +199,9 @@ set -uo pipefail
         #   0 when a matching installed theme is found; otherwise 1.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_preference_theme_name monoblue
+        #   ```
     _sgnd_preference_theme_name() {
         local requested="${1:-}"
         local requested_normalized=""
@@ -231,7 +250,9 @@ set -uo pipefail
         #   0 after rendering current values.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_preference_show
+        #   ```
     _sgnd_preference_show() {
         local theme="${SGND_UI_STYLE:-00-style-default.sh}"
 
@@ -262,7 +283,9 @@ set -uo pipefail
         #   0 on success; 1 when the value is invalid or persistence fails.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_preference_set_loglevel SGND_CONSOLE_LOG_LEVEL quiet
+        #   ```
     _sgnd_preference_set_loglevel() {
         local key="${1:?missing framework state key}"
         local level="${2:-}"
@@ -298,7 +321,9 @@ set -uo pipefail
         #   0 on success; 1 when the theme is unavailable or cannot be applied/persisted.
         #
         # . Usage
+        #   ```bash
         #   _sgnd_preference_set_theme monoblue
+        #   ```
     _sgnd_preference_set_theme() {
         local requested="${1:-}"
         local theme=""
@@ -341,7 +366,9 @@ set -uo pipefail
         #   0 on success; 2 for invalid command syntax; non-zero for validation/persistence errors.
         #
         # . Usage
+        #   ```bash
         #   main "$@"
+        #   ```
     main() {
         local setting=""
         local value=""
