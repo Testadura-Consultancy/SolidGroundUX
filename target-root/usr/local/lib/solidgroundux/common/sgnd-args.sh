@@ -46,26 +46,26 @@
 # =====================================================================================
 set -uo pipefail
 # - Library guard ------------------------------------------------------------------
-    # fn$ _sgnd_lib_guard - Enforce source-only, single-load library initialization
+    # fn: _sgnd_lib_guard - Reject direct execution and track source state
         # . Purpose
-        #   Ensure the file is sourced as a library and initialized only once.
+        #   Ensure direct execution is rejected and record that the library has been sourced.
         #
         # . Behavior
         #   - Derives a unique guard variable name from the current filename.
         #   - Aborts execution when the file is run directly instead of sourced.
-        #   - Sets the guard variable on first load.
-        #   - Returns immediately when the library was already loaded.
+        #   - Records a guard variable on the first source operation.
+        #   - Returns early if the guard flag is already present; subsequent file statements still execute.
         #
-        # Inputs
-        #   BASH_SOURCE[0]
-        #   $0
+        # . Inputs
+        #   - BASH_SOURCE[0]
+        #   - $0
         #
-        # Outputs (globals)
+        # . Outputs (globals)
         #   SGND_<MODULE>_LOADED
         #
         # . Returns
-        #   0 when already loaded or successfully initialized.
-        #   Exits with code 2 when executed instead of sourced.
+        #   - 0 when already loaded or successfully initialized.
+        #   - Exits with code 2 when executed instead of sourced.
         #
         # . Usage
         #   ```bash
@@ -107,14 +107,14 @@ set -uo pipefail
         #   - Stores parsed fields in parser-scoped scratch variables.
         #
         # . Arguments
-        #   $1  Argument specification in name|short|type|var|help|default|choices format.
+        #   - `$1` — Argument specification in name|short|type|var|help|default|choices format.
         #
-        # Outputs (globals):
-        #   _sgnd_name, _sgnd_short, _sgnd_type, _sgnd_var
-        #   _sgnd_help, _sgnd_default, _sgnd_choices
+        # . Outputs (globals)
+        #   - _sgnd_name, _sgnd_short, _sgnd_type, _sgnd_var
+        #   - _sgnd_help, _sgnd_default, _sgnd_choices
         #
         # . Returns
-        #   0 always.
+        #   - 0 always.
         #
         # . Usage
         #   ```bash
@@ -135,17 +135,17 @@ set -uo pipefail
         #   - Prints the matching raw specification to stdout.
         #
         # . Arguments
-        #   $1  Long option name or short option letter to find.
+        #   - `$1` — Long option name or short option letter to find.
         #
-        # Inputs (globals):
+        # . Inputs (globals)
         #   SGND_EFFECTIVE_ARGS_SPEC
         #
         # . Output
         #   Matching raw argument specification on stdout.
         #
         # . Returns
-        #   0 when a matching specification is found.
-        #   1 when no matching specification exists.
+        #   - 0 when a matching specification is found.
+        #   - 1 when no matching specification exists.
         #
         # . Usage
         #   ```bash
@@ -176,12 +176,12 @@ set -uo pipefail
         #   - Produces no output.
         #
         # . Arguments
-        #   $1  Value to validate.
-        #   $2  Comma-separated list of allowed values.
+        #   - `$1` — Value to validate.
+        #   - `$2` — Comma-separated list of allowed values.
         #
         # . Returns
-        #   0 when the value is allowed.
-        #   1 when the value is not allowed.
+        #   - 0 when the value is allowed.
+        #   - 1 when the value is not allowed.
         #
         # . Usage
         #   ```bash
@@ -218,17 +218,16 @@ set -uo pipefail
         #   - Stores the selected combined specification in SGND_EFFECTIVE_ARGS_SPEC.
         #
         # . Arguments
-        #   $1  Source selector: builtins, script, or both.
-        #       Default: both
+        #   - `$1` — Source selector: builtins, script, or both. Default: both
         #
-        # Inputs (globals):
+        # . Inputs (globals)
         #   SGND_BUILTIN_ARGS, SGND_ARGS_SPEC
         #
-        # Outputs (globals):
+        # . Outputs (globals)
         #   SGND_EFFECTIVE_ARGS_SPEC and configured argument target variables.
         #
         # . Returns
-        #   0 always.
+        #   - 0 always.
         #
         # . Usage
         #   ```bash
@@ -342,7 +341,7 @@ set -uo pipefail
         #   Prints script usage, description, options and optional built-in options and examples.
         #
         # . Arguments
-        #   $1 - Include built-in options and examples (1, default), or omit them (0).
+        #   - `$1` — Include built-in options and examples (1, default), or omit them (0).
         #
         # . Output
         #   Writes formatted help to the console through the Framework UI helpers.
@@ -478,28 +477,25 @@ set -uo pipefail
         #     preserved script-specific arguments without imposing argument ordering.
         #
         # . Arguments
-        #   --stop-at-unknown
-        #       Optional parser mode; stop at the first option not present in the active
-        #       specification and preserve the remainder.
-        #   --preserve-unknown
-        #       Optional parser mode; preserve arguments not present in the active
-        #       specification and continue parsing later recognized options.
-        #   $@  Command-line arguments to parse after optional parser mode switches.
+        #   - `--stop-at-unknown` — Optional parser mode; stop at the first option not present in the active specification and
+        #     preserve the remainder.
+        #   - `--preserve-unknown` — Optional parser mode; preserve arguments not present in the active specification and
+        #     continue parsing later recognized options.
+        #   - `$@` — Command-line arguments to parse after optional parser mode switches.
         #
-        # Inputs (globals)
-        #   SGND_ARGS_SOURCE
-        #   SGND_BUILTIN_ARGS
-        #   SGND_ARGS_SPEC
+        # . Inputs (globals)
+        #   - SGND_ARGS_SOURCE
+        #   - SGND_BUILTIN_ARGS
+        #   - SGND_ARGS_SPEC
         #
-        # Outputs (globals)
-        #   SGND_POSITIONAL
-        #   SGND_EFFECTIVE_ARGS_SPEC
-        #   Target variables declared by the selected argument specification.
+        # . Outputs (globals)
+        #   - SGND_POSITIONAL
+        #   - SGND_EFFECTIVE_ARGS_SPEC
+        #   - Target variables declared by the selected argument specification.
         #
         # . Returns
-        #   0 when parsing succeeds.
-        #   1 for unknown options in strict mode, missing values, invalid enum values,
-        #   or malformed argument specifications.
+        #   - 0 when parsing succeeds.
+        #   - 1 for unknown options in strict mode, missing values, invalid enum values, or malformed argument specifications.
         #
         # . Usage
         #   ```bash
@@ -706,7 +702,8 @@ set -uo pipefail
         #   May change logging/theme state or reset the saved state; information-only actions exit the script.
         #
         # . Returns
-        #   0 when normal processing completes; non-zero for invalid show targets or failed theme selection. Help/show actions exit with status 0.
+        #   - 0 when normal processing completes; non-zero for invalid show targets or failed theme selection. Help/show actions
+        #     exit with status 0.
         #
         # . Usage
         #   ```bash

@@ -46,26 +46,26 @@
 set -uo pipefail
 
 # - Library guard ------------------------------------------------------------------
-    # fn$ _sgnd_lib_guard - Enforce source-only, single-load library initialization
+    # fn: _sgnd_lib_guard - Reject direct execution and track source state
         # . Purpose
-        #   Ensure the file is sourced as a library and initialized only once.
+        #   Ensure direct execution is rejected and record that the library has been sourced.
         #
         # . Behavior
         #   - Derives a unique guard variable name from the current filename.
         #   - Aborts execution when the file is run directly instead of sourced.
-        #   - Sets the guard variable on first load.
-        #   - Returns immediately when the library was already loaded.
+        #   - Records a guard variable on the first source operation.
+        #   - Returns early if the guard flag is already present; subsequent file statements still execute.
         #
-        # Inputs
-        #   BASH_SOURCE[0]
-        #   $0
+        # . Inputs
+        #   - BASH_SOURCE[0]
+        #   - $0
         #
-        # Outputs (globals)
+        # . Outputs (globals)
         #   SGND_<MODULE>_LOADED
         #
         # . Returns
-        #   0 when already loaded or successfully initialized.
-        #   Exits with code 2 when executed instead of sourced.
+        #   - 0 when already loaded or successfully initialized.
+        #   - Exits with code 2 when executed instead of sourced.
         #
         # . Usage
         #   ```bash
@@ -101,13 +101,13 @@ set -uo pipefail
         #   Return the number of elements in a named indexed array.
         #
         # . Arguments
-        #   $1  Name of an existing Bash array (passed by name, not by value).
+        #   - `$1` — Name of an existing Bash array (passed by name, not by value).
         #
         # . Output
         #   Writes the count to stdout.
         #
         # . Returns
-        #   0 after writing its element count.
+        #   - 0 after writing its element count.
         #
         # . Usage
         #   ```bash
@@ -125,13 +125,13 @@ set -uo pipefail
         #   Split a pipe-delimited schema into its column names.
         #
         # . Arguments
-        #   $1  Schema, for example name|role.
+        #   - `$1` — Schema, for example name|role.
         #
         # . Side effects
         #   Populates the global SGND_DT_SPLIT array.
         #
         # . Returns
-        #   0 after splitting.
+        #   - 0 after splitting.
         #
         # . Usage
         #   ```bash
@@ -148,13 +148,13 @@ set -uo pipefail
         #   Split a PSV row into fields, preserving trailing empty fields.
         #
         # . Arguments
-        #   $1  Pipe-separated row; omitted means an empty row.
+        #   - `$1` — Pipe-separated row; omitted means an empty row.
         #
         # . Side effects
         #   Populates the global SGND_DT_SPLIT array.
         #
         # . Returns
-        #   0 after splitting.
+        #   - 0 after splitting.
         #
         # . Usage
         #   ```bash
@@ -175,15 +175,15 @@ set -uo pipefail
         #   Build a case-insensitive sort key from a row.
         #
         # . Arguments
-        #   $1  Schema containing the named columns.
-        #   $2  Pipe-separated row.
-        #   $3  Comma-separated column names used for sorting.
+        #   - `$1` — Schema containing the named columns.
+        #   - `$2` — Pipe-separated row.
+        #   - `$3` — Comma-separated column names used for sorting.
         #
         # . Output
         #   Prints the lowercased field values joined by |.
         #
         # . Returns
-        #   0 after printing the sort key; 1 if a column cannot be resolved.
+        #   - 0 after printing the sort key; 1 if a column cannot be resolved.
         #
         # . Usage
         #   ```bash
@@ -217,10 +217,10 @@ set -uo pipefail
         #   Reject values that cannot be safely stored in a PSV row.
         #
         # . Arguments
-        #   $1  Field value to validate.
+        #   - `$1` — Field value to validate.
         #
         # . Returns
-        #   0 when no pipe or newline is present; 1 otherwise.
+        #   - 0 when no pipe or newline is present; 1 otherwise.
         #
         # . Usage
         #   ```bash
@@ -238,13 +238,13 @@ set -uo pipefail
         #   Validate a pipe-delimited schema for nonempty unique column names.
         #
         # . Arguments
-        #   $1  Schema to check.
+        #   - `$1` — Schema to check.
         #
         # . Side effects
         #   Updates SGND_DT_SPLIT with the schema fields.
         #
         # . Returns
-        #   0 when the schema is nonempty and every column name is unique and nonempty; 1 otherwise.
+        #   - 0 when the schema is nonempty and every column name is unique and nonempty; 1 otherwise.
         #
         # . Usage
         #   ```bash
@@ -275,14 +275,14 @@ set -uo pipefail
         #   Look up the zero-based index of a named schema column.
         #
         # . Arguments
-        #   $1  Pipe-delimited schema.
-        #   $2  Column name to find (exact match).
+        #   - `$1` — Pipe-delimited schema.
+        #   - `$2` — Column name to find (exact match).
         #
         # . Output
         #   Writes the numeric column index to stdout.
         #
         # . Returns
-        #   0 when found; 1 when the column is absent.
+        #   - 0 when found; 1 when the column is absent.
         #
         # . Usage
         #   ```bash
@@ -308,13 +308,13 @@ set -uo pipefail
         #   Count the columns in a pipe-delimited schema.
         #
         # . Arguments
-        #   $1  Schema string.
+        #   - `$1` — Schema string.
         #
         # . Output
         #   Writes the count to stdout.
         #
         # . Returns
-        #   0 after writing the column count.
+        #   - 0 after writing the column count.
         #
         # . Usage
         #   ```bash
@@ -336,14 +336,13 @@ set -uo pipefail
         #   Rejects a mismatched field count and values containing a pipe or newline.
         #
         # . Arguments
-        #   $1  Schema string.
-        #   $2...  One field value per schema column, in order.
+        #   - `$1` — Schema string. $2...  One field value per schema column, in order.
         #
         # . Output
         #   Writes a pipe-separated row to stdout.
         #
         # . Returns
-        #   0 when field count and contents are valid; 1 otherwise.
+        #   - 0 when field count and contents are valid; 1 otherwise.
         #
         # . Usage
         #   ```bash
@@ -377,13 +376,13 @@ set -uo pipefail
         #   Test whether any row matches a column value.
         #
         # . Arguments
-        #   $1  Schema.
-        #   $2  Name of the indexed array holding table rows.
-        #   $3  Column name.
-        #   $4  Value to match exactly.
+        #   - `$1` — Schema.
+        #   - `$2` — Name of the indexed array holding table rows.
+        #   - `$3` — Column name.
+        #   - `$4` — Value to match exactly.
         #
         # . Returns
-        #   0 when a matching row exists; 1 otherwise.
+        #   - 0 when a matching row exists; 1 otherwise.
         #
         # . Usage
         #   ```bash
@@ -403,15 +402,15 @@ set -uo pipefail
         #   Extract one named column from an already obtained PSV row.
         #
         # . Arguments
-        #   $1  Schema.
-        #   $2  Pipe-separated row value (not a table name or index).
-        #   $3  Column name.
+        #   - `$1` — Schema.
+        #   - `$2` — Pipe-separated row value (not a table name or index).
+        #   - `$3` — Column name.
         #
         # . Output
         #   Writes the selected field value to stdout.
         #
         # . Returns
-        #   0 when the column is known; 1 if it is absent.
+        #   - 0 when the column is known; 1 if it is absent.
         #
         # . Usage
         #   ```bash
@@ -433,16 +432,16 @@ set -uo pipefail
         #   Return a PSV row with one named field replaced.
         #
         # . Arguments
-        #   $1  Schema.
-        #   $2  Original pipe-separated row.
-        #   $3  Column name.
-        #   $4  Replacement field value.
+        #   - `$1` — Schema.
+        #   - `$2` — Original pipe-separated row.
+        #   - `$3` — Column name.
+        #   - `$4` — Replacement field value.
         #
         # . Output
         #   Writes a new PSV row; does not modify a table array.
         #
         # . Returns
-        #   0 on success; 1 if the column or new value is invalid.
+        #   - 0 on success; 1 if the column or new value is invalid.
         #
         # . Usage
         #   ```bash
@@ -483,13 +482,13 @@ set -uo pipefail
         #   Count the rows stored in a named table array.
         #
         # . Arguments
-        #   $1  Name of the indexed table array.
+        #   - `$1` — Name of the indexed table array.
         #
         # . Output
         #   Writes the count to stdout.
         #
         # . Returns
-        #   0 after writing the row count.
+        #   - 0 after writing the row count.
         #
         # . Usage
         #   ```bash
@@ -509,15 +508,15 @@ set -uo pipefail
         #   Validates the schema and the number of row fields; does not revalidate individual field contents.
         #
         # . Arguments
-        #   $1  Schema.
-        #   $2  Name of the indexed table array.
-        #   $3  Complete PSV row.
+        #   - `$1` — Schema.
+        #   - `$2` — Name of the indexed table array.
+        #   - `$3` — Complete PSV row.
         #
         # . Side effects
         #   Appends a row to the named array.
         #
         # . Returns
-        #   0 when the schema and field count are valid; 1 otherwise.
+        #   - 0 when the schema and field count are valid; 1 otherwise.
         #
         # . Usage
         #   ```bash
@@ -544,14 +543,14 @@ set -uo pipefail
         #   Delete a row and compact its table array.
         #
         # . Arguments
-        #   $1  Name of the indexed table array.
-        #   $2  Zero-based index to delete.
+        #   - `$1` — Name of the indexed table array.
+        #   - `$2` — Zero-based index to delete.
         #
         # . Side effects
         #   Mutates the table array and compacts the remaining elements.
         #
         # . Returns
-        #   0 for an existing numeric index; 1 for invalid or out-of-range indexes.
+        #   - 0 for an existing numeric index; 1 for invalid or out-of-range indexes.
         #
         # . Usage
         #   ```bash
@@ -577,16 +576,16 @@ set -uo pipefail
         #   Read a column from a table row by numeric index.
         #
         # . Arguments
-        #   $1  Schema.
-        #   $2  Name of table array.
-        #   $3  Zero-based row index.
-        #   $4  Column name.
+        #   - `$1` — Schema.
+        #   - `$2` — Name of table array.
+        #   - `$3` — Zero-based row index.
+        #   - `$4` — Column name.
         #
         # . Output
         #   Writes the field value to stdout.
         #
         # . Returns
-        #   0 when row and column exist; 1 otherwise.
+        #   - 0 when row and column exist; 1 otherwise.
         #
         # . Usage
         #   ```bash
@@ -613,17 +612,17 @@ set -uo pipefail
         #   Update a named column in a table row by numeric index.
         #
         # . Arguments
-        #   $1  Schema.
-        #   $2  Name of table array.
-        #   $3  Zero-based row index.
-        #   $4  Column name.
-        #   $5  New field value.
+        #   - `$1` — Schema.
+        #   - `$2` — Name of table array.
+        #   - `$3` — Zero-based row index.
+        #   - `$4` — Column name.
+        #   - `$5` — New field value.
         #
         # . Side effects
         #   Replaces one row in the named table array.
         #
         # . Returns
-        #   0 on update; 1 for an invalid index, column, or field value.
+        #   - 0 on update; 1 for an invalid index, column, or field value.
         #
         # . Usage
         #   ```bash
@@ -653,16 +652,16 @@ set -uo pipefail
         #   Find the first row whose named column equals a value.
         #
         # . Arguments
-        #   $1  Schema.
-        #   $2  Name of table array.
-        #   $3  Column name.
-        #   $4  Value to match exactly.
+        #   - `$1` — Schema.
+        #   - `$2` — Name of table array.
+        #   - `$3` — Column name.
+        #   - `$4` — Value to match exactly.
         #
         # . Output
         #   Prints the zero-based row index of the first match.
         #
         # . Returns
-        #   0 when a row matches; 1 if no match or the column is invalid.
+        #   - 0 when a row matches; 1 if no match or the column is invalid.
         #
         # . Usage
         #   ```bash
@@ -694,15 +693,14 @@ set -uo pipefail
         #   Build, validate and append a row from individual field values.
         #
         # . Arguments
-        #   $1  Schema.
-        #   $2  Name of table array.
-        #   $3...  Values corresponding to the schema columns.
+        #   - `$1` — Schema.
+        #   - `$2` — Name of table array. $3...  Values corresponding to the schema columns.
         #
         # . Side effects
         #   Adds a row to the table array and emits a debug message.
         #
         # . Returns
-        #   0 on append; 1 for an invalid schema or field values.
+        #   - 0 on append; 1 for an invalid schema or field values.
         #
         # . Usage
         #   ```bash
@@ -728,18 +726,18 @@ set -uo pipefail
         #   By default colors come from SGND_DT_HEADERLINE_CLR, SGND_DT_COLUMNNAME_CLR and SGND_DT_DATACOLOR_CLR with legacy palette fallbacks. Explicit color arguments override both header roles or the data role.
         #
         # . Arguments
-        #   $1  Schema.
-        #   $2  Name of table array.
-        #   $3  Optional prettyprint flag (0 or 1; retained for compatibility).
-        #   $4  Optional header color override (heading and both rules).
-        #   $5  Optional data color override.
-        #   $6  Optional maximum number of rows.
+        #   - `$1` — Schema.
+        #   - `$2` — Name of table array.
+        #   - `$3` — Optional prettyprint flag (0 or 1; retained for compatibility).
+        #   - `$4` — Optional header color override (heading and both rules).
+        #   - `$5` — Optional data color override.
+        #   - `$6` — Optional maximum number of rows.
         #
         # . Output
         #   Writes an aligned table to stdout.
         #
         # . Returns
-        #   0 after rendering; 1 for an invalid schema.
+        #   - 0 after rendering; 1 for an invalid schema.
         #
         # . Usage
         #   ```bash
@@ -901,15 +899,15 @@ set -uo pipefail
         #   Creates lowercased compound sort keys and uses a pipe-separated composite key for each row.
         #
         # . Arguments
-        #   $1  Schema.
-        #   $2  Name of table array.
-        #   $3  Comma-separated column names in sort precedence order.
+        #   - `$1` — Schema.
+        #   - `$2` — Name of table array.
+        #   - `$3` — Comma-separated column names in sort precedence order.
         #
         # . Output
         #   Writes sorted PSV rows (not row indexes) to stdout.
         #
         # . Returns
-        #   0 on success; 1 if the schema or a sort column is invalid.
+        #   - 0 on success; 1 if the schema or a sort column is invalid.
         #
         # . Usage
         #   ```bash
@@ -942,15 +940,15 @@ set -uo pipefail
         #   Expand a PSV row into prefixed shell variables.
         #
         # . Arguments
-        #   $1  Schema.
-        #   $2  Prefix for generated variable names.
-        #   $3  Pipe-separated row.
+        #   - `$1` — Schema.
+        #   - `$2` — Prefix for generated variable names.
+        #   - `$3` — Pipe-separated row.
         #
         # . Side effects
         #   Creates variables named PREFIX_column using lowercased schema columns and hyphens converted to underscores.
         #
         # . Returns
-        #   0 when the schema is valid; 1 otherwise.
+        #   - 0 when the schema is valid; 1 otherwise.
         #
         # . Usage
         #   ```bash
@@ -990,15 +988,15 @@ set -uo pipefail
         #   Write a table to a PSV file with the schema as its first line.
         #
         # . Arguments
-        #   $1  Schema.
-        #   $2  Name of table array.
-        #   $3  Destination file.
+        #   - `$1` — Schema.
+        #   - `$2` — Name of table array.
+        #   - `$3` — Destination file.
         #
         # . Side effects
         #   Creates the parent directory if necessary and overwrites the destination file.
         #
         # . Returns
-        #   0 after writing the file; 1 on invalid schema or filesystem failure.
+        #   - 0 after writing the file; 1 on invalid schema or filesystem failure.
         #
         # . Usage
         #   ```bash

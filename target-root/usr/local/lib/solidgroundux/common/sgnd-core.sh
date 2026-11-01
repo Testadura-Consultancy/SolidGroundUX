@@ -46,26 +46,26 @@
 # =====================================================================================
 set -uo pipefail
 # - Library guard ------------------------------------------------------------------
-    # fn$ _sgnd_lib_guard - Enforce source-only, single-load library initialization
+    # fn: _sgnd_lib_guard - Reject direct execution and track source state
         # . Purpose
-        #   Ensure the file is sourced as a library and initialized only once.
+        #   Ensure direct execution is rejected and record that the library has been sourced.
         #
         # . Behavior
         #   - Derives a unique guard variable name from the current filename.
         #   - Aborts execution when the file is run directly instead of sourced.
-        #   - Sets the guard variable on first load.
-        #   - Returns immediately when the library was already loaded.
+        #   - Records a guard variable on the first source operation.
+        #   - Returns early if the guard flag is already present; subsequent file statements still execute.
         #
-        # Inputs
-        #   BASH_SOURCE[0]
-        #   $0
+        # . Inputs
+        #   - BASH_SOURCE[0]
+        #   - $0
         #
-        # Outputs (globals)
+        # . Outputs (globals)
         #   SGND_<MODULE>_LOADED
         #
         # . Returns
-        #   0 when already loaded or successfully initialized.
-        #   Exits with code 2 when executed instead of sourced.
+        #   - 0 when already loaded or successfully initialized.
+        #   - Exits with code 2 when executed instead of sourced.
         #
         # . Usage
         #   ```bash
@@ -102,10 +102,10 @@ set -uo pipefail
             #   Check whether a command is available on PATH.
             #
             # . Arguments
-            #   $1  Command name.
+        #   - `$1` — Command name.
             #
             # . Returns
-            #   0 if the command is found; nonzero otherwise.
+        #   - 0 if the command is found; nonzero otherwise.
             #
             # . Usage
             #   ```bash
@@ -117,13 +117,13 @@ set -uo pipefail
             #   Require a command or exit the current shell script.
             #
             # . Arguments
-            #   $1  Command name.
+        #   - `$1` — Command name.
             #
             # . Side effects
             #   Prints a diagnostic to stderr and exits when missing.
             #
             # . Returns
-            #   0 if found; exits with status 1 if missing.
+        #   - 0 if found; exits with status 1 if missing.
             #
             # . Usage
             #   ```bash
@@ -135,13 +135,13 @@ set -uo pipefail
             #   Require a minimum Bash major version or exit.
             #
             # . Arguments
-            #   $1  Optional minimum major version (default 4).
+        #   - `$1` — Optional minimum major version (default 4).
             #
             # . Side effects
             #   Writes a version error to stderr when the requirement is not met.
             #
             # . Returns
-            #   0 when Bash meets the requirement; exits with status 1 otherwise.
+        #   - 0 when Bash meets the requirement; exits with status 1 otherwise.
             #
             # . Usage
             #   ```bash
@@ -156,7 +156,7 @@ set -uo pipefail
             #   Prints an error to stderr when no stdout TTY is attached.
             #
             # . Returns
-            #   0 if stdout is a TTY; 1 otherwise.
+        #   - 0 if stdout is a TTY; 1 otherwise.
             #
             # . Usage
             #   ```bash
@@ -169,13 +169,13 @@ set -uo pipefail
             #   Check whether an existing file is writable or a new file can be created.
             #
             # . Arguments
-            #   $1  Target file path.
+        #   - `$1` — Target file path.
             #
             # . Side effects
             #   May create missing parent directories during the writability check.
             #
             # . Returns
-            #   0 for a writable file/parent; 1 when it cannot be made writable.
+        #   - 0 for a writable file/parent; 1 when it cannot be made writable.
             #
             # . Usage
             #   ```bash
@@ -207,13 +207,13 @@ set -uo pipefail
             #   Ensure a named directory exists.
             #
             # . Arguments
-            #   $1  Directory path.
+        #   - `$1` — Directory path.
             #
             # . Side effects
             #   Creates a missing directory and its parents.
             #
             # . Returns
-            #   0 if present or created; 2 if the path is empty; otherwise mkdir status.
+        #   - 0 if present or created; 2 if the path is empty; otherwise mkdir status.
             #
             # . Usage
             #   ```bash
@@ -229,13 +229,13 @@ set -uo pipefail
             #   Resolve a path using readlink -f or realpath.
             #
             # . Arguments
-            #   $1  Path to resolve.
+        #   - `$1` — Path to resolve.
             #
             # . Output
             #   Prints the canonical absolute path.
             #
             # . Returns
-            #   0 when resolved; 127 if neither utility is available; otherwise realpath status.
+        #   - 0 when resolved; 127 if neither utility is available; otherwise realpath status.
             #
             # . Usage
             #   ```bash
@@ -292,13 +292,13 @@ set -uo pipefail
             #   Whitespace becomes hyphens; repeated hyphens and leading/trailing hyphens are removed.
             #
             # . Arguments
-            #   $1  Text to normalize.
+        #   - `$1` — Text to normalize.
             #
             # . Output
             #   Lowercase letters, digits, hyphen, underscore and dot; falls back to hub for empty results.
             #
             # . Returns
-            #   0 after printing the slug.
+        #   - 0 after printing the slug.
             #
             # . Usage
             #   ```bash
@@ -326,13 +326,13 @@ set -uo pipefail
             #   Calculate the SHA-256 checksum of a readable file.
             #
             # . Arguments
-            #   $1  File path.
+        #   - `$1` — File path.
             #
             # . Output
             #   Prints the hex digest followed by a newline.
             #
             # . Returns
-            #   0 when hashed; 2 for unreadable file; 3 for hashing errors; 127 if hashing tools are missing.
+        #   - 0 when hashed; 2 for unreadable file; 3 for hashing errors; 127 if hashing tools are missing.
             #
             # . Usage
             #   ```bash
@@ -363,14 +363,14 @@ set -uo pipefail
             #   Replace a destination with a prepared file while retaining its mode.
             #
             # . Arguments
-            #   $1  Prepared source file.
-            #   $2  Existing destination file.
+        #   - `$1` — Prepared source file.
+        #   - `$2` — Existing destination file.
             #
             # . Side effects
             #   Copies the destination file mode onto the source and moves it over the destination.
             #
             # . Returns
-            #   0 when moved; 1 if either file is absent or chmod/mv fails.
+        #   - 0 when moved; 1 if either file is absent or chmod/mv fails.
             #
             # . Usage
             #   ```bash
@@ -391,10 +391,10 @@ set -uo pipefail
             #   Test whether a named shell variable has been declared.
             #
             # . Arguments
-            #   $1  Variable name.
+        #   - `$1` — Variable name.
             #
             # . Returns
-            #   0 if declared (even if empty); 1 otherwise.
+        #   - 0 if declared (even if empty); 1 otherwise.
             #
             # . Usage
             #   ```bash
@@ -406,14 +406,14 @@ set -uo pipefail
             #   Set a named shell variable to a default when unset or empty.
             #
             # . Arguments
-            #   $1  Name of shell variable.
-            #   $2  Default value (optional).
+        #   - `$1` — Name of shell variable.
+        #   - `$2` — Default value (optional).
             #
             # . Side effects
             #   Modifies the named shell variable using a nameref.
             #
             # . Returns
-            #   0 after checking or assigning the value.
+        #   - 0 after checking or assigning the value.
             #
             # . Usage
             #   ```bash
@@ -431,10 +431,10 @@ set -uo pipefail
             #   Test whether text contains digits only.
             #
             # . Arguments
-            #   $1  Text to validate.
+        #   - `$1` — Text to validate.
             #
             # . Returns
-            #   0 if it matches one or more digits; 1 otherwise.
+        #   - 0 if it matches one or more digits; 1 otherwise.
             #
             # . Usage
             #   ```bash
@@ -446,10 +446,10 @@ set -uo pipefail
             #   Test whether a named array exists and is nonempty.
             #
             # . Arguments
-            #   $1  Name of a declared array.
+        #   - `$1` — Name of a declared array.
             #
             # . Returns
-            #   0 if it contains at least one item; 1 otherwise.
+        #   - 0 if it contains at least one item; 1 otherwise.
             #
             # . Usage
             #   ```bash
@@ -466,10 +466,10 @@ set -uo pipefail
             #   Interpret common affirmative values as true.
             #
             # . Arguments
-            #   $1  Value to check; case-insensitive.
+        #   - `$1` — Value to check; case-insensitive.
             #
             # . Returns
-            #   0 for y, yes, 1 or true; 1 for everything else.
+        #   - 0 for y, yes, 1 or true; 1 for everything else.
             #
             # . Usage
             #   ```bash
@@ -487,10 +487,10 @@ set -uo pipefail
             #   Test for a running process with an exact executable name.
             #
             # . Arguments
-            #   $1  Executable name as matched by pgrep -x.
+        #   - `$1` — Executable name as matched by pgrep -x.
             #
             # . Returns
-            #   0 if found; nonzero otherwise.
+        #   - 0 if found; nonzero otherwise.
             #
             # . Usage
             #   ```bash
@@ -502,14 +502,14 @@ set -uo pipefail
             #   Wait until no process has the specified executable name.
             #
             # . Arguments
-            #   $1  Process executable name.
-            #   $2  Optional poll interval in seconds (default 0.5).
+        #   - `$1` — Process executable name.
+        #   - `$2` — Optional poll interval in seconds (default 0.5).
             #
             # . Side effects
             #   Sleeps between checks; there is no timeout.
             #
             # . Returns
-            #   0 when the matching process is no longer running.
+        #   - 0 when the matching process is no longer running.
             #
             # . Usage
             #   ```bash
@@ -528,13 +528,13 @@ set -uo pipefail
             #   Send the default pkill signal to exact-name processes if present.
             #
             # . Arguments
-            #   $1  Executable name.
+        #   - `$1` — Executable name.
             #
             # . Side effects
             #   Calls pkill -x and ignores its error status.
             #
             # . Returns
-            #   0 regardless of whether a match was found.
+        #   - 0 regardless of whether a match was found.
             #
             # . Usage
             #   ```bash
@@ -547,13 +547,13 @@ set -uo pipefail
             #   Format caller location information for diagnostics.
             #
             # . Arguments
-            #   $1  Optional call-stack depth (default 1).
+        #   - `$1` — Optional call-stack depth (default 1).
             #
             # . Output
             #   Prints basename:line (function).
             #
             # . Returns
-            #   0 after printing the identity.
+        #   - 0 after printing the identity.
             #
             # . Usage
             #   ```bash
@@ -575,7 +575,7 @@ set -uo pipefail
             #   Writes one at file:line (function) entry per stack frame.
             #
             # . Returns
-            #   0 after printing.
+        #   - 0 after printing.
             #
             # . Usage
             #   ```bash
@@ -595,7 +595,7 @@ set -uo pipefail
             #   Check whether the controlling terminal is readable and writable.
             #
             # . Returns
-            #   0 when /dev/tty is accessible for both operations; 1 otherwise.
+        #   - 0 when /dev/tty is accessible for both operations; 1 otherwise.
             #
             # . Usage
             #   ```bash
@@ -610,7 +610,7 @@ set -uo pipefail
             #   FLAG_NOUI and FLAG_BATCH take priority over FLAG_UI; otherwise checks both stdin and stdout TTYs.
             #
             # . Returns
-            #   0 for enabled UI or interactive stdin/stdout; 1 when disabled or batch.
+        #   - 0 for enabled UI or interactive stdin/stdout; 1 when disabled or batch.
             #
             # . Usage
             #   ```bash
@@ -630,7 +630,7 @@ set -uo pipefail
             #   Check whether DISPLAY or WAYLAND_DISPLAY is set.
             #
             # . Returns
-            #   0 when either variable is nonempty; 1 otherwise.
+        #   - 0 when either variable is nonempty; 1 otherwise.
             #
             # . Usage
             #   ```bash
@@ -646,13 +646,13 @@ set -uo pipefail
             #   Warn when an internal helper is called outside the framework API.
             #
             # . Arguments
-            #   $1  Name of the internal function.
+        #   - `$1` — Name of the internal function.
             #
             # . Side effects
             #   Prints a warning to stderr for callers outside sgnd_* and _* functions; does not block the call.
             #
             # . Returns
-            #   0 for allowed callers; the warning branch also returns successfully.
+        #   - 0 for allowed callers; the warning branch also returns successfully.
             #
             # . Usage
             #   ```bash
@@ -674,14 +674,14 @@ set -uo pipefail
             #   Log shell variables whose names start with a supplied prefix.
             #
             # . Arguments
-            #   $1  Nonempty variable-name prefix.
-            #   $2  Optional flag to also print through sayinfo when debug is disabled.
+        #   - `$1` — Nonempty variable-name prefix.
+        #   - `$2` — Optional flag to also print through sayinfo when debug is disabled.
             #
             # . Side effects
             #   Uses saydebug and optionally sayinfo to emit matching variable names/values.
             #
             # . Returns
-            #   0 after logging; 1 when the prefix is missing.
+        #   - 0 after logging; 1 when the prefix is missing.
             #
             # . Usage
             #   ```bash
@@ -713,11 +713,11 @@ set -uo pipefail
             #   Test whether the first version sorts at or above the second.
             #
             # . Arguments
-            #   $1  Current version.
-            #   $2  Minimum required version.
+        #   - `$1` — Current version.
+        #   - `$2` — Minimum required version.
             #
             # . Returns
-            #   0 if the first version is greater or equal according to sort -V; 1 otherwise.
+        #   - 0 if the first version is greater or equal according to sort -V; 1 otherwise.
             #
             # . Usage
             #   ```bash
@@ -732,7 +732,7 @@ set -uo pipefail
             #   Prints YYYY-MM-DD HH:MM:SS.
             #
             # . Returns
-            #   0 on success; otherwise date command status.
+        #   - 0 on success; otherwise date command status.
             #
             # . Usage
             #   ```bash
@@ -744,15 +744,14 @@ set -uo pipefail
             #   Retry a command a fixed number of times with a delay.
             #
             # . Arguments
-            #   $1  Maximum attempts (at least 1).
-            #   $2  Delay between attempts, in seconds.
-            #   $3...  Executable command and its arguments.
+        #   - `$1` — Maximum attempts (at least 1).
+        #   - `$2` — Delay between attempts, in seconds. $3...  Executable command and its arguments.
             #
             # . Side effects
             #   Executes the command up to the specified limit and sleeps between failed attempts.
             #
             # . Returns
-            #   0 when the command succeeds; 1 when all attempts fail; 2 for invalid count or missing command.
+        #   - 0 when the command succeeds; 1 when all attempts fail; 2 for invalid count or missing command.
             #
             # . Usage
             #   ```bash
@@ -780,14 +779,13 @@ set -uo pipefail
             #   Join positional arguments with a literal delimiter.
             #
             # . Arguments
-            #   $1  Delimiter.
-            #   $2...  Values to join.
+        #   - `$1` — Delimiter. $2...  Values to join.
             #
             # . Output
             #   Writes the joined values without a newline.
             #
             # . Returns
-            #   0 after printing.
+        #   - 0 after printing.
             #
             # . Usage
             #   ```bash
@@ -803,14 +801,13 @@ set -uo pipefail
             #   Populate a named destination array with unique items from source arrays.
             #
             # . Arguments
-            #   $1  Name of destination array.
-            #   $2...  Names of one or more source arrays.
+        #   - `$1` — Name of destination array. $2...  Names of one or more source arrays.
             #
             # . Side effects
             #   Resets the destination array and inserts first occurrences only.
             #
             # . Returns
-            #   0 after combining arrays; 1 if no destination or source argument is given.
+        #   - 0 after combining arrays; 1 if no destination or source argument is given.
             #
             # . Usage
             #   ```bash
@@ -852,13 +849,13 @@ set -uo pipefail
             #   Trim whitespace from both ends of a string.
             #
             # . Arguments
-            #   $@  Words to trim, joined by spaces.
+        #   - `$@` — Words to trim, joined by spaces.
             #
             # . Output
             #   Prints trimmed text without a newline.
             #
             # . Returns
-            #   0 after printing.
+        #   - 0 after printing.
             #
             # . Usage
             #   ```bash
@@ -874,14 +871,14 @@ set -uo pipefail
             #   Repeat a string a specified number of times.
             #
             # . Arguments
-            #   $1  String to repeat (default a space).
-            #   $2  Repeat count (default 0).
+        #   - `$1` — String to repeat (default a space).
+        #   - `$2` — Repeat count (default 0).
             #
             # . Output
             #   Writes the repeated string without a newline.
             #
             # . Returns
-            #   0 after printing.
+        #   - 0 after printing.
             #
             # . Usage
             #   ```bash
@@ -906,15 +903,15 @@ set -uo pipefail
             #   Left-pad text with a character to a minimum width.
             #
             # . Arguments
-            #   $1  Text.
-            #   $2  Target width (default 20).
-            #   $3  Pad string (default space).
+        #   - `$1` — Text.
+        #   - `$2` — Target width (default 20).
+        #   - `$3` — Pad string (default space).
             #
             # . Output
             #   Writes padded text without a newline.
             #
             # . Returns
-            #   0 after printing.
+        #   - 0 after printing.
             #
             # . Usage
             #   ```bash
@@ -936,15 +933,15 @@ set -uo pipefail
             #   Right-pad text with a character to a minimum width.
             #
             # . Arguments
-            #   $1  Text.
-            #   $2  Target width (default 20).
-            #   $3  Pad string (default space).
+        #   - `$1` — Text.
+        #   - `$2` — Target width (default 20).
+        #   - `$3` — Pad string (default space).
             #
             # . Output
             #   Writes padded text without a newline.
             #
             # . Returns
-            #   0 after printing.
+        #   - 0 after printing.
             #
             # . Usage
             #   ```bash
@@ -966,15 +963,15 @@ set -uo pipefail
             #   Center text to a minimum width using a padding string.
             #
             # . Arguments
-            #   $1  Text.
-            #   $2  Target width (default 20).
-            #   $3  Pad string (default space).
+        #   - `$1` — Text.
+        #   - `$2` — Target width (default 20).
+        #   - `$3` — Pad string (default space).
             #
             # . Output
             #   Writes padded text without a newline.
             #
             # . Returns
-            #   0 after printing.
+        #   - 0 after printing.
             #
             # . Usage
             #   ```bash
@@ -1005,13 +1002,13 @@ set -uo pipefail
             #   Count display characters after removing ANSI SGR escapes.
             #
             # . Arguments
-            #   $1  Text, potentially containing ANSI styling.
+        #   - `$1` — Text, potentially containing ANSI styling.
             #
             # . Output
             #   Writes the count to stdout.
             #
             # . Returns
-            #   0 after counting.
+        #   - 0 after counting.
             #
             # . Usage
             #   ```bash
@@ -1034,7 +1031,7 @@ set -uo pipefail
             #   Writes a number clamped between 40 and SGND_MAX_RENDER_WIDTH (default 140).
             #
             # . Returns
-            #   0 after printing the width.
+        #   - 0 after printing the width.
             #
             # . Usage
             #   ```bash
@@ -1059,14 +1056,14 @@ set -uo pipefail
             #   Right-pad styled text using its visible character width.
             #
             # . Arguments
-            #   $1  Text, possibly ANSI-colored.
-            #   $2  Minimum visible width.
+        #   - `$1` — Text, possibly ANSI-colored.
+        #   - `$2` — Minimum visible width.
             #
             # . Output
             #   Writes text plus trailing spaces without a newline.
             #
             # . Returns
-            #   0 after writing the string.
+        #   - 0 after writing the string.
             #
             # . Usage
             #   ```bash
@@ -1089,14 +1086,14 @@ set -uo pipefail
             #   Wrap a string into lines of a given display width.
             #
             # . Arguments
-            #   --width N  Target width (default 80).
-            #   --text TEXT  Text to wrap.
+        #   - `--width N  Target width (default 80).`
+        #   - `--text TEXT  Text to wrap.`
             #
             # . Output
             #   Writes one or more text lines to stdout.
             #
             # . Returns
-            #   0 after printing; 2 on unknown argument.
+        #   - 0 after printing; 2 on unknown argument.
             #
             # . Usage
             #   ```bash
@@ -1139,10 +1136,10 @@ set -uo pipefail
         #   Check IPv4 dotted-quad syntax and octet ranges.
         #
         # . Arguments
-        #   $1  Candidate IPv4 address.
+        #   - `$1` — Candidate IPv4 address.
         #
         # . Returns
-        #   0 for exactly four decimal octets between 0 and 255; 1 otherwise.
+        #   - 0 for exactly four decimal octets between 0 and 255; 1 otherwise.
         #
         # . Usage
         #   ```bash
@@ -1169,10 +1166,10 @@ set -uo pipefail
         #   Validate a one-character Y or N choice.
         #
         # . Arguments
-        #   $1  Candidate value.
+        #   - `$1` — Candidate value.
         #
         # . Returns
-        #   0 for Y/y/N/n; 1 otherwise.
+        #   - 0 for Y/y/N/n; 1 otherwise.
         #
         # . Usage
         #   ```bash
@@ -1184,10 +1181,10 @@ set -uo pipefail
         #   Test whether a string is a signed integer.
         #
         # . Arguments
-        #   $1  Candidate value.
+        #   - `$1` — Candidate value.
         #
         # . Returns
-        #   0 for an optional minus sign followed by digits; 1 otherwise.
+        #   - 0 for an optional minus sign followed by digits; 1 otherwise.
         #
         # . Usage
         #   ```bash
@@ -1199,10 +1196,10 @@ set -uo pipefail
         #   Test whether a string is a signed integer or decimal.
         #
         # . Arguments
-        #   $1  Candidate numeric value.
+        #   - `$1` — Candidate numeric value.
         #
         # . Returns
-        #   0 for digits with an optional preceding minus and optional decimal fraction; 1 otherwise.
+        #   - 0 for digits with an optional preceding minus and optional decimal fraction; 1 otherwise.
         #
         # . Usage
         #   ```bash
@@ -1214,10 +1211,10 @@ set -uo pipefail
         #   Check that a string is not empty.
         #
         # . Arguments
-        #   $1  Candidate text.
+        #   - `$1` — Candidate text.
         #
         # . Returns
-        #   0 if nonempty (including whitespace-only strings); 1 otherwise.
+        #   - 0 if nonempty (including whitespace-only strings); 1 otherwise.
         #
         # . Usage
         #   ```bash
@@ -1232,10 +1229,10 @@ set -uo pipefail
         #   This validates both affirmative and negative values; use sgnd_is_true to test truthiness.
         #
         # . Arguments
-        #   $1  Candidate token, case-insensitive.
+        #   - `$1` — Candidate token, case-insensitive.
         #
         # . Returns
-        #   0 for y/yes/n/no/true/false/1/0; 1 otherwise.
+        #   - 0 for y/yes/n/no/true/false/1/0; 1 otherwise.
         #
         # . Usage
         #   ```bash
@@ -1255,10 +1252,10 @@ set -uo pipefail
         #   Checks the string pattern only; does not verify that the date exists.
         #
         # . Arguments
-        #   $1  Candidate YYYY-MM-DD string.
+        #   - `$1` — Candidate YYYY-MM-DD string.
         #
         # . Returns
-        #   0 for a syntactically matching date string; 1 otherwise.
+        #   - 0 for a syntactically matching date string; 1 otherwise.
         #
         # . Usage
         #   ```bash
@@ -1270,10 +1267,10 @@ set -uo pipefail
         #   Validate a CIDR prefix length, not a network address.
         #
         # . Arguments
-        #   $1  Prefix length in decimal notation.
+        #   - `$1` — Prefix length in decimal notation.
         #
         # . Returns
-        #   0 for a number from 0 to 32; 1 otherwise.
+        #   - 0 for a number from 0 to 32; 1 otherwise.
         #
         # . Usage
         #   ```bash
@@ -1285,10 +1282,10 @@ set -uo pipefail
         #   Check a lowercase slug against allowed characters.
         #
         # . Arguments
-        #   $1  Slug.
+        #   - `$1` — Slug.
         #
         # . Returns
-        #   0 for one or more lowercase ASCII letters, digits, periods, underscores or hyphens; 1 otherwise.
+        #   - 0 for one or more lowercase ASCII letters, digits, periods, underscores or hyphens; 1 otherwise.
         #
         # . Usage
         #   ```bash
@@ -1303,10 +1300,10 @@ set -uo pipefail
         #   This checks allowed characters only, not special names or path traversal safety.
         #
         # . Arguments
-        #   $1  Candidate name.
+        #   - `$1` — Candidate name.
         #
         # . Returns
-        #   0 for one or more ASCII letters, digits, periods, underscores or hyphens; 1 otherwise.
+        #   - 0 for one or more ASCII letters, digits, periods, underscores or hyphens; 1 otherwise.
         #
         # . Usage
         #   ```bash
@@ -1318,10 +1315,10 @@ set -uo pipefail
         #   Test whether a path refers to an existing regular file.
         #
         # . Arguments
-        #   $1  Path to test.
+        #   - `$1` — Path to test.
         #
         # . Returns
-        #   0 for an existing regular file; 1 otherwise.
+        #   - 0 for an existing regular file; 1 otherwise.
         #
         # . Usage
         #   ```bash
@@ -1336,10 +1333,10 @@ set -uo pipefail
         #   Test whether a filesystem path exists.
         #
         # . Arguments
-        #   $1  Path to test.
+        #   - `$1` — Path to test.
         #
         # . Returns
-        #   0 when -e matches; 1 otherwise.
+        #   - 0 when -e matches; 1 otherwise.
         #
         # . Usage
         #   ```bash
@@ -1351,10 +1348,10 @@ set -uo pipefail
         #   Test whether a path is an existing directory.
         #
         # . Arguments
-        #   $1  Directory to test.
+        #   - `$1` — Directory to test.
         #
         # . Returns
-        #   0 when -d matches; 1 otherwise.
+        #   - 0 when -d matches; 1 otherwise.
         #
         # . Usage
         #   ```bash
@@ -1366,10 +1363,10 @@ set -uo pipefail
         #   Test whether a filesystem path is executable.
         #
         # . Arguments
-        #   $1  Path to test.
+        #   - `$1` — Path to test.
         #
         # . Returns
-        #   0 when the path is executable; 1 otherwise.
+        #   - 0 when the path is executable; 1 otherwise.
         #
         # . Usage
         #   ```bash
@@ -1381,10 +1378,10 @@ set -uo pipefail
         #   Check that a regular file does not already exist.
         #
         # . Arguments
-        #   $1  Path to test.
+        #   - `$1` — Path to test.
         #
         # . Returns
-        #   0 when the path is not an existing regular file; 1 otherwise.
+        #   - 0 when the path is not an existing regular file; 1 otherwise.
         #
         # . Usage
         #   ```bash

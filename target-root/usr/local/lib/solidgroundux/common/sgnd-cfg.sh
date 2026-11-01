@@ -46,26 +46,26 @@
 # =====================================================================================
 set -uo pipefail
 # - Library guard ------------------------------------------------------------------
-    # fn$ _sgnd_lib_guard - Enforce source-only, single-load library initialization
+    # fn: _sgnd_lib_guard - Reject direct execution and track source state
         # . Purpose
-        #   Ensure the file is sourced as a library and initialized only once.
+        #   Ensure direct execution is rejected and record that the library has been sourced.
         #
         # . Behavior
         #   - Derives a unique guard variable name from the current filename.
         #   - Aborts execution when the file is run directly instead of sourced.
-        #   - Sets the guard variable on first load.
-        #   - Returns immediately when the library was already loaded.
+        #   - Records a guard variable on the first source operation.
+        #   - Returns early if the guard flag is already present; subsequent file statements still execute.
         #
-        # Inputs
-        #   BASH_SOURCE[0]
-        #   $0
+        # . Inputs
+        #   - BASH_SOURCE[0]
+        #   - $0
         #
-        # Outputs (globals)
+        # . Outputs (globals)
         #   SGND_<MODULE>_LOADED
         #
         # . Returns
-        #   0 when already loaded or successfully initialized.
-        #   Exits with code 2 when executed instead of sourced.
+        #   - 0 when already loaded or successfully initialized.
+        #   - Exits with code 2 when executed instead of sourced.
         #
         # . Usage
         #   ```bash
@@ -101,8 +101,7 @@ set -uo pipefail
         #   Check whether text is a valid Bash variable identifier.
         #
         # . Arguments
-        #   $1  Candidate identifier.
-        #
+        #   - `$1` — Candidate identifier.
         # . Returns
         #   0 for letters/underscores followed by alphanumerics/underscores; 1 otherwise.
         #
@@ -121,8 +120,7 @@ set -uo pipefail
         #   Skips blank, comment and malformed lines, trims surrounding whitespace from names, and preserves the value after the first equals sign.
         #
         # . Arguments
-        #   $1  Path of a key/value file.
-        #
+        #   - `$1` — Path of a key/value file.
         # . Side effects
         #   Assigns validated shell variable names via printf -v.
         #
@@ -171,10 +169,9 @@ set -uo pipefail
         #   Write or replace one key in a private key/value file.
         #
         # . Arguments
-        #   $1  Destination file.
-        #   $2  Bash-identifier key.
-        #   $3  Value to store literally.
-        #
+        #   - `$1` — Destination file.
+        #   - `$2` — Bash-identifier key.
+        #   - `$3` — Value to store literally.
         # . Side effects
         #   Creates the parent directory and atomically installs a mode-600 file. Under sudo it prefers the invoking user as owner.
         #
@@ -234,9 +231,8 @@ set -uo pipefail
         #   Remove one key from a KEY=VALUE file.
         #
         # . Arguments
-        #   $1  File path.
-        #   $2  Key to remove.
-        #
+        #   - `$1` — File path.
+        #   - `$2` — Key to remove.
         # . Side effects
         #   Rewrites the file without matching lines, or deletes it if empty.
         #
@@ -272,8 +268,7 @@ set -uo pipefail
         #   Delete a key/value file if it exists.
         #
         # . Arguments
-        #   $1  File path.
-        #
+        #   - `$1` — File path.
         # . Side effects
         #   Removes the named file.
         #
@@ -293,9 +288,8 @@ set -uo pipefail
         #   Read the first matching key from a readable KEY=VALUE file.
         #
         # . Arguments
-        #   $1  File path.
-        #   $2  Valid shell-identifier key.
-        #
+        #   - `$1` — File path.
+        #   - `$2` — Valid shell-identifier key.
         # . Output
         #   Writes the exact value after the first equals sign without a trailing newline.
         #
@@ -326,9 +320,8 @@ set -uo pipefail
         #   Test whether a valid key is present, including an empty value.
         #
         # . Arguments
-        #   $1  File path.
-        #   $2  Key to test.
-        #
+        #   - `$1` — File path.
+        #   - `$2` — Key to test.
         # . Returns
         #   0 when present; 1 if absent; 2 for invalid input or unreadable file.
         #
@@ -350,8 +343,7 @@ set -uo pipefail
         #   List identifier/value pairs from a readable configuration file.
         #
         # . Arguments
-        #   $1  File path.
-        #
+        #   - `$1` — File path.
         # . Output
         #   Writes one KEY|VALUE pair per valid record.
         #
@@ -392,8 +384,7 @@ set -uo pipefail
         #   Load the selected configuration file into shell variables.
         #
         # . Arguments
-        #   $1  Optional file path (defaults to SGND_CFG_FILE).
-        #
+        #   - `$1` — Optional file path (defaults to SGND_CFG_FILE).
         # . Side effects
         #   Sets shell variables for valid entries.
         #
@@ -416,9 +407,8 @@ set -uo pipefail
         #   Configuration keys are Bash identifiers, not dotted paths.
         #
         # . Arguments
-        #   $1  Valid shell-identifier key.
-        #   $2  Literal value to store.
-        #
+        #   - `$1` — Valid shell-identifier key.
+        #   - `$2` — Literal value to store.
         # . Side effects
         #   Writes SGND_CFG_FILE and updates the named variable in the current shell.
         #
@@ -442,8 +432,7 @@ set -uo pipefail
         #   Remove a configuration key and unset its variable.
         #
         # . Arguments
-        #   $1  Valid shell-identifier key.
-        #
+        #   - `$1` — Valid shell-identifier key.
         # . Side effects
         #   Updates SGND_CFG_FILE and unsets the matching shell variable.
         #
@@ -486,8 +475,7 @@ set -uo pipefail
         #   Retrieve the persisted value of one configuration key.
         #
         # . Arguments
-        #   $1  Valid shell-identifier key.
-        #
+        #   - `$1` — Valid shell-identifier key.
         # . Output
         #   Writes the stored value without a newline.
         #
@@ -511,8 +499,7 @@ set -uo pipefail
         #   Check whether the active configuration contains a key.
         #
         # . Arguments
-        #   $1  Valid shell-identifier key.
-        #
+        #   - `$1` — Valid shell-identifier key.
         # . Returns
         #   0 if present; 1 when invalid or absent; 2 when the file is unreadable.
         #
@@ -536,8 +523,7 @@ set -uo pipefail
         #   Missing keys are shown as <unset>; present keys with empty values are shown as "".
         #
         # . Arguments
-        #   $@  Names of the keys to display.
-        #
+        #   - `$@` — Names of the keys to display.
         # . Output
         #   Writes a formatted configuration summary through Framework UI printers.
         #
@@ -576,9 +562,8 @@ set -uo pipefail
         #   Inspects the audience field in each configuration-variable specification.
         #
         # . Arguments
-        #   $1  Name of the specification array.
-        #   $2  Required audience: system or user.
-        #
+        #   - `$1` — Name of the specification array.
+        #   - `$2` — Required audience: system or user.
         # . Returns
         #   0 when an entry matches the desired audience; 1 otherwise.
         #
@@ -604,41 +589,39 @@ set -uo pipefail
         return 1
     }
         # fn: sgnd_cfg_write_skeleton_filtered
-        # Purpose:
+        # . Purpose
         #   Write an auto-generated cfg skeleton filtered by audience.
         #
-        # Behavior:
+        # . Behavior
         #   - Writes a commented KEY=VALUE config template.
         #   - Includes only specs matching the requested audience.
         #   - Includes specs marked "both" for either audience.
         #   - Uses current shell values as initial defaults where available.
         #   - Adds a standard auto-generated file header.
         #
-        # Arguments:
-        #   $1  FILE
-        #       Target cfg file path.
-        #   $2  AUDIENCE
-        #       Audience filter: "system" or "user".
-        #   $3  SPEC_ARRAY_NAME
-        #       Name of the cfg specs array.
-        #   $4  DOMAIN
-        #       Optional logical domain name for header text.
-        #       Default: configuration
-        #
-        # Side effects:
+        # . Arguments
+        #   - `$1` — `FILE`: Target cfg file path.
+        #   - `$2` — `AUDIENCE`: Filter (`system` or `user`).
+        #   - `$3` — `SPEC_ARRAY_NAME`: Name of the cfg specification array.
+        #   - `$4` — `DOMAIN`: Optional logical domain label (default: `configuration`).
+        # . Side effects
         #   - Creates or overwrites the target file.
         #
-        # Returns:
-        #   0 on success.
-        #   1 on invalid arguments.
+        # . Returns
+        #   - 0 on success.
+        #   - 1 on invalid arguments.
         #
-        # Usage:
-        #   sgnd_cfg_write_skeleton_filtered FILE AUDIENCE SPEC_ARRAY_NAME [DOMAIN]
+        # . Usage
+        #   ```bash
+        #   sgnd_cfg_write_skeleton_filtered "$SGND_USRCFG_FILE" "user" SGND_FRAMEWORK_GLOBALS "Framework"
+        #   ```
         #
-        # Examples:
+        # . Examples
+        #   ```bash
         #   sgnd_cfg_write_skeleton_filtered "$SGND_USRCFG_FILE" "user" SGND_FRAMEWORK_GLOBALS "Framework"
         #
         #   sgnd_cfg_write_skeleton_filtered "$SGND_SYSCFG_FILE" "system" SGND_SCRIPT_GLOBALS "Script"
+        #   ```
         #
     sgnd_cfg_write_skeleton_filtered() {
             local file="${1:-}"
@@ -678,9 +661,8 @@ set -uo pipefail
         #   Generate a comment header for a configuration template.
         #
         # . Arguments
-        #   $1  Optional domain name (defaults to configuration).
-        #   $2  Optional audience (defaults to user).
-        #
+        #   - `$1` — Optional domain name (defaults to configuration).
+        #   - `$2` — Optional audience (defaults to user).
         # . Output
         #   Writes comment lines to standard output.
         #
@@ -724,8 +706,7 @@ set -uo pipefail
         #   Load valid key/value lines from a readable config file.
         #
         # . Arguments
-        #   $1  Path to file; unreadable files are ignored.
-        #
+        #   - `$1` — Path to file; unreadable files are ignored.
         # . Side effects
         #   Sets valid shell variables without evaluating the values as shell code.
         #
@@ -776,12 +757,11 @@ set -uo pipefail
         #   Only creates system configuration when running as root. Creates a user skeleton when user-scope variables are declared.
         #
         # . Arguments
-        #   $1  Domain label for reporting.
-        #   $2  System configuration file path.
-        #   $3  User configuration file path.
-        #   $4  Name of array containing variable specifications.
-        #   $5  Optional mode (defaults to script).
-        #
+        #   - `$1` — Domain label for reporting.
+        #   - `$2` — System configuration file path.
+        #   - `$3` — User configuration file path.
+        #   - `$4` — Name of array containing variable specifications.
+        #   - `$5` — Optional mode (defaults to script).
         # . Side effects
         #   Creates directories and missing config files; logs results through sayinfo/saydebug.
         #
@@ -834,12 +814,11 @@ set -uo pipefail
         #   Creates missing configuration skeletons where permitted, then loads system-scope followed by user-scope values. Does not load the default values itself.
         #
         # . Arguments
-        #   $1  Domain label.
-        #   $2  System config path.
-        #   $3  User config path.
-        #   $4  Name of variable-specification array.
-        #   $5  Optional mode (defaults to script).
-        #
+        #   - `$1` — Domain label.
+        #   - `$2` — System config path.
+        #   - `$3` — User config path.
+        #   - `$4` — Name of variable-specification array.
+        #   - `$5` — Optional mode (defaults to script).
         # . Side effects
         #   May create missing files and updates configuration variables in the current shell.
         #
@@ -881,7 +860,7 @@ set -uo pipefail
         #   Reads validated KEY=VALUE entries into the current shell, using SGND_STATE_FILE when --file is omitted.
         #
         # . Arguments
-        #   --file FILE  Optional state file path.
+        #   - `--file FILE` — Optional state file path.
         #
         # . Side effects
         #   Updates variables in the calling shell.
@@ -927,10 +906,9 @@ set -uo pipefail
         #   Persist a state key and update its shell variable.
         #
         # . Arguments
-        #   --file FILE  Optional state file path.
-        #   KEY         Valid shell identifier.
-        #   VALUE       String to persist.
-        #
+        #   - `--file FILE` — Optional state file path.
+        #   - `KEY` — Valid shell identifier.
+        #   - `VALUE` — String to persist.
         # . Side effects
         #   Modifies the state file and variable KEY in the calling shell.
         #
@@ -993,9 +971,8 @@ set -uo pipefail
         #   Remove a persisted key and unset its variable.
         #
         # . Arguments
-        #   --file FILE  Optional state file path.
-        #   KEY         Valid shell identifier to remove.
-        #
+        #   - `--file FILE` — Optional state file path.
+        #   - `KEY` — Valid shell identifier to remove.
         # . Side effects
         #   Updates the state file and unsets the named shell variable.
         #
@@ -1057,7 +1034,7 @@ set -uo pipefail
         #   Reset the selected state file.
         #
         # . Arguments
-        #   --file FILE  Optional state file path.
+        #   - `--file FILE` — Optional state file path.
         #
         # . Side effects
         #   Removes the selected state file.
@@ -1100,9 +1077,8 @@ set -uo pipefail
         #   Retrieve a persisted state value.
         #
         # . Arguments
-        #   --file FILE  Optional state file path.
-        #   KEY         Valid shell identifier to retrieve.
-        #
+        #   - `--file FILE` — Optional state file path.
+        #   - `KEY` — Valid shell identifier to retrieve.
         # . Output
         #   Writes the value to standard output without modifying shell variables.
         #
@@ -1161,9 +1137,8 @@ set -uo pipefail
         #   Check whether a state key is present.
         #
         # . Arguments
-        #   --file FILE  Optional state file path.
-        #   KEY         Valid shell identifier to test.
-        #
+        #   - `--file FILE` — Optional state file path.
+        #   - `KEY` — Valid shell identifier to test.
         # . Returns
         #   0 if the key exists; 1 if absent or invalid.
         #
@@ -1222,10 +1197,9 @@ set -uo pipefail
         #   Takes names directly and/or from a named array. Unset variables are stored as empty values. Invalid keys are skipped.
         #
         # . Arguments
-        #   --file FILE          Optional state file.
-        #   --array ARRAY_NAME    Name of an indexed array containing keys.
-        #   KEY...                Additional shell-variable names.
-        #
+        #   - `--file FILE` — Optional state file.
+        #   - `--array ARRAY_NAME` — Name of an indexed array containing keys.
+        #   - `KEY...` — Additional shell-variable names.
         # . Side effects
         #   Creates or updates entries in the selected state file.
         #
@@ -1306,10 +1280,9 @@ set -uo pipefail
         #   Takes key names directly or from a named array. Absent keys leave their variables unchanged; invalid names are skipped.
         #
         # . Arguments
-        #   --file FILE          Optional state file.
-        #   --array ARRAY_NAME    Name of an indexed array containing keys.
-        #   KEY...                Additional state keys.
-        #
+        #   - `--file FILE` — Optional state file.
+        #   - `--array ARRAY_NAME` — Name of an indexed array containing keys.
+        #   - `KEY...` — Additional state keys.
         # . Side effects
         #   Assigns values to shell variables for keys found in the file.
         #
@@ -1388,7 +1361,7 @@ set -uo pipefail
         #   List keys stored in a state file.
         #
         # . Arguments
-        #   --file FILE  Optional state file path.
+        #   - `--file FILE` — Optional state file path.
         #
         # . Output
         #   Writes one key name per line to standard output.

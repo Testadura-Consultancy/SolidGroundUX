@@ -36,6 +36,14 @@
 #   - Full terminal capability abstraction beyond framework needs
 #   - Graphical or window-based user interface functionality
 #
+# Library usage:
+#   Load via the SolidGroundUX framework bootstrap or source it after the framework
+#   has initialized its UI colors and required helpers:
+#   ```bash
+#   source "${SGND_FRAMEWORK_ROOT%/}/usr/local/lib/solidgroundux/common/ui.sh"
+#   sgnd_print --text "Ready"
+#   ```
+#
 # Attribution:
 #   Developers  : Mark Fieten
 #   Company     : Testadura Consultancy
@@ -45,31 +53,35 @@
 # =====================================================================================
 set -uo pipefail
 # - Library guard ------------------------------------------------------------------
-    # fn$ _sgnd_lib_guard - Enforce source-only, single-load library initialization
+    # fn: _sgnd_lib_guard - Reject direct execution and track library sourcing
         # . Purpose
-        #   Ensure the file is sourced as a library and initialized only once.
+        #   Reject execution of this source-only library and record that it has been loaded.
         #
         # . Behavior
-        #   - Derives a unique guard variable name from the current filename.
-        #   - Aborts execution when the file is run directly instead of sourced.
-        #   - Sets the guard variable on first load.
-        #   - Returns immediately when the library was already loaded.
+        #   - Derive an SGND_<FILENAME>_LOADED flag from this file name.
+        #   - Exit the shell with status 2 when the library is executed directly.
+        #   - Return success if the loaded flag already exists, otherwise set it.
+        #   - The caller does not short-circuit the remainder of the file after the guard returns.
         #
-        # Inputs
-        #   BASH_SOURCE[0]
-        #   $0
+        # . Inputs (globals)
+        #   BASH_SOURCE[0] and $0.
         #
-        # Outputs (globals)
-        #   SGND_<MODULE>_LOADED
+        # . Outputs (globals)
+        #   SGND_UI_LOADED (derived from ui.sh).
+        #
+        # . Output
+        #   Reports direct-execution errors to stderr.
         #
         # . Returns
-        #   0 when already loaded or successfully initialized.
-        #   Exits with code 2 when executed instead of sourced.
+        #   0 after checking or setting the guard; exits 2 if directly executed.
         #
         # . Usage
         #   ```bash
         #   _sgnd_lib_guard
         #   ```
+        #
+        # . Notes
+        #   Internal sourcing helper; called once at the top of this file, then unset.
     _sgnd_lib_guard() {
         local lib_base=""
         local guard=""
@@ -94,22 +106,25 @@ set -uo pipefail
         && declare -F sgnd_header_buffer_load >/dev/null 2>&1; then
         sgnd_module_init_metadata "${BASH_SOURCE[0]}"
     fi
-    # fn: _sh_err - Sh err
+    # fn: _sh_err - Emit a compatibility error message
         # . Purpose
-        #   Write an error message through say when available, otherwise to stderr.
+        #   Report an error using say when available, with a plain stderr fallback.
+        #
+        # . Behavior
+        #   - Call say --type FAIL when say is a defined function.
+        #   - Otherwise print the joined message, or (no message), to stderr.
         #
         # . Arguments
-        #   Message text as positional arguments.
-        #
+        #   - `$@` — Words combined into the error message.
         # . Output
-        #   Writes the formatted failure message.
+        #   Writes through say or to stderr.
         #
         # . Returns
-        #   Status of the selected output helper.
+        #   Exit status of the selected output command.
         #
         # . Usage
         #   ```bash
-        #   _sh_err "Configuration file not found"
+        #   _sh_err "Palette configuration not found"
         #   ```
     _sh_err() {
         if declare -f say >/dev/null 2>&1; then
@@ -118,23 +133,32 @@ set -uo pipefail
             printf '%s\n' "${*:-(no message)}" >&2
         fi
     }
-    # fn: confirm - Confirm
+    # fn: confirm - Request a Yes/No confirmation
         # . Purpose
-        #   Ask for a Yes/No response, defaulting to No.
+        #   Ask for a confirmation with No as the default.
+        #
+        # . Behavior
+        #   - Use ask with Yes/No validation when available.
+        #   - Otherwise use a plain read -rp confirmation prompt.
+        #   - Accept Y/y as affirmative; every other answer is negative.
         #
         # . Arguments
-        #   Optional $1: prompt label (default: Are you sure?).
-        #
+        #   - `$1` — (optional) - Prompt; defaults to Are you sure?.
         # . Output
-        #   Prompts on the terminal.
+        #   Prompts via ask or a terminal read.
         #
         # . Returns
-        #   0 for Yes; nonzero for No or an input error.
+        #   0 for Yes; nonzero for No or input/prompt failure.
         #
         # . Usage
         #   ```bash
-        #   if confirm "Delete selected file?"; then echo "Confirmed"; fi
+        #   if confirm "Delete this item?"; then
+        #       sgnd_print --text "Confirmed"
+        #   fi
         #   ```
+        #
+        # . Notes
+        #   Requires a terminal/input stream; the fallback does not use the framework ask UI.
     confirm() {
         if declare -f ask >/dev/null 2>&1; then
             local _ans
@@ -154,22 +178,31 @@ set -uo pipefail
             [[ "$_a" =~ ^[Yy]$ ]]
         fi
     }
-    # fn: _sgnd_ui_resolve_theme_file - Ui resolve theme file
+    # fn: _sgnd_ui_resolve_theme_file - Locate a readable theme palette or style file
         # . Purpose
-        #   Resolve a theme palette or style specification to a readable shell file.
+        #   Resolve a palette/style name or file path to a readable .sh file.
+        #
+        # . Behavior
+        #   - Treat values containing / or ending in .sh as file paths.
+        #   - Otherwise locate <SGND_UI_THEME_DIR>/<kind>/<name>.sh.
+        #   - Do not source the resolved file.
         #
         # . Arguments
-        #   $1: kind (palette or style); $2: file path or theme name.
+        #   - `$1` — Theme subdirectory kind (e.g. palettes or styles).
+        #   - `$2` — Theme name or explicit path.
+        # . Inputs (globals)
+        #   SGND_UI_THEME_DIR when resolving by name.
         #
         # . Output
-        #   Prints the resolved file path on success.
+        #   Writes the resolved path to stdout without a final newline; errors to stderr.
         #
         # . Returns
-        #   0 if found; nonzero if the specification cannot be resolved.
+        #   - 0 found; 2 missing specification; 3 unreadable explicit path;
+        #   - 4 missing theme directory; 5 named theme not found.
         #
         # . Usage
         #   ```bash
-        #   _sgnd_ui_resolve_theme_file palette dark
+        #   palette_file="$(_sgnd_ui_resolve_theme_file palettes default-ui-palette)"
         #   ```
     _sgnd_ui_resolve_theme_file() {
         local kind="$1"
@@ -210,65 +243,92 @@ set -uo pipefail
         printf 'UI theme %s "%s" not found at: %s\n' "$kind" "$spec" "$file" >&2
         return 5
     }
-    # fn: sgnd_strip_ansi - Strip ansi
+    # fn: sgnd_strip_ansi - Remove ANSI CSI sequences from text
         # . Purpose
-        #   Remove terminal ANSI control sequences from one text argument.
+        #   Remove supported ANSI control sequences from a string.
+        #
+        # . Behavior
+        #   Use sed to strip ESC-[...] sequences ending with an alphabetic code.
         #
         # . Arguments
-        #   $1: text potentially containing ANSI escapes.
-        #
+        #   - `$1` — Text that may contain CSI sequences.
         # . Output
-        #   Prints text without supported ANSI escape sequences, followed by a newline.
+        #   Writes the stripped text followed by a newline.
         #
         # . Returns
         #   Exit status of sed.
         #
         # . Usage
         #   ```bash
-        #   sgnd_strip_ansi "${SGND_UI_TEXT}Hello${RESET}"
+        #   plain="$(sgnd_strip_ansi "$styled_text")"
         #   ```
     sgnd_strip_ansi() {
         sed -r $'s/\x1B\\[[0-9;?]*[[:alpha:]]//g' <<<"$1"
     }
-    # fn: sgnd_visible_len - Visible len
+    # fn: sgnd_visible_len - Measure text length without ANSI escapes
         # . Purpose
-        #   Calculate the visible character count after removing ANSI sequences.
+        #   Calculate a string length after removing ANSI control sequences.
+        #
+        # . Behavior
+        #   Strip supported ANSI escapes, then use Bash string length.
         #
         # . Arguments
-        #   $1: text to measure.
-        #
+        #   - `$1` — Text to measure.
         # . Output
-        #   Prints the visible character count without a trailing newline.
+        #   Writes the length as a decimal integer without a newline.
         #
         # . Returns
-        #   0 when the length is printed.
+        #   Exit status of printf.
         #
         # . Usage
         #   ```bash
-        #   sgnd_visible_len "${SGND_UI_TEXT}Hello${RESET}"
+        #   columns="$(sgnd_visible_len "$styled_label")"
         #   ```
+        #
+        # . Notes
+        #   Measures Bash characters, not terminal display cells; wide Unicode glyphs may occupy more than one cell.
     sgnd_visible_len() {
         local plain
         plain="$(sgnd_strip_ansi "$1")"
         printf '%s' "${#plain}"
     }
-    # fn: sgnd_ui_set_theme - Ui set theme
+    # fn: sgnd_ui_set_theme - Load a palette and UI style into the current shell
         # . Purpose
-        #   Load and apply a UI palette and style for the current shell.
+        #   Select and source a palette and style file for the current shell session.
+        #
+        # . Behavior
+        #   - Resolve palette and style files against SGND_UI_THEME_DIR or explicit paths.
+        #   - Source palette before style, and check that palette defines RESET.
+        #   - Set SGND_UI_PALETTE_FILE and SGND_UI_STYLE_FILE only after both load.
         #
         # . Arguments
-        #   Options: --palette NAME|PATH, --style NAME|PATH, --default, --help.
+        #   - `--palette NAME|PATH` — Palette name or file path.
+        #   - `--style NAME|PATH` — Style name or file path.
+        #   - `--default` — Use the built-in default palette and style.
+        #   - `-h`, `--help` — Display help.
+        #   - `PALETTE STYLE` — Alternatively, pass palette and style as positional values.
+        # . Inputs (globals)
+        #   SGND_UI_THEME_DIR; optionally SGND_FRAMEWORK_ROOT.
+        #
+        # . Outputs (globals)
+        #   Palette/style shell variables; SGND_UI_PALETTE_FILE; SGND_UI_STYLE_FILE.
         #
         # . Output
-        #   Updates theme and palette variables for the current process.
+        #   Writes help or diagnostics; otherwise no output on success.
         #
         # . Returns
-        #   0 on success; nonzero if a theme or its resources cannot be loaded.
+        #   - 0 when the palette and style load successfully, or for `--help`.
+        #   - 2 for unexpected arguments.
+        #   - 3–5 for theme file lookup errors; 10–12 for palette/style load errors.
         #
         # . Usage
         #   ```bash
-        #   sgnd_ui_set_theme --palette dark --style dark
+        #   sgnd_ui_set_theme --default
+        #   sgnd_ui_set_theme --palette default-ui-palette --style 00-style-default
         #   ```
+        #
+        # . Notes
+        #   Sourcing theme files can modify the current shell even if a later validation fails.
     sgnd_ui_set_theme() {
         local palette_spec=""
         local style_spec=""
@@ -349,42 +409,32 @@ set -uo pipefail
         return 0
     }
 
-    # fn: sgnd_theme - Display or switch the active UI theme
+    # fn: sgnd_theme - Show or change the selected semantic UI style
         # . Purpose
-        #   Display the current theme or switch the semantic UI style used by the
-        #   current SolidGroundUX session.
+        #   Display the active theme name or select and optionally persist another style.
         #
         # . Behavior
-        #   - With no theme argument, displays the currently configured theme.
-        #   - Resolves a short theme name such as "dark" to its numbered style file.
-        #   - Accepts an explicit numbered style filename such as "10-style-dark.sh".
-        #   - Loads the selected style immediately through sgnd_load_ui_style.
-        #   - With --save, stores SGND_UI_STYLE in the user framework cfg after the
-        #     theme has loaded successfully.
-        #   - Leaves the active theme unchanged when validation or loading fails.
+        #   - Without THEME, report SGND_UI_STYLE or the default style.
+        #   - Resolve short names against numbered *-style-*.sh files in SGND_STYLE_DIR.
+        #   - Set SGND_UI_STYLE and load it using sgnd_load_ui_style.
+        #   - When available, write the style to SGND_FRAMEWORK_STATEFILE.
+        #   - With --save, write SGND_UI_STYLE to SGND_FRAMEWORK_USRCFG_FILE.
+        #   - Attempt to restore the previous in-memory theme on a failed load/save.
         #
         # . Arguments
-        #   THEME
-        #       Optional theme name or style filename.
+        #   - `THEME` — (optional) - Short theme name, numbered style file, or path. --save - Persist the selected style to the user configuration. -h, --help - Display help.
+        # . Inputs (globals)
+        #   SGND_UI_STYLE, SGND_STYLE_DIR, framework state/user configuration paths.
         #
-        # . Options
-        #   --save
-        #       Save the selected theme in the user framework configuration.
-        #
-        #   -h, --help
-        #       Display usage information.
-        #
-        # Outputs (globals):
-        #   SGND_UI_STYLE
+        # . Outputs (globals)
+        #   SGND_UI_STYLE and optionally framework state/user configuration.
         #
         # . Output
-        #   Displays the current theme when no theme is supplied.
-        #   Reports validation, loading, or persistence failures to stderr.
+        #   Prints current theme, help or errors; selection is otherwise silent.
         #
         # . Returns
-        #   0 when the current theme is displayed or the requested theme is loaded.
-        #   1 when the theme cannot be found, loaded, or saved.
-        #   2 when invalid arguments are supplied.
+        #   - 0 for display, help or successful selection; 1 for theme/load/save errors;
+        #   - 2 for invalid arguments.
         #
         # . Usage
         #   ```bash
@@ -392,6 +442,9 @@ set -uo pipefail
         #   sgnd_theme dark
         #   sgnd_theme fantasy --save
         #   ```
+        #
+        # . Notes
+        #   A failure during --save may occur after framework state was already updated.
     sgnd_theme() {
         local theme=""
         local save=0
@@ -502,18 +555,18 @@ set -uo pipefail
 
         return 0
     }
-    # fn: sgnd_ui_set_default_theme - Ui set default theme
+    # fn: sgnd_ui_set_default_theme - Restore the framework default palette and style
         # . Purpose
-        #   Reload the Framework default theme.
+        #   Load the framework default theme into the current shell.
         #
-        # . Arguments
-        #   No arguments.
+        # . Behavior
+        #   Delegate to sgnd_ui_set_theme --default.
         #
         # . Output
-        #   Changes active UI variables to the default palette and style.
+        #   Diagnostics from sgnd_ui_set_theme, if any.
         #
         # . Returns
-        #   Status of sgnd_ui_set_theme.
+        #   Exit status of sgnd_ui_set_theme.
         #
         # . Usage
         #   ```bash
@@ -522,22 +575,29 @@ set -uo pipefail
     sgnd_ui_set_default_theme() {
         sgnd_ui_set_theme --default
     }
-    # fn: sgnd_sgr - Sgr
+    # fn: sgnd_sgr - Compose an ANSI SGR sequence
         # . Purpose
-        #   Compose a terminal SGR escape sequence from foreground, background and effects.
+        #   Compose one ANSI Select Graphic Rendition sequence from supplied parameters.
+        #
+        # . Behavior
+        #   - Ignore empty tokens and unsupported token forms.
+        #   - Accept semicolon/comma lists and extract numeric parameters from SGR sequences.
+        #   - Return RESET when no valid parameters remain.
         #
         # . Arguments
-        #   Positional SGR color or effect tokens; empty tokens are skipped.
+        #   - `$@` — Numeric SGR values, lists of numeric values, or ANSI SGR sequences.
+        # . Inputs (globals)
+        #   RESET for the no-parameter case.
         #
         # . Output
-        #   Prints a terminal escape sequence.
+        #   Writes the escape sequence without a newline.
         #
         # . Returns
-        #   0 when the sequence is printed.
+        #   Exit status of printf.
         #
         # . Usage
         #   ```bash
-        #   sgnd_sgr "$BRIGHT_BLUE" "" "$FX_BOLD"
+        #   bold_blue="$(sgnd_sgr "$BRIGHT_BLUE" "$FX_BOLD")"
         #   ```
     sgnd_sgr() {
         local -a parts=()
@@ -589,57 +649,80 @@ set -uo pipefail
 
         printf $'\e[%sm' "$(IFS=';'; echo "${parts[*]}")"
     }
-    # fn: sgnd_fg - Fg
+    # fn: sgnd_fg - Compose a foreground color and text effects
         # . Purpose
-        #   Build a foreground color sequence with optional text effects.
+        #   Build a foreground SGR sequence with optional text effects.
+        #
+        # . Behavior
+        #   Forward the requested color and effects to sgnd_sgr.
         #
         # . Arguments
-        #   $1: foreground color; following arguments: optional effects.
-        #
+        #   - `$1` — Foreground color sequence or SGR parameter.
+        #   - `$2...` — Optional effects.
         # . Output
-        #   Prints the SGR escape sequence.
+        #   Writes an ANSI sequence without a newline.
         #
         # . Returns
-        #   Status of sgnd_sgr.
+        #   Exit status of sgnd_sgr.
         #
         # . Usage
         #   ```bash
-        #   sgnd_fg "$BRIGHT_BLUE" "$FX_BOLD"
+        #   color="$(sgnd_fg "$BRIGHT_BLUE" "$FX_BOLD")"
         #   ```
-    sgnd_fg() {  # fn: sgnd_fg <fg> [fx...]
+    sgnd_fg() {
         local fg="${1:-}"
         shift || true
         sgnd_sgr "$fg" "" "$@"
     }
 
-    # fn: sgnd_bg - Bg
+    # fn: sgnd_bg - Compose a background color and text effects
         # . Purpose
-        #   Bg.
+        #   Build a background SGR sequence with optional text effects.
+        #
+        # . Behavior
+        #   Forward the background color and effects to sgnd_sgr.
+        #
+        # . Arguments
+        #   - `$1` — Background color sequence or SGR parameter.
+        #   - `$2...` — Optional effects.
+        # . Output
+        #   Writes an ANSI sequence without a newline.
         #
         # . Returns
-        #   Returns the underlying command or workflow status.
+        #   Exit status of sgnd_sgr.
         #
         # . Usage
         #   ```bash
-        #   sgnd_bg 24
+        #   background="$(sgnd_bg "$BG_BLUE" "$FX_BOLD")"
         #   ```
-    sgnd_bg() {  # fn: sgnd_bg <bg> [fx...]
+    sgnd_bg() {
         local bg="${1:-}"
         shift || true
         sgnd_sgr "" "$bg" "$@"
     }
 
  # -- Runmode indicators ----------------------------------------------------------
-    # fn: sgnd_update_runmode - Update runmode
+    # fn: sgnd_update_runmode - Refresh the displayed dry-run/commit indicator
         # . Purpose
-        #   Update runmode.
+        #   Set RUN_MODE to the styled DRYRUN or COMMIT label according to FLAG_DRYRUN.
+        #
+        # . Behavior
+        #   - Use sgnd_runmode_color to choose the current mode color.
+        #   - Append RESET after the DRYRUN or COMMIT text.
+        #
+        # . Inputs (globals)
+        #   FLAG_DRYRUN, SGND_UI_DRYRUN, SGND_UI_COMMIT, RESET.
+        #
+        # . Outputs (globals)
+        #   RUN_MODE in the current shell.
         #
         # . Returns
-        #   Returns the underlying command or workflow status.
+        #   Exit status of the final assignment (normally 0).
         #
         # . Usage
         #   ```bash
         #   sgnd_update_runmode
+        #   sgnd_print_titlebar
         #   ```
     sgnd_update_runmode() {
         if (( FLAG_DRYRUN )); then
@@ -648,48 +731,49 @@ set -uo pipefail
             RUN_MODE="$(sgnd_runmode_color)COMMIT${RESET}"
         fi
     }
-    # fn: sgnd_runmode_color - Runmode color
+    # fn: sgnd_runmode_color - Get the color for the current run mode
         # . Purpose
-        #   Select the color assigned to dry-run or commit mode.
+        #   Return the semantic color for dry-run or commit mode.
         #
-        # . Arguments
-        #   No arguments; reads FLAG_DRYRUN.
+        # . Inputs (globals)
+        #   FLAG_DRYRUN, SGND_UI_DRYRUN, SGND_UI_COMMIT.
         #
         # . Output
-        #   Prints SGND_UI_DRYRUN or SGND_UI_COMMIT.
+        #   Writes the selected color sequence without a newline.
         #
         # . Returns
-        #   0 when printed.
+        #   Exit status of printf.
         #
         # . Usage
         #   ```bash
-        #   sgnd_runmode_color
+        #   runmode_color="$(sgnd_runmode_color)"
         #   ```
     sgnd_runmode_color() {
         (( FLAG_DRYRUN )) && printf '%s' "$SGND_UI_DRYRUN" || printf '%s' "$SGND_UI_COMMIT"
     }
 
     # -- Rendering primitives --------------------------------------------------------
-        # fn: sgnd_terminal_width - Return the current terminal width
+    # fn: sgnd_terminal_width - Determine the available terminal width
         # . Purpose
-        #   Return the number of columns available to console rendering.
+        #   Return the number of columns available for console rendering.
         #
         # . Behavior
-        #   - Uses tput cols against the controlling terminal when one is available.
-        #   - Does not read from application stdin, which may contain piped data.
-        #   - Falls back to tput cols on stdout when stdout is attached to a terminal.
-        #   - Falls back to the COLUMNS environment variable.
-        #   - Falls back to 80 when no terminal width is available.
+        #   - Try tput cols on /dev/tty without reading application stdin.
+        #   - Next try tput on stdout when stdout is a terminal.
+        #   - Otherwise use valid COLUMNS; finally fall back to 80.
+        #
+        # . Inputs (globals)
+        #   COLUMNS when terminal probing fails.
         #
         # . Output
-        #   Writes one positive integer to stdout.
+        #   Writes a positive column count followed by a newline.
         #
         # . Returns
-        #   0 always.
+        #   0 after printing the selected width.
         #
         # . Usage
         #   ```bash
-        #   sgnd_terminal_width
+        #   terminal_columns="$(sgnd_terminal_width)"
         #   ```
     sgnd_terminal_width() {
         local width=""
@@ -717,32 +801,25 @@ set -uo pipefail
         printf '%s\n' "$width"
     }
 
-    # fn: sgnd_render_width - Resolve an effective console render width
+    # fn: sgnd_render_width - Clamp the requested render width to the terminal
         # . Purpose
-        #   Resolve the width used by SolidGroundUX console rendering primitives.
+        #   Choose an effective width no larger than the current terminal width.
         #
         # . Behavior
-        #   - Measures the current terminal width whenever the function is called.
-        #   - Uses an explicit requested width when supplied and smaller than the terminal.
-        #   - Otherwise uses the full current terminal width.
-        #   - Treats a requested width of 0 as the current terminal width.
-        #   - Never exceeds the current terminal width.
+        #   - Read the terminal width on every call.
+        #   - Use the requested width only when positive and narrower than the terminal.
         #
         # . Arguments
-        #   $1  REQUESTED_WIDTH (optional)
-        #       Requested render width.
-        #       Empty or 0 uses the current terminal width.
-        #
+        #   - `$1` — (optional) - Requested positive width; 0/empty/invalid uses full terminal width.
         # . Output
-        #   Writes the resolved width to stdout.
+        #   Writes an integer width followed by a newline.
         #
         # . Returns
-        #   0 always.
+        #   0 after printing the width.
         #
         # . Usage
         #   ```bash
-        #   sgnd_render_width
-        #   sgnd_render_width 120
+        #   width="$(sgnd_render_width 120)"
         #   ```
     sgnd_render_width() {
         local requested="${1:-0}"
@@ -760,22 +837,38 @@ set -uo pipefail
             printf '%s\n' "$terminal_width"
         fi
     }
-    # fn: sgnd_print_labeledvalue - Print labeledvalue
+    # fn: sgnd_print_labeledvalue - Print one styled label and value
         # . Purpose
-        #   Print an aligned label/value pair with theme-aware colors.
+        #   Render a single aligned label/value line using current UI colors.
+        #
+        # . Behavior
+        #   - Return without output for an empty label.
+        #   - Truncate the value to the available width before printing.
+        #   - Format the label in a fixed-width field.
         #
         # . Arguments
-        #   Options include --label and --value; see function option parser for formatting controls.
+        #   - `--label TEXT` — Label to display.
+        #   - `--value TEXT` — Associated value.
+        #   - `--sep TEXT` — Separator (default: colon).
+        #   - `--labelwidth N` — Label field width (default: 25).
+        #   - `--maxwidth N` — Maximum total width, capped to terminal width.
+        #   - `--pad N` — Left padding in spaces (default: 0).
+        #   - `--labelclr ANSI` — Label color override.
+        #   - `--valueclr ANSI` — Value color override.
+        #   - `LABEL VALUE` — Positional form is also accepted.
+        # . Inputs (globals)
+        #   SGND_UI_LABEL, SGND_UI_VALUE, RESET.
         #
         # . Output
-        #   Writes a formatted label/value line.
+        #   Writes one styled label/value line to stdout.
         #
         # . Returns
-        #   Status of the formatting/output operations.
+        #   0 for an empty label or successful rendering; printf status otherwise.
         #
         # . Usage
         #   ```bash
-        #   sgnd_print_labeledvalue --label "Host" --value "td-dev"
+        #   sgnd_print_labeledvalue --label "Host" --value "td-dev" --pad 2
+        #   sgnd_print_labeledvalue "Status" "Ready" --labelwidth 18 --maxwidth 80
         #   ```
     sgnd_print_labeledvalue() {
         local label=""
@@ -859,63 +952,43 @@ set -uo pipefail
             "${valueclr}${value}${RESET}"
     }
 
-    # fn: sgnd_print_labeledmultivalue
+    # fn: sgnd_print_labeledmultivalue - Print wrapped or multiple values under one label
         # . Purpose
-        #   Print one label followed by a value that may span multiple aligned lines.
+        #   Render a label with wrapped value lines aligned in one value column.
         #
         # . Behavior
-        #   - Renders the label and separator only on the first output line.
-        #   - Aligns continuation lines with the first value column.
-        #   - Accepts either one large value or an array of discrete items.
-        #   - Starts every supplied item on a new value line.
-        #   - Wraps long values and items to the requested or available value width.
-        #   - Applies the configured label and value colors to every rendered line.
+        #   - Print the label and separator only on the first line.
+        #   - Align continuation and wrapped lines to the initial value column.
+        #   - Wrap using sgnd_wrap_words and preserve explicit empty items or lines.
         #
-        # . options
-        #   --label VALUE
-        #       Label rendered on the first line.
-        #   --value VALUE
-        #       One value that may contain long text or embedded newlines.
-        #   --items ITEM...
-        #       Remaining arguments are treated as individual values. This option must
-        #       be the final option in the call.
-        #   --valuewidth WIDTH
-        #       Maximum visible width of the value column. Defaults to the available
-        #       width after padding, label, and separator are accounted for.
-        #   --sep VALUE
-        #       Separator between label and first value. Defaults to a colon.
-        #   --labelwidth WIDTH
-        #       Visible width reserved for the label. Defaults to 25.
-        #   --maxwidth WIDTH
-        #       Maximum total render width.
-        #   --pad COUNT
-        #       Number of spaces before the label. Defaults to 0.
-        #   --labelclr ANSI
-        #       ANSI sequence used for the label.
-        #   --valueclr ANSI
-        #       ANSI sequence used for the value lines.
+        # . Arguments
+        #   - `--label TEXT` — - Required label.
+        #   - `--value TEXT` — - Single possibly multiline value.
+        #   --items ITEM... - Remaining arguments are separate items (must be last).
+        #   - `--valuewidth N` — - Positive value-column width, capped to available width.
+        #   - `--sep TEXT` — - Separator (default colon).
+        #   - `--labelwidth N` — - Label field width (default 25).
+        #   - `--maxwidth N` — - Total width, capped to terminal width.
+        #   - `--pad N` — - Left padding (default 0).
+        #   - `--labelclr ANSI` — / --valueclr ANSI - Color overrides.
+        #
+        # . Inputs (globals)
+        #   SGND_UI_LABEL, SGND_UI_VALUE, RESET.
         #
         # . Output
-        #   Writes one or more aligned labeled-value lines to stdout.
+        #   Writes one or more styled lines to stdout.
         #
         # . Returns
-        #   0 after rendering.
-        #   2 when no label is supplied or a numeric option is invalid.
+        #   - 0 after rendering
+        #   - 2 if label is missing or a numeric option is invalid.
         #
         # . Usage
         #   ```bash
-        #   labelwidth="$(printf '%s\n' "Changed files" "Warnings" "Description" | awk '{ if (length > max) max = length } END { print max }')"
         #   sgnd_print_labeledmultivalue \
         #       --label "Changed files" \
-        #       --labelwidth "$labelwidth" \
-        #       --items "file-one.sh" "file-two.sh"
+        #       --items "first.sh" "second.sh"
+        #   sgnd_print_labeledmultivalue --label "Description" --value "$description" --valuewidth 60
         #   ```
-        #
-        #   sgnd_print_labeledmultivalue \
-        #       --label "Description" \
-        #       --labelwidth "$labelwidth" \
-        #       --value "$description" \
-        #       --valuewidth 60
     sgnd_print_labeledmultivalue() {
         local label=""
         local value=""
@@ -983,23 +1056,36 @@ set -uo pipefail
 
         printf -v continuation_prefix '%*s' "$continuation_width" ''
 
-        # fn: _sgnd_labeledmultivalue_emit - Render one labeled or continuation value line
+        # fn: _sgnd_labeledmultivalue_emit - Emit one line of a labeled multivalue block
             # . Purpose
-            #   Render one labeled or continuation value line.
+            #   Write one wrapped value line and track whether it is the first line.
+            #
+            # . Behavior
+            #   - On the first call, print the label, separator and value.
+            #   - On later calls, print an aligned continuation without the label.
             #
             # . Arguments
-            #   $1  One already wrapped value line.
+            #   - `$1` — Already-wrapped value line.
+            # . Inputs (globals)
+            #   Closure-local variables in sgnd_print_labeledmultivalue, including label, colors, padding and continuation_prefix.
             #
-            # . Side effects
-            #   Updates enclosing renderer variables first_output and emitted; writes formatted text to stdout.
+            # . Outputs (globals)
+            #   Closure-local first_output and emitted flags.
+            #
+            # . Output
+            #   Writes one styled line to stdout.
             #
             # . Returns
-            #   0 after rendering the line.
+            #   Exit status of the assignment to emitted (normally 0).
             #
             # . Usage
             #   ```bash
-            #   _sgnd_labeledmultivalue_emit "$line"
+            #   # Inside sgnd_print_labeledmultivalue only:
+            #   _sgnd_labeledmultivalue_emit "$wrapped_line"
             #   ```
+            #
+            # . Notes
+            #   This dynamically defined helper is removed with unset -f before the outer function returns.
         _sgnd_labeledmultivalue_emit() {
             local line="$1"
 
@@ -1053,22 +1139,38 @@ set -uo pipefail
         unset -f _sgnd_labeledmultivalue_emit
         return 0
     }
-    # fn: sgnd_print_fill - Print fill
+    # fn: sgnd_print_fill - Print left and right text separated by fill characters
         # . Purpose
-        #   Print left and right text separated by fill characters.
+        #   Render one line whose left/right texts are separated by repeated fill characters.
+        #
+        # . Behavior
+        #   - Calculate fill from visible text lengths and requested padding.
+        #   - Inherit the left color for the right when no right color is specified.
+        #   - Never use a negative fill count.
         #
         # . Arguments
-        #   Options include --left, --right, --padleft, --padright and --maxwidth.
+        #   - `--left TEXT` — Text at the left end.
+        #   - `--right TEXT` — Text at the right end.
+        #   - `--padleft N` — Left padding in characters (default: 2).
+        #   - `--padright N` — Right padding in characters (default: 1).
+        #   - `--maxwidth N` — Maximum width, capped to the terminal.
+        #   - `--fillchar CHAR` — Fill character (only the first character is used).
+        #   - `--leftclr ANSI` — Left text color override.
+        #   - `--rightclr ANSI` — Right text color override.
+        #   - `LEFT RIGHT` — Positional form is also accepted.
+        # . Inputs (globals)
+        #   SGND_UI_TEXT, RESET.
         #
         # . Output
-        #   Writes one padded line to the terminal.
+        #   Writes one styled filled line to stdout.
         #
         # . Returns
-        #   Status of the output operation.
+        #   Exit status of printf.
         #
         # . Usage
         #   ```bash
-        #   sgnd_print_fill --left "Source" --right "Destination"
+        #   sgnd_print_fill --left "Source" --right "Destination" --fillchar .
+        #   sgnd_print_fill "Queued" "12 items" --fillchar - --maxwidth 60
         #   ```
     sgnd_print_fill() {
         local left="" right=""
@@ -1129,22 +1231,44 @@ set -uo pipefail
             "${rightclr}${right}${RESET}" \
             ""
     }
-    # fn: sgnd_print_titlebar - Print titlebar
+    # fn: sgnd_print_titlebar - Render a themed application title bar
         # . Purpose
-        #   Render the application title bar with current version and run-mode metadata.
+        #   Render a title block with script metadata, run mode and optional subtitle.
+        #
+        # . Behavior
+        #   - Start with script title, version/build and RUN_MODE when no overrides apply.
+        #   - Mark non-root installations with NON-ROOT in the default left title.
+        #   - Compose the bar using sgnd_print, sgnd_print_fill and sgnd_print_sectionheader.
         #
         # . Arguments
-        #   Optional title-bar options and values handled by the function.
+        #   - `--left TEXT` — Main left title; overrides metadata default.
+        #   - `--right TEXT` — Right title/run mode; overrides metadata default.
+        #   - `--sub TEXT` — Subtitle below the main title.
+        #   - `--subjust L|C|R` — Subtitle justification.
+        #   - `--leftclr ANSI` — Left title color override.
+        #   - `--rightclr ANSI` — Right title color override.
+        #   - `--subclr ANSI` — Subtitle color override.
+        #   - `--border CHAR` — Border character.
+        #   - `--borderclr ANSI` — Border color override.
+        #   - `--padleft N` — Left padding.
+        #   - `--maxwidth N` — Maximum render width.
+        #
+        # . Inputs (globals)
+        #   SGND_SCRIPT_* metadata, RUN_MODE, SGND_FRAMEWORK_ROOT, title/style globals.
         #
         # . Output
-        #   Displays the title bar using active theme settings.
+        #   Writes the themed title bar to stdout.
         #
         # . Returns
-        #   Status of the output operation.
+        #   Exit status of the final sgnd_print_sectionheader call.
         #
         # . Usage
         #   ```bash
-        #   sgnd_print_titlebar --left "Smoke tests"
+        #   # Use the default title from script metadata.
+        #   sgnd_print_titlebar
+        #
+        #   # Override the title, run-mode label and subtitle.
+        #   sgnd_print_titlebar --left "Smoke tests" --right "DRYRUN" --sub "System checks"
         #   ```
     sgnd_print_titlebar() {
 
@@ -1225,22 +1349,36 @@ set -uo pipefail
             --borderclr "$borderclr" \
             --maxwidth "$maxwidth"
     }
-    # fn: sgnd_print_sectionheader - Print sectionheader
+    # fn: sgnd_print_sectionheader - Render a themed section heading or border
         # . Purpose
-        #   Render a themed section heading and optional border.
+        #   Print a section heading with optional leading/trailing border characters.
+        #
+        # . Behavior
+        #   - With no heading, print a full-width border.
+        #   - With a heading, align optional border fill to the render width.
+        #   - Strip ANSI escapes only for plain-text length preparation.
         #
         # . Arguments
-        #   Options include --text, --textclr, --border, --borderclr and --maxwidth.
+        #   - `--text TEXT` — - Section heading; omit for a full-width border.
+        #   - `--textclr ANSI` — / --borderclr ANSI - Colors.
+        #   - `--border CHAR` — - Border string.
+        #   - `--padleft N` — - Border characters before heading (default 4).
+        #   --padend 0|1 - Whether to fill the right side (default 1).
+        #   - `--maxwidth N` — - Maximum render width.
+        #
+        # . Inputs (globals)
+        #   SGND_SECTION_* and SGND_UI_* theme variables; RESET.
         #
         # . Output
-        #   Writes the formatted section heading.
+        #   Writes one themed line to stdout.
         #
         # . Returns
-        #   Status of the output operation.
+        #   0 on successful printing; printf status otherwise.
         #
         # . Usage
         #   ```bash
         #   sgnd_print_sectionheader --text "Network settings"
+        #   sgnd_print_sectionheader --border =
         #   ```
     sgnd_print_sectionheader() {
         local text=""
@@ -1321,22 +1459,37 @@ set -uo pipefail
 
         printf '%s\n' "$fnl"
     }
-    # fn: sgnd_print - Print
+    # fn: sgnd_print - Print optionally wrapped and aligned themed text
         # . Purpose
-        #   Print themed console text with optional padding, alignment and wrapping.
+        #   Render console text with theme color, padding, alignment and automatic wrapping.
+        #
+        # . Behavior
+        #   - With empty text, write a blank line via sgnd_print_single.
+        #   - When wrapping is enabled, wrap with sgnd_wrap_words.
+        #   - Delegate each rendered line to sgnd_print_single.
         #
         # . Arguments
-        #   Options include --text, --textclr, --justify, --pad, --wrap and --maxwidth.
+        #   - `--text TEXT` — Text to print; also accepts the first positional value.
+        #   - `--textclr ANSI` — Text color sequence.
+        #   - `--justify L|C|R` — Alignment (default: left).
+        #   - `--wrap 0|1` — Explicit wrapping; otherwise wrap when text exceeds the available width.
+        #   - `--pad N` — Left padding in spaces.
+        #   - `--rightmargin N` — Right margin in spaces.
+        #   - `--maxwidth N` — Maximum content width, capped at terminal width.
+        #
+        # . Inputs (globals)
+        #   SGND_UI_TEXT, RESET.
         #
         # . Output
-        #   Writes the formatted text to the console.
+        #   Writes one or more styled console lines to stdout.
         #
         # . Returns
-        #   Status of the output operation.
+        #   0 for an empty-text call; otherwise final rendering status.
         #
         # . Usage
         #   ```bash
         #   sgnd_print --text "Ready" --pad 2
+        #   sgnd_print --text "$description" --wrap 1 --maxwidth 80
         #   ```
     sgnd_print() {
         local text=""
@@ -1409,22 +1562,36 @@ set -uo pipefail
                 --maxwidth "$maxwidth"
         fi
     }
-    # fn: sgnd_print_single - Print single
+    # fn: sgnd_print_single - Render one aligned non-wrapped line
         # . Purpose
-        #   Print one themed text line with optional alignment and padding.
+        #   Print a single themed line using left, center or right alignment.
+        #
+        # . Behavior
+        #   - Print an empty line for empty text.
+        #   - Measure visible width without ANSI sequences.
+        #   - If text is too long, strip styling and truncate to available length.
+        #   - Pad the line to its effective width.
         #
         # . Arguments
-        #   Options include --text, --textclr, --justify, --pad and --maxwidth.
+        #   - `--text TEXT` — Text to render; the first positional argument is also accepted.
+        #   - `--textclr ANSI` — Text color override.
+        #   - `--justify L|C|R` — Alignment (default: left).
+        #   - `--pad N` — Outer padding in spaces (default: 0).
+        #   - `--maxwidth N` — Maximum render width.
+        #
+        # . Inputs (globals)
+        #   SGND_UI_TEXT, RESET.
         #
         # . Output
-        #   Writes one formatted text line.
+        #   Writes one ANSI-styled line and a newline to stdout.
         #
         # . Returns
-        #   Status of the output operation.
+        #   0 for an empty-text call; otherwise printf status.
         #
         # . Usage
         #   ```bash
-        #   sgnd_print_single --text "Ready"
+        #   sgnd_print_single --text "Ready" --justify C --maxwidth 80
+        #   sgnd_print_single "Waiting for input" --justify L --pad 2
         #   ```
     sgnd_print_single() {
         local text=""
@@ -1497,23 +1664,32 @@ set -uo pipefail
 
         printf "%b\n" "${textclr}${line}${RESET}"
     }
-    # fn: sgnd_print_file - Print file
+    # fn: sgnd_print_file - Display a file as plain text or rendered Markdown
         # . Purpose
-        #   Display a readable text file, using a pager for interactive terminals when available.
+        #   Display a readable file, selecting a Markdown renderer and pager when available.
+        #
+        # . Behavior
+        #   - Detect Markdown by .md extension (case-insensitive).
+        #   - For Markdown, prefer glow, then mdcat, bat, or pandoc if installed.
+        #   - For other files or when no renderer is available, use less in interactive output or cat.
+        #   - Do not invoke less for non-interactive stdout.
         #
         # . Arguments
-        #   $1: path to a readable file.
-        #
+        #   - `$1` — Required path to the file to display.
         # . Output
-        #   Writes file content to a pager or standard output.
+        #   Displays file contents, rendered output, or errors.
         #
         # . Returns
-        #   0 on success; 2 for missing or unreadable files; other statuses depend on the pager.
+        #   - 2 if a provided path is empty or unreadable; otherwise status from the selected renderer, pager or cat.
         #
         # . Usage
         #   ```bash
-        #   sgnd_print_file "/etc/hosts"
+        #   sgnd_print_file /etc/hosts
+        #   sgnd_print_file "$README_PATH"
         #   ```
+        #
+        # . Notes
+        #   With set -u active, omitting $1 entirely triggers Bash unbound-variable handling before the missing-path check.
     sgnd_print_file() {
         local file="$1"
         
@@ -1574,18 +1750,22 @@ set -uo pipefail
             cat -- "$file"
         fi
     }
-    # fn: sgnd_print_cell - Print cell
+    # fn: sgnd_print_cell - Print a string padded to a visible column width
         # . Purpose
-        #   Pad a string to the requested visible column width.
+        #   Print styled text followed by spaces to meet a requested column width.
+        #
+        # . Behavior
+        #   - Measure width after stripping supported ANSI sequences.
+        #   - Never truncate strings longer than the requested width.
         #
         # . Arguments
-        #   $1: width in characters; $2: text (may contain ANSI styling).
-        #
+        #   - `$1` — Target width in characters.
+        #   - `$2` — Text, optionally containing ANSI CSI sequences.
         # . Output
-        #   Prints the string followed by sufficient spaces; never truncates it.
+        #   Writes the original text and trailing spaces without a newline.
         #
         # . Returns
-        #   0 when printed.
+        #   Exit status of printf.
         #
         # . Usage
         #   ```bash
@@ -1605,23 +1785,35 @@ set -uo pipefail
 
         printf '%s%*s' "$s" "$pad" ""
     }
-    # fn: sgnd_module_show_metadata - Module show metadata
+    # fn: sgnd_module_show_metadata - Display registered module or script metadata
         # . Purpose
-        #   Display metadata registered for a module or script.
+        #   Look up and display SGND_* metadata for a module or script.
+        #
+        # . Behavior
+        #   - Use an SGND_* prefix directly or derive one from the real file path.
+        #   - Read the corresponding *_FILE, *_TITLE, *_VERSION and other metadata variables.
+        #   - Print each available field through sgnd_print_labeled_value.
+        #   - Print a separate Description section when a description exists.
         #
         # . Arguments
-        #   $1: module prefix or source file reference.
+        #   - `$1` — Required SGND_* prefix or script filename.
+        # . Inputs (globals)
+        #   SGND_<MODULE>_* metadata variables; sgnd_print_labeled_value helper.
         #
         # . Output
-        #   Writes resolved metadata fields to the console.
+        #   Writes labeled metadata fields and optional description to stdout.
         #
         # . Returns
-        #   Status of metadata lookup and output.
+        #   - 1 if readlink -f fails; otherwise 0 after printing. An omitted $1 triggers Bash missing-argument expansion.
         #
         # . Usage
         #   ```bash
+        #   sgnd_module_show_metadata SGND_UI
         #   sgnd_module_show_metadata "$SGND_SCRIPT_FILE"
         #   ```
+        #
+        # . Notes
+        #   This function calls sgnd_print_labeled_value (with an underscore); confirm that helper is defined by the runtime.
     sgnd_module_show_metadata() {
         local module_ref="${1:?missing module prefix or file}"
         local prefix=""
@@ -1707,42 +1899,44 @@ set -uo pipefail
         return 0
     }
 
-    # fn: sgnd_clear - Clear the visible terminal display
-        #     . Purpose
-        #       Clear the visible terminal display and move the cursor to the home position.
+    # fn: sgnd_clear - Clear the visible terminal screen
+        # . Purpose
+        #   Clear the visible terminal display and move the cursor to the top-left.
         #
-        #     . Behavior
-        #       - Uses explicit ANSI escape sequences instead of the external clear command.
-        #       - Clears only the visible display.
-        #       - Leaves the terminal scrollback buffer unchanged.
-        #       - Moves the cursor to row 1, column 1.
+        # . Behavior
+        #   - Print ESC[H followed by ESC[2J.
+        #   - Leave scrollback history untouched.
         #
-        #     . Output
-        #       Writes terminal control sequences to stdout.
+        # . Output
+        #   Writes two ANSI control sequences to stdout.
         #
-        #     . Returns
-        #       0 always.
+        # . Returns
+        #   Exit status of printf.
         #
-        #     . Usage
+        # . Usage
         #   ```bash
-        #       sgnd_clear
+        #   sgnd_clear
         #   ```
     sgnd_clear() {
         #printf '\033[H\033[2J\033[3J'
         printf '\033[H\033[2J'
     }
-    # fn: sgnd_color_samples - Color samples
+    # fn: sgnd_color_samples - Preview named palette colors and effects
         # . Purpose
-        #   Print a preview of the configured foreground colors and text effects.
+        #   Display sample colors and text effects from the active palette.
         #
-        # . Arguments
-        #   No arguments.
+        # . Behavior
+        #   - Print a fixed sample heading.
+        #   - Use sgnd_sample_row for the predefined color families.
+        #
+        # . Inputs (globals)
+        #   Palette variables and effect variables used by sgnd_sample_row.
         #
         # . Output
-        #   Writes a color/effect demonstration to the console.
+        #   Prints a collection of color/effect samples.
         #
         # . Returns
-        #   Status of output.
+        #   Exit status of the last sgnd_sample_row invocation.
         #
         # . Usage
         #   ```bash
@@ -1766,23 +1960,32 @@ set -uo pipefail
         sgnd_sample_row	YELLOW	BRIGHT_YELLOW	DARK_YELLOW	    BG_YELLOW	BG_DARK_YELLOW
 
     }
-    # fn: sgnd_sample_row - Sample row
+    # fn: sgnd_sample_row - Preview a row of palette variables and effects
         # . Purpose
-        #   Print sample foreground/background colors and effects for named palette variables.
+        #   Render sample output for each supplied palette variable name.
+        #
+        # . Behavior
+        #   - Resolve each name through Bash eval.
+        #   - Display the name/color and bold, faint, italic, underline, reverse and strike samples.
         #
         # . Arguments
-        #   One or more existing color variable names.
+        #   - `$@` — Names of already-defined color variables (not literal color values).
+        # . Inputs (globals)
+        #   Named palette variables and FX_* effect sequences; RESET.
         #
         # . Output
-        #   Writes a sample row to the terminal.
+        #   Prints one demonstration line per supplied variable, then a blank line.
         #
         # . Returns
-        #   Status of output.
+        #   Exit status of the final printf.
         #
         # . Usage
         #   ```bash
         #   sgnd_sample_row BLUE BRIGHT_BLUE DARK_BLUE
         #   ```
+        #
+        # . Notes
+        #   Pass trusted variable names only; implementation resolves the names with eval.
     sgnd_sample_row(){
         local clr name val
 
@@ -1827,24 +2030,26 @@ set -uo pipefail
         printf "\n"
     }
 
-    # fn$: _sgnd_style_color_description - Resolve a semantic color to a palette name or RGB value
+    # fn: _sgnd_style_color_description - Describe a resolved semantic color value
         # . Purpose
-        #   Return a readable description for an already resolved ANSI color value.
+        #   Convert a selected ANSI color value into a readable palette name or color code.
         #
         # . Behavior
-        #   - Prefers a matching named foreground palette variable when available.
-        #   - Falls back to #RRGGBB for 24-bit foreground colors.
-        #   - Falls back to xterm-N for indexed foreground colors.
-        #   - Returns "custom" when the value cannot be recognized.
+        #   - First compare the value with known palette variables.
+        #   - Then decode 24-bit foreground colors as #RRGGBB.
+        #   - Then decode indexed foreground colors as xterm-N.
+        #   - Return custom for other sequences.
         #
         # . Arguments
-        #   $1  COLOR_VALUE - Resolved ANSI foreground color sequence.
+        #   - `$1` — Resolved ANSI foreground color sequence.
+        # . Inputs (globals)
+        #   Named palette variables.
         #
         # . Output
-        #   Writes the palette name, RGB hex value, indexed color, or "custom".
+        #   Writes one descriptive string followed by a newline.
         #
         # . Returns
-        #   0 always.
+        #   0 after printing the description.
         #
         # . Usage
         #   ```bash
@@ -1902,31 +2107,32 @@ set -uo pipefail
         return 0
     }
 
-    # fn: sgnd_style_samples - Display the active UI theme
+    # fn: sgnd_style_samples - Showcase the currently active UI style
         # . Purpose
-        #   Demonstrate the active SolidGroundUX theme and the rendering primitives
-        #   used by framework console applications.
+        #   Display a non-interactive demonstration of theme colors and UI primitives.
         #
         # . Behavior
-        #   - Shows the current theme name through sgnd_print_titlebar.
-        #   - Renders every message label directly through sgnd_print using its
-        #     corresponding MSG_CLR_* semantic color.
-        #   - Demonstrates the principal sgnd_print* rendering primitives by name.
-        #   - Includes a non-interactive simulation of ask prompt/input styling.
-        #   - Preserves the run-mode and validation/state specimens.
-        #   - Shows message, progress, and UI semantic colors with their resolved
-        #     palette name or RGB/indexed fallback.
+        #   - Show the current theme name in a title bar.
+        #   - Demonstrate message labels, text rendering, labeled values and prompt styling.
+        #   - Display run modes, validation states and progress styling.
+        #   - List resolved semantic colors by palette name, RGB hex or indexed color.
+        #
+        # . Inputs (globals)
+        #   SGND_UI_STYLE, MSG_CLR_*, PROG_*, LBL_* and UI theme variables.
         #
         # . Output
-        #   Writes a visual theme and rendering showcase to the terminal.
+        #   Writes a full theme showcase to the terminal.
         #
         # . Returns
-        #   0 on success.
+        #   0 after completing the demonstration.
         #
         # . Usage
         #   ```bash
         #   sgnd_style_samples
         #   ```
+        #
+        # . Notes
+        #   Uses sayprogress_begin/sayprogress and pauses briefly with sleep 1.
     sgnd_style_samples() {
         local current_theme="${SGND_UI_STYLE##*/}"
         local message_type=""

@@ -49,26 +49,26 @@
 
 set -uo pipefail
 # - Library guard ------------------------------------------------------------------
-    # fn$ _sgnd_lib_guard - Enforce source-only, single-load library initialization
+    # fn: _sgnd_lib_guard - Reject direct execution and track source state
         # . Purpose
-        #   Ensure the file is sourced as a library and initialized only once.
+        #   Ensure direct execution is rejected and record that the library has been sourced.
         #
         # . Behavior
         #   - Derives a unique guard variable name from the current filename.
         #   - Aborts execution when the file is run directly instead of sourced.
-        #   - Sets the guard variable on first load.
-        #   - Returns immediately when the library was already loaded.
+        #   - Records a guard variable on the first source operation.
+        #   - Returns early if the guard flag is already present; subsequent file statements still execute.
         #
-        # Inputs
-        #   BASH_SOURCE[0]
-        #   $0
+        # . Inputs
+        #   - BASH_SOURCE[0]
+        #   - $0
         #
-        # Outputs (globals)
+        # . Outputs (globals)
         #   SGND_<MODULE>_LOADED
         #
         # . Returns
-        #   0 when already loaded or successfully initialized.
-        #   Exits with code 2 when executed instead of sourced.
+        #   - 0 when already loaded or successfully initialized.
+        #   - Exits with code 2 when executed instead of sourced.
         #
         # . Usage
         #   ```bash
@@ -107,13 +107,13 @@ set -uo pipefail
         #   Skips an initial shebang and blank lines; stops at the first non-comment line after the header.
         #
         # . Arguments
-        #   $1  Readable source filename.
+        #   - `$1` — Readable source filename.
         #
         # . Output
         #   Writes the comment header without the final newline.
         #
         # . Returns
-        #   0 after printing the header; 1 if the file is unreadable.
+        #   - 0 after printing the header; 1 if the file is unreadable.
         #
         # . Usage
         #   ```bash
@@ -153,16 +153,16 @@ set -uo pipefail
         #   Append fields from one source-header section into a datatable.
         #
         # . Arguments
-        #   $1  Source file.
-        #   $2  Section name such as Metadata.
-        #   $3  Schema for destination rows.
-        #   $4  Name of destination table array.
+        #   - `$1` — Source file.
+        #   - `$2` — Section name such as Metadata.
+        #   - `$3` — Schema for destination rows.
+        #   - `$4` — Name of destination table array.
         #
         # . Side effects
         #   Appends section/key/value records to the named table array.
         #
         # . Returns
-        #   0 after reading; 1 when a row cannot be appended.
+        #   - 0 after reading; 1 when a row cannot be appended.
         #
         # . Usage
         #   ```bash
@@ -217,10 +217,10 @@ set -uo pipefail
         #   Accepts a leading hash, space, a letter-led heading and a trailing colon; rejects indented content lines.
         #
         # . Arguments
-        #   $1  Single source-comment line.
+        #   - `$1` — Single source-comment line.
         #
         # . Returns
-        #   0 for a section header; 1 otherwise.
+        #   - 0 for a section header; 1 otherwise.
         #
         # . Usage
         #   ```bash
@@ -238,13 +238,13 @@ set -uo pipefail
         #   Cache one source file header for repeated queries.
         #
         # . Arguments
-        #   $1  Readable source path.
+        #   - `$1` — Readable source path.
         #
         # . Side effects
         #   Sets SGND_HEADER_BUFFER_FILE and SGND_HEADER_BUFFER_TEXT.
         #
         # . Returns
-        #   0 when cached; 1 if unreadable or header extraction fails.
+        #   - 0 when cached; 1 if unreadable or header extraction fails.
         #
         # . Usage
         #   ```bash
@@ -263,14 +263,14 @@ set -uo pipefail
         #   Retrieve a section from the currently cached source header.
         #
         # . Arguments
-        #   $1  Section name.
-        #   $2  Name of the shell variable to receive the section.
+        #   - `$1` — Section name.
+        #   - `$2` — Name of the shell variable to receive the section.
         #
         # . Side effects
         #   Assigns the extracted text to the caller-selected shell variable.
         #
         # . Returns
-        #   0 when the section is found; 1 if the buffer is empty or section absent.
+        #   - 0 when the section is found; 1 if the buffer is empty or section absent.
         #
         # . Usage
         #   ```bash
@@ -291,13 +291,13 @@ set -uo pipefail
         #   Excludes Version, Build and Checksum entries within the Metadata header section from the hashed input.
         #
         # . Arguments
-        #   $1  Readable source path.
+        #   - `$1` — Readable source path.
         #
         # . Output
         #   Writes a SHA-256 digest without changing the file.
         #
         # . Returns
-        #   0 after hashing; 1 if the file is unreadable.
+        #   - 0 after hashing; 1 if the file is unreadable.
         #
         # . Usage
         #   ```bash
@@ -323,14 +323,14 @@ set -uo pipefail
         #   Refresh script checksum/build metadata and optionally bump version.
         #
         # . Arguments
-        #   $1  Script path.
-        #   $2  Bump mode: none, major or minor (default none).
+        #   - `$1` — Script path.
+        #   - `$2` — Bump mode: none, major or minor (default none).
         #
         # . Side effects
         #   May rewrite Metadata Version, Build and Checksum; sets SGND_HEADER_BUMP_CHANGED to 1 when modified.
         #
         # . Returns
-        #   0 when processed successfully; 1 on read or update failure.
+        #   - 0 when processed successfully; 1 on read or update failure.
         #
         # . Usage
         #   ```bash
@@ -420,15 +420,15 @@ set -uo pipefail
         #   Read a named section from a source-file header into a shell variable.
         #
         # . Arguments
-        #   $1  Source path.
-        #   $2  Section name.
-        #   $3  Name of the destination variable.
+        #   - `$1` — Source path.
+        #   - `$2` — Section name.
+        #   - `$3` — Name of the destination variable.
         #
         # . Side effects
         #   Assigns section text to the named variable.
         #
         # . Returns
-        #   0 on completion; consult the destination content to determine whether the section was present.
+        #   - 0 on completion; consult the destination content to determine whether the section was present.
         #
         # . Usage
         #   ```bash
@@ -474,15 +474,15 @@ set -uo pipefail
         #   Extract a named section from previously loaded comment text.
         #
         # . Arguments
-        #   $1  Header text.
-        #   $2  Section name.
-        #   $3  Destination variable name.
+        #   - `$1` — Header text.
+        #   - `$2` — Section name.
+        #   - `$3` — Destination variable name.
         #
         # . Side effects
         #   Assigns the extracted section to the named variable.
         #
         # . Returns
-        #   0 if the section occurs; 1 if absent.
+        #   - 0 if the section occurs; 1 if absent.
         #
         # . Usage
         #   ```bash
@@ -531,12 +531,12 @@ set -uo pipefail
         #   Parse product and title from supplied header text.
         #
         # . Arguments
-        #   $1  TEXT - Text value.
-        #   $2  _PRODUCT_VAR - Target variable name.
-        #   $3  _TITLE_VAR - Target variable name.
+        #   - `$1` — TEXT - Text value.
+        #   - `$2` — _PRODUCT_VAR - Target variable name.
+        #   - `$3` — _TITLE_VAR - Target variable name.
         #
         # . Returns
-        #   0 if a product/title banner is recognized; 1 otherwise (output variables are cleared).
+        #   - 0 if a product/title banner is recognized; 1 otherwise (output variables are cleared).
                 #
         # . Usage
         #   ```bash
@@ -587,15 +587,15 @@ set -uo pipefail
         #   Split a banner comment into product and title.
         #
         # . Arguments
-        #   $1  Banner comment line in # Product - Title format.
-        #   $2  Output variable name for product.
-        #   $3  Output variable name for title.
+        #   - `$1` — Banner comment line in # Product - Title format.
+        #   - `$2` — Output variable name for product.
+        #   - `$3` — Output variable name for title.
         #
         # . Side effects
         #   Assigns product/title variables, or empties them when the line does not match.
         #
         # . Returns
-        #   0 on match; 1 when no banner delimiter was found.
+        #   - 0 on match; 1 when no banner delimiter was found.
         #
         # . Usage
         #   ```bash
@@ -631,16 +631,16 @@ set -uo pipefail
         #   Read a named field from a source-header section.
         #
         # . Arguments
-        #   $1  Source path.
-        #   $2  Section name (for example Metadata).
-        #   $3  Field name (for example Version).
-        #   $4  Destination variable name.
+        #   - `$1` — Source path.
+        #   - `$2` — Section name (for example Metadata).
+        #   - `$3` — Field name (for example Version).
+        #   - `$4` — Destination variable name.
         #
         # . Side effects
         #   Writes the field value into the specified variable; empties it if missing.
         #
         # . Returns
-        #   0 when found; 1 when absent.
+        #   - 0 when found; 1 when absent.
         #
         # . Usage
         #   ```bash
@@ -695,9 +695,9 @@ set -uo pipefail
         #   Print a named field value directly to stdout.
         #
         # . Arguments
-        #   $1  Source path.
-        #   $2  Section name.
-        #   $3  Field name.
+        #   - `$1` — Source path.
+        #   - `$2` — Section name.
+        #   - `$3` — Field name.
         #
         # . Output
         #   Writes the field value or an empty string when not found.
@@ -723,12 +723,12 @@ set -uo pipefail
         #   Read product and title from a script file.
         #
         # . Arguments
-        #   $1  FILE - File path.
-        #   $2  _PRODUCT_VAR - Target variable name.
-        #   $3  _TITLE_VAR - Target variable name.
+        #   - `$1` — FILE - File path.
+        #   - `$2` — _PRODUCT_VAR - Target variable name.
+        #   - `$3` — _TITLE_VAR - Target variable name.
         #
         # . Returns
-        #   0 if a product/title banner is recognized; 1 otherwise (output variables are cleared).
+        #   - 0 if a product/title banner is recognized; 1 otherwise (output variables are cleared).
                 #
         # . Usage
         #   ```bash
@@ -779,8 +779,8 @@ set -uo pipefail
         #   Extract a field value from an already loaded section string.
         #
         # . Arguments
-        #   $1  Section text.
-        #   $2  Field name.
+        #   - `$1` — Section text.
+        #   - `$2` — Field name.
         #
         # . Output
         #   Writes the trimmed value, without a trailing newline.
@@ -824,13 +824,13 @@ set -uo pipefail
         #   Add a metadata field to a named header section.
         #
         # . Arguments
-        #   $1  FILE - File path.
-        #   $2  SECTION - Header section name.
-        #   $3  FIELD - Metadata field name.
-        #   $4  VALUE - Value to read, validate, render, or store.
+        #   - `$1` — FILE - File path.
+        #   - `$2` — SECTION - Header section name.
+        #   - `$3` — FIELD - Metadata field name.
+        #   - `$4` — VALUE - Value to read, validate, render, or store.
         #
         # . Returns
-        #   0 on insertion or dry-run; 1 on temporary-file or replacement failure; 2 if the section is missing.
+        #   - 0 on insertion or dry-run; 1 on temporary-file or replacement failure; 2 if the section is missing.
                 #
         # . Usage
         #   ```bash
@@ -901,16 +901,16 @@ set -uo pipefail
         #   Set an existing metadata field or insert it when absent.
         #
         # . Arguments
-        #   $1  Source path.
-        #   $2  Section name.
-        #   $3  Field name.
-        #   $4  New field value.
+        #   - `$1` — Source path.
+        #   - `$2` — Section name.
+        #   - `$3` — Field name.
+        #   - `$4` — New field value.
         #
         # . Side effects
         #   Rewrites the source header field; does not create a missing section.
         #
         # . Returns
-        #   0 on success; otherwise the status from set/add operations.
+        #   - 0 on success; otherwise the status from set/add operations.
         #
         # . Usage
         #   ```bash
@@ -937,13 +937,13 @@ set -uo pipefail
         #   Set an existing metadata field in a named header section.
         #
         # . Arguments
-        #   $1  FILE - File path.
-        #   $2  SECTION - Header section name.
-        #   $3  FIELD - Metadata field name.
-        #   $4  VALUE - Value to read, validate, render, or store.
+        #   - `$1` — FILE - File path.
+        #   - `$2` — SECTION - Header section name.
+        #   - `$3` — FIELD - Metadata field name.
+        #   - `$4` — VALUE - Value to read, validate, render, or store.
         #
         # . Returns
-        #   0 on replacement or dry-run; 1 on temporary-file or replacement failure; 2 if the field is missing.
+        #   - 0 on replacement or dry-run; 1 on temporary-file or replacement failure; 2 if the field is missing.
                 #
         # . Usage
         #   ```bash
@@ -1041,15 +1041,15 @@ set -uo pipefail
         #   Update the framework version/build assignments in a shell source file.
         #
         # . Arguments
-        #   $1  Source file path.
-        #   $2  New version string.
-        #   $3  New build string.
+        #   - `$1` — Source file path.
+        #   - `$2` — New version string.
+        #   - `$3` — New build string.
         #
         # . Side effects
         #   Replaces matching SGND_VERSION and SGND_BUILD shell assignments using sed.
         #
         # . Returns
-        #   0 on success; 1 for missing input, absent file or editing failure.
+        #   - 0 on success; 1 for missing input, absent file or editing failure.
         #
         # . Usage
         #   ```bash

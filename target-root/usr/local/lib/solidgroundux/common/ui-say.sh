@@ -51,26 +51,26 @@
 set -uo pipefail
 
 # - Library guard ------------------------------------------------------------------
-    # fn$ _sgnd_lib_guard - Enforce source-only, single-load library initialization
+    # fn: _sgnd_lib_guard - Reject direct execution and track source state
         # . Purpose
-        #   Ensure the file is sourced as a library and initialized only once.
+        #   Ensure direct execution is rejected and record that the library has been sourced.
         #
         # . Behavior
         #   - Derives a unique guard variable name from the current filename.
         #   - Aborts execution when the file is run directly instead of sourced.
-        #   - Sets the guard variable on first load.
-        #   - Returns immediately when the library was already loaded.
+        #   - Records a guard variable on the first source operation.
+        #   - Returns early if the guard flag is already present; subsequent file statements still execute.
         #
-        # Inputs
-        #   BASH_SOURCE[0]
-        #   $0
+        # . Inputs
+        #   - BASH_SOURCE[0]
+        #   - $0
         #
-        # Outputs (globals)
+        # . Outputs (globals)
         #   SGND_<MODULE>_LOADED
         #
         # . Returns
-        #   0 when already loaded or successfully initialized.
-        #   Exits with code 2 when executed instead of sourced.
+        #   - 0 when already loaded or successfully initialized.
+        #   - Exits with code 2 when executed instead of sourced.
         #
         # . Usage
         #   ```bash
@@ -129,7 +129,7 @@ set -uo pipefail
         #   Writes the normalized log-level name to stdout.
         #
         # . Returns
-        #   0 always.
+        #   - 0 always.
         #
         # . Usage
         #   ```bash
@@ -187,8 +187,8 @@ set -uo pipefail
         #   SGND_CONSOLE_LOG_LEVEL
         #
         # . Returns
-        #   0 if the message should be displayed.
-        #   1 if the message should be suppressed.
+        #   - 0 if the message should be displayed.
+        #   - 1 if the message should be suppressed.
         #
         # . Usage
         #   ```bash
@@ -265,14 +265,14 @@ set -uo pipefail
         #   Apply the file log level independently from console visibility.
         #
         # . Arguments
-        #   $1  TYPE - Message type.
+        #   - `$1` — TYPE - Message type.
         #
-        # Inputs (globals):
+        # . Inputs (globals)
         #   SGND_FILE_LOG_LEVEL
         #
         # . Returns
-        #   0 when the message should be logged.
-        #   1 when the message should be suppressed.
+        #   - 0 when the message should be logged.
+        #   - 1 when the message should be suppressed.
         #
         # . Usage
         #   ```bash
@@ -307,13 +307,12 @@ set -uo pipefail
         #   Find the first non-say caller in the current Bash function stack.
         #
         # . Arguments
-        #   No arguments; reads FUNCNAME, BASH_SOURCE and BASH_LINENO.
-        #
+        #   - `No` — arguments; reads FUNCNAME, BASH_SOURCE and BASH_LINENO.
         # . Output
         #   Prints caller function, file and line separated by tabs.
         #
         # . Returns
-        #   0 when a caller is found.
+        #   - 0 when a caller is found.
         #
         # . Usage
         #   ```bash
@@ -342,13 +341,12 @@ set -uo pipefail
         #   Append an eligible structured message to the configured logfile.
         #
         # . Arguments
-        #   $1: message type; $2: text; $3: timestamp.
-        #
+        #   - `$1` — message type; $2: text; $3: timestamp.
         # . Output
         #   Writes to the chosen logfile when the log level permits.
         #
         # . Returns
-        #   0 when logging is skipped or completed; depends on filesystem operations on errors.
+        #   - 0 when logging is skipped or completed; depends on filesystem operations on errors.
         #
         # . Usage
         #   ```bash
@@ -403,13 +401,12 @@ set -uo pipefail
         #   Rotate a logfile when it reaches the configured size threshold.
         #
         # . Arguments
-        #   $1: logfile path; reads SGND_LOG_MAX_BYTES and SGND_LOG_KEEP.
-        #
+        #   - `$1` — logfile path; reads SGND_LOG_MAX_BYTES and SGND_LOG_KEEP.
         # . Output
         #   Moves old logfiles to rotated suffixes, optionally compressing them.
         #
         # . Returns
-        #   0 when rotation is unnecessary or completed; filesystem failures may be reported.
+        #   - 0 when rotation is unnecessary or completed; filesystem failures may be reported.
         #
         # . Usage
         #   ```bash
@@ -454,13 +451,12 @@ set -uo pipefail
         #   Select the first configured logfile that can be appended to.
         #
         # . Arguments
-        #   No arguments; reads SGND_LOG_PATH and SGND_ALTLOG_PATH.
-        #
+        #   - `No` — arguments; reads SGND_LOG_PATH and SGND_ALTLOG_PATH.
         # . Output
         #   Prints the selected logfile path without a newline.
         #
         # . Returns
-        #   0 when a writable target is found; 1 otherwise.
+        #   - 0 when a writable target is found; 1 otherwise.
         #
         # . Usage
         #   ```bash
@@ -488,8 +484,7 @@ set -uo pipefail
         #   Update one line of the multi-slot terminal progress display.
         #
         # . Arguments
-        #   $1: zero-based progress slot; $2: rendered text.
-        #
+        #   - `$1` — zero-based progress slot; $2: rendered text.
         # . Output
         #   Writes cursor positioning and text to stderr.
         #
@@ -528,13 +523,12 @@ set -uo pipefail
         #   Finish a pending terminal output line before printing another message.
         #
         # . Arguments
-        #   No arguments; reads and clears SGND_LINEBREAK_PENDING.
-        #
+        #   - `No` — arguments; reads and clears SGND_LINEBREAK_PENDING.
         # . Output
         #   Prints a newline on stderr only when a line break is pending.
         #
         # . Returns
-        #   0 when completed.
+        #   - 0 when completed.
         #
         # . Usage
         #   ```bash
@@ -569,43 +563,27 @@ set -uo pipefail
         #     printing a normal message.
         #
         # . Arguments
-        #   $1...  TYPE and/or MESSAGE
-        #          When the first positional argument is a known message type, it is
-        #          treated as TYPE and the remaining arguments form the message.
-        #          Otherwise all positional arguments form the message and TYPE defaults
-        #          to EMPTY.
-        #   
-        # . options
-        #   --type TYPE
-        #       Explicitly set the message type.
-        #   
-        #   --date
-        #       Prefix the message with the current date/time using SAY_DATE_FORMAT.
+        #   - `$1...` — Message words; an optional first word specifies the type.
+        #     When the first word is a recognized type, the remaining words form the
+        #     message. Otherwise all words form an `EMPTY` (unprefixed) message.
+        # . Options
+        #   - `--type TYPE` — Explicitly set the message type.
+        #   - `--date` — Prefix the message with the current date/time using SAY_DATE_FORMAT.
+        #   - `--show VALUE` — Select which prefix elements are shown. Supported values are label, icon, symbol, all, or combinations using comma or plus separators.
+        #   - `--colorize VALUE` — Select which parts are colorized. Supported values are none, label, msg, date, both, and all.
+        #   - `--delay VALUE` — Delay after handling the message. The default is 0 (no delay). Positive values are passed to sleep and may be fractional.
+        #     With `--delay -1`, wait for a single keypress instead of sleeping.
+        # . Inputs (globals)
+        #   - SAY_DATE_DEFAULT, SAY_SHOW_DEFAULT, SAY_COLORIZE_DEFAULT, SAY_DATE_FORMAT
+        #   - SGND_CONSOLE_LOG_LEVEL, SGND_FILE_LOG_LEVEL, SGND_LINEBREAK_PENDING
+        #   - LBL_*, ICO_*, SYM_*, MSG_CLR_*, RESET
         #
-        #   --show VALUE
-        #       Select which prefix elements are shown. Supported values are label,
-        #       icon, symbol, all, or combinations using comma or plus separators.
-        #
-        #   --colorize VALUE
-        #       Select which parts are colorized. Supported values are none, label,
-        #       msg, date, both, and all.
-        #
-        #   --delay VALUE
-        #       Delay after handling the message. The default is 0 (no delay).
-        #       Positive values are passed to sleep and may be fractional.
-        #       -1 waits for a single keypress.
-        #
-        # Inputs (globals):
-        #   SAY_DATE_DEFAULT, SAY_SHOW_DEFAULT, SAY_COLORIZE_DEFAULT, SAY_DATE_FORMAT
-        #   SGND_CONSOLE_LOG_LEVEL, SGND_FILE_LOG_LEVEL, SGND_LINEBREAK_PENDING
-        #   LBL_*, ICO_*, SYM_*, MSG_CLR_*, RESET
-        #
-        # . Outputs
-        #   Prints the rendered message to stdout when allowed by SGND_CONSOLE_LOG_LEVEL.
-        #   Appends a timestamped best-effort logfile record when allowed by SGND_FILE_LOG_LEVEL.
+        # . Output
+        #   - Prints the rendered message to stdout when allowed by SGND_CONSOLE_LOG_LEVEL.
+        #   - Appends a timestamped best-effort logfile record when allowed by SGND_FILE_LOG_LEVEL.
         #
         # . Returns
-        #   0 always. Unknown message types are normalized to EMPTY.
+        #   - 0 always. Unknown message types are normalized to EMPTY.
         #
         # . Usage
         #   ```bash
@@ -881,17 +859,15 @@ set -uo pipefail
         #   - Marks a pending line break so later normal messages can restore clean
         #     output formatting.
         #
-        # . options
-        #   --slots COUNT
-        #       Number of progress lines to reserve. Values less than 1 are normalized
-        #       to 1.
+        # . Options
+        #   - `--slots COUNT` — Number of progress lines to reserve. Values less than 1 are normalized to 1.
         #
         # . Outputs
         #   Writes terminal cursor control sequences to stderr.
         #
         # . Returns
-        #   0 on success.
-        #   1 when an unknown argument is supplied.
+        #   - 0 on success.
+        #   - 1 when an unknown argument is supplied.
         #
         # . Usage
         #   ```bash
@@ -935,53 +911,34 @@ set -uo pipefail
         #   - Throttles redraws for slot 1 and deeper to reduce terminal I/O.
         #   - Always redraws the first item and the final 10 items.
         #
-        # . options
-        #   --current VALUE
-        #       Current progress value. Values below 0 are normalized to 0.
-        #
-        #   --total VALUE
-        #       Total progress value. Values below 1 are normalized to 1.
-        #
-        #   --label TEXT
-        #       Text appended to the progress indicators.
-        #
-        #   --type MASK
-        #       Bit mask controlling visible indicators. 1 shows current/total,
-        #       2 shows percentage, and 4 shows the progress bar.
-        #
-        #   --barcolor VALUE
-        #       Color token used for the progress bar.
-        #
-        #   --labelcolor VALUE
-        #       Color token used for the label.
-        #
-        #   --indicatorcolor VALUE
-        #       Color token used for numeric progress indicators.
-        #
-        #   --interval COUNT
-        #       Redraw interval for throttled progress slots. Applies only to slot 1
-        #       and deeper. When omitted, the interval defaults to total / 100,
-        #       with a minimum of 1.
-        #
-        #   --padleft COUNT
-        #       Number of spaces to prefix before the progress text.
-        #
-        #   --slot INDEX
-        #       Reserved progress slot to update. Slot numbering starts at 0.
-        #
-        #   --width COUNT
-        #       Width of the progress bar.
-        #
+        # . Options
+        #   - `--current VALUE` — Current progress value. Values below 0 are normalized to 0.
+        #   - `--total VALUE` — Total progress value. Values below 1 are normalized to 1.
+        #   - `--label TEXT` — Text appended to the progress indicators.
+        #   - `--type MASK` — Bit mask controlling visible indicators. 1 shows current/total, 2 shows percentage, and 4 shows the progress bar.
+        #   - `--barcolor VALUE` — Color token used for the progress bar.
+        #   - `--labelcolor VALUE` — Color token used for the label.
+        #   - `--indicatorcolor VALUE` — Color token used for numeric progress indicators.
+        #   - `--interval COUNT` — Redraw interval for throttled progress slots. Applies only to slot 1 and deeper. When omitted, the interval defaults to total / 100, with a minimum of 1.
+        #   - `--padleft COUNT` — Number of spaces to prefix before the progress text.
+        #   - `--slot INDEX` — Reserved progress slot to update. Slot numbering starts at 0.
+        #   - `--width COUNT` — Width of the progress bar.
         # . Outputs
         #   Writes terminal cursor control sequences and progress text to stderr.
-        #
         # . Returns
-        #   0 on success.
-        #   1 when an unknown argument is supplied.
+        #   - 0 on success.
+        #   - 1 when an unknown argument is supplied.
         #
         # . Usage
         #   ```bash
+        #   # Show all default indicators (count, percentage and progress bar).
         #   sayprogress --current 5 --total 10 --label "Processing"
+        #
+        #   # Reserve two lines and update each progress slot separately.
+        #   sayprogress_begin --slots 2
+        #   sayprogress --slot 0 --current 2 --total 4 --label "Packages"
+        #   sayprogress --slot 1 --current 10 --total 20 --type 3 --label "Files"
+        #   sayprogress_done
         #   ```
     sayprogress() {
         local current=0
@@ -1141,11 +1098,11 @@ set -uo pipefail
         #   Writes terminal cursor control sequences to stderr.
         #
         # . Returns
-        #   0 always.
+        #   - 0 always.
         #
         # . Usage
         #   ```bash
-        #   sayprogress_done "Package installation complete"
+        #   sayprogress_done
         #   ```
     sayprogress_done() {
         local slots="${SGND_PROGRESS_RESERVED:-0}"
@@ -1173,13 +1130,13 @@ set -uo pipefail
                 #   Write a normal informational message through the SolidGroundUX message layer.
                 #
                 # . Arguments
-                #   $@ - Message text to write.
+        #   - `$@` — Message text to write.
                 #
                 # . Output
                 #   Writes the formatted message to the configured console/log targets.
                 #
                 # . Returns
-                #   0 when the message was handled.
+        #   - 0 when the message was handled.
                 #
                 # . Usage
                 #   ```bash
@@ -1194,13 +1151,13 @@ set -uo pipefail
                 #   Announce the start of an operation through the SolidGroundUX message layer.
                 #
                 # . Arguments
-                #   $@ - Message text to write.
+        #   - `$@` — Message text to write.
                 #
                 # . Output
                 #   Writes the formatted start message to the configured console/log targets.
                 #
                 # . Returns
-                #   0 when the message was handled.
+        #   - 0 when the message was handled.
                 #
                 # . Usage
                 #   ```bash
@@ -1223,8 +1180,10 @@ set -uo pipefail
             #   saywarning "Example warning"
             #   ```
             #
-            # Examples:
+            # . Examples
+            #   ```bash
             #   saywarning "Configuration missing"
+            #   ```
         saywarning() {
             say WARN --delay "${SGND_UI_WARNING_DELAY:-0.5}" "$@"
         }
@@ -1238,13 +1197,13 @@ set -uo pipefail
                 #   - Defaults to SGND_UI_ERROR_DELAY (fallback 0.5); an explicit --delay supplied by the caller overrides it.
                 #
                 # . Arguments
-                #   $@ - Message text to write.
+        #   - `$@` — Message text to write.
                 #
                 # . Output
                 #   Writes the formatted failure message to the configured console/log targets.
                 #
                 # . Returns
-                #   0 when the message was handled.
+        #   - 0 when the message was handled.
                 #
                 # . Usage
                 #   ```bash
@@ -1259,13 +1218,13 @@ set -uo pipefail
                 #   Report a cancelled operation through the SolidGroundUX message layer.
                 #
                 # . Arguments
-                #   $@ - Message text to write.
+        #   - `$@` — Message text to write.
                 #
                 # . Output
                 #   Writes the formatted cancellation message to the configured console/log targets.
                 #
                 # . Returns
-                #   0 when the message was handled.
+        #   - 0 when the message was handled.
                 #
                 # . Usage
                 #   ```bash
@@ -1280,13 +1239,13 @@ set -uo pipefail
                 #   Report a successful operation through the SolidGroundUX message layer.
                 #
                 # . Arguments
-                #   $@ - Message text to write.
+        #   - `$@` — Message text to write.
                 #
                 # . Output
                 #   Writes the formatted success message to the configured console/log targets.
                 #
                 # . Returns
-                #   0 when the message was handled.
+        #   - 0 when the message was handled.
                 #
                 # . Usage
                 #   ```bash
@@ -1301,13 +1260,13 @@ set -uo pipefail
                 #   Mark the end of an operation through the SolidGroundUX message layer.
                 #
                 # . Arguments
-                #   $@ - Message text to write.
+        #   - `$@` — Message text to write.
                 #
                 # . Output
                 #   Writes the formatted end message to the configured console/log targets.
                 #
                 # . Returns
-                #   0 when the message was handled.
+        #   - 0 when the message was handled.
                 #
                 # . Usage
                 #   ```bash
@@ -1336,13 +1295,13 @@ set -uo pipefail
                 #   Write message text without applying a semantic say-state such as ok, fail, or warning.
                 #
                 # . Arguments
-                #   $@ - Message text to write.
+        #   - `$@` — Message text to write.
                 #
                 # . Output
                 #   Writes the message to the configured console/log targets.
                 #
                 # . Returns
-                #   0 when the message was handled.
+        #   - 0 when the message was handled.
                 #
                 # . Usage
                 #   ```bash
@@ -1357,13 +1316,13 @@ set -uo pipefail
                 #   Write diagnostic output when debug messaging is enabled by the runtime configuration.
                 #
                 # . Arguments
-                #   $@ - Debug message text to write.
+        #   - `$@` — Debug message text to write.
                 #
                 # . Output
                 #   Writes the debug message to the configured console/log targets when enabled.
                 #
                 # . Returns
-                #   0 when the message was ignored or handled.
+        #   - 0 when the message was ignored or handled.
                 #
                 # . Usage
                 #   ```bash

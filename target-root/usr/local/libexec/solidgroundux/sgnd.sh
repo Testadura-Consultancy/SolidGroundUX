@@ -66,9 +66,8 @@ set -uo pipefail
         #   helpers are not available until sgnd-exe-common.sh has been loaded.
         #
         # . Returns
-        #   0 when the framework root was resolved and executable common library loaded.
-        #   126 when the script path cannot be resolved, no canonical root component can
-        #   be found, or the executable common library is unreadable.
+        #   - 0 when the framework root was resolved and executable common library loaded.
+        #   - 126 when the script path cannot be resolved, no canonical root component can be found, or the executable common library is unreadable.
         #
         # . Usage
         #   ```bash
@@ -167,9 +166,11 @@ set -uo pipefail
 
 # --- Helpers ------------------------------------------------------------------------
     # fn: _sgnd_preference_valid_loglevel - Validate a transferable log level
-        # . Arguments
-        #   $1  LEVEL - Requested console or file log level.
+        # . Purpose
+        #   Validate a transferable log level.
         #
+        # . Arguments
+        #   - `$1` — LEVEL - Requested console or file log level.
         # . Returns
         #   0 for silent, quiet, normal, verbose, debug, or trace; otherwise 1.
         #
@@ -190,8 +191,7 @@ set -uo pipefail
         #   punctuation-free spelling such as monoblue for mono-blue.
         #
         # . Arguments
-        #   $1  THEME - Requested theme name.
-        #
+        #   - `$1` — THEME - Requested theme name.
         # . Output
         #   Prints the canonical short theme name when exactly one installed theme matches.
         #
@@ -246,6 +246,9 @@ set -uo pipefail
     }
 
     # fn: _sgnd_preference_show - Display the current transferable framework preferences
+        # . Purpose
+        #   Display the current transferable framework preferences.
+        #
         # . Returns
         #   0 after rendering current values.
         #
@@ -272,11 +275,13 @@ set -uo pipefail
     }
 
     # fn: _sgnd_preference_set_loglevel - Validate and persist one framework log level
-        # . Arguments
-        #   $1  KEY   - SGND_CONSOLE_LOG_LEVEL or SGND_FILE_LOG_LEVEL.
-        #   $2  VALUE - Requested supported log level.
+        # . Purpose
+        #   Validate and persist one framework log level.
         #
-        # Side effects:
+        # . Arguments
+        #   - `$1` — KEY   - SGND_CONSOLE_LOG_LEVEL or SGND_FILE_LOG_LEVEL.
+        #   - `$2` — VALUE - Requested supported log level.
+        # . Side effects
         #   Updates SGND_FRAMEWORK_STATEFILE unless --dryrun is active.
         #
         # . Returns
@@ -311,10 +316,12 @@ set -uo pipefail
     }
 
     # fn: _sgnd_preference_set_theme - Validate, apply, and persist the active framework theme
-        # . Arguments
-        #   $1  THEME - Installed theme name or unambiguous punctuation-free spelling.
+        # . Purpose
+        #   Validate, apply, and persist the active framework theme.
         #
-        # Side effects:
+        # . Arguments
+        #   - `$1` — THEME - Installed theme name or unambiguous punctuation-free spelling.
+        # . Side effects
         #   Applies the selected theme and updates SGND_FRAMEWORK_STATEFILE unless --dryrun is active.
         #
         # . Returns
@@ -353,8 +360,7 @@ set -uo pipefail
         #   by the Management Console.
         #
         # . Arguments
-        #   $@  Framework built-in options followed by optional SETTING VALUE positionals.
-        #
+        #   - `$@` — Framework built-in options followed by optional SETTING VALUE positionals.
         # . Behavior
         #   - With no positionals, displays the current transferable preferences.
         #   - Supports consoleloglevel, fileloglevel, and theme.

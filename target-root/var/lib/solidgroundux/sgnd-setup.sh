@@ -170,6 +170,9 @@ set -uo pipefail
     fi
 
     # fn: _release_framework_root_for_target - Resolve the framework root for the selected target
+        # . Purpose
+        #   Resolve the framework root for the selected target.
+        #
         # . Usage
         #   ```bash
         #   _release_framework_root_for_target
@@ -248,9 +251,12 @@ set -uo pipefail
     }
 
     # fn: _release_print - Print a line through the active UI implementation
+        # . Purpose
+        #   Print a line through the active UI implementation.
+        #
         # . Usage
         #   ```bash
-        #   _release_print "<args...>"
+        #   _release_print "Setup is ready"
         #   ```
     _release_print() {
         if [[ "$RELEASE_UI_MODE" == "framework" ]] && declare -F sgnd_print >/dev/null 2>&1; then
@@ -261,9 +267,12 @@ set -uo pipefail
     }
 
     # fn: _release_section_header - Render a section header through the active UI
+        # . Purpose
+        #   Render a section header through the active UI.
+        #
         # . Usage
         #   ```bash
-        #   _release_section_header "<title>"
+        #   _release_section_header "Installed products"
         #   ```
     _release_section_header() {
         local title="${1:-}"
@@ -278,11 +287,14 @@ set -uo pipefail
     }
 
     # fn: _release_ask - Ask for a scalar value using framework ask() or the fallback UI
+        # . Purpose
+        #   Ask for a scalar value using framework ask() or the fallback UI.
+        #
         # Arguments:
         #   $1 label, $2 variable name, $3 default
         # . Usage
         #   ```bash
-        #   _release_ask "<label>" "<var_name>" "<default>"
+        #   _release_ask "Target directory" target_dir "/srv/storage"
         #   ```
     _release_ask() {
         local label="${1:-Value}"
@@ -309,9 +321,12 @@ set -uo pipefail
     }
 
     # fn: _release_ask_yesno - Ask a yes/no question with a default
+        # . Purpose
+        #   Ask a yes/no question with a default.
+        #
         # . Usage
         #   ```bash
-        #   _release_ask_yesno "<label>" "<default>"
+        #   _release_ask_yesno "Continue with installation?" "N"
         #   ```
     _release_ask_yesno() {
         local label="${1:-Continue?}"
@@ -335,10 +350,15 @@ set -uo pipefail
     }
 
     # fn: _release_terminal_width - Return the usable terminal width
+        # . Purpose
+        #   Return the usable terminal width.
+        #
         # Returns:
         #   Prints a terminal width between 40 and 140 columns.
         # Usage:
+        #   ```bash
         #   width="$(_release_terminal_width)"
+        #   ```
     _release_terminal_width() {
         local width=80
 
@@ -353,20 +373,30 @@ set -uo pipefail
     }
 
     # fn: _release_clear - Clear the active terminal reliably
+        # . Purpose
+        #   Clear the active terminal reliably.
+        #
         # Returns:
         #   0 always.
         # Usage:
+        #   ```bash
         #   _release_clear
+        #   ```
     _release_clear() {
         [[ -t 1 ]] || return 0
         printf '\033[2J\033[H'
     }
 
     # fn: _release_line - Print a repeated border character
+        # . Purpose
+        #   Print a repeated border character.
+        #
         # Returns:
         #   0 always.
         # Usage:
+        #   ```bash
         #   _release_line "═"
+        #   ```
     _release_line() {
         local char="${1:-─}"
         local width=80
@@ -459,10 +489,15 @@ set -uo pipefail
     }
 
     # fn: _release_labeled_value - Print one aligned label/value pair
+        # . Purpose
+        #   Print one aligned label/value pair.
+        #
         # Returns:
         #   0 always.
         # Usage:
+        #   ```bash
         #   _release_labeled_value "Installed release" "$current"
+        #   ```
     _release_labeled_value() {
         local label="${1:-}"
         local value="${2:-}"
@@ -552,6 +587,14 @@ set -uo pipefail
 
 # --- Arguments and paths ------------------------------------------------------------
     # fn: _ensure_root - Re-execute sgnd-setup with elevated privileges when required
+        # . Purpose
+        #   Re-execute sgnd-setup with elevated privileges when required.
+        #
+        #
+        # . Usage
+        #   ```bash
+        #   _ensure_root "$@"
+        #   ```
     _ensure_root() {
         local script_file=""
 
@@ -832,11 +875,16 @@ set -uo pipefail
     }
 
     # fn: _nuke_root_path - Resolve one absolute path beneath the located framework root
+        # . Purpose
+        #   Resolve one absolute path beneath the located framework root.
+        #
         # Returns:
         #   0 with the root-relative absolute path on stdout.
         #
         # Usage:
+        #   ```bash
         #   path="$(_nuke_root_path "/var/lib/solidgroundux")"
+        #   ```
     _nuke_root_path() {
         local path="${1:?missing path}"
         path="/${path#/}"
@@ -859,7 +907,9 @@ set -uo pipefail
         #   0 when absent or removed successfully; non-zero on removal failure.
         #
         # Usage:
+        #   ```bash
         #   _nuke_remove_path "$path"
+        #   ```
     _nuke_remove_path() {
         local path="${1:?missing path}"
 
@@ -881,7 +931,9 @@ set -uo pipefail
         #   0 on success; non-zero on the first removal failure.
         #
         # Usage:
+        #   ```bash
         #   _nuke_remove_code
+        #   ```
     _nuke_remove_code() {
         local path=""
         local dir=""
@@ -934,7 +986,9 @@ set -uo pipefail
         #   0 on success; non-zero on the first removal failure.
         #
         # Usage:
+        #   ```bash
         #   _nuke_remove_state_and_logs
+        #   ```
     _nuke_remove_state_and_logs() {
         local passwd_file=""
         local user=""
@@ -996,7 +1050,9 @@ set -uo pipefail
         #   0 on success; non-zero on the first removal failure.
         #
         # Usage:
+        #   ```bash
         #   _nuke_remove_config
+        #   ```
     _nuke_remove_config() {
         local passwd_file=""
         local user=""
@@ -1054,7 +1110,9 @@ set -uo pipefail
         #   0 when confirmed; 2 when cancelled; 1 when confirmation cannot be collected.
         #
         # Usage:
+        #   ```bash
         #   _nuke_confirm "tsar"
+        #   ```
     _nuke_confirm() {
         local yield="${1:?missing yield}"
         local expected="${yield^^}"
@@ -1096,7 +1154,9 @@ set -uo pipefail
         #   0 on success; 2 on cancellation; non-zero on failure.
         #
         # Usage:
+        #   ```bash
         #   _action_nuke
+        #   ```
     _action_nuke() {
         local description=""
         local rc=0
@@ -1157,6 +1217,9 @@ set -uo pipefail
     }
 
     # fn: _release_default_target_root - Derive target root only from canonical manager location
+        # . Purpose
+        #   Derive target root only from canonical manager location.
+        #
         # . Usage
         #   ```bash
         #   _release_default_target_root
@@ -1213,6 +1276,9 @@ set -uo pipefail
     }
 
     # fn: _release_load_state - Load standalone parameter defaults
+        # . Purpose
+        #   Load standalone parameter defaults.
+        #
         # . Usage
         #   ```bash
         #   _release_load_state
@@ -1239,6 +1305,9 @@ set -uo pipefail
     }
 
     # fn: _release_save_state - Persist accepted parameter values
+        # . Purpose
+        #   Persist accepted parameter values.
+        #
         # . Usage
         #   ```bash
         #   _release_save_state
@@ -1286,10 +1355,15 @@ set -uo pipefail
     }
 
     # fn: _release_normalize_github_url - Normalize a GitHub repository/release URL
+        # . Purpose
+        #   Normalize a GitHub repository/release URL.
+        #
         # Returns:
         #   0 with the normalized URL on stdout; 1 when empty.
         # Usage:
+        #   ```bash
         #   url="$(_release_normalize_github_url "$url")"
+        #   ```
     _release_normalize_github_url() {
         local url="${1:-}"
         url="$(printf '%s' "$url" | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//')"
@@ -1308,20 +1382,30 @@ set -uo pipefail
     }
 
     # fn: _release_project_repo_state_file - Resolve per-project repository state file
+        # . Purpose
+        #   Resolve per-project repository state file.
+        #
         # Returns:
         #   0 with the state pathname on stdout.
         # Usage:
+        #   ```bash
         #   file="$(_release_project_repo_state_file "$project")"
+        #   ```
     _release_project_repo_state_file() {
         local project="${1:-${VAL_PROJECT:-solidgroundux}}"
         printf '%s/projects/%s/repository.url\n' "${VAL_STATE_ROOT%/}" "$project"
     }
 
     # fn: _release_load_project_repo - Load a saved repository URL for one project
+        # . Purpose
+        #   Load a saved repository URL for one project.
+        #
         # Returns:
         #   0 when a saved URL was loaded; 1 when none exists.
         # Usage:
+        #   ```bash
         #   _release_load_project_repo "$project"
+        #   ```
     _release_load_project_repo() {
         local project="${1:-${VAL_PROJECT:-solidgroundux}}" file="" url="" repo=""
         file="$(_release_project_repo_state_file "$project")"
@@ -1337,10 +1421,15 @@ set -uo pipefail
     }
 
     # fn: _release_save_project_repo - Persist repository URL for the selected project
+        # . Purpose
+        #   Persist repository URL for the selected project.
+        #
         # Returns:
         #   0 on success; non-zero on persistence failure.
         # Usage:
+        #   ```bash
         #   _release_save_project_repo
+        #   ```
     _release_save_project_repo() {
         local file="" url=""
         url="$(_release_normalize_github_url "${VAL_GITHUB_URL:-}" 2>/dev/null || true)"
@@ -1357,10 +1446,15 @@ set -uo pipefail
     }
 
     # fn: _release_repo_from_url - Convert a GitHub release URL to OWNER/REPO
+        # . Purpose
+        #   Convert a GitHub release URL to OWNER/REPO.
+        #
         # Returns:
         #   0 with OWNER/REPO on stdout; 1 for an unsupported URL.
         # Usage:
+        #   ```bash
         #   repo="$(_release_repo_from_url "$url")"
+        #   ```
     _release_repo_from_url() {
         local url="${1:-}"
         url="$(_release_normalize_github_url "$url" 2>/dev/null || true)"
@@ -1571,10 +1665,15 @@ set -uo pipefail
     }
 
     # fn: _release_prompt_manual_settings - Collect explicit product/repository/channel overrides
+        # . Purpose
+        #   Collect explicit product/repository/channel overrides.
+        #
         # Returns:
         #   0 when the manual settings are valid; non-zero otherwise.
         # Usage:
+        #   ```bash
         #   _release_prompt_manual_settings
+        #   ```
     _release_prompt_manual_settings() {
         local repo=""
         _release_ask "Project" VAL_PROJECT "${VAL_PROJECT:-solidgroundux}" || return 1
@@ -1618,7 +1717,7 @@ set -uo pipefail
         #   Parse a simple KEY=value field without sourcing package-controlled shell code.
         # . Usage
         #   ```bash
-        #   _package_info_value "<file>" "<key>"
+        #   _package_info_value "$metadata" "SGND_PACKAGE_TYPE"
         #   ```
     _package_info_value() {
         local file="${1:?missing package info}"
@@ -1631,9 +1730,12 @@ set -uo pipefail
     }
 
     # fn: _project_slug_safe - Validate a project slug used beneath the manager state root
+        # . Purpose
+        #   Validate a project slug used beneath the manager state root.
+        #
         # . Usage
         #   ```bash
-        #   _project_slug_safe "<slug>"
+        #   _project_slug_safe "solidgroundux"
         #   ```
     _project_slug_safe() {
         local slug="${1:-}"
@@ -1641,9 +1743,12 @@ set -uo pipefail
     }
 
     # fn: _load_project_info - Load persisted display identity for one project
+        # . Purpose
+        #   Load persisted display identity for one project.
+        #
         # . Usage
         #   ```bash
-        #   _load_project_info "<slug>"
+        #   _load_project_info "solidgroundux"
         #   ```
     _load_project_info() {
         local slug="${1:?missing project slug}"
@@ -1673,7 +1778,7 @@ set -uo pipefail
         #   - Other projects use /var/lib/solidgroundux/projects/<slug>/.
         # . Usage
         #   ```bash
-        #   _set_project_context "<slug>"
+        #   _set_project_context "solidgroundux"
         #   ```
     _set_project_context() {
         local slug="${1:-solidgroundux}"
@@ -1708,9 +1813,12 @@ set -uo pipefail
     }
 
     # fn: _persist_project_info - Persist display identity for an admitted project package
+        # . Purpose
+        #   Persist display identity for an admitted project package.
+        #
         # . Usage
         #   ```bash
-        #   _persist_project_info "<package_info>"
+        #   _persist_project_info "$package_info"
         #   ```
     _persist_project_info() {
         local package_info="${1:?missing package info}"
@@ -1728,6 +1836,9 @@ set -uo pipefail
     }
 
     # fn: _list_known_projects - List locally known project slugs
+        # . Purpose
+        #   List locally known project slugs.
+        #
         # . Usage
         #   ```bash
         #   _list_known_projects
@@ -1742,9 +1853,12 @@ set -uo pipefail
     }
 
     # fn: _select_project_interactive - Select a locally known project
+        # . Purpose
+        #   Select a locally known project.
+        #
         # . Usage
         #   ```bash
-        #   _select_project_interactive "<command_name>"
+        #   _select_project_interactive "Setup"
         #   ```
     _select_project_interactive() {
         local slug=""
@@ -2063,10 +2177,15 @@ EOF
 
 # --- Release identity and discovery -------------------------------------------------
     # fn: _release_product_artifact_name - Convert a display product name to its canonical release-file identity
+        # . Purpose
+        #   Convert a display product name to its canonical release-file identity.
+        #
         # Returns:
         #   Product name with whitespace runs replaced by hyphens.
         # Usage:
+        #   ```bash
         #   artifact_product="$(_release_product_artifact_name "$SGND_RELEASE_PRODUCT")"
+        #   ```
     _release_product_artifact_name() {
         local product_name="${1:-}"
         printf '%s\n' "$product_name" | sed -E 's/[[:space:]]+/-/g'
@@ -2713,6 +2832,14 @@ EOF
 
 # --- Release channel ----------------------------------------------------------------
     # fn: _remember_release_channel - Persist the channel of the successfully installed release
+        # . Purpose
+        #   Persist the channel of the successfully installed release.
+        #
+        #
+        # . Usage
+        #   ```bash
+        #   _remember_release_channel "$archive"
+        #   ```
     _remember_release_channel() {
         local archive="${1:?missing archive}" base="" metadata="" type=""
         base="$(_release_base_from_archive "$archive")" || return 1
@@ -3340,10 +3467,15 @@ EOF
 
 # --- Product package ZIP workflow ---------------------------------------------------
     # fn: _package_zip_info_value - Read one package metadata value directly from a ZIP
+        # . Purpose
+        #   Read one package metadata value directly from a ZIP.
+        #
         # Returns:
         #   0 with the requested value on stdout; non-zero when unavailable.
         # Usage:
+        #   ```bash
         #   project="$(_package_zip_info_value "$zip" SGND_PACKAGE_PROJECT)"
+        #   ```
     _package_zip_info_value() {
         local zip_file="${1:?missing package ZIP}"
         local key="${2:?missing package metadata key}"
@@ -3354,12 +3486,17 @@ EOF
     }
 
     # fn: _package_zip_record - Describe one valid product package ZIP
+        # . Purpose
+        #   Describe one valid product package ZIP.
+        #
         # Output:
         #   path|project|product|version|build|release
         # Returns:
         #   0 for a valid product package; 1 otherwise.
         # Usage:
+        #   ```bash
         #   _package_zip_record "/path/product-release.zip"
+        #   ```
     _package_zip_record() {
         local zip_file="${1:?missing package ZIP}"
         local format="" type="" project="" product="" version="" build="" release=""
@@ -3379,28 +3516,43 @@ EOF
     }
 
     # fn: _package_store_dir - Return the canonical pending product-package directory
+        # . Purpose
+        #   Return the canonical pending product-package directory.
+        #
         # Returns:
         #   Canonical global product ZIP store.
         # Usage:
+        #   ```bash
         #   dir="$(_package_store_dir)"
+        #   ```
     _package_store_dir() {
         printf '%s/releases\n' "${VAL_STATE_ROOT%/}"
     }
 
     # fn: _package_archive_dir - Return the canonical installed package archive directory
+        # . Purpose
+        #   Return the canonical installed package archive directory.
+        #
         # Returns:
         #   Canonical original-ZIP archive root.
         # Usage:
+        #   ```bash
         #   dir="$(_package_archive_dir)"
+        #   ```
     _package_archive_dir() {
         printf '%s/releases/archive\n' "${VAL_STATE_ROOT%/}"
     }
 
     # fn: _scan_product_packages - Scan one directory for valid product release ZIPs
+        # . Purpose
+        #   Scan one directory for valid product release ZIPs.
+        #
         # Output:
         #   One _package_zip_record per valid package ZIP.
         # Usage:
+        #   ```bash
         #   _scan_product_packages "/var/lib/solidgroundux/releases"
+        #   ```
     _scan_product_packages() {
         local directory="${1:?missing package directory}" zip_file=""
         [[ -d "$directory" ]] || return 0
@@ -3416,7 +3568,9 @@ EOF
         # Output:
         #   Unique package records, preferring canonical/system copies over duplicates.
         # Usage:
+        #   ```bash
         #   mapfile -t rows < <(_local_package_catalog "$extra_dir")
+        #   ```
     _local_package_catalog() {
         local extra_dir="${1:-}" line="" key="" rest="" project="" release=""
         local -A seen=()
@@ -3441,10 +3595,15 @@ EOF
     }
 
     # fn: _newest_local_package_for_project - Resolve newest local product ZIP for one project
+        # . Purpose
+        #   Resolve newest local product ZIP for one project.
+        #
         # Returns:
         #   0 with package record on stdout; 1 when none exists.
         # Usage:
+        #   ```bash
         #   row="$(_newest_local_package_for_project "$project")"
+        #   ```
     _newest_local_package_for_project() {
         local project="${1:?missing project}" line="" row_project="" release=""
         local -a rows=()
@@ -3458,10 +3617,15 @@ EOF
     }
 
     # fn: _admit_product_package_zip - Copy one valid product ZIP into canonical releases
+        # . Purpose
+        #   Copy one valid product ZIP into canonical releases.
+        #
         # Returns:
         #   0 with canonical ZIP path on stdout; non-zero on validation/copy failure.
         # Usage:
+        #   ```bash
         #   admitted="$(_admit_product_package_zip "$source_zip")"
+        #   ```
     _admit_product_package_zip() {
         local source_zip="${1:?missing package ZIP}" record="" destination_dir="" destination=""
         record="$(_package_zip_record "$source_zip")" || {
@@ -3478,10 +3642,15 @@ EOF
     }
 
     # fn: _archive_product_package_zip - Archive the original ZIP after successful installation
+        # . Purpose
+        #   Archive the original ZIP after successful installation.
+        #
         # Returns:
         #   0 on success; non-zero on filesystem failure.
         # Usage:
+        #   ```bash
         #   _archive_product_package_zip "$zip" "$project"
+        #   ```
     _archive_product_package_zip() {
         local zip_file="${1:?missing package ZIP}" project="${2:?missing project}" archive_dir=""
         archive_dir="$(_package_archive_dir)/$project"
@@ -3496,7 +3665,9 @@ EOF
         # Returns:
         #   0 on success; non-zero on validation/installation failure.
         # Usage:
+        #   ```bash
         #   _install_product_package_zip "$zip"
+        #   ```
     _install_product_package_zip() {
         local input_zip="${1:?missing package ZIP}" canonical_zip="" temp_dir="" base="" archive=""
         local project="" product=""
@@ -3536,6 +3707,9 @@ EOF
     }
 
     # fn: _select_package_records - Select one, several, or all package records
+        # . Purpose
+        #   Select one, several, or all package records.
+        #
         # Arguments:
         #   $1 title; remaining arguments are package records.
         # Output:
@@ -3543,7 +3717,9 @@ EOF
         # Returns:
         #   0 on selection; 1 on cancel/invalid input.
         # Usage:
+        #   ```bash
         #   mapfile -t selected < <(_select_package_records "Local releases" "${rows[@]}")
+        #   ```
     _select_package_records() {
         local title="${1:?missing title}"; shift
         local choice="" i=0 record="" zip_file="" project="" product="" version="" build="" release=""
@@ -3575,10 +3751,15 @@ EOF
     }
 
     # fn: _product_catalog - List known products without requiring package preselection
+        # . Purpose
+        #   List known products without requiring package preselection.
+        #
         # Output:
         #   project|product|github-url|version|build
         # Usage:
+        #   ```bash
         #   mapfile -t products < <(_product_catalog)
+        #   ```
     _product_catalog() {
         local line="" project="" product="" variant="" url="" version="" build="" zip="" release=""
         local -A seen=()
@@ -3598,10 +3779,15 @@ EOF
     }
 
     # fn: _select_product_records - Select one, several, or all known products
+        # . Purpose
+        #   Select one, several, or all known products.
+        #
         # Output:
         #   Selected product records.
         # Usage:
+        #   ```bash
         #   mapfile -t selected < <(_select_product_records "Products" "${rows[@]}")
+        #   ```
     _select_product_records() {
         local title="${1:?missing title}"; shift
         local choice="" i=0 row="" project="" product="" url="" version="" build=""
@@ -3629,10 +3815,15 @@ EOF
     }
 
     # fn: _install_explicit_package_source - Install a directly supplied product ZIP source
+        # . Purpose
+        #   Install a directly supplied product ZIP source.
+        #
         # Returns:
         #   0 on success; non-zero on download/installation failure.
         # Usage:
+        #   ```bash
         #   _install_explicit_package_source "$VAL_SOURCE"
+        #   ```
     _install_explicit_package_source() {
         local source="${1:?missing package source}" zip_path=""
         if [[ "$source" == http://* || "$source" == https://* ]]; then
@@ -3648,8 +3839,13 @@ EOF
     }
 
     # fn: _action_install_latest_local_packages - Select/install newest local package per product
+        # . Purpose
+        #   Select/install newest local package per product.
+        #
         # Usage:
+        #   ```bash
         #   _action_install_latest_local_packages
+        #   ```
     _action_install_latest_local_packages() {
         local product_row="" project="" product="" url="" version="" build="" package_row=""
         local -a products=() packages=() selected=()
@@ -3674,8 +3870,13 @@ EOF
     }
 
     # fn: _action_install_other_packages - Select/install product ZIPs from another directory
+        # . Purpose
+        #   Select/install product ZIPs from another directory.
+        #
         # Usage:
+        #   ```bash
         #   _action_install_other_packages
+        #   ```
     _action_install_other_packages() {
         local directory="" row=""
         local -a packages=() selected=()
@@ -3689,8 +3890,13 @@ EOF
     }
 
     # fn: _action_install_latest_github_products - Select products, download/install newest GitHub ZIPs
+        # . Purpose
+        #   Select products, download/install newest GitHub ZIPs.
+        #
         # Usage:
+        #   ```bash
         #   _action_install_latest_github_products
+        #   ```
     _action_install_latest_github_products() {
         local row="" project="" product="" url="" version="" build="" repo="" asset="" source="" zip_path=""
         local -a products=() selected=()
@@ -3738,13 +3944,18 @@ EOF
     }
 
     # fn: _release_display_identity - Reduce a release basename to Version.Build for display
+        # . Purpose
+        #   Reduce a release basename to Version.Build for display.
+        #
         # Arguments:
         #   $1  Product display name.
         #   $2  Full release basename.
         # Returns:
         #   0 with a compact display identity on stdout.
         # Usage:
+        #   ```bash
         #   display="$(_release_display_identity "$product" "$release")"
+        #   ```
     _release_display_identity() {
         local product="${1:-}"
         local release="${2:-}"
@@ -3758,8 +3969,13 @@ EOF
     }
 
     # fn: _dashboard_product_rows - Render product-centric installed/local/GitHub status
+        # . Purpose
+        #   Render product-centric installed/local/GitHub status.
+        #
         # Usage:
+        #   ```bash
         #   _dashboard_product_rows
+        #   ```
     _dashboard_product_rows() {
         local row="" project="" product="" url="" version="" build=""
         local installed="" installed_display="" local_row="" local_release="" local_display=""
@@ -3814,7 +4030,9 @@ EOF
         # Returns:
         #   0 when no adjacent product packages exist or installation succeeds; non-zero otherwise.
         # Usage:
+        #   ```bash
         #   _bootstrap_first_install_packages
+        #   ```
     _bootstrap_first_install_packages() {
         local row="" canonical=""
         local -a packages=() selected=()
@@ -4016,7 +4234,9 @@ EOF
         # Purpose:
         #   Show installed, newest local, and newest GitHub releases for every known product.
         # Usage:
+        #   ```bash
         #   _print_status
+        #   ```
     _print_status() {
         _dashboard_product_rows
         printf '
@@ -4026,10 +4246,15 @@ EOF
     }
 
     # fn: _interactive_menu - Run the standalone product setup menu
+        # . Purpose
+        #   Run the standalone product setup menu.
+        #
         # Returns:
         #   0 on normal exit.
         # Usage:
+        #   ```bash
         #   _interactive_menu
+        #   ```
     _interactive_menu() {
         local choice="" target="" product_row="" project="" product="" url="" version="" build=""
         local -a products=() selected=()

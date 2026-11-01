@@ -67,9 +67,8 @@ set -uo pipefail
         #   helpers are not available until sgnd-exe-common.sh has been loaded.
         #
         # . Returns
-        #   0 when the framework root was resolved and executable common library loaded.
-        #   126 when the script path cannot be resolved, no canonical root component can
-        #   be found, or the executable common library is unreadable.
+        #   - 0 when the framework root was resolved and executable common library loaded.
+        #   - 126 when the script path cannot be resolved, no canonical root component can be found, or the executable common library is unreadable.
         #
         # . Usage
         #   ```bash
@@ -202,9 +201,11 @@ set -uo pipefail
 
 # - Helpers -------------------------------------------------------------------------
     # fn: _scan_cli_args - Record which restore settings were supplied explicitly
-        # . Arguments
-        #   $@  Original command-line arguments.
+        # . Purpose
+        #   Record which restore settings were supplied explicitly.
         #
+        # . Arguments
+        #   - `$@` — Original command-line arguments.
         # . Returns
         #   0 always.
         #
@@ -238,6 +239,9 @@ set -uo pipefail
     }
 
     # fn: _cleanup_staging - Remove the temporary extraction directory
+        # . Purpose
+        #   Remove the temporary extraction directory.
+        #
         # . Returns
         #   0 always.
         #
@@ -251,6 +255,9 @@ set -uo pipefail
     }
 
     # fn: _resolve_archive - Resolve ARCHIVE_FILE against ARCHIVE_DIRECTORY
+        # . Purpose
+        #   Resolve ARCHIVE_FILE against ARCHIVE_DIRECTORY.
+        #
         # . Returns
         #   0 when a readable archive is resolved; 1 otherwise.
         #
@@ -276,7 +283,7 @@ set -uo pipefail
         # . Purpose
         #   Find readable .tar.gz archives in ARCHIVE_DIRECTORY and store their basenames.
         #
-        # Outputs (globals):
+        # . Outputs (globals)
         #   AVAILABLE_ARCHIVES
         #
         # . Returns
@@ -317,7 +324,7 @@ set -uo pipefail
         # . Purpose
         #   Display available archives and resolve a numeric user selection.
         #
-        # Outputs (globals):
+        # . Outputs (globals)
         #   ARCHIVE_FILE
         #
         # . Returns
@@ -342,6 +349,9 @@ set -uo pipefail
     }
 
     # fn: _validate_archive_entries - Reject unsafe archive entry paths
+        # . Purpose
+        #   Reject unsafe archive entry paths.
+        #
         # . Returns
         #   0 when every archive path is safe and relative; 1 otherwise.
         #
@@ -365,6 +375,9 @@ set -uo pipefail
     }
 
     # fn: _validate_parameters - Validate restore settings
+        # . Purpose
+        #   Validate restore settings.
+        #
         # . Returns
         #   0 when settings and archive are usable; 1 otherwise.
         #
@@ -396,6 +409,9 @@ set -uo pipefail
     }
 
     # fn: _getparameters - Resolve and confirm restore settings
+        # . Purpose
+        #   Resolve and confirm restore settings.
+        #
         # . Returns
         #   0 when settings are valid and confirmed; 1 on cancellation.
         #
@@ -463,6 +479,9 @@ set -uo pipefail
     }
 
     # fn: _extract_staging - Extract the validated archive into temporary staging
+        # . Purpose
+        #   Extract the validated archive into temporary staging.
+        #
         # . Returns
         #   0 on success; non-zero on extraction failure.
         #
@@ -480,6 +499,9 @@ set -uo pipefail
     }
 
     # fn: _select_files - Select staged files using directory and filename mask
+        # . Purpose
+        #   Select staged files using directory and filename mask.
+        #
         # . Outputs (globals)
         #   SELECTED_FILES
         #
@@ -519,6 +541,9 @@ set -uo pipefail
     }
 
     # fn: _restore_files - Restore selected staged files beneath the target root
+        # . Purpose
+        #   Restore selected staged files beneath the target root.
+        #
         # . Returns
         #   0 after successful restoration; non-zero on failure.
         #
@@ -561,9 +586,11 @@ set -uo pipefail
 
 # - Main ----------------------------------------------------------------------------
     # fn: main - Run the selective restore workflow
-        # . Arguments
-        #   $@  Framework and script-specific arguments.
+        # . Purpose
+        #   Run the selective restore workflow.
         #
+        # . Arguments
+        #   - `$@` — Framework and script-specific arguments.
         # . Returns
         #   Workflow exit status.
         #

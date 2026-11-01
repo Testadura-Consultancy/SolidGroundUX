@@ -42,26 +42,26 @@
 # =====================================================================================
 set -uo pipefail
 # - Library guard ------------------------------------------------------------------
-    # fn$ _sgnd_lib_guard - Enforce source-only, single-load library initialization
+    # fn: _sgnd_lib_guard - Reject direct execution and track source state
         # . Purpose
-        #   Ensure the file is sourced as a library and initialized only once.
+        #   Ensure direct execution is rejected and record that the library has been sourced.
         #
         # . Behavior
         #   - Derives a unique guard variable name from the current filename.
         #   - Aborts execution when the file is run directly instead of sourced.
-        #   - Sets the guard variable on first load.
-        #   - Returns immediately when the library was already loaded.
+        #   - Records a guard variable on the first source operation.
+        #   - Returns early if the guard flag is already present; subsequent file statements still execute.
         #
-        # Inputs
-        #   BASH_SOURCE[0]
-        #   $0
+        # . Inputs
+        #   - BASH_SOURCE[0]
+        #   - $0
         #
-        # Outputs (globals)
+        # . Outputs (globals)
         #   SGND_<MODULE>_LOADED
         #
         # . Returns
-        #   0 when already loaded or successfully initialized.
-        #   Exits with code 2 when executed instead of sourced.
+        #   - 0 when already loaded or successfully initialized.
+        #   - Exits with code 2 when executed instead of sourced.
         #
         # . Usage
         #   ```bash
@@ -103,13 +103,13 @@ set -uo pipefail
         #   - Emits invalid reversed ranges as warnings and skips them.
         #
         # . Arguments
-        #   $1 - Choice specification to expand.
+        #   - `$1` — Choice specification to expand.
         #
         # . Output
         #   Writes one expanded choice per line to stdout.
         #
         # . Returns
-        #   0 after processing the supplied specification.
+        #   - 0 after processing the supplied specification.
         #
         # . Usage
         #   ```bash
@@ -162,12 +162,12 @@ set -uo pipefail
         #   Validate a single choice against a ask_choose-style choices list.
         #
         # . Arguments
-        #   $1  VALUE
-        #   $2  CHOICES
+        #   - `$1` — VALUE
+        #   - `$2` — CHOICES
         #
         # . Returns
-        #   0 if valid
-        #   1 if invalid
+        #   - 0 if valid
+        #   - 1 if invalid
         #
         # . Usage
         #   ```bash
@@ -201,18 +201,18 @@ set -uo pipefail
         #   - Applies label and input colors according to the colorize mode.
         #
         # . Arguments
-        #   $1 - Label text.
-        #   $2 - Visible label width, or empty to avoid width padding.
-        #   $3 - Number of leading spaces to add before the label.
-        #   $4 - ANSI sequence used for the label color.
-        #   $5 - ANSI sequence used for the input color.
-        #   $6 - Colorize mode: none, label, input, or both.
+        #   - `$1` — Label text.
+        #   - `$2` — Visible label width, or empty to avoid width padding.
+        #   - `$3` — Number of leading spaces to add before the label.
+        #   - `$4` — ANSI sequence used for the label color.
+        #   - `$5` — ANSI sequence used for the input color.
+        #   - `$6` — Colorize mode: none, label, input, or both.
         #
         # . Output
         #   Writes the prompt string to stdout.
         #
         # . Returns
-        #   0 when the prompt string was written.
+        #   - 0 when the prompt string was written.
         #
         # . Usage
         #   ```bash
@@ -278,16 +278,16 @@ set -uo pipefail
         #   Run a validation callback when provided.
         #
         # . Arguments
-        #   $1  VALIDATE_FUNCTION
-        #   $2  VALUE
+        #   - `$1` — VALIDATE_FUNCTION
+        #   - `$2` — VALUE
         #
         # . Returns
-        #   0 if valid or no validator is supplied.
-        #   Non-zero when the validator rejects the value.
+        #   - 0 if valid or no validator is supplied.
+        #   - Non-zero when the validator rejects the value.
         #
         # . Usage
         #   ```bash
-        #   _ask_validate "42" sgnd_validate_int && printf 'Valid integer\n'
+        #   _ask_validate sgnd_validate_int "42" && printf 'Valid integer\n'
         #   ```
     _ask_validate() {
         local fn="${1-}"
@@ -308,13 +308,13 @@ set -uo pipefail
         #   - Normalizes aliases to uppercase for matching.
         #
         # . Arguments
-        #   $1 - Decision specification, for example "YES|Y,NO|N,CANCEL|C".
+        #   - `$1` — Decision specification, for example "YES|Y,NO|N,CANCEL|C".
         #
         # . Output
         #   Writes CANONICAL|ALIAS records to stdout.
         #
         # . Returns
-        #   0 after processing the supplied specification.
+        #   - 0 after processing the supplied specification.
         #
         # . Usage
         #   ```bash
@@ -355,16 +355,16 @@ set -uo pipefail
         #   - Compares values case-insensitively through uppercase aliases.
         #
         # . Arguments
-        #   $1 - Typed value to normalize.
-        #   $2 - Decision choice specification.
-        #   $3 - Default value used when $1 is empty.
+        #   - `$1` — Typed value to normalize.
+        #   - `$2` — Decision choice specification.
+        #   - `$3` — Default value used when $1 is empty.
         #
         # . Output
         #   Writes the canonical decision value to stdout.
         #
         # . Returns
-        #   0 when the value matched a known alias.
-        #   1 when the value could not be normalized.
+        #   - 0 when the value matched a known alias.
+        #   - 1 when the value could not be normalized.
         #
         # . Usage
         #   ```bash
@@ -397,13 +397,13 @@ set -uo pipefail
         #   Build a compact display string from a decision specification.
         #
         # . Arguments
-        #   $1  CHOICES
+        #   - `$1` — CHOICES
         #
         # . Output
         #   Writes display string, e.g. YES/NO.
         #
         # . Returns
-        #   0 always.
+        #   - 0 always.
         #
         # . Usage
         #   ```bash
@@ -438,16 +438,16 @@ set -uo pipefail
         #   - Maps redo return codes to REDO where available.
         #
         # . Arguments
-        #   $1 - Return code from ask_dlg_autocontinue.
-        #   $2 - Decision choice specification.
-        #   $3 - Default decision value.
+        #   - `$1` — Return code from ask_dlg_autocontinue.
+        #   - `$2` — Decision choice specification.
+        #   - `$3` — Default decision value.
         #
         # . Output
         #   Writes the mapped canonical decision value to stdout.
         #
         # . Returns
-        #   0 when a mapping was found.
-        #   1 when the return code cannot be mapped to the supplied choices.
+        #   - 0 when a mapping was found.
+        #   - 1 when the return code cannot be mapped to the supplied choices.
         #
         # . Usage
         #   ```bash
@@ -496,16 +496,16 @@ set -uo pipefail
         #   - Leaves validation of the parsed key to the caller.
         #
         # . Arguments
-        #   $1 - Field specification in KEY|LABEL|DEFAULT|VALIDATOR format.
+        #   - `$1` — Field specification in KEY|LABEL|DEFAULT|VALIDATOR format.
         #
-        # Outputs (globals):
-        #   _ask_field_key      - Target variable name.
-        #   _ask_field_label    - Prompt label.
-        #   _ask_field_default  - Default value.
-        #   _ask_field_validate - Optional validator function name.
+        # . Outputs (globals)
+        #   - _ask_field_key      - Target variable name.
+        #   - _ask_field_label    - Prompt label.
+        #   - _ask_field_default  - Default value.
+        #   - _ask_field_validate - Optional validator function name.
         #
         # . Returns
-        #   0 when the specification was parsed.
+        #   - 0 when the specification was parsed.
         #
         # . Usage
         #   ```bash
@@ -527,11 +527,11 @@ set -uo pipefail
         #   Test whether a value is a valid shell variable identifier.
         #
         # . Arguments
-        #   $1  VALUE
+        #   - `$1` — VALUE
         #
         # . Returns
-        #   0 if valid
-        #   1 if invalid
+        #   - 0 if valid
+        #   - 1 if invalid
         #
         # . Usage
         #   ```bash
@@ -541,7 +541,7 @@ set -uo pipefail
         [[ "${1-}" =~ ^[A-Za-z_][A-Za-z0-9_]*$ ]]
     }
 
-    # fn$ _ask_datetime_normalize
+    # fn: _ask_datetime_normalize
         # . Purpose
         #   Normalize an absolute date/time value or SolidGroundUX datetime shortcut.
         #
@@ -555,15 +555,15 @@ set -uo pipefail
         #   - Supports combined relative expressions such as -1d2h30m.
         #   - Returns a local ISO-8601 timestamp including the UTC offset.
         #
-        # Inputs:
-        #   $1 - Absolute date/time value or SolidGroundUX datetime expression.
+        # . Inputs
+        #   - $1 - Absolute date/time value or SolidGroundUX datetime expression.
         #
-        # Outputs (stdout):
-        #   Normalized ISO-8601 datetime.
+        #   - Outputs (stdout):
+        #   - Normalized ISO-8601 datetime.
         #
         # . Returns
-        #   0 when the value was normalized successfully.
-        #   1 when the value is empty or invalid.
+        #   - 0 when the value was normalized successfully.
+        #   - 1 when the value is empty or invalid.
         #
         # . Usage
         #   ```bash
@@ -638,50 +638,38 @@ set -uo pipefail
         #   - Applies optional label alignment, padding, and input coloring.
         #   - Re-prompts until the optional validation callback accepts the value.
         #
-        # . options
-        #   --label TEXT
-        #       Prompt label shown before the input field.
-        #   --var NAME
-        #       Shell variable that receives the entered value.
-        #   --default VALUE
-        #       Editable default value offered to the user.
-        #   --validate FUNCTION
-        #       Optional validator callback. FUNCTION receives the value as $1 and
-        #       must return 0 for valid input and non-zero for invalid input.
-        #   --back
-        #       Treat a lone Q (case-insensitive) as "back" and return 1 without
-        #       assigning the target variable.
-        #   --echo
-        #       Echo the accepted value and validation marker to the terminal.
-        #   --labelwidth WIDTH
-        #       Visible width used to align the prompt label.
-        #   --pad COUNT
-        #       Number of spaces inserted before the prompt label.
-        #   --labelclr ANSI
-        #       ANSI sequence used for the label.
-        #   --inputclr ANSI
-        #       ANSI sequence used for the input.
-        #   --colorize MODE
-        #       Colorize mode: none, label, input, or both.
+        # . Options
+        #   - `--label TEXT` — Prompt label shown before the input field.
+        #   - `--var NAME` — Shell variable that receives the entered value.
+        #   - `--default VALUE` — Editable default value offered to the user.
+        #   - `--validate FUNCTION` — Optional validator callback. FUNCTION receives the value as $1 and must return 0 for valid
+        #     input and non-zero for invalid input.
+        #   - `--back` — Treat a lone Q (case-insensitive) as "back" and return 1 without assigning the target variable.
+        #   - `--echo` — Display the accepted value and validation marker on `/dev/tty`; also write the value to stdout when `--var` is omitted.
+        #   - `--labelwidth WIDTH` — Visible width used to align the prompt label.
+        #   - `--pad COUNT` — Number of spaces inserted before the prompt label.
+        #   - `--labelclr ANSI` — ANSI sequence used for the label.
+        #   - `--inputclr ANSI` — ANSI sequence used for the input.
+        #   - `--colorize MODE` — Colorize mode: none, label, input, or both.
         #
-        # Common validators:
-        #   sgnd_validate_text
-        #   sgnd_validate_yesno
-        #   sgnd_validate_int
-        #   sgnd_validate_numeric
-        #   sgnd_validate_bool
-        #   sgnd_validate_date
-        #   sgnd_validate_ipv4
-        #   sgnd_validate_cidr
-        #   sgnd_validate_slug
-        #   sgnd_validate_fs_name
-        #   sgnd_validate_file_exists
-        #   sgnd_validate_file_not_exists
-        #   sgnd_validate_path_exists
-        #   sgnd_validate_dir_exists
-        #   sgnd_validate_executable
+        # . Common validators
+        #   - `sgnd_validate_text`
+        #   - `sgnd_validate_yesno`
+        #   - `sgnd_validate_int`
+        #   - `sgnd_validate_numeric`
+        #   - `sgnd_validate_bool`
+        #   - `sgnd_validate_date`
+        #   - `sgnd_validate_ipv4`
+        #   - `sgnd_validate_cidr`
+        #   - `sgnd_validate_slug`
+        #   - `sgnd_validate_fs_name`
+        #   - `sgnd_validate_file_exists`
+        #   - `sgnd_validate_file_not_exists`
+        #   - `sgnd_validate_path_exists`
+        #   - `sgnd_validate_dir_exists`
+        #   - `sgnd_validate_executable`
         #
-        # Outputs (globals):
+        # . Outputs (globals)
         #   Variable named by --var, when --var is supplied.
         #
         # . Output
@@ -691,13 +679,32 @@ set -uo pipefail
         #   Writes the interactive prompt, validation message, and optional echoed value to /dev/tty.
         #
         # . Returns
-        #   0 when a valid value was accepted.
-        #   1 when --back is enabled and Q is entered.
-        #   2 when /dev/tty is not available.
+        #   - 0 when a valid value was accepted.
+        #   - 1 when --back is enabled and Q is entered.
+        #   - 2 when /dev/tty is not available.
         #
         # . Usage
         #   ```bash
-        #   ask --label "Target directory" --var TARGET_DIR --default "/tmp" --validate sgnd_validate_dir_exists
+        #   # Ask for a value and store it in a shell variable.
+        #   ask --label "Project name" --var PROJECT_NAME
+        #
+        #   # Offer an editable default and require an existing directory.
+        #   ask --label "Target directory" --var TARGET_DIR \
+        #       --default "/tmp" --validate sgnd_validate_dir_exists
+        #
+        #   # Validate a number using a framework callback.
+        #   ask --label "Retry count" --var RETRY_COUNT \
+        #       --default "3" --validate sgnd_validate_int
+        #
+        #   # Accept Q as a request to return to the previous menu (exit status 1).
+        #   ask --label "Remote host" --var REMOTE_HOST --back
+        #
+        #   # Read stdout when no --var destination is requested.
+        #   USER_NAME="$(ask --label "User name" --echo)"
+        #
+        #   # Customize alignment, padding and color mode.
+        #   ask --label "Database host" --var DB_HOST \
+        #       --labelwidth 28 --pad 2 --colorize label
         #   ```
     ask() {
         local label=""
@@ -806,37 +813,28 @@ set -uo pipefail
         #   - Displays the resolved ISO-8601 datetime when a shortcut is entered.
         #   - Stores the accepted value as a local ISO-8601 timestamp.
         #
-        # . options
-        #   --label TEXT
-        #       Prompt label shown before the input field.
-        #   --var NAME
-        #       Shell variable that receives the normalized datetime.
-        #   --default VALUE
-        #       Editable absolute value or SolidGroundUX datetime shortcut.
-        #   --echo
-        #       Echo the normalized value after it has been accepted.
-        #   --labelwidth WIDTH
-        #       Visible width used to align the prompt label.
-        #   --pad COUNT
-        #       Number of spaces inserted before the prompt label.
-        #   --labelclr ANSI
-        #       ANSI sequence used for the label.
-        #   --inputclr ANSI
-        #       ANSI sequence used for the input.
-        #   --colorize MODE
-        #       Colorize mode: none, label, input, or both.
+        # . Options
+        #   - `--label TEXT` — Prompt label shown before the input field.
+        #   - `--var NAME` — Shell variable that receives the normalized datetime.
+        #   - `--default VALUE` — Editable absolute value or SolidGroundUX datetime shortcut.
+        #   - `--echo` — Echo the normalized value after it has been accepted.
+        #   - `--labelwidth WIDTH` — Visible width used to align the prompt label.
+        #   - `--pad COUNT` — Number of spaces inserted before the prompt label.
+        #   - `--labelclr ANSI` — ANSI sequence used for the label.
+        #   - `--inputclr ANSI` — ANSI sequence used for the input.
+        #   - `--colorize MODE` — Colorize mode: none, label, input, or both.
         #
-        # Supported shortcuts:
-        #   N       Current local date and time.
-        #   D       Current local date at 00:00:00.
-        #   s       Seconds.
-        #   m       Minutes.
-        #   h       Hours.
-        #   d       Days.
-        #   M       Months.
-        #   y       Years.
+        # . Supported shortcuts
+        #   - `N` — Current local date and time.
+        #   - `D` — Current local date at 00:00:00.
+        #   - `s` — Seconds.
+        #   - `m` — Minutes.
+        #   - `h` — Hours.
+        #   - `d` — Days.
+        #   - `M` — Months.
+        #   - `y` — Years.
         #
-        # Outputs (globals):
+        # . Outputs (globals)
         #   Variable named by --var, when --var is supplied.
         #
         # . Output
@@ -844,12 +842,19 @@ set -uo pipefail
         #   Writes the normalized value to stdout only when --echo is used without --var.
         #
         # . Returns
-        #   0 when a valid datetime was accepted.
-        #   2 when /dev/tty is unavailable through ask.
+        #   - 0 when a valid datetime was accepted.
+        #   - 2 when /dev/tty is unavailable through ask.
         #
         # . Usage
         #   ```bash
+        #   # Accept an editable relative default and store an ISO-8601 value.
         #   ask_datetime --label "Changed after" --var CHANGED_AFTER --default "-2h"
+        #
+        #   # Accept the current local time with N or a relative offset such as -1d2h30m.
+        #   ask_datetime --label "Run at" --var RUN_AT --default "N"
+        #
+        #   # Capture the accepted datetime from stdout instead of assigning a variable.
+        #   RUN_AT="$(ask_datetime --label "Schedule" --default "D" --echo)"
         #   ```
     ask_datetime() {
         local label=""
@@ -942,42 +947,37 @@ set -uo pipefail
         #   - Can auto-continue after a timeout and map redo/cancel keys to decisions.
         #   - Re-prompts until the entered value matches the configured choice list.
         #
-        # . options
-        #   --label TEXT
-        #       Prompt text displayed to the user.
-        #   --choices SPEC
-        #       Comma-separated canonical/alias groups, e.g. "YES|Y,NO|N".
-        #   --default VALUE
-        #       Default decision used for empty input or timeout mapping.
-        #   --var NAME
-        #       Shell variable that receives the canonical decision. Defaults to decision.
-        #   --seconds COUNT
-        #       Optional auto-continue countdown before falling back to typed input.
-        #   --displaychoices 0|1
-        #       Controls whether the compact choice list is shown in the prompt.
-        #   --labelwidth WIDTH
-        #       Visible width used to align the prompt label.
-        #   --pad COUNT
-        #       Number of spaces inserted before the prompt label.
-        #   --labelclr ANSI
-        #       ANSI sequence used for the label.
-        #   --inputclr ANSI
-        #       ANSI sequence used for the input.
-        #   --colorize MODE
-        #       Colorize mode passed to ask.
+        # . Options
+        #   - `--label TEXT` — Prompt text displayed to the user.
+        #   - `--choices SPEC` — Comma-separated canonical/alias groups, e.g. "YES|Y,NO|N".
+        #   - `--default VALUE` — Default decision used for empty input or timeout mapping.
+        #   - `--var NAME` — Shell variable that receives the canonical decision. Defaults to decision.
+        #   - `--seconds COUNT` — Optional auto-continue countdown before falling back to typed input.
+        #   - `--displaychoices 0|1` — Controls whether the compact choice list is shown in the prompt.
+        #   - `--labelwidth WIDTH` — Visible width used to align the prompt label.
+        #   - `--pad COUNT` — Number of spaces inserted before the prompt label.
+        #   - `--labelclr ANSI` — ANSI sequence used for the label.
+        #   - `--inputclr ANSI` — ANSI sequence used for the input.
+        #   - `--colorize MODE` — Colorize mode passed to ask.
         #
-        # Outputs (globals):
+        # . Outputs (globals)
         #   Variable named by --var.
         #
         # . Returns
-        #   0 when a canonical decision was stored.
+        #   - 0 when a canonical decision was stored.
         #
         # . Usage
         #   ```bash
+        #   # Present Yes/No/Cancel aliases and store a canonical decision.
         #   ask_decision --label "Install now" \
         #       --choices "YES|Y,NO|N,CANCEL|C" \
         #       --default "YES" \
         #       --var decision
+        #
+        #   # Use the short countdown mode, without listing choices in the prompt.
+        #   ask_decision --label "Continue?" \
+        #       --choices "CONTINUE|C,CANCEL|Q" --default CONTINUE \
+        #       --seconds 5 --displaychoices 0 --var next_action
         #   ```
     ask_decision() {
         local label=""
@@ -1070,39 +1070,42 @@ set -uo pipefail
         #   - Optionally supports redo, cancel, and pause/resume keys.
         #   - Returns distinct codes so callers can map user intervention to decisions.
         #
-        # . options
-        #   --seconds COUNT
-        #       Countdown length in seconds. Defaults to 5.
-        #   --message TEXT
-        #       Message displayed above the countdown.
-        #   --legend TEXT
-        #       Custom legend text. When omitted, the standard key legend is built
-        #       from the enabled interaction options.
-        #   --redo
-        #       Enables R as redo, returning 3.
-        #   --again
-        #       Enables A as again/repeat, returning 3.
-        #   --cancel
-        #       Enables C or Esc as cancel, returning 2.
-        #   --pause
-        #       Enables P or Space to pause/resume the countdown.
-        #   --anykey
-        #       Allows any key to continue immediately.
-        #   --hidelegend
-        #       Suppresses the key legend line.
+        # . Options
+        #   - `--seconds COUNT` — Countdown length in seconds. Defaults to 5.
+        #   - `--message TEXT` — Message displayed above the countdown.
+        #   - `--legend TEXT` — Custom legend text. When omitted, the standard key legend is built from the enabled interaction
+        #     options.
+        #   - `--redo` — Enables R as redo, returning 3.
+        #   - `--again` — Enables A as again/repeat, returning 3.
+        #   - `--cancel` — Enables C or Esc as cancel, returning 2.
+        #   - `--pause` — Enables P or Space to pause/resume the countdown.
+        #   - `--anykey` — Allows any key to continue immediately.
+        #   - `--hidelegend` — Suppresses the key legend line.
         #
         # . Output
         #   Writes countdown UI to /dev/tty.
         #
         # . Returns
-        #   0 when the user continues explicitly.
-        #   1 when the countdown expires.
-        #   2 when the user cancels.
-        #   3 when the user requests redo/again.
+        #   - 0 when the user continues explicitly.
+        #   - 1 when the countdown expires.
+        #   - 2 when the user cancels.
+        #   - 3 when the user requests redo/again.
         #
         # . Usage
         #   ```bash
-        #   ask_dlg_autocontinue --seconds 10 --message "Continuing deployment" --redo --cancel --pause
+        #   # Continue automatically after a short countdown.
+        #   ask_dlg_autocontinue --seconds 5 --message "Next step"
+        #
+        #   # Allow cancellation, redo, and pause; handle the return status.
+        #   ask_dlg_autocontinue --seconds 10 --message "Continuing deployment" \
+        #       --redo --cancel --pause
+        #   result=$?
+        #   case "$result" in
+        #       0) : ;; # continued explicitly
+        #       1) : ;; # countdown expired
+        #       2) : ;; # cancelled
+        #       3) : ;; # redo requested
+        #   esac
         #   ```
     ask_dlg_autocontinue() {
         local seconds=5
@@ -1262,33 +1265,31 @@ set -uo pipefail
         #   - Accepts Q to cancel and return to the caller.
         #   - Re-prompts after invalid selections.
         #
-        # . options
-        #   --label TEXT
-        #       Heading displayed above the selection list. Defaults to "Select an option".
-        #   --var NAME
-        #       Variable that receives the selected value. In --multi mode NAME receives
-        #       an indexed array of selected values. Defaults to selection.
-        #   --multi
-        #       Enable selection of multiple values using entries such as 1,3,5-7.
-        #   --items ITEM...
-        #       Values to display. This option must be the final option in the call.
+        # . Options
+        #   - `--label TEXT` — Heading displayed above the selection list. Defaults to "Select an option".
+        #   - `--var NAME` — Variable that receives the selected value. In --multi mode NAME receives an indexed array of
+        #     selected values. Defaults to selection.
+        #   - `--multi` — Enable selection of multiple values using entries such as 1,3,5-7.
+        #   - `--items ITEM...` — Values to display. This option must be the final option in the call.
         #
-        # Outputs (globals):
+        # . Outputs (globals)
         #   Variable named by --var. Scalar in single-select mode; indexed array in multi-select mode.
         #
         # . Returns
-        #   0 when a valid selection was stored.
-        #   1 when the user selects Q to cancel.
-        #   2 when no items are supplied or --var is not a valid shell identifier.
+        #   - 0 when a valid selection was stored.
+        #   - 1 when the user selects Q to cancel.
+        #   - 2 when no items are supplied or --var is not a valid shell identifier.
         #
         # . Usage
         #   ```bash
+        #   # Single selection returns one value in the target variable.
         #   options=("Default" "Dark" "Testadura")
         #   ask_selection --label "Theme" --var theme --items "${options[@]}"
-        #   ```
         #
+        #   # Multiple selection returns an indexed array of selected values.
         #   groups=("Domain Admins" "File Server Users" "Accounting")
         #   ask_selection --label "Groups" --var selected_groups --multi --items "${groups[@]}"
+        #   ```
     ask_selection() {
         local label="Select an option"
         local var_name="selection"
@@ -1418,39 +1419,32 @@ set -uo pipefail
         #   - Supports expanded ranges such as A-D through _ask_expand_choices.
         #   - Can either keep asking or accept the invalid value after warning.
         #
-        # . options
-        #   --label TEXT
-        #       Prompt label shown to the user.
-        #   --var NAME
-        #       Shell variable that receives the chosen value. Defaults to choice.
-        #   --choices SPEC
-        #       Comma-separated choices or ranges, e.g. "A-D,Q".
-        #   --displaychoices 0|1
-        #       Controls whether choices are appended to the label.
-        #   --keepasking 0|1
-        #       Controls whether invalid choices are re-prompted. Defaults to 1.
-        #   --preservecase 0|1
-        #       Preserves the exact case of instant single-key choices. Defaults to 0.
-        #   --labelwidth WIDTH
-        #       Visible width used to align the prompt label.
-        #   --pad COUNT
-        #       Number of spaces inserted before the prompt label.
-        #   --labelclr ANSI
-        #       ANSI sequence used for the label.
-        #   --inputclr ANSI
-        #       ANSI sequence used for the input.
-        #   --colorize MODE
-        #       Colorize mode passed to ask.
+        # . Options
+        #   - `--label TEXT` — Prompt label shown to the user.
+        #   - `--var NAME` — Shell variable that receives the chosen value. Defaults to choice.
+        #   - `--choices SPEC` — Comma-separated choices or ranges, e.g. "A-D,Q".
+        #   - `--displaychoices 0|1` — Controls whether choices are appended to the label.
+        #   - `--keepasking 0|1` — Controls whether invalid choices are re-prompted. Defaults to 1.
+        #   - `--labelwidth WIDTH` — Visible width used to align the prompt label.
+        #   - `--pad COUNT` — Number of spaces inserted before the prompt label.
+        #   - `--labelclr ANSI` — ANSI sequence used for the label.
+        #   - `--inputclr ANSI` — ANSI sequence used for the input.
+        #   - `--colorize MODE` — Colorize mode passed to ask.
         #
-        # Outputs (globals):
+        # . Outputs (globals)
         #   Variable named by --var.
         #
         # . Returns
-        #   0 after storing the selected or accepted value.
+        #   - 0 after storing the selected or accepted value.
         #
         # . Usage
         #   ```bash
+        #   # Choose one letter from a compact range, or Q to go back.
         #   ask_choose --label "Select action" --choices "A-D,Q" --var action
+        #
+        #   # Keep the accepted value in a named variable; do not repeat invalid entries.
+        #   ask_choose --label "Proceed" --choices "Y,N,Q" \
+        #       --keepasking 0 --displaychoices 1 --var confirmation
         #   ```
     ask_choose() {
         local label=""
@@ -1535,42 +1529,36 @@ set -uo pipefail
         #   - Supports backspace editing for the typed buffer.
         #   - Validates the final response against the configured choice list when supplied.
         #
-        # . options
-        #   --label TEXT
-        #       Prompt label shown to the user.
-        #   --var NAME
-        #       Shell variable that receives the selected value. Defaults to choice.
-        #   --choices SPEC
-        #       Full accepted choice list, e.g. "A-D,Q".
-        #   --instantchoices SPEC
-        #       Choices accepted immediately after one key press.
-        #   --displaychoices 0|1
-        #       Controls whether choices are appended to the label.
-        #   --keepasking 0|1
-        #       Controls whether invalid choices are re-prompted. Defaults to 1.
-        #   --preservecase 0|1
-        #       Preserves the exact case of instant single-key choices. Defaults to 0.
-        #   --labelwidth WIDTH
-        #       Visible width used to align the prompt label.
-        #   --pad COUNT
-        #       Number of spaces inserted before the prompt label.
-        #   --labelclr ANSI
-        #       ANSI sequence used for the label.
-        #   --inputclr ANSI
-        #       ANSI sequence used for the input.
-        #   --colorize MODE
-        #       Colorize mode passed to the prompt builder.
+        # . Options
+        #   - `--label TEXT` — Prompt label shown to the user.
+        #   - `--var NAME` — Shell variable that receives the selected value. Defaults to choice.
+        #   - `--choices SPEC` — Full accepted choice list, e.g. "A-D,Q".
+        #   - `--instantchoices SPEC` — Choices accepted immediately after one key press.
+        #   - `--displaychoices 0|1` — Controls whether choices are appended to the label.
+        #   - `--keepasking 0|1` — Controls whether invalid choices are re-prompted. Defaults to 1.
+        #   - `--preservecase 0|1` — Preserves the exact case of instant single-key choices. Defaults to 0.
+        #   - `--labelwidth WIDTH` — Visible width used to align the prompt label.
+        #   - `--pad COUNT` — Number of spaces inserted before the prompt label.
+        #   - `--labelclr ANSI` — ANSI sequence used for the label.
+        #   - `--inputclr ANSI` — ANSI sequence used for the input.
+        #   - `--colorize MODE` — Colorize mode passed to the prompt builder.
         #
-        # Outputs (globals):
+        # . Outputs (globals)
         #   Variable named by --var.
         #
         # . Returns
-        #   0 after storing a valid selected value.
-        #   1 when reading from /dev/tty fails.
+        #   - 0 after storing a valid selected value.
+        #   - 1 when reading from /dev/tty fails.
         #
         # . Usage
         #   ```bash
-        #   ask_choose_immediate --label "Menu" --choices "1-9,Q" --instantchoices "1-9,Q" --var menu_choice
+        #   # Accept menu digits and Q immediately, without waiting for Enter.
+        #   ask_choose_immediate --label "Menu" --choices "1-9,Q" \
+        #       --instantchoices "1-9,Q" --var menu_choice
+        #
+        #   # Accept left/right arrow keys as the symbolic choices < and >.
+        #   ask_choose_immediate --label "Page" --choices "<,>,Q" \
+        #       --instantchoices "<,>,Q" --var navigation
         #   ```
     ask_choose_immediate() {
         local label=""
@@ -1730,35 +1718,34 @@ set -uo pipefail
         #   - Optionally auto-aligns labels based on the widest field label.
         #   - Skips invalid shell variable names with a warning.
         #
-        # . options
-        #   --labelwidth WIDTH
-        #       Visible label width for all fields.
-        #   --autoalign
-        #       Calculates label width from the supplied field labels.
-        #   --colorize MODE
-        #       Colorize mode passed to ask.
-        #   --pad COUNT
-        #       Number of spaces inserted before each prompt label.
-        #   --labelclr ANSI
-        #       ANSI sequence used for labels.
-        #   --inputclr ANSI
-        #       ANSI sequence used for input.
+        # . Options
+        #   - `--labelwidth WIDTH` — Visible label width for all fields.
+        #   - `--autoalign` — Calculates label width from the supplied field labels.
+        #   - `--colorize MODE` — Colorize mode passed to ask.
+        #   - `--pad COUNT` — Number of spaces inserted before each prompt label.
+        #   - `--labelclr ANSI` — ANSI sequence used for labels.
+        #   - `--inputclr ANSI` — ANSI sequence used for input.
         #
         # . Arguments
-        #   FIELD_SPEC...
-        #       One or more KEY|LABEL|DEFAULT|VALIDATOR records.
+        #   - `FIELD_SPEC...` — One or more KEY|LABEL|DEFAULT|VALIDATOR records.
         #
-        # Outputs (globals):
+        # . Outputs (globals)
         #   Variables named by the KEY component of each valid field specification.
         #
         # . Returns
-        #   0 after all valid fields have been prompted.
+        #   - 0 after all valid fields have been prompted.
         #
         # . Usage
         #   ```bash
+        #   # Auto-align two validated fields.
         #   ask_prompt_form --autoalign \
         #       "TARGET_DIR|Target directory|/tmp|sgnd_validate_dir_exists" \
         #       "RETRY_COUNT|Retry count|3|sgnd_validate_int"
+        #
+        #   # Supply a fixed label width and editable defaults.
+        #   ask_prompt_form --labelwidth 24 \
+        #       "HOST|Database host|localhost|" \
+        #       "PORT|Database port|5432|sgnd_validate_int"
         #   ```
     ask_prompt_form() {
         local labelwidth=0

@@ -44,26 +44,26 @@
 # =====================================================================================
 set -uo pipefail
 # - Library guard ------------------------------------------------------------------
-    # fn$ _sgnd_lib_guard - Enforce source-only, single-load library initialization
+    # fn: _sgnd_lib_guard - Reject direct execution and track source state
         # . Purpose
-        #   Ensure the file is sourced as a library and initialized only once.
+        #   Ensure direct execution is rejected and record that the library has been sourced.
         #
         # . Behavior
         #   - Derives a unique guard variable name from the current filename.
         #   - Aborts execution when the file is run directly instead of sourced.
-        #   - Sets the guard variable on first load.
-        #   - Returns immediately when the library was already loaded.
+        #   - Records a guard variable on the first source operation.
+        #   - Returns early if the guard flag is already present; subsequent file statements still execute.
         #
-        # Inputs
-        #   BASH_SOURCE[0]
-        #   $0
+        # . Inputs
+        #   - BASH_SOURCE[0]
+        #   - $0
         #
-        # Outputs (globals)
+        # . Outputs (globals)
         #   SGND_<MODULE>_LOADED
         #
         # . Returns
-        #   0 when already loaded or successfully initialized.
-        #   Exits with code 2 when executed instead of sourced.
+        #   - 0 when already loaded or successfully initialized.
+        #   - Exits with code 2 when executed instead of sourced.
         #
         # . Usage
         #   ```bash
@@ -98,13 +98,12 @@ set -uo pipefail
         #   Build a readable key legend for a dialog choice set.
         #
         # . Arguments
-        #   $1: encoded dialog choices; optional $2: paused flag.
-        #
+        #   - `$1` — encoded dialog choices; optional $2: paused flag.
         # . Output
         #   Prints labels for enabled keys.
         #
         # . Returns
-        #   0 when the legend is printed.
+        #   - 0 when the legend is printed.
         #
         # . Usage
         #   ```bash
@@ -140,8 +139,7 @@ set -uo pipefail
         #   Expand comma-separated decision aliases into canonical/alias records.
         #
         # . Arguments
-        #   $1: choice specification, with aliases separated by vertical bars.
-        #
+        #   - `$1` — choice specification, with aliases separated by vertical bars.
         # . Output
         #   Prints normalized choice/alias records.
         #
@@ -183,13 +181,12 @@ set -uo pipefail
         #   Normalize a decision input using the configured aliases and default.
         #
         # . Arguments
-        #   $1: entered value; $2: choices; optional $3: default value.
-        #
+        #   - `$1` — entered value; $2: choices; optional $3: default value.
         # . Output
         #   Prints the canonical matching decision.
         #
         # . Returns
-        #   0 for recognized input; nonzero for an unsupported choice.
+        #   - 0 for recognized input; nonzero for an unsupported choice.
         #
         # . Usage
         #   ```bash
@@ -224,13 +221,12 @@ set -uo pipefail
         #   Build the short, slash-separated display text for available decisions.
         #
         # . Arguments
-        #   $1: choice specification with comma-separated groups.
-        #
+        #   - `$1` — choice specification with comma-separated groups.
         # . Output
         #   Prints the first alias from each group separated by slashes.
         #
         # . Returns
-        #   0 when printed.
+        #   - 0 when printed.
         #
         # . Usage
         #   ```bash
@@ -263,13 +259,12 @@ set -uo pipefail
         #   Translate a dialog return code into a normalized decision.
         #
         # . Arguments
-        #   $1: dialog return code; $2: choices; optional $3: default value.
-        #
+        #   - `$1` — dialog return code; $2: choices; optional $3: default value.
         # . Output
         #   Prints the corresponding canonical decision, if recognized.
         #
         # . Returns
-        #   0 when translated; nonzero when no mapping is available.
+        #   - 0 when translated; nonzero when no mapping is available.
         #
         # . Usage
         #   ```bash
@@ -318,8 +313,9 @@ set -uo pipefail
         #   Show a terminal countdown with only the specified continuation choices.
         #
         # . Arguments
-        #   Optional $1: seconds; $2: message; $3: enabled dialog choices.
-        #
+        #   - `$1` — Optional countdown duration in seconds.
+        #   - `$2` — Optional message displayed during the countdown.
+        #   - `$3` — Optional enabled choices (passed through to dialog choice handling).
         # . Output
         #   Displays a countdown on the controlling terminal.
         #
@@ -367,13 +363,12 @@ set -uo pipefail
             #   Find the return code for a configured custom dialog key.
             #
             # . Arguments
-            #   $1: pressed key; reads the custom_keys collection.
-            #
+            #   - `$1` — pressed key; reads the custom_keys collection.
             # . Output
             #   Prints a custom return code (starting at 10) for matching keys.
             #
             # . Returns
-            #   0 when the key matches; nonzero otherwise.
+        #   - 0 when the key matches; nonzero otherwise.
             #
             # . Usage
             #   ```bash
@@ -532,13 +527,12 @@ set -uo pipefail
         #   Present a selection prompt from a supplied list.
         #
         # . Arguments
-        #   Named options and list values accepted by the prompt parser.
-        #
+        #   - `Named` — options and list values accepted by the prompt parser.
         # . Output
         #   Displays a list prompt and records the selected value through the requested output mechanism.
         #
         # . Returns
-        #   0 on selection; nonzero on cancellation or invalid input.
+        #   - 0 on selection; nonzero on cancellation or invalid input.
         #
         # . Usage
         #   ```bash
@@ -637,13 +631,12 @@ set -uo pipefail
         #   Ask for a decision using aliases, defaults and optional timeout.
         #
         # . Arguments
-        #   Named options including --label, --choices, --default and --var.
-        #
+        #   - `Named` — options including --label, --choices, --default and --var.
         # . Output
         #   Prompts the user and assigns the normalized decision to the requested variable.
         #
         # . Returns
-        #   0 when a decision is accepted; nonzero on cancellation or failed input.
+        #   - 0 when a decision is accepted; nonzero on cancellation or failed input.
         #
         # . Usage
         #   ```bash

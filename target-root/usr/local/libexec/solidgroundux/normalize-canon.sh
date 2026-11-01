@@ -66,9 +66,8 @@ set -uo pipefail
         #   helpers are not available until sgnd-exe-common.sh has been loaded.
         #
         # . Returns
-        #   0 when the framework root was resolved and executable common library loaded.
-        #   126 when the script path cannot be resolved, no canonical root component can
-        #   be found, or the executable common library is unreadable.
+        #   - 0 when the framework root was resolved and executable common library loaded.
+        #   - 126 when the script path cannot be resolved, no canonical root component can be found, or the executable common library is unreadable.
         #
         # . Usage
         #   ```bash
@@ -167,14 +166,13 @@ set -uo pipefail
     SGND_CANON_CLI_INPUTS=()
 
 # - Parameter collection ------------------------------------------------------------
-    # fn$ _collect_cli_inputs - Collect positional file and mask arguments
+    # fn: _collect_cli_inputs - Collect positional file and mask arguments
         # . Purpose
         #   Preserve positional file and mask arguments as explicit runtime inputs while
         #   excluding the script-specific --auto switch from the collected values.
         #
         # . Arguments
-        #   $@  Original executable arguments.
-        #
+        #   - `$@` — Original executable arguments.
         # . Outputs (globals)
         #   SGND_CANON_CLI_INPUTS
         #
@@ -207,7 +205,7 @@ set -uo pipefail
         return 0
     }
 
-    # fn$ _get_parameters - Resolve interactive or automatic normalization inputs
+    # fn: _get_parameters - Resolve interactive or automatic normalization inputs
         # . Purpose
         #   Resolve the file or mask used for canonical normalization, using explicit
         #   command-line inputs as the highest-priority values and saved state as the
@@ -221,8 +219,8 @@ set -uo pipefail
         #   - In interactive mode, prompts with ask and saves the confirmed value.
         #
         # . Outputs (globals)
-        #   SGND_CANON_INPUT
-        #   SGND_CANON_CLI_INPUTS
+        #   - SGND_CANON_INPUT
+        #   - SGND_CANON_CLI_INPUTS
         #
         # . Returns
         #   0 when usable input has been resolved; 2 when auto mode has no usable input.
@@ -282,7 +280,10 @@ set -uo pipefail
     }
 
 # - Local script functions ----------------------------------------------------------
-    # fn$ _resolve_canon_files - Resolve and validate canonical fragment files
+    # fn: _resolve_canon_files - Resolve and validate canonical fragment files
+        # . Purpose
+        #   Resolve and validate canonical fragment files.
+        #
         # . Returns
         #   0 when both canonical fragments are readable; 1 otherwise.
         #
@@ -315,14 +316,16 @@ set -uo pipefail
         return 0
     }
 
-    # fn$ _detect_canonical_target - Determine which canonical structure a file contains
-        # . Arguments
-        #   $1 FILE
-        #   $2 OUTPUT_VAR
+    # fn: _detect_canonical_target - Determine which canonical structure a file contains
+        # . Purpose
+        #   Determine which canonical structure a file contains.
         #
+        # . Arguments
+        #   - `$1` — FILE
+        #   - `$2` — OUTPUT_VAR
         # . Returns
-        #   0 with OUTPUT_VAR set to locator, libguard, or skip.
-        #   1 when both mutually exclusive target functions are present.
+        #   - 0 with OUTPUT_VAR set to locator, libguard, or skip.
+        #   - 1 when both mutually exclusive target functions are present.
         #
         # . Usage
         #   ```bash
@@ -351,10 +354,12 @@ set -uo pipefail
         return 0
     }
 
-    # fn$ _replace_framework_locator - Replace one locator function and its canonical header
-        # . Arguments
-        #   $1 FILE
+    # fn: _replace_framework_locator - Replace one locator function and its canonical header
+        # . Purpose
+        #   Replace one locator function and its canonical header.
         #
+        # . Arguments
+        #   - `$1` — FILE
         # . Behavior
         #   - Starts replacement at the fn$ locator header when present immediately
         #     before the function; otherwise starts at the function declaration.
@@ -459,10 +464,12 @@ set -uo pipefail
         return 0
     }
 
-    # fn$ _replace_library_guard - Replace the complete Library guard section
-        # . Arguments
-        #   $1 FILE
+    # fn: _replace_library_guard - Replace the complete Library guard section
+        # . Purpose
+        #   Replace the complete Library guard section.
         #
+        # . Arguments
+        #   - `$1` — FILE
         # . Behavior
         #   Uses _sgnd_lib_guard() only to identify the file type. Once identified,
         #   replaces the complete Library guard section through the next top-level
@@ -531,10 +538,12 @@ set -uo pipefail
         return 0
     }
 
-    # fn$ _expand_input - Expand one file path or glob mask
-        # . Arguments
-        #   $1 INPUT
+    # fn: _expand_input - Expand one file path or glob mask
+        # . Purpose
+        #   Expand one file path or glob mask.
         #
+        # . Arguments
+        #   - `$1` — INPUT
         # . Output
         #   Writes matching regular files, one per line.
         #
@@ -564,10 +573,12 @@ set -uo pipefail
         (( matched ))
     }
 
-    # fn$ _normalize_file - Apply the appropriate canonical replacement to one file
-        # . Arguments
-        #   $1 FILE
+    # fn: _normalize_file - Apply the appropriate canonical replacement to one file
+        # . Purpose
+        #   Apply the appropriate canonical replacement to one file.
         #
+        # . Arguments
+        #   - `$1` — FILE
         # . Returns
         #   0 for replaced or skipped files; non-zero on structural failure.
         #
@@ -624,10 +635,12 @@ set -uo pipefail
     }
 
 # - Main ----------------------------------------------------------------------------
-    # fn$ main - Normalize canonical structures in selected shell files
-        # . Arguments
-        #   $@  One or more file paths or shell glob masks.
+    # fn: main - Normalize canonical structures in selected shell files
+        # . Purpose
+        #   Normalize canonical structures in selected shell files.
         #
+        # . Arguments
+        #   - `$@` — One or more file paths or shell glob masks.
         # . Returns
         #   0 when all matching files were processed successfully; non-zero otherwise.
         #

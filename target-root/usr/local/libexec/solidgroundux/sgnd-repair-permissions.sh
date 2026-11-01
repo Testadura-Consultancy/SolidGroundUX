@@ -92,9 +92,8 @@ set -uo pipefail
         #   helpers are not available until sgnd-exe-common.sh has been loaded.
         #
         # . Returns
-        #   0 when the framework root was resolved and executable common library loaded.
-        #   126 when the script path cannot be resolved, no canonical root component can
-        #   be found, or the executable common library is unreadable.
+        #   - 0 when the framework root was resolved and executable common library loaded.
+        #   - 126 when the script path cannot be resolved, no canonical root component can be found, or the executable common library is unreadable.
         #
         # . Usage
         #   ```bash
@@ -200,9 +199,11 @@ set -uo pipefail
 
 # - Local helpers --------------------------------------------------------------------
     # fn: _trim - Trim leading and trailing whitespace
-        # . Arguments
-        #   $1  Text to trim.
+        # . Purpose
+        #   Trim leading and trailing whitespace.
         #
+        # . Arguments
+        #   - `$1` — Text to trim.
         # . Output
         #   Trimmed text on stdout.
         #
@@ -229,15 +230,15 @@ set -uo pipefail
         #   - Defaults the policy to SGND_SHARE_DIR/permissions.dta.
         #   - Preserves an explicitly supplied --file value.
         #
-        # Inputs (globals)
+        # . Inputs (globals)
         #   SGND_SHARE_DIR
         #
-        # Outputs (globals)
+        # . Outputs (globals)
         #   VAL_PERMISSION_FILE
         #
         # . Returns
-        #   0 when SGND_SHARE_DIR is available.
-        #   1 when the framework shared-data directory was not initialized.
+        #   - 0 when SGND_SHARE_DIR is available.
+        #   - 1 when the framework shared-data directory was not initialized.
         #
         # . Usage
         #   ```bash
@@ -262,13 +263,13 @@ set -uo pipefail
         #   - Refuses to silently translate operator to root when no invoking operator
         #     can be identified.
         #
-        # Outputs (globals)
-        #   SGND_PERMISSION_OPERATOR_USER
-        #   SGND_PERMISSION_OPERATOR_GROUP
+        # . Outputs (globals)
+        #   - SGND_PERMISSION_OPERATOR_USER
+        #   - SGND_PERMISSION_OPERATOR_GROUP
         #
         # . Returns
-        #   0 when an operator user and primary group were resolved.
-        #   1 when no non-root operator can be identified.
+        #   - 0 when an operator user and primary group were resolved.
+        #   - 1 when no non-root operator can be identified.
         #
         # . Usage
         #   ```bash
@@ -303,15 +304,14 @@ set -uo pipefail
         #   Translate the symbolic value "operator" or preserve an explicit identity.
         #
         # . Arguments
-        #   $1  Raw owner/group value.
-        #   $2  Identity kind: owner or group.
-        #
+        #   - `$1` — Raw owner/group value.
+        #   - `$2` — Identity kind: owner or group.
         # . Output
         #   Resolved identity on stdout.
         #
         # . Returns
-        #   0 on success.
-        #   1 when operator resolution fails.
+        #   - 0 on success.
+        #   - 1 when operator resolution fails.
         #
         # . Usage
         #   ```bash
@@ -342,14 +342,13 @@ set -uo pipefail
         #   Make one policy file usable for both staged target-root trees and live systems.
         #
         # . Arguments
-        #   $1  Absolute target path or path relative to SGND_FRAMEWORK_ROOT.
-        #
+        #   - `$1` — Absolute target path or path relative to SGND_FRAMEWORK_ROOT.
         # . Output
         #   Resolved absolute target path on stdout.
         #
         # . Returns
-        #   0 when the path is valid.
-        #   1 for an empty target or the filesystem root itself.
+        #   - 0 when the path is valid.
+        #   - 1 for an empty target or the filesystem root itself.
         #
         # . Usage
         #   ```bash
@@ -373,9 +372,11 @@ set -uo pipefail
     }
 
     # fn: _validate_mode - Validate an octal permission mode
-        # . Arguments
-        #   $1  Permission mode.
+        # . Purpose
+        #   Validate an octal permission mode.
         #
+        # . Arguments
+        #   - `$1` — Permission mode.
         # . Returns
         #   0 for three- or four-digit octal modes; 1 otherwise.
         #
@@ -392,21 +393,20 @@ set -uo pipefail
         #   Apply one already-resolved permission rule to a single filesystem object.
         #
         # . Arguments
-        #   $1  Type: d for directory or f for regular file.
-        #   $2  Resolved absolute target path.
-        #   $3  Resolved owner name or numeric uid.
-        #   $4  Resolved group name or numeric gid.
-        #   $5  Octal permission mode.
-        #   $6  Source policy line number.
-        #   $7  Create missing directory: 1 or 0.
-        #
+        #   - `$1` — Type: d for directory or f for regular file.
+        #   - `$2` — Resolved absolute target path.
+        #   - `$3` — Resolved owner name or numeric uid.
+        #   - `$4` — Resolved group name or numeric gid.
+        #   - `$5` — Octal permission mode.
+        #   - `$6` — Source policy line number.
+        #   - `$7` — Create missing directory: 1 or 0.
         # . Side effects
         #   May create an exact directory target and may change ownership and permissions.
         #
         # . Returns
-        #   0 when the target was applied or was already correct.
-        #   1 when validation or filesystem modification fails.
-        #   2 when a declared object is absent and creation is not permitted.
+        #   - 0 when the target was applied or was already correct.
+        #   - 1 when validation or filesystem modification fails.
+        #   - 2 when a declared object is absent and creation is not permitted.
         #
         # . Usage
         #   ```bash
@@ -515,16 +515,13 @@ set -uo pipefail
         #   Apply an exact target rule or an explicitly masked child selection.
         #
         # . Arguments
-        #   $1  Type: d for directory or f for regular file.
-        #   $2  Target path, absolute or framework-root relative.
-        #   $3  Owner name, numeric uid, or operator.
-        #   $4  Group name, numeric gid, or operator.
-        #   $5  Octal permission mode.
-        #   $6  Optional filemask: empty for exact target, * for all immediate children,
-        #       ** for all descendants recursively, or a shell-style glob such as
-        #       sgnd-* for matching immediate children.
-        #   $7  Source policy line number.
-        #
+        #   - `$1` — Type: d for directory or f for regular file.
+        #   - `$2` — Target path, absolute or framework-root relative.
+        #   - `$3` — Owner name, numeric uid, or operator.
+        #   - `$4` — Group name, numeric gid, or operator.
+        #   - `$5` — Octal permission mode.
+        #   - `$6` — Optional filemask: empty for exact target, * for all immediate children, ** for all descendants recursively, or a shell-style glob such as sgnd-* for matching immediate children.
+        #   - `$7` — Source policy line number.
         # . Behavior
         #   - Empty filemask applies only to the exact target.
         #   - * applies to all immediate children of the declared directory root.
@@ -537,9 +534,9 @@ set -uo pipefail
         #   May create an exact directory target and may change ownership and permissions.
         #
         # . Returns
-        #   0 when the row is valid and applied or has no matching masked objects.
-        #   1 when validation or filesystem modification fails.
-        #   2 when an exact declared file is absent; this is reported as a warning.
+        #   - 0 when the row is valid and applied or has no matching masked objects.
+        #   - 1 when validation or filesystem modification fails.
+        #   - 2 when an exact declared file is absent; this is reported as a warning.
         #
         # . Usage
         #   ```bash
@@ -647,11 +644,10 @@ set -uo pipefail
         #   - Treats missing exact declared files as warnings rather than hard failures.
         #
         # . Arguments
-        #   $1  Policy file path.
-        #
+        #   - `$1` — Policy file path.
         # . Returns
-        #   0 when every applicable row was valid and applied.
-        #   1 when one or more rows failed.
+        #   - 0 when every applicable row was valid and applied.
+        #   - 1 when one or more rows failed.
         #
         # . Usage
         #   ```bash
@@ -727,11 +723,9 @@ set -uo pipefail
         #   Start the framework runtime with root privileges and apply the selected policy.
         #
         # . Arguments
-        #   $@  Framework and script-specific command-line arguments.
-        #
+        #   - `$@` — Framework and script-specific command-line arguments.
         # . Returns
-        #   0 when all applicable policy rows were processed successfully.
-        #   Non-zero when startup, validation, or filesystem changes fail.
+        #   - 0 when all applicable policy rows were processed successfully. Non-zero when startup, validation, or filesystem changes fail.
         #
         # . Usage
         #   ```bash

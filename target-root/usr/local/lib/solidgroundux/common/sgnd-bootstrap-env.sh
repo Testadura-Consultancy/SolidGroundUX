@@ -45,26 +45,26 @@
 # =====================================================================================
 set -uo pipefail
 # - Library guard ------------------------------------------------------------------
-    # fn$ _sgnd_lib_guard - Enforce source-only, single-load library initialization
+    # fn: _sgnd_lib_guard - Reject direct execution and track source state
         # . Purpose
-        #   Ensure the file is sourced as a library and initialized only once.
+        #   Ensure direct execution is rejected and record that the library has been sourced.
         #
         # . Behavior
         #   - Derives a unique guard variable name from the current filename.
         #   - Aborts execution when the file is run directly instead of sourced.
-        #   - Sets the guard variable on first load.
-        #   - Returns immediately when the library was already loaded.
+        #   - Records a guard variable on the first source operation.
+        #   - Returns early if the guard flag is already present; subsequent file statements still execute.
         #
-        # Inputs
-        #   BASH_SOURCE[0]
-        #   $0
+        # . Inputs
+        #   - BASH_SOURCE[0]
+        #   - $0
         #
-        # Outputs (globals)
+        # . Outputs (globals)
         #   SGND_<MODULE>_LOADED
         #
         # . Returns
-        #   0 when already loaded or successfully initialized.
-        #   Exits with code 2 when executed instead of sourced.
+        #   - 0 when already loaded or successfully initialized.
+        #   - Exits with code 2 when executed instead of sourced.
         #
         # . Usage
         #   ```bash
@@ -115,15 +115,15 @@ set -uo pipefail
         #   - Marks framework-owned paths as system directories.
         #   - Marks user configuration, state, and alternate log paths as user directories.
         #
-        # Inputs (globals):
-        #   SGND_COMMON_LIB, SGND_SYSCFG_DIR, SGND_USRCFG_DIR, SGND_STATE_DIR,
-        #   SGND_STYLE_DIR, SGND_DOCS_DIR, SGND_LOG_PATH, SGND_ALTLOG_PATH
+        # . Inputs (globals)
+        #   - SGND_COMMON_LIB, SGND_SYSCFG_DIR, SGND_USRCFG_DIR, SGND_STATE_DIR,
+        #   - SGND_STYLE_DIR, SGND_DOCS_DIR, SGND_LOG_PATH, SGND_ALTLOG_PATH
         #
-        # Outputs (globals):
+        # . Outputs (globals)
         #   SGND_FRAMEWORK_DIRS
         #
         # . Returns
-        #   0 always.
+        #   - 0 always.
         #
         # . Usage
         #   ```bash
@@ -148,7 +148,7 @@ set -uo pipefail
         #   Apply default framework path, metadata, runtime, UI, and logging globals when they are not already set.
         #
         # . Returns
-        #   0 after applying unset defaults and resolving the user home directory.
+        #   - 0 after applying unset defaults and resolving the user home directory.
         #
         # . Usage
         #   ```bash
@@ -261,7 +261,7 @@ set -uo pipefail
         #   Recalculate framework configuration file paths from the configured etc directory.
         #
         # . Returns
-        #   0 after assigning the two Framework configuration paths.
+        #   - 0 after assigning the two Framework configuration paths.
         #
         # . Usage
         #   ```bash
@@ -276,7 +276,7 @@ set -uo pipefail
         #   Ensure the directory specifications supplied by bootstrap exist.
         #
         # . Arguments
-        #   $@ - Entries formatted as KIND|PATH; kind u requests user ownership/permissions.
+        #   - `$@` — Entries formatted as KIND|PATH; kind u requests user ownership/permissions.
         #
         # . Description
         #   Creates missing directories. Under sudo, user entries may be chowned to SUDO_USER; chmod/chown failures in that adjustment are ignored.
@@ -285,7 +285,7 @@ set -uo pipefail
         #   Creates directories and may adjust ownership or user permissions.
         #
         # . Returns
-        #   1 if mkdir fails; otherwise succeeds after iterating the specifications.
+        #   - 1 if mkdir fails; otherwise succeeds after iterating the specifications.
         #
         # . Usage
         #   ```bash

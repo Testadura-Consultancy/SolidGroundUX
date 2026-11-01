@@ -44,26 +44,26 @@
 # =====================================================================================
 set -uo pipefail
 # - Library guard ------------------------------------------------------------------
-    # fn$ _sgnd_lib_guard - Enforce source-only, single-load library initialization
+    # fn: _sgnd_lib_guard - Reject direct execution and track source state
         # . Purpose
-        #   Ensure the file is sourced as a library and initialized only once.
+        #   Ensure direct execution is rejected and record that the library has been sourced.
         #
         # . Behavior
         #   - Derives a unique guard variable name from the current filename.
         #   - Aborts execution when the file is run directly instead of sourced.
-        #   - Sets the guard variable on first load.
-        #   - Returns immediately when the library was already loaded.
+        #   - Records a guard variable on the first source operation.
+        #   - Returns early if the guard flag is already present; subsequent file statements still execute.
         #
-        # Inputs
-        #   BASH_SOURCE[0]
-        #   $0
+        # . Inputs
+        #   - BASH_SOURCE[0]
+        #   - $0
         #
-        # Outputs (globals)
+        # . Outputs (globals)
         #   SGND_<MODULE>_LOADED
         #
         # . Returns
-        #   0 when already loaded or successfully initialized.
-        #   Exits with code 2 when executed instead of sourced.
+        #   - 0 when already loaded or successfully initialized.
+        #   - Exits with code 2 when executed instead of sourced.
         #
         # . Usage
         #   ```bash
@@ -103,13 +103,13 @@ set -uo pipefail
             #   Preserves the Framework root and PATH, sets SGND_ALREADY_ROOT to prevent repeated escalation.
             #
             # . Arguments
-            #   $@ - Original executable arguments to forward when restarting.
+        #   - `$@` — Original executable arguments to forward when restarting.
             #
             # . Side effects
             #   May replace the running process with a sudo-launched invocation.
             #
             # . Returns
-            #   0 when already running as root; otherwise the restarted process determines the exit status.
+        #   - 0 when already running as root; otherwise the restarted process determines the exit status.
             #
             # . Usage
             #   ```bash
@@ -136,7 +136,7 @@ set -uo pipefail
             #   Exits the process if EUID is 0.
             #
             # . Returns
-            #   0 when running as a non-root user; exits with status 1 if root.
+        #   - 0 when running as a non-root user; exits with status 1 if root.
             #
             # . Usage
             #   ```bash
@@ -158,7 +158,7 @@ set -uo pipefail
             #   Exits the process if systemctl is unavailable.
             #
             # . Returns
-            #   0 when systemctl is available; exits with status 1 otherwise.
+        #   - 0 when systemctl is available; exits with status 1 otherwise.
             #
             # . Usage
             #   ```bash
@@ -170,13 +170,13 @@ set -uo pipefail
             #   Require that the specified path is writable to the current process.
             #
             # . Arguments
-            #   $1 - Path to test.
+        #   - `$1` — Path to test.
             #
             # . Side effects
             #   Exits the process on failure.
             #
             # . Returns
-            #   0 if writable; exits with status 1 otherwise.
+        #   - 0 if writable; exits with status 1 otherwise.
             #
             # . Usage
             #   ```bash
@@ -188,7 +188,7 @@ set -uo pipefail
             #   Check whether the named systemd service is active.
             #
             # . Arguments
-            #   $1 - Service name.
+        #   - `$1` — Service name.
             #
             # . Returns
             #   Passes through the exit status of systemctl is-active --quiet.
@@ -206,13 +206,13 @@ set -uo pipefail
             #   Despite its historical name, this function does not test the directory for write permission.
             #
             # . Arguments
-            #   $1 - Directory path.
+        #   - `$1` — Directory path.
             #
             # . Side effects
             #   May create the directory and attempt to chown it to SUDO_USER.
             #
             # . Returns
-            #   0 if the directory exists after the attempt; 2 for empty path, 3 for mkdir failure, 4 if still absent.
+        #   - 0 if the directory exists after the attempt; 2 for empty path, 3 for mkdir failure, 4 if still absent.
             #
             # . Usage
             #   ```bash
@@ -261,10 +261,10 @@ set -uo pipefail
             #   Test whether a host responds to a single ping.
             #
             # . Arguments
-            #   $1 - Hostname or IP address.
+        #   - `$1` — Hostname or IP address.
             #
             # . Returns
-            #   0 when ping succeeds; non-zero otherwise.
+        #   - 0 when ping succeeds; non-zero otherwise.
             #
             # . Usage
             #   ```bash
@@ -279,11 +279,11 @@ set -uo pipefail
             #   Uses nc -z if available; otherwise Bash /dev/tcp.
             #
             # . Arguments
-            #   $1 - Hostname or IP address.
-            #   $2 - TCP port number.
+        #   - `$1` — Hostname or IP address.
+        #   - `$2` — TCP port number.
             #
             # . Returns
-            #   0 when the connection succeeds; non-zero otherwise.
+        #   - 0 when the connection succeeds; non-zero otherwise.
             #
             # . Usage
             #   ```bash
@@ -323,7 +323,7 @@ set -uo pipefail
             #   Writes SUDO_USER when it is set and not root; otherwise writes id -un.
             #
             # . Returns
-            #   0 on successful output; otherwise the status of id -un.
+        #   - 0 on successful output; otherwise the status of id -un.
             #
             # . Usage
             #   ```bash
@@ -360,7 +360,7 @@ set -uo pipefail
             #   Execute a command as the invoking user when running through sudo.
             #
             # . Arguments
-            #   $@ - Command and its arguments.
+        #   - `$@` — Command and its arguments.
             #
             # . Side effects
             #   May execute the command through sudo -u, or directly.
@@ -387,7 +387,7 @@ set -uo pipefail
             #   Recursively assign a path to the invoking user and that user’s primary group.
             #
             # . Arguments
-            #   $1 - File or directory path.
+        #   - `$1` — File or directory path.
             #
             # . Side effects
             #   Calls chown -R on the supplied path.
@@ -416,7 +416,7 @@ set -uo pipefail
             #   This removes executable bits from regular files and does not preserve existing custom modes.
             #
             # . Arguments
-            #   $1 - File or directory path.
+        #   - `$1` — File or directory path.
             #
             # . Side effects
             #   Runs find/chmod on directories and files below the path.
@@ -474,8 +474,8 @@ set -uo pipefail
         #   Includes a stack trace in verbose mode; otherwise includes a caller reference.
         #
         # . Arguments
-        #   $1 - Optional message.
-        #   $2 - Exit code (default 1).
+        #   - `$1` — Optional message.
+        #   - `$2` — Exit code (default 1).
         #
         # . Side effects
         #   Logs the error and terminates the process.
@@ -505,7 +505,7 @@ set -uo pipefail
         #   Execute a command and report its failure without exiting.
         #
         # . Arguments
-        #   $@ - Command and arguments.
+        #   - `$@` — Command and arguments.
         #
         # . Side effects
         #   Prints a failure message when the command fails.
@@ -532,13 +532,13 @@ set -uo pipefail
         #   Execute a command or terminate the current script on failure.
         #
         # . Arguments
-        #   $@ - Command and arguments.
+        #   - `$@` — Command and arguments.
         #
         # . Side effects
         #   Calls sgnd_die when the command fails.
         #
         # . Returns
-        #   0 on success; otherwise exits with the command status.
+        #   - 0 on success; otherwise exits with the command status.
         #
         # . Usage
         #   ```bash

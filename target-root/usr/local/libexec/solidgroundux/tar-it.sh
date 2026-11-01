@@ -65,9 +65,8 @@ set -uo pipefail
         #   helpers are not available until sgnd-exe-common.sh has been loaded.
         #
         # . Returns
-        #   0 when the framework root was resolved and executable common library loaded.
-        #   126 when the script path cannot be resolved, no canonical root component can
-        #   be found, or the executable common library is unreadable.
+        #   - 0 when the framework root was resolved and executable common library loaded.
+        #   - 126 when the script path cannot be resolved, no canonical root component can be found, or the executable common library is unreadable.
         #
         # . Usage
         #   ```bash
@@ -189,9 +188,11 @@ set -uo pipefail
 
 # - Helpers -------------------------------------------------------------------------
     # fn: _scan_cli_args - Record which archive settings were supplied explicitly
-        # . Arguments
-        #   $@  Original command-line arguments.
+        # . Purpose
+        #   Record which archive settings were supplied explicitly.
         #
+        # . Arguments
+        #   - `$@` — Original command-line arguments.
         # . Returns
         #   0 always.
         #
@@ -222,6 +223,9 @@ set -uo pipefail
     }
 
     # fn: _normalize_archive_name - Normalize the requested archive filename
+        # . Purpose
+        #   Normalize the requested archive filename.
+        #
         # . Output
         #   Writes a basename ending in .tar.gz.
         #
@@ -242,6 +246,9 @@ set -uo pipefail
     }
 
     # fn: _validate_parameters - Validate archive source and destination settings
+        # . Purpose
+        #   Validate archive source and destination settings.
+        #
         # . Returns
         #   0 when all settings are usable; 1 otherwise.
         #
@@ -267,6 +274,9 @@ set -uo pipefail
     }
 
     # fn: _getparameters - Resolve and confirm archive settings
+        # . Purpose
+        #   Resolve and confirm archive settings.
+        #
         # . Returns
         #   0 when settings are valid and confirmed; 1 on cancellation.
         #
@@ -320,6 +330,9 @@ set -uo pipefail
     }
 
     # fn: _create_archive - Create the compressed framework archive
+        # . Purpose
+        #   Create the compressed framework archive.
+        #
         # . Returns
         #   0 after successful archive creation; non-zero on failure.
         #
@@ -379,9 +392,11 @@ set -uo pipefail
 
 # - Main ----------------------------------------------------------------------------
     # fn: main - Run the archive workflow
-        # . Arguments
-        #   $@  Framework and script-specific arguments.
+        # . Purpose
+        #   Run the archive workflow.
         #
+        # . Arguments
+        #   - `$@` — Framework and script-specific arguments.
         # . Returns
         #   Workflow exit status.
         #

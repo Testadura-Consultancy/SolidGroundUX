@@ -72,12 +72,13 @@ set -uo pipefail
         #   helpers are not available until sgnd-exe-common.sh has been loaded.
         #
         # . Returns
-        #   0 when the framework root was resolved and executable common library loaded.
-        #   126 when the script path cannot be resolved, no canonical root component can
-        #   be found, or the executable common library is unreadable.
+        #   - 0 when the framework root was resolved and executable common library loaded.
+        #   - 126 when the script path cannot be resolved, no canonical root component can be found, or the executable common library is unreadable.
         #
         # . Usage
+        #   ```bash
         #   _framework_locator || return $?
+        #   ```
     _framework_locator() {
         local script_file=""
         local path_without_root=""
@@ -534,6 +535,11 @@ set -uo pipefail
         # . DRYRUN
         #   File logging is intentionally skipped because exercising it would append test
         #   records to the active logfile. The test reports exactly what would be tested.
+        #
+        # . Usage
+        #   ```bash
+        #   file_loglevel_test
+        #   ```
     file_loglevel_test() {
         local logfile=""
         local level=""
@@ -604,8 +610,8 @@ set -uo pipefail
         #   - Reports an empty or unavailable logfile without failing unexpectedly.
         #
         # . Returns
-        #   0 when the logfile is displayed.
-        #   1 when no readable logfile can be resolved.
+        #   - 0 when the logfile is displayed.
+        #   - 1 when no readable logfile can be resolved.
         #
         # . Usage
         #   ```bash
@@ -631,12 +637,18 @@ set -uo pipefail
         sgnd_print_file "$logfile"
     }
 
-    # fn: motd_test - Motd test
+    # fn: motd_test - Check the installed SolidGroundUX MOTD scripts
         # . Purpose
-        #   Motd test.
+        #   Locate and run executable SolidGroundUX MOTD fragments to check their output.
+        #
+        # . Behavior
+        #   - Search the framework's `etc/update-motd.d` directory for `95-solidgroundux*`.
+        #   - Skip non-executable fragments with a warning and execute the others.
+        #   - Report a missing directory, missing files, or failed fragments.
         #
         # . Returns
-        #   Returns the underlying command or workflow status.
+        #   - 0 if no executed fragment fails (including when no matching files exist).
+        #   - 1 when the MOTD directory is missing, no matching file is executable, or a fragment fails.
         #
         # . Usage
         #   ```bash
@@ -813,9 +825,9 @@ set -uo pipefail
         sgnd_print
     }
 
-    # fn: show_colorchart - Show colorchart
+    # fn: show_colorchart - Display framework theme color samples
         # . Purpose
-        #   Show colorchart.
+        #   Display the configured color samples by invoking `sgnd_color_samples`.
         #
         # . Returns
         #   Returns the underlying command or workflow status.
@@ -865,8 +877,8 @@ set -uo pipefail
         #   - Q returns to the smoke-test menu and leaves the selected theme active.
         #
         # . Returns
-        #   0 after leaving the theme browser.
-        #   1 when no readable themes are found.
+        #   - 0 after leaving the theme browser.
+        #   - 1 when no readable themes are found.
         #
         # . Usage
         #   ```bash
@@ -980,8 +992,7 @@ set -uo pipefail
         #   Resolve an installed or staged Framework path.
         #
         # . Arguments
-        #   $1  Absolute Framework-relative path.
-        #
+        #   - `$1` — Absolute Framework-relative path.
         # . Output
         #   Writes the resolved path to stdout.
         #
@@ -1009,10 +1020,9 @@ set -uo pipefail
         #   Print a validation outcome and increment its counter.
         #
         # . Arguments
-        #   $1  Test label.
-        #   $2  PASS, SKIP or FAIL.
-        #   $3  Optional detail.
-        #
+        #   - `$1` — Test label.
+        #   - `$2` — PASS, SKIP or FAIL.
+        #   - `$3` — Optional detail.
         # . Side effects
         #   Increments SGND_TEST_PASS, SGND_TEST_SKIP or SGND_TEST_FAIL and prints the result.
         #
@@ -1046,11 +1056,10 @@ set -uo pipefail
         #   Summarize validation counters for a test area.
         #
         # . Arguments
-        #   $1  Area name.
-        #   $2  Initial PASS count.
-        #   $3  Initial FAIL count.
-        #   $4  Initial SKIP count.
-        #
+        #   - `$1` — Area name.
+        #   - `$2` — Initial PASS count.
+        #   - `$3` — Initial FAIL count.
+        #   - `$4` — Initial SKIP count.
         # . Output
         #   Prints pass/fail/skip counts and a summary message.
         #
@@ -1211,8 +1220,7 @@ set -uo pipefail
         #   Return the colored icon for a completed smoke test.
         #
         # . Arguments
-        #   $1  Smoke test identifier.
-        #
+        #   - `$1` — Smoke test identifier.
         # . Output
         #   Writes an ANSI-colored status icon or a space.
         #
@@ -1252,9 +1260,8 @@ set -uo pipefail
         #   Execute a smoke test and record its result.
         #
         # . Arguments
-        #   $1  Test identifier.
-        #   $2  Function name to invoke.
-        #
+        #   - `$1` — Test identifier.
+        #   - `$2` — Function name to invoke.
         # . Side effects
         #   Updates SGND_SMOKETEST_STATUS and waits for input outside Run All mode.
         #
@@ -1359,8 +1366,7 @@ set -uo pipefail
         #   Read and validate a smoke-test menu choice.
         #
         # . Arguments
-        #   $1  Name of the output variable.
-        #
+        #   - `$1` — Name of the output variable.
         # . Side effects
         #   Reads /dev/tty and assigns the selected value to the named variable.
         #
@@ -1392,8 +1398,7 @@ set -uo pipefail
         #   Dispatch a numbered smoke-test selection.
         #
         # . Arguments
-        #   $1  Selection number (1-12).
-        #
+        #   - `$1` — Selection number (1-12).
         # . Returns
         #   Status of the selected test, or 0 if no matching case.
         #
@@ -1544,8 +1549,7 @@ set -uo pipefail
         #   Bootstrap the test runner and dispatch the requested suite.
         #
         # . Arguments
-        #   $@  Framework and smoke-test command-line arguments.
-        #
+        #   - `$@` — Framework and smoke-test command-line arguments.
         # . Returns
         #   Status of the selected suite or interactive workflow.
         #

@@ -45,26 +45,26 @@
 # ==================================================================================
 set -uo pipefail
 # - Library guard ------------------------------------------------------------------
-    # fn$ _sgnd_lib_guard - Enforce source-only, single-load library initialization
+    # fn: _sgnd_lib_guard - Reject direct execution and track source state
         # . Purpose
-        #   Ensure the file is sourced as a library and initialized only once.
+        #   Ensure direct execution is rejected and record that the library has been sourced.
         #
         # . Behavior
         #   - Derives a unique guard variable name from the current filename.
         #   - Aborts execution when the file is run directly instead of sourced.
-        #   - Sets the guard variable on first load.
-        #   - Returns immediately when the library was already loaded.
+        #   - Records a guard variable on the first source operation.
+        #   - Returns early if the guard flag is already present; subsequent file statements still execute.
         #
-        # Inputs
-        #   BASH_SOURCE[0]
-        #   $0
+        # . Inputs
+        #   - BASH_SOURCE[0]
+        #   - $0
         #
-        # Outputs (globals)
+        # . Outputs (globals)
         #   SGND_<MODULE>_LOADED
         #
         # . Returns
-        #   0 when already loaded or successfully initialized.
-        #   Exits with code 2 when executed instead of sourced.
+        #   - 0 when already loaded or successfully initialized.
+        #   - Exits with code 2 when executed instead of sourced.
         #
         # . Usage
         #   ```bash
@@ -125,7 +125,7 @@ set -uo pipefail
         #   Writes the normalized log-level name to stdout.
         #
         # . Returns
-        #   0 always.
+        #   - 0 always.
         #
         # . Usage
         #   ```bash
@@ -155,8 +155,8 @@ set -uo pipefail
         #   SGND_LOG_LEVEL
         #
         # . Returns
-        #   0 if the message should be displayed.
-        #   1 if the message should be suppressed.
+        #   - 0 if the message should be displayed.
+        #   - 1 if the message should be suppressed.
         #
         # . Usage
         #   ```bash
@@ -219,7 +219,7 @@ set -uo pipefail
         #   Writes a formatted message to stderr when allowed by SGND_LOG_LEVEL.
         #
         # . Returns
-        #   0 always.
+        #   - 0 always.
         #
         # . Usage
         #   ```bash
@@ -255,7 +255,7 @@ set -uo pipefail
         #   Send a START message through the shared say formatter.
         #
         # . Arguments
-        #   MESSAGE...  Message text passed to say.
+        #   - `MESSAGE...` — Message text passed to say.
         #
         # . Returns
         #   The status returned by say.
@@ -270,7 +270,7 @@ set -uo pipefail
         #   Send a INFO message through the shared say formatter.
         #
         # . Arguments
-        #   MESSAGE...  Message text passed to say.
+        #   - `MESSAGE...` — Message text passed to say.
         #
         # . Returns
         #   The status returned by say.
@@ -285,7 +285,7 @@ set -uo pipefail
         #   Send a OK message through the shared say formatter.
         #
         # . Arguments
-        #   MESSAGE...  Message text passed to say.
+        #   - `MESSAGE...` — Message text passed to say.
         #
         # . Returns
         #   The status returned by say.
@@ -300,7 +300,7 @@ set -uo pipefail
         #   Send a WARN message through the shared say formatter.
         #
         # . Arguments
-        #   MESSAGE...  Message text passed to say.
+        #   - `MESSAGE...` — Message text passed to say.
         #
         # . Returns
         #   The status returned by say.
@@ -315,7 +315,7 @@ set -uo pipefail
         #   Send a FAIL message through the shared say formatter.
         #
         # . Arguments
-        #   MESSAGE...  Message text passed to say.
+        #   - `MESSAGE...` — Message text passed to say.
         #
         # . Returns
         #   The status returned by say.
@@ -330,7 +330,7 @@ set -uo pipefail
         #   Send a DEBUG message through the shared say formatter.
         #
         # . Arguments
-        #   MESSAGE...  Message text passed to say.
+        #   - `MESSAGE...` — Message text passed to say.
         #
         # . Returns
         #   The status returned by say.
@@ -345,7 +345,7 @@ set -uo pipefail
         #   Send a CANCEL message through the shared say formatter.
         #
         # . Arguments
-        #   MESSAGE...  Message text passed to say.
+        #   - `MESSAGE...` — Message text passed to say.
         #
         # . Returns
         #   The status returned by say.
@@ -360,7 +360,7 @@ set -uo pipefail
         #   Send a END message through the shared say formatter.
         #
         # . Arguments
-        #   MESSAGE...  Message text passed to say.
+        #   - `MESSAGE...` — Message text passed to say.
         #
         # . Returns
         #   The status returned by say.
@@ -387,8 +387,8 @@ set -uo pipefail
         #   - Does not change SGND_FRAMEWORK_ROOT.
         #
         # . Returns
-        #   0 when the path exists.
-        #   126 when the path cannot be resolved.
+        #   - 0 when the path exists.
+        #   - 126 when the path cannot be resolved.
         #
         # . Usage
         #   ```bash
@@ -430,8 +430,8 @@ set -uo pipefail
         #   Writes a fatal message to stderr when the bootstrap library cannot be read.
         #
         # . Returns
-        #   0 when the bootstrap library was sourced.
-        #   126 when the bootstrap library is unreadable.
+        #   - 0 when the bootstrap library was sourced.
+        #   - 126 when the bootstrap library is unreadable.
         #
         # . Usage
         #   ```bash
@@ -462,11 +462,10 @@ set -uo pipefail
         #   Run the standard SolidGroundUX executable startup sequence.
         #
         # . Arguments
-        #   $@  Command-line arguments passed from the executable main function.
+        #   - `$@` — Command-line arguments passed from the executable main function.
         #
         # . Options
-        #   --no-title
-        #       Suppress automatic rendering of the standard SolidGroundUX title bar.
+        #   - `--no-title` — Suppress automatic rendering of the standard SolidGroundUX title bar.
         #
         # . Behavior
         #   - Processes executable-runtime options before framework bootstrap.
@@ -483,7 +482,7 @@ set -uo pipefail
         #   title bar to the terminal.
         #
         # . Returns
-        #   0 when startup completed and script-specific logic may continue.
+        #   - 0 when startup completed and script-specific logic may continue.
         #
         # . Usage
         #   ```bash

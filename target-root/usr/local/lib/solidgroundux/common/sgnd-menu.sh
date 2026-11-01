@@ -45,26 +45,26 @@
 # =====================================================================================
 set -uo pipefail
 # - Library guard ------------------------------------------------------------------
-    # fn$ _sgnd_lib_guard - Enforce source-only, single-load library initialization
+    # fn: _sgnd_lib_guard - Reject direct execution and track source state
         # . Purpose
-        #   Ensure the file is sourced as a library and initialized only once.
+        #   Ensure direct execution is rejected and record that the library has been sourced.
         #
         # . Behavior
         #   - Derives a unique guard variable name from the current filename.
         #   - Aborts execution when the file is run directly instead of sourced.
-        #   - Sets the guard variable on first load.
-        #   - Returns immediately when the library was already loaded.
+        #   - Records a guard variable on the first source operation.
+        #   - Returns early if the guard flag is already present; subsequent file statements still execute.
         #
-        # Inputs
-        #   BASH_SOURCE[0]
-        #   $0
+        # . Inputs
+        #   - BASH_SOURCE[0]
+        #   - $0
         #
-        # Outputs (globals)
+        # . Outputs (globals)
         #   SGND_<MODULE>_LOADED
         #
         # . Returns
-        #   0 when already loaded or successfully initialized.
-        #   Exits with code 2 when executed instead of sourced.
+        #   - 0 when already loaded or successfully initialized.
+        #   - Exits with code 2 when executed instead of sourced.
         #
         # . Usage
         #   ```bash
@@ -96,12 +96,13 @@ set -uo pipefail
     fi
 # - Internal helpers ----------------------------------------------------------------
     # fn: _sgnd_flag_is_on - Evaluate whether a menu/framework flag is enabled
+        # . Purpose
+        #   Determine whether a menu or framework flag represents an enabled state.
         # . Arguments
-        #   $1  Value to evaluate.
-        #
+        #   - `$1` — Value to evaluate.
         # . Returns
-        #   0 for 1, true, yes, or on (case-insensitive variants currently supported).
-        #   1 otherwise.
+        #   - 0 for 1, true, yes, or on (case-insensitive variants currently supported).
+        #   - 1 otherwise.
         #
         # . Usage
         #   ```bash
@@ -120,12 +121,11 @@ set -uo pipefail
         #   Format one toggle label using the enabled/disabled color and underline its hotkey.
         #
         # . Arguments
-        #   $1  WORD    - Toggle text.
-        #   $2  HOTKEY  - Character to emphasize within WORD.
-        #   $3  STATE   - Non-zero for enabled, zero for disabled.
-        #   $4  ONCLR   - Optional enabled color.
-        #   $5  OFFCLR  - Optional disabled color.
-        #
+        #   - `$1` — WORD    - Toggle text.
+        #   - `$2` — HOTKEY  - Character to emphasize within WORD.
+        #   - `$3` — STATE   - Non-zero for enabled, zero for disabled.
+        #   - `$4` — ONCLR   - Optional enabled color.
+        #   - `$5` — OFFCLR  - Optional disabled color.
         # . Output
         #   Writes the styled toggle word to stdout.
         #
@@ -176,12 +176,13 @@ set -uo pipefail
             "$RESET"
     }
     # fn: _sgnd_console_statusword - Render one status-bar fragment
+        # . Purpose
+        #   Render one status-bar fragment using its configured state and style.
         # . Arguments
-        #   $1  LABEL  - Status label.
-        #   $2  VALUE  - Display value.
-        #   $3  COLOR  - Optional value color.
-        #   $4  HOTKEY - Optional character to emphasize in LABEL.
-        #
+        #   - `$1` — LABEL  - Status label.
+        #   - `$2` — VALUE  - Display value.
+        #   - `$3` — COLOR  - Optional value color.
+        #   - `$4` — HOTKEY - Optional character to emphasize in LABEL.
         # . Output
         #   Writes a styled LABEL: VALUE fragment to stdout.
         #
@@ -213,11 +214,12 @@ set -uo pipefail
     }
 
     # fn: _sgnd_console_onoff - Render a colored On/Off state
+        # . Purpose
+        #   Format an enabled or disabled state as a colored On/Off value.
         # . Arguments
-        #   $1  VALUE  - Boolean/numeric state.
-        #   $2  ONCLR  - Optional enabled color.
-        #   $3  OFFCLR - Optional disabled color.
-        #
+        #   - `$1` — VALUE  - Boolean/numeric state.
+        #   - `$2` — ONCLR  - Optional enabled color.
+        #   - `$3` — OFFCLR - Optional disabled color.
         # . Output
         #   Writes styled On or Off text to stdout.
         #
@@ -241,6 +243,8 @@ set -uo pipefail
     }
 # - Toggle labels ------------------------------------------------------------------
     # fn: _sgnd_console_label_clearonrender - Build the clear-on-render label
+        # . Purpose
+        #   Build the status-bar label for the clear-on-render setting.
         # . Output
         #   Writes the current Clear screen toggle label to stdout.
         #
@@ -256,6 +260,8 @@ set -uo pipefail
         printf 'Clear screen: %s' "$(_sgnd_console_onoff "$SGND_CLEAR_ONRENDER")"
     }
     # fn: _sgnd_console_label_dryrun - Build the dry-run label
+        # . Purpose
+        #   Build the status-bar label for dry-run mode.
         # . Output
         #   Writes the current Dry-run/Commit toggle label to stdout.
         #
@@ -271,6 +277,8 @@ set -uo pipefail
         printf 'Dry-run: %s' "$(_sgnd_console_onoff "$FLAG_DRYRUN" "$SGND_UI_DRYRUN" "$SGND_UI_COMMIT")"
     }
     # fn: _sgnd_console_label_debug - Build the debug label
+        # . Purpose
+        #   Build the status-bar label for debug mode.
         # . Output
         #   Writes the current Debug toggle label to stdout.
         #
@@ -286,6 +294,8 @@ set -uo pipefail
         printf 'Debug: %s' "$(_sgnd_console_onoff "$FLAG_DEBUG")"
     }
     # fn: _sgnd_console_label_verbose - Build the verbose label
+        # . Purpose
+        #   Build the status-bar label for verbose output.
         # . Output
         #   Writes the current Verbose toggle label to stdout.
         #
@@ -301,6 +311,8 @@ set -uo pipefail
         printf 'Verbose: %s' "$(_sgnd_console_onoff "$FLAG_VERBOSE")"
     }
     # fn: _sgnd_console_label_logfile - Build the logfile label
+        # . Purpose
+        #   Build the status-bar label for logfile state.
         # . Output
         #   Writes the current Logfile toggle label to stdout.
         #
@@ -320,7 +332,7 @@ set -uo pipefail
         # . Purpose
         #   Switch SGND_CLEAR_ONRENDER between enabled and disabled for the current session.
         #
-        # Outputs (globals):
+        # . Outputs (globals)
         #   SGND_CLEAR_ONRENDER
         #
         # . Returns
@@ -345,7 +357,7 @@ set -uo pipefail
         # . Purpose
         #   Toggle FLAG_DEBUG and refresh the framework run mode.
         #
-        # Outputs (globals):
+        # . Outputs (globals)
         #   FLAG_DEBUG
         #
         # . Returns
@@ -371,7 +383,7 @@ set -uo pipefail
         # . Purpose
         #   Switch FLAG_VERBOSE for the current console session.
         #
-        # Outputs (globals):
+        # . Outputs (globals)
         #   FLAG_VERBOSE
         #
         # . Returns
@@ -454,6 +466,8 @@ set -uo pipefail
         sgnd_state_set SGND_PAGE_MAX_ROWS "$SGND_PAGE_MAX_ROWS"
     }
     # fn: _sgnd_console_redraw - Request a menu redraw
+        # . Purpose
+        #   Signal that the current console menu should be rendered again.
         # . Returns
         #   0; the host loop redraws the menu on the next iteration.
         #
@@ -469,6 +483,8 @@ set -uo pipefail
         return 0
     }
     # fn: _sgnd_console_quit - Request menu termination
+        # . Purpose
+        #   Signal that the console menu should terminate.
         # . Returns
         #   200, the menu termination sentinel.
         #
@@ -480,11 +496,13 @@ set -uo pipefail
         return 200
     }
     # fn: _sgnd_console_nextpage - Move to the next menu page
+        # . Purpose
+        #   Advance the menu to the next visible page when available.
         # . Behavior
         #   - Rebuilds page boundaries when required.
         #   - Advances SGND_PAGE_INDEX only when another page exists.
         #
-        # Outputs (globals):
+        # . Outputs (globals)
         #   SGND_PAGE_INDEX
         #
         # . Returns
@@ -504,7 +522,9 @@ set -uo pipefail
         return 0
     }
     # fn: _sgnd_console_prevpage - Move to the previous menu page
-        # Outputs (globals):
+        # . Purpose
+        #   Move the menu to the previous visible page when available.
+        # . Outputs (globals)
         #   SGND_PAGE_INDEX
         #
         # . Returns
@@ -531,7 +551,7 @@ set -uo pipefail
         #   - Splits each datatable row once per rebuild.
         #   - Increments SGND_CONSOLE_MODEL_CACHE_GENERATION after rebuilding.
         #
-        # Outputs (globals):
+        # . Outputs (globals)
         #   SGND_GROUP_CACHE_*, SGND_ITEM_CACHE_*, and model-cache generation/count values.
         #
         # . Returns
@@ -630,7 +650,7 @@ set -uo pipefail
         #   - Sorts groups by configured order and original row position.
         #   - Reuses the cache until the menu model or active source changes.
         #
-        # Outputs (globals):
+        # . Outputs (globals)
         #   SGND_GROUP_RENDER_INDEXES and group-index cache metadata.
         #
         # . Returns
@@ -698,7 +718,7 @@ set -uo pipefail
         #   - Includes visible and disabled-rendered states; excludes hidden rows.
         #   - Invalidates dependent layout caches when the visible signature changes.
         #
-        # Outputs (globals):
+        # . Outputs (globals)
         #   SGND_VISIBLE_ITEM_INDEXES and visibility-cache metadata.
         #
         # . Returns
@@ -766,6 +786,8 @@ set -uo pipefail
         fi
     }
     # fn: _sgnd_console_visible_item_count - Return the visible item count
+        # . Purpose
+        #   Count the currently visible menu items.
         # . Output
         #   Writes the number of currently visible/renderable menu items to stdout.
         #
@@ -780,9 +802,10 @@ set -uo pipefail
         printf '%s\n' "${#SGND_VISIBLE_ITEM_INDEXES[@]}"
     }
     # fn: _sgnd_console_get_visible_row_index - Resolve a visible position to its model row
+        # . Purpose
+        #   Translate a visible menu-item position into the corresponding model row.
         # . Arguments
-        #   $1  VISIBLE_INDEX - Zero-based position in SGND_VISIBLE_ITEM_INDEXES.
-        #
+        #   - `$1` — VISIBLE_INDEX - Zero-based position in SGND_VISIBLE_ITEM_INDEXES.
         # . Output
         #   Writes the corresponding SGND_ITEM_ROWS index to stdout.
         #
@@ -807,13 +830,12 @@ set -uo pipefail
         #   Group ordered console modules by their tens prefix: 10/15, 20/25, 30/35, etc.
         #
         # . Arguments
-        #   $1  SOURCE - Module source/id beginning with an optional numeric prefix.
-        #
+        #   - `$1` — SOURCE - Module source/id beginning with an optional numeric prefix.
         # . Output
         #   Numeric chapter identifier. Sources without a numeric prefix use chapter 0.
         # . Usage
         #   ```bash
-        #   _sgnd_menu_module_chapter "<source>"
+        #   _sgnd_menu_module_chapter "20-active-directory-server.sh"
         #   ```
     _sgnd_menu_module_chapter() {
         local source="${1:-}"
@@ -833,8 +855,7 @@ set -uo pipefail
         #   Convert a model row index into the numeric key shown to the user, resetting numbering when the module chapter changes.
         #
         # . Arguments
-        #   $1  ROW_INDEX - Index in SGND_ITEM_ROWS.
-        #
+        #   - `$1` — ROW_INDEX - Index in SGND_ITEM_ROWS.
         # . Output
         #   Writes the one-based display number to stdout.
         #
@@ -872,9 +893,10 @@ set -uo pipefail
         return 1
     }
     # fn: _sgnd_console_find_visible_pos_for_row - Find a model row in the visible index
+        # . Purpose
+        #   Find the visible position corresponding to a model row.
         # . Arguments
-        #   $1  ROW_INDEX - Index in SGND_ITEM_ROWS.
-        #
+        #   - `$1` — ROW_INDEX - Index in SGND_ITEM_ROWS.
         # . Output
         #   Writes the zero-based visible position to stdout.
         #
@@ -899,10 +921,11 @@ set -uo pipefail
         return 1
     }
     # fn: _sgnd_console_group_continues_after_visible_pos - Test whether a group continues later in the visible list
+        # . Purpose
+        #   Determine whether the current group has additional items later in the visible list.
         # . Arguments
-        #   $1  GROUP_KEY        - Group to test.
-        #   $2  LAST_VISIBLE_POS - Visible position after which to search.
-        #
+        #   - `$1` — GROUP_KEY        - Group to test.
+        #   - `$2` — LAST_VISIBLE_POS - Visible position after which to search.
         # . Returns
         #   0 when another visible row belongs to GROUP_KEY; 1 otherwise.
         #
@@ -950,9 +973,10 @@ set -uo pipefail
         printf '%s\n' "$body_height"
     }
     # fn: _sgnd_console_measure_item_lines - Measure one rendered menu item
+        # . Purpose
+        #   Measure how many terminal lines one rendered menu item occupies.
         # . Arguments
-        #   $1  ROW_INDEX - Item row to measure.
-        #
+        #   - `$1` — ROW_INDEX - Item row to measure.
         # . Output
         #   Writes the number of terminal lines required by the item and wrapped description.
         #
@@ -993,6 +1017,8 @@ set -uo pipefail
         printf '%s\n' "$wrapped_count"
     }
     # fn: _sgnd_console_measure_group_header_lines - Return group-header height
+        # . Purpose
+        #   Measure the terminal line count of a rendered menu-group header.
         # . Output
         #   Writes the fixed two-line group-header height to stdout.
         #
@@ -1128,7 +1154,7 @@ set -uo pipefail
         #   - Starts a new page when the module chapter changes.
         #   - Rebuilds only when layout-affecting inputs change.
         #
-        # Outputs (globals):
+        # . Outputs (globals)
         #   SGND_PAGE_STARTS, SGND_PAGE_ROWS, row/group offsets and counts, and layout cache state.
         #
         # . Returns
@@ -1250,7 +1276,7 @@ set -uo pipefail
         # . Purpose
         #   Render the title, page indicator, paged module rows, builtin groups, and toggle bar.
         #
-        # Outputs (globals):
+        # . Outputs (globals)
         #   SGND_RENDER_LABEL_WIDTH.
         #
         # . Returns
@@ -1401,7 +1427,7 @@ set -uo pipefail
         # . Purpose
         #   Select the current page's cached rows/groups and pass them to the row renderer.
         #
-        # Outputs (globals):
+        # . Outputs (globals)
         #   SGND_PAGE_HAS_PREV and SGND_PAGE_HAS_NEXT.
         #
         # . Returns
@@ -1461,9 +1487,8 @@ set -uo pipefail
         #   Render one page using the supplied group keys and model row indexes.
         #
         # . Arguments
-        #   $1  PAGE_GROUPS - Name of an array containing group keys.
-        #   $2  PAGE_ROWS   - Name of an array containing SGND_ITEM_ROWS indexes.
-        #
+        #   - `$1` — PAGE_GROUPS - Name of an array containing group keys.
+        #   - `$2` — PAGE_ROWS   - Name of an array containing SGND_ITEM_ROWS indexes.
         # . Behavior
         #   - Renders group headings and separators.
         #   - Applies visible/disabled styling, indentation, status icons, and wrapped descriptions.
@@ -1617,8 +1642,7 @@ set -uo pipefail
         #   Render a group and all of its currently renderable items, primarily for builtin groups outside normal paging.
         #
         # . Arguments
-        #   $1  GROUP_KEY - Registered group key.
-        #
+        #   - `$1` — GROUP_KEY - Registered group key.
         # . Returns
         #   0 when rendered or when the group has nothing renderable.
         #
@@ -1873,9 +1897,8 @@ set -uo pipefail
         #   Initialize or reset the menu model used by the caller.
         #
         # . Arguments
-        #   $1  TITLE - Menu title.
-        #   $2  DESC  - Optional menu description.
-        #
+        #   - `$1` — TITLE - Menu title.
+        #   - `$2` — DESC  - Optional menu description.
         # . Returns
         #   0 after resetting the menu model.
         #
@@ -1942,13 +1965,12 @@ set -uo pipefail
         #   Add a group definition to the reusable menu model.
         #
         # . Arguments
-        #   $1  KEY      - Unique group key.
-        #   $2  LABEL    - Visible group label.
-        #   $3  DESC     - Optional group description.
-        #   $4  BUILTIN  - 1 for host-owned groups, otherwise 0.
-        #   $5  VISIBLE  - Group visibility state.
-        #   $6  ORDER    - Relative group order within the active page.
-        #
+        #   - `$1` — KEY      - Unique group key.
+        #   - `$2` — LABEL    - Visible group label.
+        #   - `$3` — DESC     - Optional group description.
+        #   - `$4` — BUILTIN  - 1 for host-owned groups, otherwise 0.
+        #   - `$5` — VISIBLE  - Group visibility state.
+        #   - `$6` — ORDER    - Relative group order within the active page.
         # . Returns
         #   0 when registered or already present; non-zero on datatable failure.
         #
@@ -1978,18 +2000,16 @@ set -uo pipefail
         #   Add an executable item to the reusable menu model.
         #
         # . Arguments
-        #   $1  KEY       - Unique menu key.
-        #   $2  GROUP     - Owning group key.
-        #   $3  LABEL     - Visible item label.
-        #   $4  HANDLER   - Function invoked when selected.
-        #   $5  DESC      - Optional description.
-        #   $6  BUILTIN   - 1 for host-owned controls, otherwise 0.
-        #   $7  WAITSECS  - Post-action countdown; normal actions are clamped to a
-        #                    minimum of 15 seconds when a non-zero wait is requested.
-        #   $8  VISIBLE   - Visibility state.
-        #   $9  INDENT    - Item indentation level.
-        #   $10 STATUS    - Optional transient status decoration.
-        #
+        #   - `$1` — KEY       - Unique menu key.
+        #   - `$2` — GROUP     - Owning group key.
+        #   - `$3` — LABEL     - Visible item label.
+        #   - `$4` — HANDLER   - Function invoked when selected.
+        #   - `$5` — DESC      - Optional description.
+        #   - `$6` — BUILTIN   - 1 for host-owned controls, otherwise 0.
+        #   - `$7` — WAITSECS  - Post-action countdown; normal actions are clamped to a minimum of 15 seconds when a non-zero wait is requested.
+        #   - `$8` — VISIBLE   - Visibility state.
+        #   - `$9` — INDENT    - Item indentation level.
+        #   - `$10` — STATUS    - Optional transient status decoration.
         # . Returns
         #   0 when registered; non-zero on validation, duplicate-key, or handler errors.
         #
@@ -2046,9 +2066,8 @@ set -uo pipefail
         #   Update the transient status associated with a registered menu item.
         #
         # . Arguments
-        #   $1  ITEM_KEY - Registered menu item key.
-        #   $2  STATUS   - never, success, warning, failed, or empty.
-        #
+        #   - `$1` — ITEM_KEY - Registered menu item key.
+        #   - `$2` — STATUS   - never, success, warning, failed, or empty.
         # . Returns
         #   0 when updated; 1 when the item does not exist or status is invalid.
         #
@@ -2079,10 +2098,11 @@ set -uo pipefail
     }
 
     # fn: _sgnd_menu_status_text - Build a colored status icon
+        # . Purpose
+        #   Render the icon and colors associated with a named menu-item status.
         # . Arguments
-        #   $1  STATUS      - never, success, warning, failed, or empty.
-        #   $2  LABEL_STYLE - Style restored after the icon.
-        #
+        #   - `$1` — STATUS      - never, success, warning, failed, or empty.
+        #   - `$2` — LABEL_STYLE - Style restored after the icon.
         # . Output
         #   Writes the styled icon plus trailing space, or nothing for an empty/unknown status.
         #
@@ -2114,10 +2134,10 @@ set -uo pipefail
         # . Purpose
         #   Render the menu model using the shared SolidGroundUX menu renderer.
         #
-        # Inputs (globals):
-        #   SGND_MENU_SHOW_TOGGLEBAR
-        #       1 (default) renders the management-console status/legend bar.
-        #       0 renders only the title, groups, items, and page header.
+        # . Inputs (globals)
+        #   - SGND_MENU_SHOW_TOGGLEBAR
+        #   - 1 (default) renders the management-console status/legend bar.
+        #   - 0 renders only the title, groups, items, and page header.
         #
         # . Returns
         #   0 after rendering.
@@ -2135,6 +2155,8 @@ set -uo pipefail
     # sgnd_menu_register_group/item directly.
 
     # fn: sgnd_console_register_group - Compatibility alias for sgnd_menu_register_group
+        # . Purpose
+        #   Preserve the legacy group-registration API by forwarding arguments to sgnd_menu_register_group.
         # . Returns
         #   Status returned by sgnd_menu_register_group.
         #
@@ -2145,6 +2167,8 @@ set -uo pipefail
     sgnd_console_register_group() { sgnd_menu_register_group "$@"; }
 
     # fn: sgnd_console_register_item - Compatibility alias for sgnd_menu_register_item
+        # . Purpose
+        #   Preserve the legacy item-registration API by forwarding arguments to sgnd_menu_register_item.
         # . Returns
         #   Status returned by sgnd_menu_register_item.
         #
@@ -2172,8 +2196,7 @@ set -uo pipefail
         #   - Multi-digit numeric selections are completed with Enter.
         #
         # . Arguments
-        #   $1  OUTPUT_VAR - Variable receiving the normalized choice.
-        #
+        #   - `$1` — OUTPUT_VAR - Variable receiving the normalized choice.
         # . Returns
         #   0 on input; non-zero when /dev/tty cannot be read.
         #
@@ -2251,9 +2274,8 @@ set -uo pipefail
         #   Execute or navigate the current menu through the public menu API.
         #
         # . Arguments
-        #   $1  CHOICE - Normalized choice returned by sgnd_menu_read_choice.
-        #
-        # Outputs (globals):
+        #   - `$1` — CHOICE - Normalized choice returned by sgnd_menu_read_choice.
+        # . Outputs (globals)
         #   SGND_LAST_WAITSECS - Post-action wait configured by the selected item.
         #
         # . Returns
@@ -2315,10 +2337,9 @@ set -uo pipefail
         #   handler execution with application-specific behavior such as result tracking.
         #
         # . Arguments
-        #   $1  ITEM_KEY - Registered menu item key.
-        #   $2  HANDLER  - Registered handler function.
-        #   $3  BUILTIN  - 1 for host/builtin items, otherwise 0.
-        #
+        #   - `$1` — ITEM_KEY - Registered menu item key.
+        #   - `$2` — HANDLER  - Registered handler function.
+        #   - `$3` — BUILTIN  - 1 for host/builtin items, otherwise 0.
         # . Behavior
         #   - Calls the function named by SGND_MENU_ITEM_EXECUTOR when configured.
         #   - Falls back to calling the registered handler directly.
@@ -2328,7 +2349,8 @@ set -uo pipefail
         #   Exit status from the host executor or registered handler.
         # . Usage
         #   ```bash
-        #   _sgnd_menu_execute_item "<item_key>" "<handler>" "<builtin>"
+        #   example_handler() { :; }
+        #   _sgnd_menu_execute_item "example" example_handler 0
         #   ```
     _sgnd_menu_execute_item() {
         local item_key="${1:?missing item key}"
@@ -2350,9 +2372,8 @@ set -uo pipefail
         #   current cached menu model and execute the selected handler.
         #
         # . Arguments
-        #   $1  CHOICE - Normalized choice returned by sgnd_menu_read_choice.
-        #
-        # Outputs (globals):
+        #   - `$1` — CHOICE - Normalized choice returned by sgnd_menu_read_choice.
+        # . Outputs (globals)
         #   SGND_LAST_WAITSECS - Post-action wait configured by the selected item.
         #
         # . Returns

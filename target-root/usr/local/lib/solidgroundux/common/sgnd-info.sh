@@ -45,26 +45,26 @@
 set -uo pipefail
 
 # - Library guard ------------------------------------------------------------------
-    # fn$ _sgnd_lib_guard - Enforce source-only, single-load library initialization
+    # fn: _sgnd_lib_guard - Reject direct execution and track source state
         # . Purpose
-        #   Ensure the file is sourced as a library and initialized only once.
+        #   Ensure direct execution is rejected and record that the library has been sourced.
         #
         # . Behavior
         #   - Derives a unique guard variable name from the current filename.
         #   - Aborts execution when the file is run directly instead of sourced.
-        #   - Sets the guard variable on first load.
-        #   - Returns immediately when the library was already loaded.
+        #   - Records a guard variable on the first source operation.
+        #   - Returns early if the guard flag is already present; subsequent file statements still execute.
         #
-        # Inputs
-        #   BASH_SOURCE[0]
-        #   $0
+        # . Inputs
+        #   - BASH_SOURCE[0]
+        #   - $0
         #
-        # Outputs (globals)
+        # . Outputs (globals)
         #   SGND_<MODULE>_LOADED
         #
         # . Returns
-        #   0 when already loaded or successfully initialized.
-        #   Exits with code 2 when executed instead of sourced.
+        #   - 0 when already loaded or successfully initialized.
+        #   - Exits with code 2 when executed instead of sourced.
         #
         # . Usage
         #   ```bash
@@ -102,8 +102,7 @@ set -uo pipefail
         #   Print one parsed argument specification and its current variable value.
         #
         # . Arguments
-        #   $1 - Specification entry in NAME|SHORT|TYPE|VARIABLE|HELP|CHOICES format.
-        #
+        #   - `$1` — Specification entry in NAME|SHORT|TYPE|VARIABLE|HELP|CHOICES format.
         # . Returns
         #   Status of sgnd_print_labeledvalue.
         #
@@ -143,9 +142,8 @@ set -uo pipefail
         #   Print a labeled list of argument specifications and their current values.
         #
         # . Arguments
-        #   $1 - Heading to display.
-        #   $2 - Name of the specification array.
-        #
+        #   - `$1` — Heading to display.
+        #   - `$2` — Name of the specification array.
         # . Returns
         #   0 when the array is absent or empty; otherwise the final rendering status.
         #
@@ -177,10 +175,9 @@ set -uo pipefail
         #   Render a named configuration array, filtered by the accepted scope values.
         #
         # . Arguments
-        #   $1 - Section heading.
-        #   $2 - Specification array name.
-        #   $@ - Accepted scopes, after the first two arguments.
-        #
+        #   - `$1` — Section heading.
+        #   - `$2` — Specification array name.
+        #   - `$@` — Accepted scopes, after the first two arguments.
         # . Returns
         #   Status of the final UI output operation.
         #
@@ -228,9 +225,8 @@ set -uo pipefail
         #   Print effective configuration values for diagnostics.
         #
         # . Arguments
-        #   $1 - Name of a configuration specification array.
-        #   $2 - Scope filter: system, user, or both (default).
-        #
+        #   - `$1` — Name of a configuration specification array.
+        #   - `$2` — Scope filter: system, user, or both (default).
         # . Returns
         #   1 for an unsupported scope filter; otherwise the status of the final output helper.
                 #
