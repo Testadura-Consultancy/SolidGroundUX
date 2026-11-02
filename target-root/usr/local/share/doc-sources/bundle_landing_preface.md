@@ -1,7 +1,9 @@
 ---
-title: "SolidGroundUX @ Heart"
+title: "Preface"
 nav_order: 10
 ---
+
+## SolidGroundUX @ Heart
 
 SolidGroundUX at heart is a Bash framework for building, documenting, and standardizing Bash scripts.
 
@@ -9,7 +11,7 @@ Its aim is to assist where needed, but get out of the way when ignored, while de
 
 SolidGroundUX has been written and tested on Ubuntu 24.04 and 26.04. Other Linux distributions may work, but are currently untested and unsupported.
 
-# It Boasts
+## It Boasts
 
 - Standardized console and file logging
 - State and configuration parameters
@@ -19,7 +21,7 @@ SolidGroundUX has been written and tested on Ubuntu 24.04 and 26.04. Other Linux
 - Tools to generate documentation, bundle releases, and publish repositories
 - A Management Console integrating modules into a single menu-driven environment
 
-# What It Will Do for You Out of the Box
+## What It Will Do for You Out of the Box
 
 Out of the box, SolidGroundUX includes a number of VM management modules, primarily aimed at configuring servers and installing server roles.
 
@@ -49,7 +51,7 @@ During release testing, SolidGroundUX was used to configure a complete small-bus
 
 That included configuring the machines and installing their respective roles.
 
-# What It Will Do for You After First Installation
+## What It Will Do for You After First Installation
 
 SolidGroundUX also provides the framework functionality, script templates, repository tooling, and development conventions needed to build or integrate that toolbox directory you've been meaning to improve.
 

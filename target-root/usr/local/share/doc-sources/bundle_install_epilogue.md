@@ -18,7 +18,7 @@ installation.
 Download the latest SolidGroundUX first-install package or individual product
 release package from:
 
-https://github.com/Testadura-Mark/SolidGroundUX/releases
+[SolidGroundUX Releases](https://github.com/Testadura-Mark/SolidGroundUX/releases)
 
 Current releases use **one product ZIP per product**. A multi-product release run
 does not create a combined product bundle. When SolidGroundUX itself is selected,
@@ -26,20 +26,20 @@ does not create a combined product bundle. When SolidGroundUX itself is selected
 
 Typical names are:
 
-* `SolidGroundUX-<version>.<build>-release.zip`
-* `SolidGroundUX-Management-Console-Modules-<version>.<build>-release.zip`
-* `SolidGroundUX-SDK-<version>.<build>-release.zip`
-* `SolidGroundUX-first-install-<version>.<build>.zip`
+* `SolidGroundUX-[version].[build]-release.zip`
+* `SolidGroundUX-Management-Console-Modules-[version].[build]-release.zip`
+* `SolidGroundUX-SDK-[version].[build]-release.zip`
+* `SolidGroundUX-first-install-[version].[build].zip`
 
 Each product release ZIP contains:
 
 * `release-package.info`
-* `<Product>-<version>.<build>.tar.gz`
-* `<Product>-<version>.<build>.tar.gz.sha256`
-* `<Product>-<version>.<build>.manifest`
-* `<Product>-<version>.<build>.manifest.sha256`
-* `<Product>-<version>.<build>.removed`
-* `<Product>-<version>.<build>.removed.sha256`
+* `[Product]-[version].[build].tar.gz`
+* `[Product]-[version].[build].tar.gz.sha256`
+* `[Product]-[version].[build].manifest`
+* `[Product]-[version].[build].manifest.sha256`
+* `[Product]-[version].[build].removed`
+* `[Product]-[version].[build].removed.sha256`
 
 The first-install transport ZIP is not itself a product release. It contains:
 
@@ -58,7 +58,7 @@ For example:
 
 ```bash
 cd /tmp
-unzip SolidGroundUX-first-install-<version>.<build>.zip
+unzip SolidGroundUX-first-install-[version].[build].zip
 chmod +x sgnd-setup.sh
 sudo ./sgnd-setup.sh
 ```
