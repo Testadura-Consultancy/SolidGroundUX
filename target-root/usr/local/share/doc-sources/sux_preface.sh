@@ -75,7 +75,7 @@
 # > and development tooling to evolve independently.
 #
 # . Images
-#   sux-framework-features.png :: SolidGroundUX Framework capabilities and product boundaries.
+#   ![SolidGroundUX Framework - Capabilities and product boundaries.](/assets/sux-framework-features.png){width=75%}
 #
 # - Framework capabilities summary --------------------------------------------------
 #
@@ -94,15 +94,14 @@
 # > layered configuration, persistent state, validation, and transfer of selected values
 # > between invocations.
 #
-# . Images
-#   sux-config-state-precedence.png :: Precedence of configuration and state layers in SolidGroundUX.
-#
+# ![Precedence of configuration and state layers in SolidGroundUX.](/assets/sux-config-state-precedence.png){width=50%}
+# 
 # -- Logging and terminal UI ---------------------------------------------------------
 # > Screen messaging, file logging, themes, palettes, title bars, sections, typed prompts,
 # > dialogs, and menu primitives share one vocabulary and one runtime policy.
 #
 # . Images
-#   sux-theme-showcase.png :: SolidGroundUX themes and palettes.
+#   ![SolidGroundUX themes and palettes.](/assets/sux-theme-showcase.png){width=90%}
 #
 # -- Reusable APIs ------------------------------------------------------------------
 # > Common libraries provide metadata/header parsing, datatable helpers, system helpers,
@@ -119,7 +118,7 @@
 # - Architecture --------------------------------------------------------------------
 #
 # . Images
-#   sux-framework-architecture.png :: SolidGroundUX product and framework architecture.
+#   ![SolidGroundUX - Product and framework architecture.](/assets/sux-framework-architecture.png){width=85%}
 #
 # > The Framework is the shared runtime beneath independently installable products and
 # > applications. Applications consume public Framework APIs; product-specific orchestration
@@ -128,7 +127,7 @@
 # -- Framework Locator and Resource Resolution --------------------------------------
 #
 # . Images
-#   sux-framework-locator.png :: Framework locator and resource-resolution model.
+#   ![Framework locator and resource-resolution model.](/assets/sux-framework-locator.png){width=85%}
 #
 # > `SGND_FRAMEWORK_ROOT` describes the contextual root from which the executable is
 # > running. It is `/` for an installed execution and normally a repository `target-root`
@@ -144,7 +143,7 @@
 # -- Bootstrap Architecture ----------------------------------------------------------
 #
 # . Images
-#   sux-bootstrap-sequence.png :: Framework executable bootstrap sequence.
+#   ![Framework executable bootstrap sequence.](/assets/sux-bootstrap-sequence.png){width=85%}
 #
 # > Startup deliberately has a small pre-bootstrap boundary:
 # >
