@@ -49,7 +49,8 @@
 <h2 id="solidgroundux-in-a-nutshell">SolidGroundUX in a nutshell</h2>
 <blockquote><p>SolidGroundUX is the runtime framework for structured Bash applications. It provides bootstrap and execution conventions, argument handling, configuration and state, logging, terminal UI primitives, reusable libraries, metadata support, and common APIs used by applications built on the framework.</p></blockquote>
 <blockquote><p>Version 2.1 separates that runtime from two products built around it:  - <strong><code>SolidGroundUX Framework</code></strong> — Runtime, bootstrap, common libraries, configuration/state, UI, and reusable APIs.  - <strong><code>SolidGroundUX Management Console Modules (MCM)</code></strong> — The <code>sgnd-console</code> host, server-management modules, documentation bundles, Markdown generation and WCM publishing workflows.  - <strong><code>SolidGroundUX SDK</code></strong> — Workspace creation, development deployment, packaging, release preparation, and SDK templates.  MCM and SDK both depend on the Framework. They are sibling products and do not depend on each other. This boundary keeps the installed runtime small while allowing management and development tooling to evolve independently.</p></blockquote>
-<figure class="sgnd-figure" id="figure-1"><img src="../../images/sux-framework-features.png" alt="SolidGroundUX Framework capabilities and product boundaries."><figcaption><em>Figure 1: SolidGroundUX Framework capabilities and product boundaries.</em></figcaption></figure>
+<h3 id="images">Images</h3>
+<figure class="sgnd-figure" id="figure-1"><img src="../../assets/sux-framework-features.png" alt="SolidGroundUX Framework - Capabilities and product boundaries." style="width: 75%; height: auto; max-width: 100%; object-fit: contain"><figcaption><em>Figure 1: SolidGroundUX Framework - Capabilities and product boundaries.</em></figcaption></figure>
 <h2 id="framework-capabilities-summary">Framework capabilities summary</h2>
 <h2 id="bootstrap-and-runtime-initialization">Bootstrap and runtime initialization</h2>
 <blockquote><p>Executables begin with the lightweight framework locator, load <code>sgnd-exe-common.sh</code>, and then enter the normal bootstrap sequence. Bootstrap establishes the runtime environment, global definitions, configuration/state, logging, UI support, and any additional libraries declared by the executable.</p></blockquote>
@@ -57,23 +58,27 @@
 <blockquote><p>Applications declare additional Framework libraries through <code>SGND_USING</code>. Bootstrap resolves and loads those dependencies after the core runtime is available.</p></blockquote>
 <h2 id="arguments-configuration-and-state">Arguments, configuration, and state</h2>
 <blockquote><p>The Framework provides a common model for built-in and application arguments, layered configuration, persistent state, validation, and transfer of selected values between invocations.</p></blockquote>
-<figure class="sgnd-figure" id="figure-2"><img src="../../images/sux-config-state-precedence.png" alt="Precedence of configuration and state layers in SolidGroundUX."><figcaption><em>Figure 2: Precedence of configuration and state layers in SolidGroundUX.</em></figcaption></figure>
+<figure class="sgnd-figure" id="figure-2"><img src="../../assets/sux-config-state-precedence.png" alt="Precedence of configuration and state layers in SolidGroundUX." style="width: 50%; height: auto; max-width: 100%; object-fit: contain"><figcaption><em>Figure 2: Precedence of configuration and state layers in SolidGroundUX.</em></figcaption></figure>
 <h2 id="logging-and-terminal-ui">Logging and terminal UI</h2>
 <blockquote><p>Screen messaging, file logging, themes, palettes, title bars, sections, typed prompts, dialogs, and menu primitives share one vocabulary and one runtime policy.</p></blockquote>
-<figure class="sgnd-figure" id="figure-3"><img src="../../images/sux-theme-showcase.png" alt="SolidGroundUX themes and palettes."><figcaption><em>Figure 3: SolidGroundUX themes and palettes.</em></figcaption></figure>
+<h3 id="images">Images</h3>
+<figure class="sgnd-figure" id="figure-3"><img src="../../assets/sux-theme-showcase.png" alt="SolidGroundUX themes and palettes." style="width: 90%; height: auto; max-width: 100%; object-fit: contain"><figcaption><em>Figure 3: SolidGroundUX themes and palettes.</em></figcaption></figure>
 <h2 id="reusable-apis">Reusable APIs</h2>
 <blockquote><p>Common libraries provide metadata/header parsing, datatable helpers, system helpers, menu mechanics, and other functionality that is useful across multiple applications. Product-specific behavior stays with the product that owns it.</p></blockquote>
 <h2 id="products-built-on-the-framework">Products built on the Framework</h2>
 <blockquote><p>The Management Console Modules product owns the management-console host, public <code>sgnd-console</code> command, module discovery/lazy loading, and server-management modules. The SDK owns project/workspace tooling, development deployment, release preparation and development templates. Documentation bundle management and generation now belong to MCM; the installed release lifecycle belongs to Framework setup.</p></blockquote>
 <h2 id="architecture">Architecture</h2>
-<figure class="sgnd-figure" id="figure-4"><img src="../../images/sux-framework-architecture.png" alt="SolidGroundUX product and framework architecture."><figcaption><em>Figure 4: SolidGroundUX product and framework architecture.</em></figcaption></figure>
+<h3 id="images">Images</h3>
+<figure class="sgnd-figure" id="figure-4"><img src="../../assets/sux-framework-architecture.png" alt="SolidGroundUX - Product and framework architecture." style="width: 85%; height: auto; max-width: 100%; object-fit: contain"><figcaption><em>Figure 4: SolidGroundUX - Product and framework architecture.</em></figcaption></figure>
 <blockquote><p>The Framework is the shared runtime beneath independently installable products and applications. Applications consume public Framework APIs; product-specific orchestration remains outside the Framework itself.</p></blockquote>
 <h2 id="framework-locator-and-resource-resolution">Framework Locator and Resource Resolution</h2>
-<figure class="sgnd-figure" id="figure-5"><img src="../../images/sux-framework-locator.png" alt="Framework locator and resource-resolution model."><figcaption><em>Figure 5: Framework locator and resource-resolution model.</em></figcaption></figure>
+<h3 id="images">Images</h3>
+<figure class="sgnd-figure" id="figure-5"><img src="../../assets/sux-framework-locator.png" alt="Framework locator and resource-resolution model." style="width: 85%; height: auto; max-width: 100%; object-fit: contain"><figcaption><em>Figure 5: Framework locator and resource-resolution model.</em></figcaption></figure>
 <blockquote><p><code>SGND_FRAMEWORK_ROOT</code> describes the contextual root from which the executable is running. It is <code>/</code> for an installed execution and normally a repository <code>target-root</code> for a development execution.</p></blockquote>
 <blockquote><p>Framework-owned resources are not assumed to live beneath that contextual root. <code>sgnd_framework_resolve_path</code> first uses the contextual tree when that tree actually contains a Framework installation; otherwise it resolves the resource from the installed Framework under <code>/</code>. A development MCM or SDK tree can therefore run its own code while consuming the installed Framework without changing <code>SGND_FRAMEWORK_ROOT</code>.</p></blockquote>
 <h2 id="bootstrap-architecture">Bootstrap Architecture</h2>
-<figure class="sgnd-figure" id="figure-6"><img src="../../images/sux-bootstrap-sequence.png" alt="Framework executable bootstrap sequence."><figcaption><em>Figure 6: Framework executable bootstrap sequence.</em></figcaption></figure>
+<h3 id="images">Images</h3>
+<figure class="sgnd-figure" id="figure-6"><img src="../../assets/sux-bootstrap-sequence.png" alt="Framework executable bootstrap sequence." style="width: 85%; height: auto; max-width: 100%; object-fit: contain"><figcaption><em>Figure 6: Framework executable bootstrap sequence.</em></figcaption></figure>
 <blockquote>
 <p>Startup deliberately has a small pre-bootstrap boundary: </p>
 <pre><code class="language-text">executable
