@@ -6,17 +6,25 @@ The format is inspired by *Keep a Changelog* while remaining focused on practica
 
 ## Unreleased
 
+## Release 2.2.2630620
+
 ### Added
 
 - Added separate DataTable theme defaults for header separator lines (`SGND_DT_HEADERLINE_CLR`), column names (`SGND_DT_COLUMNNAME_CLR`), and data text (`SGND_DT_DATACOLOR_CLR`) across the Framework themes.
 
 ### Changed
 
+- Completed the Framework source-documentation pass: refreshed function headers, usage examples, and documentation prefaces/epilogues to reflect the current runtime and generated navigation.
+- Reviewed and refreshed Framework documentation illustrations for architecture, bootstrap sequence, framework locator, configuration/state precedence and feature coverage.
 - Normalized `SGND_SHARE_DIR` resolution for installed and staged/development roots and made it available in runtime-global metadata for Framework, SDK, and MCM consumers.
 - Made DataTable rendering use active-theme colors by default while preserving explicit `headercolor` and `datacolor` overrides and legacy fallback behavior.
 
 - Replaced hardcoded Setup product/repository defaults with an external `sgnd-setup.cfg` catalog seeded from a packaged `.default` file, including SDK product discovery without assuming a GitHub release URL.
 - Simplified interactive Setup removal to **Remove product** without manual manifest selection. Complete removal uses the active release manifest; recovery falls back to a limited ownership-header scan.
+
+### Fixed (2026-11-02)
+
+- Prepared missing post-guard section markers in `common/ui-dlg.sh` and `common/ui.sh`. The canonical normalizer previously stopped with “Library guard section has no following section marker” because it could not identify the end of their library guards. The two-file correction passes isolated normalizer and Bash syntax checks; integration and a full release run remain to be verified.
 
 ## Release 2.1.2627801
 

@@ -2,9 +2,9 @@
 # SolidGroundUX - Framework Introduction
 # ----------------------------------------------------------------------------------
 # Metadata:
-#   Version     : 2.1
-#   Build       : 2627700
-#   Checksum    : 74f7f5eb605a7aa4f04854c7dac0bd344b53ca008688e3b65181bb7173f2916e
+#   Version     : 2.2
+#   Build       : 2630620
+#   Checksum    : e6941a34f40bf35111c3eca32c0c2484eadd22c01025614ee6448ad295ad7b57
 #   Source      : sux-preface.sh
 #   Type        : documentation
 #   Group       : SolidGroundUX

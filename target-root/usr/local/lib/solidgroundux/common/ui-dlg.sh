@@ -2,9 +2,9 @@
 # SolidGroundUX - UI Dialogs
 # -------------------------------------------------------------------------------------
 # Metadata:
-#   Version     : 2.1
-#   Build       : 2627501
-#   Checksum    : 6fff59dd2ae92c589a548ac322d16348ce1aff68c89bb5a5e84d14cda9991b56
+#   Version     : 2.2
+#   Build       : 2630620
+#   Checksum    : 6f1e980b1e47023f3c3b68b64de89a5069d468a0657cbf9f930fc6d261094d44
 #   Source      : ui-dlg.sh
 #   Type        : library
 #   Group       : UI
@@ -44,26 +44,26 @@
 # =====================================================================================
 set -uo pipefail
 # - Library guard ------------------------------------------------------------------
-    # fn: _sgnd_lib_guard - Reject direct execution and track source state
+    # fn$ _sgnd_lib_guard - Enforce source-only, single-load library initialization
         # . Purpose
-        #   Ensure direct execution is rejected and record that the library has been sourced.
+        #   Ensure the file is sourced as a library and initialized only once.
         #
         # . Behavior
         #   - Derives a unique guard variable name from the current filename.
         #   - Aborts execution when the file is run directly instead of sourced.
-        #   - Records a guard variable on the first source operation.
-        #   - Returns early if the guard flag is already present; subsequent file statements still execute.
+        #   - Sets the guard variable on first load.
+        #   - Returns immediately when the library was already loaded.
         #
-        # . Inputs
-        #   - BASH_SOURCE[0]
-        #   - $0
+        # Inputs
+        #   BASH_SOURCE[0]
+        #   $0
         #
-        # . Outputs (globals)
+        # Outputs (globals)
         #   SGND_<MODULE>_LOADED
         #
         # . Returns
-        #   - 0 when already loaded or successfully initialized.
-        #   - Exits with code 2 when executed instead of sourced.
+        #   0 when already loaded or successfully initialized.
+        #   Exits with code 2 when executed instead of sourced.
         #
         # . Usage
         #   ```bash
@@ -93,6 +93,7 @@ set -uo pipefail
         && declare -F sgnd_header_buffer_load >/dev/null 2>&1; then
         sgnd_module_init_metadata "${BASH_SOURCE[0]}"
     fi
+# - Internal helpers ----------------------------------------------------------------
     # fn: _dlg_keymap - Dlg keymap
         # . Purpose
         #   Build a readable key legend for a dialog choice set.
@@ -134,6 +135,7 @@ set -uo pipefail
 
         printf '%s' "$keymap"
     }
+# - Public API ----------------------------------------------------------------------
     # fn: sgnd_decision_expand_choices - Decision expand choices
         # . Purpose
         #   Expand comma-separated decision aliases into canonical/alias records.

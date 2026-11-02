@@ -2,9 +2,9 @@
 # SolidGroundUX - Menu Library
 # -------------------------------------------------------------------------------------
 # Metadata:
-#   Version     : 2.1
-#   Build       : 2627501
-#   Checksum    : e0b271f75db3b35a454693399403a2fa6531dc860b7b518d9d3f4c4d08778872
+#   Version     : 2.2
+#   Build       : 2630620
+#   Checksum    : 57d05cac420f8503f9c73663fb294fab9a8f815a3911ca0b4ef18aeab6d68688
 #   Source      : sgnd-menu.sh
 #   Group       : Common Core
 #   Type        : library
@@ -45,26 +45,26 @@
 # =====================================================================================
 set -uo pipefail
 # - Library guard ------------------------------------------------------------------
-    # fn: _sgnd_lib_guard - Reject direct execution and track source state
+    # fn$ _sgnd_lib_guard - Enforce source-only, single-load library initialization
         # . Purpose
-        #   Ensure direct execution is rejected and record that the library has been sourced.
+        #   Ensure the file is sourced as a library and initialized only once.
         #
         # . Behavior
         #   - Derives a unique guard variable name from the current filename.
         #   - Aborts execution when the file is run directly instead of sourced.
-        #   - Records a guard variable on the first source operation.
-        #   - Returns early if the guard flag is already present; subsequent file statements still execute.
+        #   - Sets the guard variable on first load.
+        #   - Returns immediately when the library was already loaded.
         #
-        # . Inputs
-        #   - BASH_SOURCE[0]
-        #   - $0
+        # Inputs
+        #   BASH_SOURCE[0]
+        #   $0
         #
-        # . Outputs (globals)
+        # Outputs (globals)
         #   SGND_<MODULE>_LOADED
         #
         # . Returns
-        #   - 0 when already loaded or successfully initialized.
-        #   - Exits with code 2 when executed instead of sourced.
+        #   0 when already loaded or successfully initialized.
+        #   Exits with code 2 when executed instead of sourced.
         #
         # . Usage
         #   ```bash

@@ -3,15 +3,15 @@
 # SolidGroundUX - Framework Preference Utility
 # -------------------------------------------------------------------------------------
 # Metadata:
-#   Version     : 2.1
-#   Build       : 2627515
+#   Version     : 2.2
+#   Build       : 2630620
 #   Shortname   : SGND
 #   Source      : sgnd.sh
 #   Type        : script
 #   Group       : Framework Utilities
 #   Purpose     : Show and change transferable SolidGroundUX framework preferences
 #
-#   Checksum : 3773a61795693d926f1070cef9cc81bfeffe47123b40c8e8a15bef49072d93d0
+#   Checksum : 77a2ac87e820a345a7d9fddfafb46312ae18e2e9091b3b5ce1770b5a8c551d5e
 # Description:
 #   Provides a small command-line front end for the transferable SolidGroundUX framework
 #   settings also used by the Management Console. It can show or change console logging,
@@ -66,8 +66,9 @@ set -uo pipefail
         #   helpers are not available until sgnd-exe-common.sh has been loaded.
         #
         # . Returns
-        #   - 0 when the framework root was resolved and executable common library loaded.
-        #   - 126 when the script path cannot be resolved, no canonical root component can be found, or the executable common library is unreadable.
+        #   0 when the framework root was resolved and executable common library loaded.
+        #   126 when the script path cannot be resolved, no canonical root component can
+        #   be found, or the executable common library is unreadable.
         #
         # . Usage
         #   ```bash

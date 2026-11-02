@@ -2,9 +2,9 @@
 # SolidGroundUX - Bootstrap Core
 # -------------------------------------------------------------------------------------
 # Metadata:
-#   Version     : 2.1
-#   Build       : 2627501
-#   Checksum    : 1780f5dfeb149a56313cc136e0bbe24f2580db36d4642367a57aa0592d90141e
+#   Version     : 2.2
+#   Build       : 2630620
+#   Checksum    : 41de6d64b9d5ae019398d17129007f0c54e854ece20d9f3a747e074dbbb4c1da
 #   Source      : sgnd-bootstrap.sh
 #   Type        : library
 #   Group       : Bootstrap

@@ -2,9 +2,9 @@
 # SolidGroundUX - Fantasy UI Style
 # -------------------------------------------------------------------------------------
 # Metadata:
-#   Version     : 2.1
-#   Build       : 2627501
-#   Checksum    : 2d3f75a4b5d5fe8f5c0464541018114a1c1aa9c1d812a0611629b8499c2b8302
+#   Version     : 2.2
+#   Build       : 2630620
+#   Checksum    : 1779700056ada2f4492495413f59ad3c2e70d35d5609365ac6327c38987d1694
 #   Source      : 21-style-fantasy.sh
 #   Type        : library
 #   Group       : UI

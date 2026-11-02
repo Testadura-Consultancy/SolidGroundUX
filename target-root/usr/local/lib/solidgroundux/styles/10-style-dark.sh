@@ -2,9 +2,9 @@
 # SolidGroundUX - Dark UI Style
 # -------------------------------------------------------------------------------------
 # Metadata:
-#   Version     : 2.1
-#   Build       : 2627501
-#   Checksum    : 7296787544d128753f71a87c1c1789b944069d8f1d7bebced036b6a0a61ee821
+#   Version     : 2.2
+#   Build       : 2630620
+#   Checksum    : 4cfcc5e4643cb7d6048eb89b7c90a999f6dc3c5f62edca455a9abdab8a0df516
 #   Source      : 10-style-dark.sh
 #   Type        : library
 #   Group       : UI

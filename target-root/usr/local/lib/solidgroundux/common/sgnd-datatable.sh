@@ -2,9 +2,9 @@
 # SolidGroundUX - Datatable
 # -------------------------------------------------------------------------------------
 # Metadata:
-#   Version     : 2.1
-#   Build       : 2627501
-#   Checksum    : c631457fdd2c6412b1e9c5736560b372a21f2666a6586da77d1293c04ae41cf3
+#   Version     : 2.2
+#   Build       : 2630620
+#   Checksum    : 2adce079d47545fa8d5c279ed88156f720295c73332cefd71b41fc6eb2a474ff
 #   Source      : sgnd-datatable.sh
 #   Type        : library
 #   Group       : Common Core
@@ -46,26 +46,26 @@
 set -uo pipefail
 
 # - Library guard ------------------------------------------------------------------
-    # fn: _sgnd_lib_guard - Reject direct execution and track source state
+    # fn$ _sgnd_lib_guard - Enforce source-only, single-load library initialization
         # . Purpose
-        #   Ensure direct execution is rejected and record that the library has been sourced.
+        #   Ensure the file is sourced as a library and initialized only once.
         #
         # . Behavior
         #   - Derives a unique guard variable name from the current filename.
         #   - Aborts execution when the file is run directly instead of sourced.
-        #   - Records a guard variable on the first source operation.
-        #   - Returns early if the guard flag is already present; subsequent file statements still execute.
+        #   - Sets the guard variable on first load.
+        #   - Returns immediately when the library was already loaded.
         #
-        # . Inputs
-        #   - BASH_SOURCE[0]
-        #   - $0
+        # Inputs
+        #   BASH_SOURCE[0]
+        #   $0
         #
-        # . Outputs (globals)
+        # Outputs (globals)
         #   SGND_<MODULE>_LOADED
         #
         # . Returns
-        #   - 0 when already loaded or successfully initialized.
-        #   - Exits with code 2 when executed instead of sourced.
+        #   0 when already loaded or successfully initialized.
+        #   Exits with code 2 when executed instead of sourced.
         #
         # . Usage
         #   ```bash

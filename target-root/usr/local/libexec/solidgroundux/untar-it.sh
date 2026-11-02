@@ -3,9 +3,9 @@
 # SolidGroundUX - Untar It
 # -------------------------------------------------------------------------------------
 # Metadata:
-#   Version     : 2.1
-#   Build       : 2627501
-#   Checksum    : ce602f17e12d065734bc201c9824337aab319a94257587cce1bfa2caac4d2887
+#   Version     : 2.2
+#   Build       : 2630620
+#   Checksum    : 55c36c7021cd3fb55702dffc5f1304bc35a5325ed8ace48e3431984d8d1608ae
 #   Source      : untar-it.sh
 #   Type        : script
 #   Group       : Common Core
@@ -67,8 +67,9 @@ set -uo pipefail
         #   helpers are not available until sgnd-exe-common.sh has been loaded.
         #
         # . Returns
-        #   - 0 when the framework root was resolved and executable common library loaded.
-        #   - 126 when the script path cannot be resolved, no canonical root component can be found, or the executable common library is unreadable.
+        #   0 when the framework root was resolved and executable common library loaded.
+        #   126 when the script path cannot be resolved, no canonical root component can
+        #   be found, or the executable common library is unreadable.
         #
         # . Usage
         #   ```bash

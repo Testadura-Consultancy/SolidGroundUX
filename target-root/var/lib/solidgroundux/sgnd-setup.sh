@@ -3,9 +3,9 @@
 # SolidGroundUX - Setup
 # -------------------------------------------------------------------------------------
 # Metadata:
-#   Version     : 2.1
-#   Build       : 2627700
-#   Checksum    : 2aec2d14e3383d1ccfd82d32617a2977d0ab902cbf2b7cef3a129cbdaace22ef
+#   Version     : 2.2
+#   Build       : 2630620
+#   Checksum    : f133b37cf35719c26f169a685aa8834c1a17771eb3b016dbf176cf86ab641d0a
 #   Source      : sgnd-setup.sh
 #   Wrapper     : sgnd-setup
 #   Type        : script

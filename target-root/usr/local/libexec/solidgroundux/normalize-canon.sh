@@ -3,9 +3,9 @@
 # SolidGroundUX - Canonical Structure Normalizer
 # -------------------------------------------------------------------------------------
 # Metadata:
-#   Version     : 2.1
-#   Build       : 2627501
-#   Checksum    : 46f2358035ae2a651af363634edd1c317c4e7bdbea83164d96a6da48de009bc3
+#   Version     : 2.2
+#   Build       : 2630620
+#   Checksum    : 0c0b0e133f92a8e44d4b0dd3807caedda2a3fae8a09720cd485042d0393220cf
 #   Source      : normalize-canon.sh
 #   Type        : script
 #   Group       : Bootstrap
@@ -66,8 +66,9 @@ set -uo pipefail
         #   helpers are not available until sgnd-exe-common.sh has been loaded.
         #
         # . Returns
-        #   - 0 when the framework root was resolved and executable common library loaded.
-        #   - 126 when the script path cannot be resolved, no canonical root component can be found, or the executable common library is unreadable.
+        #   0 when the framework root was resolved and executable common library loaded.
+        #   126 when the script path cannot be resolved, no canonical root component can
+        #   be found, or the executable common library is unreadable.
         #
         # . Usage
         #   ```bash

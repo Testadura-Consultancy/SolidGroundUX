@@ -2,9 +2,9 @@
 # SolidGroundUX - UI Rendering
 # -------------------------------------------------------------------------------------
 # Metadata:
-#   Version     : 2.1
-#   Build       : 2627501
-#   Checksum    : 7d1e8b764491c3ea8d171489d551c2a95a60897b95468049a5fc1a7ae5cd392f
+#   Version     : 2.2
+#   Build       : 2630620
+#   Checksum    : 928452490f1bf5edd81aaa13eee5058089849ae6928fc67a1cb5711d1cc6b951
 #   Source      : ui.sh
 #   Type        : library
 #   Group       : UI
@@ -53,35 +53,31 @@
 # =====================================================================================
 set -uo pipefail
 # - Library guard ------------------------------------------------------------------
-    # fn: _sgnd_lib_guard - Reject direct execution and track library sourcing
+    # fn$ _sgnd_lib_guard - Enforce source-only, single-load library initialization
         # . Purpose
-        #   Reject execution of this source-only library and record that it has been loaded.
+        #   Ensure the file is sourced as a library and initialized only once.
         #
         # . Behavior
-        #   - Derive an SGND_<FILENAME>_LOADED flag from this file name.
-        #   - Exit the shell with status 2 when the library is executed directly.
-        #   - Return success if the loaded flag already exists, otherwise set it.
-        #   - The caller does not short-circuit the remainder of the file after the guard returns.
+        #   - Derives a unique guard variable name from the current filename.
+        #   - Aborts execution when the file is run directly instead of sourced.
+        #   - Sets the guard variable on first load.
+        #   - Returns immediately when the library was already loaded.
         #
-        # . Inputs (globals)
-        #   BASH_SOURCE[0] and $0.
+        # Inputs
+        #   BASH_SOURCE[0]
+        #   $0
         #
-        # . Outputs (globals)
-        #   SGND_UI_LOADED (derived from ui.sh).
-        #
-        # . Output
-        #   Reports direct-execution errors to stderr.
+        # Outputs (globals)
+        #   SGND_<MODULE>_LOADED
         #
         # . Returns
-        #   0 after checking or setting the guard; exits 2 if directly executed.
+        #   0 when already loaded or successfully initialized.
+        #   Exits with code 2 when executed instead of sourced.
         #
         # . Usage
         #   ```bash
         #   _sgnd_lib_guard
         #   ```
-        #
-        # . Notes
-        #   Internal sourcing helper; called once at the top of this file, then unset.
     _sgnd_lib_guard() {
         local lib_base=""
         local guard=""
@@ -106,6 +102,7 @@ set -uo pipefail
         && declare -F sgnd_header_buffer_load >/dev/null 2>&1; then
         sgnd_module_init_metadata "${BASH_SOURCE[0]}"
     fi
+# - UI functions --------------------------------------------------------------------
     # fn: _sh_err - Emit a compatibility error message
         # . Purpose
         #   Report an error using say when available, with a plain stderr fallback.

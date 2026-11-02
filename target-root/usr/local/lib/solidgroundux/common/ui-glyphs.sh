@@ -2,9 +2,9 @@
 # SolidGroundUX - UI Glyphs
 # -------------------------------------------------------------------------------------
 # Metadata:
-#   Version     : 2.1
-#   Build       : 2627501
-#   Checksum    : feee7c562670fd6ec7a4aece16ea0be242a8fdabb2eae849cf468112b47cec6d
+#   Version     : 2.2
+#   Build       : 2630620
+#   Checksum    : 2c7a5af9e40620760da928c3d9446cc864d2c5ac6219b4b948031c72d54fa7b6
 #   Source      : ui-glyphs.sh
 #   Type        : library
 #   Group       : UI
@@ -45,26 +45,26 @@
 set -uo pipefail
 
 # - Library guard ------------------------------------------------------------------
-    # fn: _sgnd_lib_guard - Reject direct execution and track source state
+    # fn$ _sgnd_lib_guard - Enforce source-only, single-load library initialization
         # . Purpose
-        #   Ensure direct execution is rejected and record that the library has been sourced.
+        #   Ensure the file is sourced as a library and initialized only once.
         #
         # . Behavior
         #   - Derives a unique guard variable name from the current filename.
         #   - Aborts execution when the file is run directly instead of sourced.
-        #   - Records a guard variable on the first source operation.
-        #   - Returns early if the guard flag is already present; subsequent file statements still execute.
+        #   - Sets the guard variable on first load.
+        #   - Returns immediately when the library was already loaded.
         #
-        # . Inputs
-        #   - BASH_SOURCE[0]
-        #   - $0
+        # Inputs
+        #   BASH_SOURCE[0]
+        #   $0
         #
-        # . Outputs (globals)
+        # Outputs (globals)
         #   SGND_<MODULE>_LOADED
         #
         # . Returns
-        #   - 0 when already loaded or successfully initialized.
-        #   - Exits with code 2 when executed instead of sourced.
+        #   0 when already loaded or successfully initialized.
+        #   Exits with code 2 when executed instead of sourced.
         #
         # . Usage
         #   ```bash

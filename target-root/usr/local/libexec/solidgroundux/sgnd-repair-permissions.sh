@@ -3,9 +3,9 @@
 # SolidGroundUX - Repair Permissions
 # -------------------------------------------------------------------------------------
 # Metadata:
-#   Version     : 2.1
-#   Build       : 2627808
-#   Checksum    : e6792a134d418f4de40c631b6f11e8422bb8d012bad3ace5453b4a92d026f202
+#   Version     : 2.2
+#   Build       : 2630620
+#   Checksum    : 978005c65c8bd1c7fc53916f7c32b981c2d3b6b1f6f05321f98063f993e9c9b3
 #   Source      : sgnd-repair-permissions.sh
 #   Type        : script
 #   Group       : Framework Tools
@@ -92,8 +92,9 @@ set -uo pipefail
         #   helpers are not available until sgnd-exe-common.sh has been loaded.
         #
         # . Returns
-        #   - 0 when the framework root was resolved and executable common library loaded.
-        #   - 126 when the script path cannot be resolved, no canonical root component can be found, or the executable common library is unreadable.
+        #   0 when the framework root was resolved and executable common library loaded.
+        #   126 when the script path cannot be resolved, no canonical root component can
+        #   be found, or the executable common library is unreadable.
         #
         # . Usage
         #   ```bash

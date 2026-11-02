@@ -3,15 +3,15 @@
 # SolidGroundUX Framework - Smoke Test and Validation
 # -------------------------------------------------------------------------------------
 # Metadata:
-#   Version     : 2.1
+#   Version     : 2.2
 #   Source      : sgnd-smoketest.sh
 #   Wrapper     : sgnd-smoketest
 #   Type        : script
 #   Group       : Console Actions
 #   Purpose     : Validate the framework and exercise its interactive UI helpers
 #
-#   Build : 2627501
-#   Checksum : da8eefaf6795212bd62c046b359c577d8ad3dc2da48fe1aefc4c948a6621efd3
+#   Build : 2630620
+#   Checksum : 3acd21e6996392aa0f6c783a54927cb13e64baacdfa327ab3d85022d35991c8a
 # Description:
 #   Framework-owned smoke-test and validation implementation for SolidGroundUX. Supports individual validation suites, a complete Run All
 #   pass, and the original interactive UI smoke-test menu.
@@ -72,8 +72,9 @@ set -uo pipefail
         #   helpers are not available until sgnd-exe-common.sh has been loaded.
         #
         # . Returns
-        #   - 0 when the framework root was resolved and executable common library loaded.
-        #   - 126 when the script path cannot be resolved, no canonical root component can be found, or the executable common library is unreadable.
+        #   0 when the framework root was resolved and executable common library loaded.
+        #   126 when the script path cannot be resolved, no canonical root component can
+        #   be found, or the executable common library is unreadable.
         #
         # . Usage
         #   ```bash

@@ -2,9 +2,9 @@
 # SolidGroundUX - Deployment Boundary
 # ----------------------------------------------------------------------------------
 # Metadata:
-#   Version     : 2.1
-#   Build       : 2627700
-#   Checksum    : 45bd67ba89586ee8bba11155e8f9acf91ff08a7106f2d1ea0c86dc5923188202
+#   Version     : 2.2
+#   Build       : 2630620
+#   Checksum    : b3c5e92a085a70a4d8374a66cb248423662ce15d316ae7a8efa1c0670c246a23
 #   Source      : sux-deployment_preface.sh
 #   Type        : documentation
 #   Group       : Deployment

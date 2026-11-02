@@ -2,9 +2,9 @@
 # SolidGroundUX - Bootstrap Sequence
 # ----------------------------------------------------------------------------------
 # Metadata:
-#   Version     : 2.1
-#   Build       : 2627501
-#   Checksum    : 972145c454a220bae6ca501ee7c88a10a96c24138cad7722502264a0d1332be1
+#   Version     : 2.2
+#   Build       : 2630620
+#   Checksum    : 90efd315e04a6ea37bd45cf53c7c301559019c95ebf72684b9928fd76da84cf1
 #   Source      : sux-bootstrap_preface.sh
 #   Type        : documentation
 #   Group       : Bootstrap

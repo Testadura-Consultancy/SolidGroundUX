@@ -2,9 +2,9 @@
 # SolidGroundUX - How do I?
 # ----------------------------------------------------------------------------------
 # Metadata:
-#   Version     : 2.1
-#   Build       : 2627700
-#   Checksum    : 5636dd85648e7bc27f94bfcc079138f5381ba2662dbf4e7122eb7bf653ab9965
+#   Version     : 2.2
+#   Build       : 2630620
+#   Checksum    : 4277786d80dc86c881d072cde1aa28f2dfab60b5e1bbf3ce2152a4b66f70aac5
 #   Source      : sux_epilogue.sh
 #   Type        : documentation
 #   Group       : SolidGroundUX

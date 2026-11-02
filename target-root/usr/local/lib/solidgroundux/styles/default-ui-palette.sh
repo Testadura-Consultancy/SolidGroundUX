@@ -2,9 +2,9 @@
 # SolidGroundUX - Default UI Palette
 # -------------------------------------------------------------------------------------
 # Metadata:
-#   Version     : 2.1
-#   Build       : 2627501
-#   Checksum    : d97fd529b9b7ed1588810c9347b69286dedf69a9b93a7e9752be3a00bf33191f
+#   Version     : 2.2
+#   Build       : 2630620
+#   Checksum    : 5ddfc550f007f823d6b931df62f9966fa4f733a3bf23e43f93c3808e2245b192
 #   Source      : default-ui-palette.sh
 #   Type        : library
 #   Group       : UI

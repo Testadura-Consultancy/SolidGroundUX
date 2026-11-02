@@ -3,9 +3,9 @@
 # SolidGroundUX - Tar It
 # -------------------------------------------------------------------------------------
 # Metadata:
-#   Version     : 2.1
-#   Build       : 2627501
-#   Checksum    : bb3dc8626060f30c151a2dddaf65efd2b9d9f8ebcbfdfab88ae7afcc5e88c8bb
+#   Version     : 2.2
+#   Build       : 2630620
+#   Checksum    : 1985b18820ff33d4e8723dccebde99f3f810dfa6752049c441d756c19f3e0d25
 #   Source      : tar-it.sh
 #   Type        : script
 #   Group       : Common Core
@@ -65,8 +65,9 @@ set -uo pipefail
         #   helpers are not available until sgnd-exe-common.sh has been loaded.
         #
         # . Returns
-        #   - 0 when the framework root was resolved and executable common library loaded.
-        #   - 126 when the script path cannot be resolved, no canonical root component can be found, or the executable common library is unreadable.
+        #   0 when the framework root was resolved and executable common library loaded.
+        #   126 when the script path cannot be resolved, no canonical root component can
+        #   be found, or the executable common library is unreadable.
         #
         # . Usage
         #   ```bash
