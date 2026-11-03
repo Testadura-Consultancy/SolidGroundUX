@@ -4,7 +4,7 @@
 # Metadata:
 #   Version     : 2.2
 #   Build       : 2630700
-#   Checksum    : 2c79b3ba64d7221234757d2e95635528d37873ec4314d2037c3cc7778482dc1a
+#   Checksum    : 507ac21e226c8a4da18e29a5d24c80cc36d7524ccab32953d56381e3f19ccbc3
 #   Source      : sgnd-definitions.sh
 #   Type        : library
 #   Group       : Globals
