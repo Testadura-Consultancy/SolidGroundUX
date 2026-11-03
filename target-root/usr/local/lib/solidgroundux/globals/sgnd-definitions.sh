@@ -79,7 +79,7 @@ set -uo pipefail
     # def: Framework identity
     SGND_PRODUCT="SolidGroundUX"
     SGND_VERSION="2.2"
-    SGND_BUILD="2630620"
+    SGND_BUILD="2630621"
     SGND_COMPANY="Testadura Consultancy"
     SGND_COPYRIGHT="© 2025 - 2026 Testadura Consultancy"
     SGND_LICENSE="Testadura Non-Commercial License (TD-NC) v1.1."
