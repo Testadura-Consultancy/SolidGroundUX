@@ -4,7 +4,7 @@
 # -------------------------------------------------------------------------------------
 # Metadata:
 #   Version     : 2.2
-#   Build       : 2630620
+#   Build       : 2630700
 #   Checksum    : f133b37cf35719c26f169a685aa8834c1a17771eb3b016dbf176cf86ab641d0a
 #   Source      : sgnd-setup.sh
 #   Wrapper     : sgnd-setup

@@ -3,7 +3,7 @@
 # ----------------------------------------------------------------------------------
 # Metadata:
 #   Version     : 2.2
-#   Build       : 2630620
+#   Build       : 2630700
 #   Checksum    : c83dc7562a391fd6e6b2f54d08798c5aab4ff7452f6a17074282d1419096db5f
 #   Source      : sux-common-core-preface.sh
 #   Type        : documentation

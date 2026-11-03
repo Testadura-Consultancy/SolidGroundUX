@@ -3,7 +3,7 @@
 # -------------------------------------------------------------------------------------
 # Metadata:
 #   Version     : 2.2
-#   Build       : 2630620
+#   Build       : 2630700
 #   Checksum    : 127e10c2b967f407b6093fa20e358fd8404094c5262742065efc94aa47350f22
 #   Source      : 20-style-testadura.sh
 #   Type        : library
