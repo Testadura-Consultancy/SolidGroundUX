@@ -1,10 +1,8 @@
-# Changelog
+# Changelog History
 
-All notable changes to SolidGroundUX are documented in this file.
+This changelog covers Release 1.2.2626021 - Release 2.2.2630700
 
-The format is inspired by *Keep a Changelog* while remaining focused on practical framework development.
-
-## Unreleased
+[Back to  current Changelog](CHANGELOG.md)
 
 ## Release 2.2.2630700
 
