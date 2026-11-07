@@ -3,7 +3,7 @@
 # -------------------------------------------------------------------------------------
 # Metadata:
 #   Version     : 2.2
-#   Build       : 2630700
+#   Build       : 2631102
 #   Checksum    : 4cfcc5e4643cb7d6048eb89b7c90a999f6dc3c5f62edca455a9abdab8a0df516
 #   Source      : 10-style-dark.sh
 #   Type        : library

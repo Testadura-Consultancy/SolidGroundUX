@@ -4,8 +4,8 @@
 # -------------------------------------------------------------------------------------
 # Metadata:
 #   Version     : 2.2
-#   Build       : 2630700
-#   Checksum    : f133b37cf35719c26f169a685aa8834c1a17771eb3b016dbf176cf86ab641d0a
+#   Build       : 2631102
+#   Checksum    : f93da313a47da10fe1c700406621e4db6c49ff32e02c99c69a377c4473a1c945
 #   Source      : sgnd-setup.sh
 #   Wrapper     : sgnd-setup
 #   Type        : script
@@ -25,7 +25,7 @@
 #     - Removes selected products using active release manifests, with ownership-scan recovery
 #     - Provides root-scoped nuclear cleanup yields for state/log cleanup, code removal,
 #       or complete SolidGroundUX eradication without requiring a working framework
-#     - Queries GitHub for the latest published release and downloads it only when needed
+#     - Queries GitHub for the latest published release or lets users select a published build
 #     - Bootstraps a clean machine from sgnd-setup.sh plus adjacent product release ZIPs
 #     - Installs a canonical setup copy under /var/lib/solidgroundux for future recovery
 #     - Uses a small self-contained UI before SolidGroundUX is available
@@ -76,6 +76,7 @@ set -uo pipefail
     VAL_ARCHIVE_ROOT=""
     VAL_GITHUB_REPO=""
     VAL_GITHUB_URL=""
+    CLI_GITHUB_REPO=""
     VAL_PROJECT=""
     VAL_VARIANT=""
     VAL_NUKE_YIELD=""
@@ -748,6 +749,7 @@ set -uo pipefail
                     shift
                     VAL_GITHUB_REPO="${1:-}"
                     [[ -n "$VAL_GITHUB_REPO" ]] || { _release_fail "--repo requires a value"; return 1; }
+                    CLI_GITHUB_REPO="$VAL_GITHUB_REPO"
                     FLAG_REPO_OVERRIDE=1
                     ;;
                 --source)
@@ -1275,6 +1277,19 @@ set -uo pipefail
         RELEASE_STATE_FILE="${VAL_STATE_ROOT%/}/release-manager.state"
     }
 
+    # fn: _release_state_persistence_enabled - Restrict runtime state to an installed or explicitly selected state root
+        # . Purpose
+        #   Keep host-specific setup state out of development target-root workspaces.
+        # . Returns
+        #   0 for the live target or an explicit --state-root; 1 for an implicit staged state root.
+        # . Usage
+        #   ```bash
+        #   _release_state_persistence_enabled || return 0
+        #   ```
+    _release_state_persistence_enabled() {
+        [[ "$VAL_TARGET_ROOT" == "/" ]] || (( FLAG_STATE_ROOT_OVERRIDE ))
+    }
+
     # fn: _release_load_state - Load standalone parameter defaults
         # . Purpose
         #   Load standalone parameter defaults.
@@ -1287,6 +1302,8 @@ set -uo pipefail
         local file="${RELEASE_STATE_FILE:-}"
         local key="" value=""
 
+        # Development target roots must not consume host-specific state from the workspace.
+        _release_state_persistence_enabled || return 0
         [[ -r "$file" ]] || return 0
 
         while IFS='=' read -r key value || [[ -n "$key" ]]; do
@@ -1295,8 +1312,6 @@ set -uo pipefail
                 VAL_PROJECT)      (( FLAG_PROJECT_OVERRIDE )) || VAL_PROJECT="$value" ;;
                 VAL_SOURCE)       : ;; # transient package source; intentionally not restored
                 VAL_RELEASE)      (( FLAG_RELEASE_OVERRIDE )) || VAL_RELEASE="$value" ;;
-                VAL_GITHUB_REPO)  (( FLAG_REPO_OVERRIDE )) || VAL_GITHUB_REPO="$value" ;;
-                VAL_GITHUB_URL)   (( FLAG_REPO_OVERRIDE )) || VAL_GITHUB_URL="$value" ;;
                 VAL_VARIANT)      (( FLAG_VARIANT_OVERRIDE )) || VAL_VARIANT="$value" ;;
                 VAL_STATE_ROOT)   (( FLAG_STATE_ROOT_OVERRIDE )) || VAL_STATE_ROOT="$value" ;;
                 *) ;;
@@ -1315,6 +1330,8 @@ set -uo pipefail
     _release_save_state() {
         local file="${RELEASE_STATE_FILE:-}"
 
+        # The implicit state root of a staged target is source code, not runtime storage.
+        _release_state_persistence_enabled || return 0
         [[ -n "$file" ]] || return 0
         if (( FLAG_DRYRUN )); then
             _release_info "Would save setup state: $file"
@@ -1326,8 +1343,6 @@ set -uo pipefail
             printf 'VAL_TARGET_ROOT=%s\n' "$VAL_TARGET_ROOT"
             printf 'VAL_PROJECT=%s\n' "${VAL_PROJECT:-solidgroundux}"
             printf 'VAL_RELEASE=%s\n' "${VAL_RELEASE:-}"
-            printf 'VAL_GITHUB_REPO=%s\n' "${VAL_GITHUB_REPO:-}"
-            printf 'VAL_GITHUB_URL=%s\n' "${VAL_GITHUB_URL:-}"
             printf 'SGND_RELEASE_BUILD=%s\n' "${SGND_RELEASE_BUILD:-}"
             printf 'VAL_VARIANT=%s\n' "${VAL_VARIANT:-}"
             printf 'VAL_STATE_ROOT=%s\n' "$VAL_STATE_ROOT"
@@ -1381,68 +1396,116 @@ set -uo pipefail
         printf '%s\n' "$url"
     }
 
-    # fn: _release_project_repo_state_file - Resolve per-project repository state file
+    # fn: _release_load_project_repo - Resolve a repository URL from the product catalog
         # . Purpose
-        #   Resolve per-project repository state file.
-        #
-        # Returns:
-        #   0 with the state pathname on stdout.
-        # Usage:
-        #   ```bash
-        #   file="$(_release_project_repo_state_file "$project")"
-        #   ```
-    _release_project_repo_state_file() {
-        local project="${1:-${VAL_PROJECT:-solidgroundux}}"
-        printf '%s/projects/%s/repository.url\n' "${VAL_STATE_ROOT%/}" "$project"
-    }
-
-    # fn: _release_load_project_repo - Load a saved repository URL for one project
-        # . Purpose
-        #   Load a saved repository URL for one project.
-        #
-        # Returns:
-        #   0 when a saved URL was loaded; 1 when none exists.
-        # Usage:
+        #   Use the one editable Setup catalog for every project. Legacy repository.url
+        #   files, saved release state and release-manager.cfg do not override it.
+        #   An explicit --repo option applies only to the current invocation.
+        # . Returns
+        #   0 for a configured repository; 1 if the catalog has no URL.
+        # . Usage
         #   ```bash
         #   _release_load_project_repo "$project"
         #   ```
     _release_load_project_repo() {
-        local project="${1:-${VAL_PROJECT:-solidgroundux}}" file="" url="" repo=""
-        file="$(_release_project_repo_state_file "$project")"
-        [[ -r "$file" ]] || return 1
-        IFS= read -r url < "$file" || true
-        url="$(_release_normalize_github_url "$url" 2>/dev/null || true)"
-        [[ -n "$url" ]] || return 1
-        repo="$(_release_repo_from_url "$url" 2>/dev/null || true)"
-        [[ -n "$repo" ]] || return 1
-        VAL_GITHUB_URL="$url"
-        VAL_GITHUB_REPO="$repo"
-        return 0
+        local selected="${1:-${VAL_PROJECT:-solidgroundux}}"
+        local row="" project="" product="" variant="" url="" version="" build="" repo=""
+
+        if (( FLAG_REPO_OVERRIDE )); then
+            VAL_GITHUB_URL=""
+            VAL_GITHUB_REPO="$CLI_GITHUB_REPO"
+            return 0
+        fi
+        VAL_GITHUB_URL=""
+        VAL_GITHUB_REPO=""
+        while IFS= read -r row; do
+            IFS='|' read -r project product variant url version build <<< "$row"
+            [[ "$project" == "$selected" ]] || continue
+            repo="$(_release_repo_from_url "$url" 2>/dev/null || true)"
+            [[ -n "$repo" ]] || return 1
+            VAL_GITHUB_URL="https://github.com/$repo/releases"
+            VAL_GITHUB_REPO="$repo"
+            return 0
+        done < <(_release_package_catalog)
+        return 1
     }
 
-    # fn: _release_save_project_repo - Persist repository URL for the selected project
+    # fn: _release_save_project_repo - Save the selected repository to the single Setup catalog
         # . Purpose
-        #   Persist repository URL for the selected project.
-        #
-        # Returns:
-        #   0 on success; non-zero on persistence failure.
-        # Usage:
+        #   Preserve compatibility with interactive product selection while persisting
+        #   URLs exclusively in sgnd-setup.cfg, never in per-project state files.
+        # . Usage
         #   ```bash
         #   _release_save_project_repo
         #   ```
     _release_save_project_repo() {
-        local file="" url=""
+        local repo="" url=""
         url="$(_release_normalize_github_url "${VAL_GITHUB_URL:-}" 2>/dev/null || true)"
         [[ -n "$url" ]] || return 0
-        VAL_GITHUB_URL="$url"
-        file="$(_release_project_repo_state_file "${VAL_PROJECT:-solidgroundux}")"
+        repo="$(_release_repo_from_url "$url" 2>/dev/null || true)"
+        [[ -n "$repo" ]] || { _release_fail "Invalid GitHub repository URL: $url"; return 1; }
+        VAL_GITHUB_URL="https://github.com/$repo/releases"
+        VAL_GITHUB_REPO="$repo"
+        _setup_write_catalog_repo_urls "${VAL_PROJECT:-solidgroundux}" "$VAL_GITHUB_URL"
+    }
+
+    # fn: _setup_write_catalog_repo_urls - Atomically update URLs in the editable product catalog
+        # . Purpose
+        #   Change only the URL column, preserving existing product metadata, ordering,
+        #   comments and unrelated catalog rows. On first use, start with packaged defaults.
+        #   The arguments are alternating project slugs and GitHub release URLs.
+        # . Returns
+        #   0 after one atomic save; non-zero without replacing the catalog on failure.
+        # . Usage
+        #   ```bash
+        #   _setup_write_catalog_repo_urls solidgroundux "https://github.com/owner/repo/releases"
+        #   ```
+    _setup_write_catalog_repo_urls() {
+        local cfg="${VAL_STATE_ROOT%/}/sgnd-setup.cfg"
+        local source="" temp="" line="" project="" product="" url="" version="" build="" extra=""
+        local requested_project="" requested_url="" row="" variant=""
+        local -A overrides=() seen=()
+        local -a projects=()
+
+        (( $# > 0 && $# % 2 == 0 )) || return 1
+        while (( $# > 0 )); do
+            requested_project="$1"; requested_url="$2"; shift 2
+            _project_slug_safe "$requested_project" || return 1
+            overrides["$requested_project"]="$requested_url"
+            projects+=("$requested_project")
+        done
+        source="$(_setup_catalog_source 2>/dev/null || true)"
+        [[ -n "$source" ]] || { _release_fail "No Setup product catalog available"; return 1; }
         if (( FLAG_DRYRUN )); then
-            _release_info "Would save project GitHub repository: $file"
+            _release_info "Would update GitHub repository URLs in $cfg"
             return 0
         fi
-        mkdir -p -- "$(dirname -- "$file")" || return 1
-        printf '%s\n' "$url" > "$file" || return 1
-        chmod 0600 "$file" 2>/dev/null || true
+        mkdir -p -- "$(dirname -- "$cfg")" || return 1
+        temp="$(mktemp "${cfg}.tmp.XXXXXX")" || return 1
+
+        while IFS= read -r line || [[ -n "$line" ]]; do
+            IFS='|' read -r project product url version build extra <<< "$line"
+            if [[ -n "$project" && -n "${overrides[$project]+x}" && -z "$extra" && -n "$product" ]]; then
+                printf '%s|%s|%s|%s|%s\n' "$project" "$product" "${overrides[$project]}" "$version" "$build" >> "$temp" || { rm -f -- "$temp"; return 1; }
+                seen["$project"]=1
+            else
+                printf '%s\n' "$line" >> "$temp" || { rm -f -- "$temp"; return 1; }
+            fi
+        done < "$source"
+
+        # Installed products not yet present in the catalog become ordinary catalog rows.
+        for requested_project in "${projects[@]}"; do
+            [[ -n "${seen[$requested_project]+x}" ]] && continue
+            while IFS= read -r row; do
+                IFS='|' read -r project product variant url version build <<< "$row"
+                [[ "$project" == "$requested_project" ]] || continue
+                printf '%s|%s|%s|%s|%s\n' "$project" "$product" "${overrides[$project]}" "$version" "$build" >> "$temp" || { rm -f -- "$temp"; return 1; }
+                seen["$project"]=1
+                break
+            done < <(_release_package_catalog)
+            [[ -n "${seen[$requested_project]+x}" ]] || { rm -f -- "$temp"; _release_fail "Unknown product project: $requested_project"; return 1; }
+        done
+        chmod 0644 -- "$temp" && mv -f -- "$temp" "$cfg" || { rm -f -- "$temp"; return 1; }
     }
 
     # fn: _release_repo_from_url - Convert a GitHub release URL to OWNER/REPO
@@ -1459,10 +1522,14 @@ set -uo pipefail
         local url="${1:-}"
         url="$(_release_normalize_github_url "$url" 2>/dev/null || true)"
         [[ -n "$url" ]] || return 1
-        url="${url#https://github.com/}"
-        url="${url#http://github.com/}"
-        url="${url%/releases}"; url="${url%/}"
-        [[ "$url" == */* && "$url" != http* ]] || return 1
+        case "$url" in
+            https://github.com/*) url="${url#https://github.com/}" ;;
+            http://github.com/*)  url="${url#http://github.com/}" ;;
+            *://*|/*) return 1 ;;
+        esac
+        url="${url%/releases/latest}"; url="${url%/releases}"; url="${url%/}"
+        url="${url%.git}"
+        [[ "$url" =~ ^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$ ]] || return 1
         printf '%s\n' "$url"
     }
 
@@ -1478,8 +1545,9 @@ set -uo pipefail
         #   ```
     _setup_catalog_source() {
         local path=""
+        # One persisted override and one packaged default: never read an adjacent
+        # sgnd-setup.cfg as an independent, hidden third source.
         local -a candidates=(
-            "$SCRIPT_DIR/sgnd-setup.cfg"
             "${VAL_STATE_ROOT%/}/sgnd-setup.cfg"
             "${VAL_TARGET_ROOT%/}/usr/local/share/solidgroundux/sgnd-setup.cfg.default"
             "$SCRIPT_DIR/sgnd-setup.cfg.default"
@@ -1492,30 +1560,17 @@ set -uo pipefail
         return 1
     }
 
-    # fn: _ensure_setup_catalog - Persist packaged catalog defaults for local customization
+    # fn: _ensure_setup_catalog - Keep the packaged catalog as the source until explicitly overridden
         # . Purpose
-        #   Seed the editable sgnd-setup.cfg once; never overwrite user changes.
-        #   The packaged .default file is distributable despite the release policy
-        #   excluding runtime *.cfg files.
-        # . Returns
-        #   0 when present/created/no defaults exist; non-zero on copying failure.
+        #   Do not materialize the packaged defaults as local configuration just by
+        #   running Setup. The only local override is sgnd-setup.cfg, created or
+        #   changed explicitly using Configure GitHub repositories (menu option 3).
         # . Usage
         #   ```bash
         #   _ensure_setup_catalog
         #   ```
     _ensure_setup_catalog() {
-        local target="${VAL_STATE_ROOT%/}/sgnd-setup.cfg"
-        local source=""
-        [[ -f "$target" ]] && return 0
-        source="$(_setup_catalog_source 2>/dev/null || true)"
-        [[ -n "$source" && "$source" != "$target" ]] || return 0
-        if (( FLAG_DRYRUN )); then
-            _release_info "Would create product catalog: $target"
-            return 0
-        fi
-        mkdir -p -- "$(dirname -- "$target")" || return 1
-        cp -- "$source" "$target" || return 1
-        chmod 0644 -- "$target" || return 1
+        return 0
     }
 
     # fn: _release_package_catalog - List setup products from the external catalog
@@ -1534,7 +1589,7 @@ set -uo pipefail
         local globals="${VAL_TARGET_ROOT%/}/usr/local/lib/solidgroundux/globals"
         local cfg="" line="" project="" product="" url="" version="" build="" extra=""
         local file="" product_var="" version_var="" build_var="" installed_project=""
-        local -A installed_version=() installed_build=() installed_url=() installed_project_by_product=() seen=()
+        local -A installed_version=() installed_build=() installed_project_by_product=() seen=()
 
         if [[ -d "$globals" ]]; then
             while IFS= read -r -d '' file; do
@@ -1553,8 +1608,6 @@ set -uo pipefail
                 [[ -n "$product" ]] || continue
                 installed_version["$product"]="$(_release_definition_value "$file" "$version_var" 2>/dev/null || true)"
                 installed_build["$product"]="$(_release_definition_value "$file" "$build_var" 2>/dev/null || true)"
-                installed_url["$product"]="$(_release_definition_value "$file" "${product_var%_PRODUCT}_RELEASE_URL" 2>/dev/null || true)"
-                [[ "$product_var" == "SGND_PRODUCT" ]] && installed_url["$product"]="$(_release_definition_value "$file" SGND_RELEASE_URL 2>/dev/null || true)"
                 installed_project_by_product["$product"]="$installed_project"
             done < <(find "$globals" -maxdepth 1 -type f -name '*-definitions.sh' -print0 2>/dev/null | sort -z)
         fi
@@ -1571,7 +1624,6 @@ set -uo pipefail
                 seen["$project"]=1
                 [[ -n "${installed_version[$product]-}" ]] && version="${installed_version[$product]}"
                 [[ -n "${installed_build[$product]-}" ]] && build="${installed_build[$product]}"
-                [[ -z "$url" && -n "${installed_url[$product]-}" ]] && url="${installed_url[$product]}"
                 printf '%s|%s|individual|%s|%s|%s\n' "$project" "$product" "$url" "$version" "$build"
             done < "$cfg"
         fi
@@ -1580,7 +1632,7 @@ set -uo pipefail
         for product in "${!installed_project_by_product[@]}"; do
             project="${installed_project_by_product[$product]}"
             [[ -n "${seen[$project]+x}" ]] && continue
-            printf '%s|%s|individual|%s|%s|%s\n' "$project" "$product" "${installed_url[$product]-}" "${installed_version[$product]-}" "${installed_build[$product]-}"
+            printf '%s|%s|individual|%s|%s|%s\n' "$project" "$product" "" "${installed_version[$product]-}" "${installed_build[$product]-}"
         done
     }
 
@@ -1649,9 +1701,8 @@ set -uo pipefail
         SGND_RELEASE_PRODUCT="$product"
 
         # Version and build are product metadata, not Setup input. Keep the
-        # values discovered from the selected product definitions/catalog until GitHub
-        # discovery supplies the identity of a newer published artifact. Repository
-        # overrides are persisted per project and take precedence over definitions.
+        # values discovered from selected definitions/catalog until GitHub discovery
+        # supplies the newer release identity. Repository URLs live in one catalog.
         VAL_GITHUB_URL=""
         VAL_GITHUB_REPO=""
         _release_load_project_repo "$project" || true
@@ -1908,41 +1959,35 @@ set -uo pipefail
     }
 
 # --- Standalone configuration --------------------------------------------------------
-    # fn: _load_release_manager_config - Load persistent standalone setup settings
+    # fn: _load_release_manager_config - Load legacy non-repository setup settings
         # . Purpose
-        #   Load release-source settings from the compatibility config file without
-        #   depending on SolidGroundUX framework configuration libraries.
-        # . Returns
-        #   0 always; missing config is not an error.
+        #   Restore the old release line/variant when present. Any GitHub repository
+        #   values in this compatibility file are intentionally ignored; only the
+        #   product catalog controls repository resolution.
         # . Usage
         #   ```bash
         #   _load_release_manager_config
         #   ```
     _load_release_manager_config() {
         local cfg="${SGND_RELEASE_CONFIG_FILE:-}"
-        if [[ -z "$cfg" || ! -r "$cfg" ]]; then
-            VAL_GITHUB_REPO="${VAL_GITHUB_REPO:-$SGND_RELEASE_GITHUB_REPO}"
-            VAL_VARIANT="${VAL_VARIANT:-$SGND_RELEASE_VARIANT}"
-            return 0
+        local key="" value=""
+        if [[ -n "$cfg" && -r "$cfg" ]]; then
+            while IFS='=' read -r key value || [[ -n "$key" ]]; do
+                case "$key" in
+                    SGND_RELEASE_LINE) [[ -n "$value" ]] && SGND_RELEASE_LINE="$value" ;;
+                    SGND_RELEASE_VARIANT) [[ -n "$value" ]] && SGND_RELEASE_VARIANT="$value" ;;
+                    *) ;;
+                esac
+            done < "$cfg"
         fi
-
-        # shellcheck disable=SC1090
-        source "$cfg"
-        # The product catalog supplies the fallback repository, not hardcoded defaults.
-        : "${SGND_RELEASE_GITHUB_REPO:=${VAL_GITHUB_REPO:-}}"
-        : "${SGND_RELEASE_LINE:=2.1}"
-        : "${SGND_RELEASE_API_URL:=https://api.github.com/repos/${SGND_RELEASE_GITHUB_REPO}/releases/latest}"
-        VAL_GITHUB_REPO="${VAL_GITHUB_REPO:-$SGND_RELEASE_GITHUB_REPO}"
         VAL_VARIANT="${VAL_VARIANT:-$SGND_RELEASE_VARIANT}"
         SGND_RELEASE_VARIANT="$VAL_VARIANT"
-        return 0
     }
 
-    # fn: _ensure_release_manager_config - Create the persistent standalone config when absent
+    # fn: _ensure_release_manager_config - Seed compatibility settings without GitHub URLs
         # . Purpose
-        #   Seed release-manager.cfg with the current release source and release line.
-        # . Returns
-        #   0 on success; non-zero on write failure.
+        #   Retain legacy release line/variant state; GitHub repositories live only in
+        #   the product catalog and are never written to this compatibility file.
         # . Usage
         #   ```bash
         #   _ensure_release_manager_config
@@ -1950,20 +1995,15 @@ set -uo pipefail
     _ensure_release_manager_config() {
         local cfg="${SGND_RELEASE_CONFIG_FILE:?setup config path not initialized}"
         [[ -e "$cfg" ]] && return 0
-
         if (( FLAG_DRYRUN )); then
             printf '[DRYRUN] create %q\n' "$cfg"
             return 0
         fi
-
         {
-            printf '%s\n' '# SolidGroundUX Setup configuration'
+            printf '%s\n' '# SolidGroundUX Setup compatibility configuration (no repository URLs)'
             printf 'SGND_RELEASE_LINE=%q\n' "$SGND_RELEASE_LINE"
-            printf 'SGND_RELEASE_GITHUB_REPO=%q\n' "${VAL_GITHUB_REPO:-$SGND_RELEASE_GITHUB_REPO}"
             printf 'SGND_RELEASE_VARIANT=%q\n' "${VAL_VARIANT:-$SGND_RELEASE_VARIANT}"
-            printf 'SGND_RELEASE_API_URL=%q\n' "https://api.github.com/repos/${VAL_GITHUB_REPO:-$SGND_RELEASE_GITHUB_REPO}/releases/latest"
         } > "$cfg" || return 1
-
         chmod 0644 "$cfg"
     }
 
@@ -2021,16 +2061,39 @@ EOF
 
     # fn: _install_setup_self - Install the standalone setup script at its canonical path
         # . Purpose
-        #   Copy a bootstrap/setup copy to the canonical recovery path and install wrappers.
+        #   Copy Setup to its canonical location, creating the directory when needed.
+        # . Behavior
+        #   - First install copies automatically (the default mode).
+        #   - A standalone interactive launch may request confirmation (prompt mode).
+        #   - Declining the prompt leaves the current script running where it is.
+        # . Arguments
+        #   $1 - Optional mode: automatic (default) or prompt.
         # . Returns
-        #   0 on success; non-zero on filesystem failure.
+        #   0 on success or when declined; non-zero on filesystem failure.
         # . Usage
         #   ```bash
         #   _install_setup_self
+        #   _install_setup_self prompt
         #   ```
     _install_setup_self() {
         local source="$SCRIPT_FILE"
+        local mode="${1:-automatic}"
+
         [[ -n "$CANONICAL_MANAGER_PATH" ]] || return 1
+        case "$mode" in
+            automatic|prompt) ;;
+            *) _release_fail "Unknown Setup copy mode: $mode"; return 1 ;;
+        esac
+
+        if [[ "$source" != "$CANONICAL_MANAGER_PATH" && "$mode" == "prompt" ]]; then
+            # Command-line automation must not prompt or change the installed copy.
+            (( ! FLAG_AUTO )) && [[ -t 0 && -t 1 ]] || return 0
+            if ! _release_ask_yesno "Copy Setup to $CANONICAL_MANAGER_PATH?" "Y"; then
+                _release_info "Continuing Setup from $source"
+                return 0
+            fi
+        fi
+
         _release_run mkdir -p -- "$(dirname -- "$CANONICAL_MANAGER_PATH")" || return 1
         if [[ "$source" != "$CANONICAL_MANAGER_PATH" ]]; then
             _release_run cp -f -- "$source" "$CANONICAL_MANAGER_PATH" || return 1
@@ -3145,47 +3208,59 @@ EOF
         cp -f -- "$source" "$dest"
     }
 
-    # fn: _github_release_json - Fetch metadata from the configured GitHub Release endpoint
+    # fn: _github_release_json - Fetch metadata from a configured GitHub Release endpoint
         # . Purpose
-        #   Read the configured GitHub Release metadata. The endpoint is persistent while
-        #   individual build ZIP assets can be replaced or added underneath it.
+        #   Read latest-release metadata by default, or the 100 most recent published
+        #   GitHub releases when called with "list". Both use the single Setup catalog.
         # . Returns
         #   0 and the release JSON on stdout; non-zero when lookup fails.
         # . Usage
         #   ```bash
         #   json="$(_github_release_json)"
+        #   published="$(_github_release_json list)"
         #   ```
     _github_release_json() {
-        local url="${SGND_RELEASE_API_URL:?missing release API URL}"
+        local mode="${1:-latest}"
+        local url="" repo=""
         local temp_file=""
         local http_code=""
         local curl_rc=0
 
-        # Repository selection is project-aware. An explicit/stateful repository wins;
-        # otherwise retain the configured default.
+        # Repositories come only from the catalog (or the current --repo option).
+        # Do not fall back to stale release-manager.cfg or saved setup state.
         if [[ -n "${VAL_GITHUB_URL:-}" ]]; then
-            local repo=""
             repo="$(_release_repo_from_url "$VAL_GITHUB_URL" 2>/dev/null || true)"
-            [[ -n "$repo" ]] || { _release_fail "Invalid GitHub repository URL: $VAL_GITHUB_URL"; return 1; }
-            url="https://api.github.com/repos/${repo}/releases/latest"
-        elif [[ -n "${VAL_GITHUB_REPO:-}" ]]; then
-            url="https://api.github.com/repos/${VAL_GITHUB_REPO}/releases/latest"
+        else
+            repo="${VAL_GITHUB_REPO:-}"
         fi
+        [[ "$repo" =~ ^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$ ]] || {
+            _release_fail "GitHub repository is not configured for $SGND_RELEASE_PRODUCT"
+            return 1
+        }
+        case "$mode" in
+            latest) url="https://api.github.com/repos/${repo}/releases/latest" ;;
+            list)   url="https://api.github.com/repos/${repo}/releases?per_page=100" ;;
+            *) _release_fail "Unsupported GitHub release query: $mode"; return 1 ;;
+        esac
 
         if command -v curl >/dev/null 2>&1; then
             temp_file="$(mktemp)" || return 1
             http_code="$(curl -sS -L -o "$temp_file" -w '%{http_code}' "$url")" || curl_rc=$?
             if (( curl_rc != 0 )); then
                 rm -f -- "$temp_file"
-                _release_fail "Could not contact GitHub Release API"
+                _release_fail "Cannot contact GitHub for $repo ($url; curl error $curl_rc)"
                 return 1
             fi
             case "$http_code" in
                 200) cat -- "$temp_file"; rm -f -- "$temp_file"; return 0 ;;
-                404) rm -f -- "$temp_file"; return 4 ;;
+                404)
+                    rm -f -- "$temp_file"
+                    _release_fail "GitHub repository or release not found (HTTP 404): $repo"
+                    return 4
+                    ;;
                 *)
                     rm -f -- "$temp_file"
-                    _release_fail "GitHub Release API returned HTTP $http_code"
+                    _release_fail "GitHub API returned HTTP $http_code for $repo"
                     return 1
                     ;;
             esac
@@ -3202,10 +3277,50 @@ EOF
         return 1
     }
 
-    # fn: _github_latest_asset - Resolve the newest build ZIP attached to the configured GitHub Release
+    # fn: _github_release_asset_rows - Extract matching product ZIP assets from GitHub JSON
         # . Purpose
-        #   Inspect Release assets and select the highest
-        #   SolidGroundUX-<release-line>.<build>-release.zip by version sorting.
+        #   Extract downloadable individual product ZIPs from one release or a list
+        #   of releases. Exclude bundled ZIPs and mismatched products. The actual
+        #   asset name, not the GitHub tag, identifies the installable build.
+        # . Arguments
+        #   $1  GitHub Releases API JSON.
+        # . Returns
+        #   One "<release-base>|<download-url>" row per matching asset.
+        # . Usage
+        #   ```bash
+        #   _github_release_asset_rows "$json"
+        #   ```
+    _github_release_asset_rows() {
+        local json="${1:-}"
+        local url="" name="" base="" identity=""
+        local artifact_product="$(_release_product_artifact_name "$SGND_RELEASE_PRODUCT")"
+        local prefix="${artifact_product}-"
+        local suffix="-release.zip"
+
+        # Extract each browser_download_url independently, even if the GitHub JSON
+        # is minified onto one line. This keeps asset names paired with their URLs.
+        while IFS= read -r url; do
+            [[ -n "$url" ]] || continue
+            name="${url##*/}"
+            [[ "${name,,}" == "${prefix,,}"*"${suffix,,}" ]] || continue
+            [[ "${name,,}" == "${artifact_product,,}-bundled-"* ]] && continue
+            base="${name%$suffix}"
+            identity="${base#${prefix}}"
+            # An exact numeric release identity prevents Framework from treating
+            # SDK/MCM packages as its own (their names share the same prefix).
+            [[ "$identity" =~ ^[0-9]+([.][0-9]+)+$ ]] || continue
+            printf '%s|%s\n' "$base" "$url"
+        done < <(
+            printf '%s\n' "$json" | \
+                grep -oE '"browser_download_url"[[:space:]]*:[[:space:]]*"[^"]+"' | \
+                sed -E 's/^"browser_download_url"[[:space:]]*:[[:space:]]*"([^"]+)"$/\1/'
+        )
+    }
+
+    # fn: _github_latest_asset - Resolve the newest build ZIP attached to the latest GitHub release
+        # . Purpose
+        #   Inspect the latest GitHub Release's assets, selecting the highest
+        #   matching product build. The existing latest-install path is unchanged.
         # . Returns
         #   Prints "<release-base>|<download-url>" and returns 0 when found.
         # . Usage
@@ -3213,17 +3328,8 @@ EOF
         #   row="$(_github_latest_asset)"
         #   ```
     _github_latest_asset() {
-        local json=""
-        local url=""
-        local name=""
-        local base=""
-        local variant="${VAL_VARIANT:-${SGND_RELEASE_VARIANT:-individual}}"
-        local artifact_product="$(_release_product_artifact_name "$SGND_RELEASE_PRODUCT")"
-        local prefix="${artifact_product}-"
-        local suffix="-release.zip"
-        local github_rc=0
+        local json="" github_rc=0
         local -a rows=()
-
 
         json="$(_github_release_json)" || github_rc=$?
         if (( github_rc != 0 )); then
@@ -3231,23 +3337,33 @@ EOF
             _release_fail "Could not read configured GitHub Release metadata"
             return 1
         fi
-
-        # browser_download_url is the authoritative artifact identity. Parsing the URL
-        # directly avoids depending on GitHub JSON field ordering or pairing an asset's
-        # name field with a later URL field.
-        while IFS= read -r url; do
-            [[ -n "$url" ]] || continue
-            name="${url##*/}"
-            [[ "${name,,}" == "${prefix,,}"*"${suffix,,}" ]] || continue
-            [[ "${name,,}" == "${artifact_product,,}-bundled-"* ]] && continue
-            base="${name%$suffix}"
-            rows+=("${base}|${url}")
-        done < <(
-            printf '%s\n' "$json" | sed -n -E                 's/.*"browser_download_url"[[:space:]]*:[[:space:]]*"([^"]+)".*/\1/p'
-        )
-
+        mapfile -t rows < <(_github_release_asset_rows "$json")
         (( ${#rows[@]} > 0 )) || return 4
         printf '%s\n' "${rows[@]}" | LC_ALL=C sort -t '|' -k1,1V | tail -n 1
+    }
+
+    # fn: _github_published_assets - List available GitHub product builds, newest first
+        # . Purpose
+        #   Inspect up to 100 most recent published GitHub releases, collect matching
+        #   product ZIPs, and deduplicate identical build identities. A repository
+        #   may publish multiple build assets under one GitHub release/tag.
+        # . Returns
+        #   Sorted "<release-base>|<download-url>" rows; nonzero if unavailable.
+        # . Usage
+        #   ```bash
+        #   rows="$(_github_published_assets)"
+        #   ```
+    _github_published_assets() {
+        local json="" row="" base="" github_rc=0
+        local -A seen=()
+        json="$(_github_release_json list)" || github_rc=$?
+        (( github_rc == 0 )) || return "$github_rc"
+        while IFS= read -r row; do
+            base="${row%%|*}"
+            [[ -n "$base" && -z "${seen[$base]+x}" ]] || continue
+            seen["$base"]=1
+            printf '%s\n' "$row"
+        done < <(_github_release_asset_rows "$json") | LC_ALL=C sort -t '|' -k1,1Vr
     }
 
     # fn: _latest_online_release - Resolve the canonical base name of the newest published build
@@ -3561,39 +3677,47 @@ EOF
         done < <(find "$directory" -maxdepth 1 -type f -name '*-release.zip' -print0 2>/dev/null | sort -z)
     }
 
-    # fn: _local_package_catalog - List locally discoverable product packages
+    # fn: _local_package_catalog - List canonical pending and archived product ZIPs
         # Purpose:
-        #   Always scan beside the running setup script and the canonical system releases
-        #   directory; optionally scan one additional directory for Install other.
+        #   Discover product ZIPs in canonical releases/ and releases/archive/<project>/.
+        #   Do not mix in the first-install extraction directory during normal updates.
         # Output:
-        #   Unique package records, preferring canonical/system copies over duplicates.
+        #   Unique package records, preferring pending copies over archived duplicates.
         # Usage:
         #   ```bash
         #   mapfile -t rows < <(_local_package_catalog "$extra_dir")
         #   ```
     _local_package_catalog() {
-        local extra_dir="${1:-}" line="" key="" rest="" project="" release=""
+        local extra_dir="${1:-}" line="" project="" release="" key="" directory=""
+        local archive_root="" archived_dir=""
         local -A seen=()
-        local directory=""
-        local -a dirs=("$SCRIPT_DIR" "$(_package_store_dir)")
+        local -a dirs=()
+
+        # The canonical pending and archived ZIP stores are the Local source.
+        # Adjacent first-install ZIPs are handled separately by bootstrap.
+        dirs+=("$(_package_store_dir)")
+        archive_root="$(_package_archive_dir)"
+        if [[ -d "$archive_root" ]]; then
+            while IFS= read -r -d '' archived_dir; do
+                dirs+=("$archived_dir")
+            done < <(find "$archive_root" -mindepth 1 -maxdepth 1 -type d -print0 2>/dev/null | sort -z)
+        fi
         [[ -n "$extra_dir" ]] && dirs+=("$extra_dir")
+
         for directory in "${dirs[@]}"; do
             [[ -d "$directory" ]] || continue
             while IFS= read -r line; do
                 [[ -n "$line" ]] || continue
-                key="${line#*|}"; key="${key%|*}" # enough to dedupe identical metadata/path-independent rows
-                # Exact release identity is the final field; project + release is authoritative.
-                rest="${line#*|}"
-                project="${rest%%|*}"
+                project="${line#*|}"
+                project="${project%%|*}"
                 release="${line##*|}"
                 key="${project}|${release}"
-                [[ -n "${seen[$key]+x}" ]] && continue
-                seen[$key]=1
+                [[ -z "${seen[$key]+x}" ]] || continue
+                seen["$key"]=1
                 printf '%s\n' "$line"
             done < <(_scan_product_packages "$directory")
         done
     }
-
     # fn: _newest_local_package_for_project - Resolve newest local product ZIP for one project
         # . Purpose
         #   Resolve newest local product ZIP for one project.
@@ -3790,8 +3914,9 @@ EOF
         #   ```
     _select_product_records() {
         local title="${1:?missing title}"; shift
-        local choice="" i=0 row="" project="" product="" url="" version="" build=""
+        local choice="" i=0 project="" product="" url="" version="" build=""
         local -a rows=("$@") indexes=()
+        local -A seen=()
         (( ${#rows[@]} > 0 )) || return 1
         printf '\n%s%s%s\n' "$_RL_BRIGHT_WHITE" "$title" "$_RL_RESET" > /dev/tty
         _release_line "─" > /dev/tty
@@ -3801,19 +3926,21 @@ EOF
         done
         printf '  %sA)%s %sAll products%s\n' "$_RL_UI_PROMPT" "$_RL_RESET" "$_RL_UI_TEXT" "$_RL_RESET" > /dev/tty
         printf '  %sQ)%s %sCancel%s\n' "$_RL_UI_PROMPT" "$_RL_RESET" "$_RL_UI_TEXT" "$_RL_RESET" > /dev/tty
-        printf '%sSelect product(s): %s' "$_RL_UI_PROMPT" "$_RL_UI_INPUT" > /dev/tty
-        read -r choice < /dev/tty
+        printf '%sSelect product(s) (e.g. 1,3): %s' "$_RL_UI_PROMPT" "$_RL_UI_INPUT" > /dev/tty
+        IFS= read -r choice < /dev/tty || return 1
         printf '%s' "$_RL_RESET" > /dev/tty
         case "${choice^^}" in Q|"") return 1 ;; A) printf '%s\n' "${rows[@]}"; return 0 ;; esac
         choice="${choice// /}"
         IFS=',' read -r -a indexes <<< "$choice"
+        (( ${#indexes[@]} > 0 )) || return 1
         for choice in "${indexes[@]}"; do
             [[ "$choice" =~ ^[0-9]+$ ]] || return 1
             (( choice >= 1 && choice <= ${#rows[@]} )) || return 1
+            [[ -n "${seen[$choice]+x}" ]] && continue
+            seen[$choice]=1
             printf '%s\n' "${rows[$((choice-1))]}"
         done
     }
-
     # fn: _install_explicit_package_source - Install a directly supplied product ZIP source
         # . Purpose
         #   Install a directly supplied product ZIP source.
@@ -3916,22 +4043,14 @@ EOF
             _set_project_context "$project" || return 1
             SGND_RELEASE_PRODUCT="$product"
             VAL_VARIANT="individual"; SGND_RELEASE_VARIANT="individual"
-            VAL_GITHUB_URL=""; VAL_GITHUB_REPO=""
-            _release_load_project_repo "$project" || true
-            if [[ -z "$VAL_GITHUB_URL" && -n "$url" ]]; then
-                VAL_GITHUB_URL="$(_release_normalize_github_url "$url" 2>/dev/null || true)"
-                repo="$(_release_repo_from_url "$VAL_GITHUB_URL" 2>/dev/null || true)"
-                [[ -n "$repo" ]] && VAL_GITHUB_REPO="$repo"
-            fi
-            if [[ -z "$VAL_GITHUB_REPO" ]]; then
-                _release_ask "GitHub repository URL for $product" VAL_GITHUB_URL "${VAL_GITHUB_URL:-}" || return 1
-                VAL_GITHUB_URL="$(_release_normalize_github_url "$VAL_GITHUB_URL" 2>/dev/null || true)"
-                repo="$(_release_repo_from_url "$VAL_GITHUB_URL" 2>/dev/null || true)"
-                [[ -n "$repo" ]] || { _release_fail "Invalid GitHub repository URL: $VAL_GITHUB_URL"; return 1; }
-                VAL_GITHUB_REPO="$repo"
-                _release_save_project_repo || return 1
-            fi
-            asset="$(_github_latest_asset)" || { _release_fail "No GitHub release found for $product"; return 1; }
+            _release_load_project_repo "$project" || {
+                _release_fail "GitHub repository for $product is not configured. Use Configure GitHub repositories (menu option 3)."
+                return 1
+            }
+            asset="$(_github_latest_asset)" || {
+                _release_fail "Could not find a matching latest GitHub release for $product ($VAL_GITHUB_REPO)"
+                return 1
+            }
             source="${asset#*|}"
             zip_path="$(_package_store_dir)/${source##*/}"
             _release_run mkdir -p -- "$(_package_store_dir)" || return 1
@@ -3941,6 +4060,122 @@ EOF
             fi
             _install_product_package_zip "$zip_path" || return 1
         done
+    }
+
+    # fn: _select_github_release_asset - Choose one published GitHub build interactively
+        # . Purpose
+        #   Show up to 12 builds per page, newest first, with installed/downloaded
+        #   indicators. N/P navigate pages; Q cancels; no release is preselected.
+        # . Arguments
+        #   $1  Product display name.
+        #   Remaining arguments: "<release-base>|<download-url>" rows.
+        # . Returns
+        #   The selected asset row on stdout; 1 if cancelled.
+        # . Usage
+        #   ```bash
+        #   asset="$(_select_github_release_asset "$product" "${assets[@]}")"
+        #   ```
+    _select_github_release_asset() {
+        local product="${1:?missing product}"; shift
+        local -a assets=("$@")
+        local page=0 page_size=12 total=0 pages=0 start=0 end=0 i=0 number=0
+        local choice="" row="" base="" label="" marker="" installed=""
+        (( ${#assets[@]} > 0 )) || return 1
+        total=${#assets[@]}
+        pages=$(( (total + page_size - 1) / page_size ))
+        installed="$(_installed_product_release "$VAL_PROJECT" "$product" 2>/dev/null || true)"
+
+        while true; do
+            start=$(( page * page_size ))
+            end=$(( start + page_size ))
+            (( end <= total )) || end=$total
+            printf '\n%sGitHub releases for %s%s - newest first (page %d/%d)\n' \
+                "$_RL_BRIGHT_WHITE" "$product" "$_RL_RESET" "$((page+1))" "$pages" > /dev/tty
+            _release_line "─" > /dev/tty
+            for (( i=start; i<end; i++ )); do
+                row="${assets[$i]}"
+                base="${row%%|*}"
+                label="$(_release_display_identity "$product" "$base")"
+                marker=""
+                if [[ "$base" == "$installed" ]]; then
+                    marker=" (Installed)"
+                elif [[ -f "$(_package_store_dir)/${row##*/}" ]]; then
+                    marker=" (Downloaded)"
+                fi
+                number=$(( i - start + 1 ))
+                printf '  %s%2d)%s %s%-27s%s %s%s%s\n' \
+                    "$_RL_UI_PROMPT" "$number" "$_RL_RESET" \
+                    "$_RL_UI_TEXT" "$label" "$_RL_RESET" "$_RL_DARK_WHITE" "$marker" "$_RL_RESET" > /dev/tty
+            done
+            printf '  %sN)%s Next page    %sP)%s Previous page    %sQ)%s Cancel\n' \
+                "$_RL_UI_PROMPT" "$_RL_RESET" "$_RL_UI_PROMPT" "$_RL_RESET" "$_RL_UI_PROMPT" "$_RL_RESET" > /dev/tty
+            printf '%sSelect release: %s' "$_RL_UI_PROMPT" "$_RL_UI_INPUT" > /dev/tty
+            IFS= read -r choice < /dev/tty || return 1
+            printf '%s' "$_RL_RESET" > /dev/tty
+            case "${choice^^}" in
+                Q) return 1 ;;
+                N) (( page + 1 < pages )) && page=$((page+1)); continue ;;
+                P) (( page > 0 )) && page=$((page-1)); continue ;;
+            esac
+            [[ "$choice" =~ ^[0-9]+$ ]] || continue
+            (( choice >= 1 && choice <= end - start )) || continue
+            printf '%s\n' "${assets[$(( start + choice - 1 ))]}"
+            return 0
+        done
+    }
+
+    # fn: _action_install_selected_github_release - Select and install one published GitHub build
+        # . Purpose
+        #   Select a product, list its published GitHub release ZIPs across GitHub
+        #   releases, select one version without a default, confirm, and install via
+        #   the same product-package ZIP pipeline as the latest-release action.
+        # . Returns
+        #   0 if installed; nonzero when cancelled or installation fails.
+        # . Usage
+        #   ```bash
+        #   _action_install_selected_github_release
+        #   ```
+    _action_install_selected_github_release() {
+        local row="" project="" product="" url="" version="" build=""
+        local asset="" source="" zip_path="" release="" github_rc=0 assets_text=""
+        local -a products=() selected=() assets=()
+        (( FLAG_AUTO == 0 )) || { _release_fail "Interactive GitHub release selection requires a terminal"; return 1; }
+        mapfile -t products < <(_product_catalog)
+        mapfile -t selected < <(_select_product_records "Select product for GitHub release" "${products[@]}")
+        (( ${#selected[@]} == 1 )) || {
+            (( ${#selected[@]} > 1 )) && _release_warn "Select one product at a time when choosing a GitHub release"
+            return 1
+        }
+        IFS='|' read -r project product url version build <<< "${selected[0]}"
+        _set_project_context "$project" || return 1
+        SGND_RELEASE_PRODUCT="$product"
+        VAL_VARIANT="individual"; SGND_RELEASE_VARIANT="individual"
+        _release_load_project_repo "$project" || {
+            _release_fail "Configure the GitHub repository for $product with Setup menu option 3"
+            return 1
+        }
+        _release_print "Retrieving published GitHub builds for $product..."
+        assets_text="$(_github_published_assets)" || github_rc=$?
+        if (( github_rc != 0 )); then
+            _release_fail "Could not list GitHub releases for $product (${VAL_GITHUB_REPO:-not configured})"
+            return 1
+        fi
+        [[ -n "$assets_text" ]] && mapfile -t assets <<< "$assets_text"
+        (( ${#assets[@]} > 0 )) || {
+            _release_fail "GitHub returned releases, but none contain a matching product ZIP for $product"
+            return 1
+        }
+        asset="$(_select_github_release_asset "$product" "${assets[@]}")" || return 1
+        release="${asset%%|*}"
+        source="${asset#*|}"
+        _release_ask_yesno "Install $product ($(_release_display_identity "$product" "$release"))?" "N" || return 1
+        zip_path="$(_package_store_dir)/${source##*/}"
+        _release_run mkdir -p -- "$(_package_store_dir)" || return 1
+        if [[ ! -f "$zip_path" ]]; then
+            _release_info "Downloading $product: ${source##*/}"
+            _download_to "$source" "$zip_path" || return 1
+        fi
+        _install_product_package_zip "$zip_path"
     }
 
     # fn: _release_display_identity - Reduce a release basename to Version.Build for display
@@ -3968,9 +4203,45 @@ EOF
         printf '%s\n' "$release"
     }
 
+    # fn: _installed_product_release - Read the installed product version from its definitions file
+        # . Purpose
+        #   Report the actually installed version/build; archived releases and defaults
+        #   are never evidence that a product is currently installed.
+        # . Arguments
+        #   $1 Product project slug; $2 product display name.
+        # . Returns
+        #   Release basename on stdout; 1 if no valid installed definitions exist.
+        # . Usage
+        #   ```bash
+        #   _installed_product_release solidgroundux SolidGroundUX
+        #   ```
+    _installed_product_release() {
+        local project="${1:?missing project}" product="${2:?missing product}"
+        local file="" product_key="" version_key="" build_key="" version="" build="" artifact=""
+        file="${VAL_TARGET_ROOT%/}/usr/local/lib/solidgroundux/globals/${project}-definitions.sh"
+        if [[ "$project" == "solidgroundux" ]]; then
+            file="${VAL_TARGET_ROOT%/}/usr/local/lib/solidgroundux/globals/sgnd-definitions.sh"
+            version_key="SGND_VERSION"
+            build_key="SGND_BUILD"
+        else
+            [[ -r "$file" ]] || return 1
+            product_key="$(sed -n -E 's/^[[:space:]]*(SGND_[A-Za-z0-9_]+_PRODUCT)[[:space:]]*=.*$/\1/p' "$file" | head -n 1)"
+            [[ -n "$product_key" ]] || return 1
+            version_key="${product_key%_PRODUCT}_VERSION"
+            build_key="${product_key%_PRODUCT}_BUILD"
+        fi
+        [[ -r "$file" ]] || return 1
+        version="$(_release_definition_value "$file" "$version_key" 2>/dev/null || true)"
+        build="$(_release_definition_value "$file" "$build_key" 2>/dev/null || true)"
+        [[ "$version" =~ ^[0-9]+([.][0-9]+)*$ && "$build" =~ ^[0-9]+$ ]] || return 1
+        artifact="$(_release_product_artifact_name "$product")"
+        printf '%s-%s.%s\n' "$artifact" "$version" "$build"
+    }
+
     # fn: _dashboard_product_rows - Render product-centric installed/local/GitHub status
         # . Purpose
-        #   Render product-centric installed/local/GitHub status.
+        #   Read installed definitions, canonical local ZIPs and latest GitHub releases.
+        #   Highlight only a GitHub version newer than the installed release.
         #
         # Usage:
         #   ```bash
@@ -3979,7 +4250,7 @@ EOF
     _dashboard_product_rows() {
         local row="" project="" product="" url="" version="" build=""
         local installed="" installed_display="" local_row="" local_release="" local_display=""
-        local github="" github_display="" repo="" status="" line_color=""
+        local github="" github_display="" github_color=""
         local -a products=()
         mapfile -t products < <(_product_catalog)
         printf '%s%-44s %-16s %-16s %-16s%s\n' "$_RL_BRIGHT_WHITE" "Product" "Installed" "Local" "GitHub" "$_RL_RESET"
@@ -3988,41 +4259,35 @@ EOF
             IFS='|' read -r project product url version build <<< "$row"
             _set_project_context "$project" >/dev/null 2>&1 || continue
             SGND_RELEASE_PRODUCT="$product"
-            installed="$(_current_release 2>/dev/null || true)"
+            installed="$(_installed_product_release "$project" "$product" 2>/dev/null || true)"
             installed_display="$(_release_display_identity "$product" "$installed")"
             local_row="$(_newest_local_package_for_project "$project" 2>/dev/null || true)"
-            local_release="${local_row##*|}"
             if [[ -n "$local_row" ]]; then
+                local_release="${local_row##*|}"
                 local_display="$(_release_display_identity "$product" "$local_release")"
             else
-                local_release=""
                 local_display="-"
             fi
-            github="Not checked"
-            VAL_GITHUB_URL=""; VAL_GITHUB_REPO=""
-            _release_load_project_repo "$project" || true
-            if [[ -z "$VAL_GITHUB_URL" && -n "$url" ]]; then
-                VAL_GITHUB_URL="$(_release_normalize_github_url "$url" 2>/dev/null || true)"
-                repo="$(_release_repo_from_url "$VAL_GITHUB_URL" 2>/dev/null || true)"
-                [[ -n "$repo" ]] && VAL_GITHUB_REPO="$repo"
-            fi
-            if [[ -n "$VAL_GITHUB_REPO" ]]; then
+            if _release_load_project_repo "$project"; then
                 github="$(_latest_online_release 2>/dev/null || printf '%s' 'Unavailable')"
             else
                 github="Not configured"
             fi
             case "$github" in
-                Unavailable|"Not configured"|"Not checked") github_display="$github" ;;
+                Unavailable|"Not configured") github_display="$github" ;;
                 *) github_display="$(_release_display_identity "$product" "$github")" ;;
             esac
-            status=0
-            if [[ -n "$local_release" && ( -z "$installed" || "$(printf '%s\n%s\n' "$installed" "$local_release" | _release_sort | tail -n 1)" == "$local_release" && "$installed" != "$local_release" ) ]]; then status=1; fi
-            if [[ "$github" != "Unavailable" && "$github" != "Not configured" && "$github" != "Not checked" && -n "$github" && ( -z "$installed" || "$(printf '%s\n%s\n' "$installed" "$github" | _release_sort | tail -n 1)" == "$github" && "$installed" != "$github" ) ]]; then status=1; fi
-            if (( status )); then line_color="${_RL_BOLD}${_RL_BRIGHT_GREEN}"; else line_color="$_RL_UI_TEXT"; fi
-            printf '%s%-44.44s %-16.16s %-16.16s %-16.16s%s\n' "$line_color" "$product" "$installed_display" "$local_display" "$github_display" "$_RL_RESET"
+            github_color="$_RL_UI_TEXT"
+            if [[ -n "$installed" && -n "$github" && "$github" != "Unavailable" && "$github" != "Not configured" ]]; then
+                if [[ "$installed" != "$github" && "$(printf '%s\n%s\n' "$installed" "$github" | _release_sort | tail -n 1)" == "$github" ]]; then
+                    github_color="${_RL_BOLD}${_RL_BRIGHT_GREEN}"
+                fi
+            fi
+            printf '%s%-44.44s %-16.16s %-16.16s %s%-16.16s%s\n' \
+                "$_RL_UI_TEXT" "$product" "$installed_display" "$local_display" \
+                "$github_color" "$github_display" "$_RL_RESET"
         done
     }
-
     # fn: _bootstrap_first_install_packages - First install from adjacent product ZIPs
         # Purpose:
         #   Install setup itself, admit adjacent product ZIPs, let the operator select one or
@@ -4245,9 +4510,422 @@ EOF
         _release_labeled_value "Package archive" "$(_package_archive_dir)"
     }
 
-    # fn: _interactive_menu - Run the standalone product setup menu
+    # fn: _setup_default_repo_url - Read a packaged repository URL for Reset to default
         # . Purpose
-        #   Run the standalone product setup menu.
+        #   Resolve a product URL from the packaged default, never the editable catalog.
+        # . Usage
+        #   ```bash
+        #   url="$(_setup_default_repo_url solidgroundux)"
+        #   ```
+    _setup_default_repo_url() {
+        local project="${1:?missing project}" path="" key="" product="" url="" version="" build="" extra=""
+        for path in "${VAL_TARGET_ROOT%/}/usr/local/share/solidgroundux/sgnd-setup.cfg.default" "$SCRIPT_DIR/sgnd-setup.cfg.default"; do
+            [[ -r "$path" ]] || continue
+            while IFS='|' read -r key product url version build extra || [[ -n "$key$product$url$version$build$extra" ]]; do
+                if [[ "$key" == "$project" ]]; then
+                    printf '%s\n' "$url"
+                    return 0
+                fi
+            done < "$path"
+        done
+        return 1
+    }
+
+    # fn: _setup_configure_github_repositories - Configure the repositories in one file
+        # . Purpose
+        #   Show each currently effective GitHub URL and read one response:
+        #   Enter keeps it, a new URL replaces it, D restores the packaged default,
+        #   - clears it, and Q cancels without saving. Validate each entry, then
+        #   confirm and atomically write the single local sgnd-setup.cfg override.
+        #   The packaged catalog remains untouched.
+        # . Returns
+        #   0 when saved or cancelled, 1 when persistence fails.
+        # . Usage
+        #   ```bash
+        #   _setup_configure_github_repositories
+        #   ```
+    _setup_configure_github_repositories() {
+        local row="" project="" product="" url="" version="" build="" answer="" repo="" default_url=""
+        local changed=0 i=0
+        local -a products=() changes=()
+        mapfile -t products < <(_product_catalog)
+        (( ${#products[@]} > 0 )) || { _release_warn "No products available to configure"; return 1; }
+        _release_section_header "Configure GitHub repositories"
+        if [[ -f "${VAL_STATE_ROOT%/}/sgnd-setup.cfg" ]]; then
+            _release_labeled_value "Configuration" "${VAL_STATE_ROOT%/}/sgnd-setup.cfg"
+        else
+            _release_labeled_value "Configuration" "Packaged defaults (no local override)"
+        fi
+        printf '%sEnter keeps the current URL; D = default, - = clear, Q = cancel.%s\n' "$_RL_ITALIC" "$_RL_RESET"
+        for row in "${products[@]}"; do
+            IFS='|' read -r project product url version build <<< "$row"
+            printf '\n'
+            _release_labeled_value "$product" "${url:-(not configured)}" 43
+            while true; do
+                printf '%sNew URL (Enter/D/-/Q): %s' "$_RL_UI_PROMPT" "$_RL_UI_INPUT" > /dev/tty
+                if ! IFS= read -r answer < /dev/tty; then
+                    printf '%s' "$_RL_RESET" > /dev/tty
+                    return 1
+                fi
+                printf '%s' "$_RL_RESET" > /dev/tty
+                case "${answer^^}" in
+                    '') answer="$url" ;;
+                    D)
+                        default_url="$(_setup_default_repo_url "$project")" || {
+                            _release_fail "No packaged default URL for $product"
+                            return 1
+                        }
+                        answer="$default_url"
+                        ;;
+                    -) answer="" ;;
+                    Q) _release_print "Repository configuration cancelled"; return 0 ;;
+                esac
+                if [[ -n "$answer" ]]; then
+                    repo="$(_release_repo_from_url "$answer" 2>/dev/null || true)"
+                    if [[ -z "$repo" ]]; then
+                        _release_warn "Invalid GitHub repository URL. Enter an owner/repo or github.com URL."
+                        continue
+                    fi
+                    answer="https://github.com/$repo/releases"
+                fi
+                break
+            done
+            [[ "$answer" == "$url" ]] || changed=1
+            changes+=("$project" "$answer")
+        done
+        if (( ! changed )); then
+            _release_print "Repository URLs unchanged"
+            return 0
+        fi
+        printf '\n%sRepository URLs to save:%s\n' "$_RL_BRIGHT_WHITE" "$_RL_RESET"
+        for (( i=0; i<${#changes[@]}; i+=2 )); do
+            printf '  %-43s %s\n' "${changes[$i]}" "${changes[$((i+1))]:-(not configured)}"
+        done
+        _release_ask_yesno "Save repository configuration?" "N" || return 0
+        _setup_write_catalog_repo_urls "${changes[@]}" || return 1
+        _release_ok "GitHub repositories saved in ${VAL_STATE_ROOT%/}/sgnd-setup.cfg"
+        _release_load_project_repo "${VAL_PROJECT:-solidgroundux}" || true
+    }
+
+    # fn: _setup_select_product_zip - Select a matching product ZIP from a directory
+        # . Purpose
+        #   List a directory's product release ZIPs, newest first, with a simple
+        #   numbered selector. Never install or copy anything during selection.
+        # . Arguments
+        #   $1  Project slug.
+        #   $2  Product display name.
+        #   $3  Directory containing ZIP files.
+        # . Returns
+        #   Selected package record, or nonzero when cancelled/no packages exist.
+        # . Usage
+        #   ```bash
+        #   row="$(_setup_select_product_zip solidgroundux SolidGroundUX /var/lib/solidgroundux/releases)"
+        #   ```
+    _setup_select_product_zip() {
+        local project="${1:?missing project}" product="${2:?missing product}" directory="${3:?missing directory}"
+        local line="" row_project="" choice="" page=0 page_size=12 pages=0
+        local start=0 end=0 i=0 number=0 display="" installed="" marker=""
+        local -a rows=() ordered=()
+
+        while IFS= read -r line; do
+            [[ -n "$line" ]] || continue
+            row_project="${line#*|}"; row_project="${row_project%%|*}"
+            [[ "$row_project" == "$project" ]] || continue
+            ordered+=("${line##*|}|${line}")
+        done < <(_scan_product_packages "$directory")
+        (( ${#ordered[@]} > 0 )) || {
+            _release_warn "No $product release ZIPs found in $directory"
+            return 1
+        }
+        mapfile -t rows < <(printf '%s\n' "${ordered[@]}" | LC_ALL=C sort -t'|' -k1,1Vr | cut -d'|' -f2-)
+        pages=$(( (${#rows[@]} + page_size - 1) / page_size ))
+        installed="$(_installed_product_release "$project" "$product" 2>/dev/null || true)"
+
+        while true; do
+            start=$(( page * page_size ))
+            end=$(( start + page_size ))
+            (( end <= ${#rows[@]} )) || end=${#rows[@]}
+            printf '\n%sAvailable ZIPs for %s%s - newest first (page %d/%d)\n' \
+                "$_RL_BRIGHT_WHITE" "$product" "$_RL_RESET" "$((page+1))" "$pages" > /dev/tty
+            _release_line "─" > /dev/tty
+            printf '%sDirectory: %s\n' "$_RL_UI_LABEL" "$directory" > /dev/tty
+            for (( i=start; i<end; i++ )); do
+                display="$(_release_display_identity "$product" "${rows[$i]##*|}")"
+                marker=""
+                [[ "${rows[$i]##*|}" == "$installed" ]] && marker=" (Installed)"
+                number=$(( i - start + 1 ))
+                printf '  %s%2d)%s %s%s%s%s\n' \
+                    "$_RL_UI_PROMPT" "$number" "$_RL_RESET" "$display" "$_RL_DARK_WHITE" "$marker" "$_RL_RESET" > /dev/tty
+            done
+            printf '  %sN)%s Next page    %sP)%s Previous page    %sQ)%s Cancel\n' \
+                "$_RL_UI_PROMPT" "$_RL_RESET" "$_RL_UI_PROMPT" "$_RL_RESET" "$_RL_UI_PROMPT" "$_RL_RESET" > /dev/tty
+            printf '%sSelect ZIP: %s' "$_RL_UI_PROMPT" "$_RL_UI_INPUT" > /dev/tty
+            IFS= read -r choice < /dev/tty || return 1
+            printf '%s' "$_RL_RESET" > /dev/tty
+            case "${choice^^}" in
+                Q) return 1 ;;
+                N) (( page + 1 < pages )) && page=$((page+1)); continue ;;
+                P) (( page > 0 )) && page=$((page-1)); continue ;;
+            esac
+            [[ "$choice" =~ ^[0-9]+$ ]] || continue
+            (( choice >= 1 && choice <= end - start )) || continue
+            printf '%s\n' "${rows[$(( start + choice - 1 ))]}"
+            return 0
+        done
+    }
+
+    # fn: _setup_choose_install_package - Select an installation ZIP for one product
+        # . Purpose
+        #   Resolve one of five package sources to a concrete ZIP path or GitHub URL.
+        #   Do not download or install anything during selection.
+        # . Returns
+        #   source|release-basename|ZIP-path-or-URL; 1 if cancelled/unavailable.
+        # . Usage
+        #   ```bash
+        #   _setup_choose_install_package solidgroundux SolidGroundUX
+        #   ```
+    _setup_choose_install_package() {
+        local project="${1:?missing project}" product="${2:?missing product}"
+        local choice="" row="" release="" url="" path="" package_project="" assets_text=""
+        local -a assets=()
+        _set_project_context "$project" || return 1
+        SGND_RELEASE_PRODUCT="$product"
+        VAL_VARIANT="individual"; SGND_RELEASE_VARIANT="individual"
+        printf '\n%sSelect package for %s%s\n' "$_RL_BRIGHT_WHITE" "$product" "$_RL_RESET" > /dev/tty
+        printf '  %s1)%s Latest GitHub release\n' "$_RL_UI_PROMPT" "$_RL_RESET" > /dev/tty
+        printf '  %s2)%s Select GitHub release\n' "$_RL_UI_PROMPT" "$_RL_RESET" > /dev/tty
+        printf '  %s3)%s Latest local release\n' "$_RL_UI_PROMPT" "$_RL_RESET" > /dev/tty
+        printf '  %s4)%s Select archived release ZIP\n' "$_RL_UI_PROMPT" "$_RL_RESET" > /dev/tty
+        printf '  %s5)%s Select ZIP from alternate location\n' "$_RL_UI_PROMPT" "$_RL_RESET" > /dev/tty
+        printf '  %sQ)%s Cancel\n' "$_RL_UI_PROMPT" "$_RL_RESET" > /dev/tty
+        while true; do
+            printf '%sSelect source: %s' "$_RL_UI_PROMPT" "$_RL_UI_INPUT" > /dev/tty
+            IFS= read -r choice < /dev/tty || return 1
+            printf '%s' "$_RL_RESET" > /dev/tty
+            case "${choice^^}" in
+                1)
+                    _release_load_project_repo "$project" || {
+                        _release_fail "No GitHub repository configured for $product"
+                        return 1
+                    }
+                    row="$(_github_latest_asset)" || {
+                        _release_fail "No matching latest GitHub package found for $product ($VAL_GITHUB_REPO)"
+                        return 1
+                    }
+                    printf 'github|%s|%s\n' "${row%%|*}" "${row#*|}"
+                    return 0
+                    ;;
+                2)
+                    _release_load_project_repo "$project" || {
+                        _release_fail "No GitHub repository configured for $product"
+                        return 1
+                    }
+                    assets_text="$(_github_published_assets)" || {
+                        _release_fail "Could not list GitHub releases for $product ($VAL_GITHUB_REPO)"
+                        return 1
+                    }
+                    [[ -n "$assets_text" ]] && mapfile -t assets <<< "$assets_text"
+                    (( ${#assets[@]} > 0 )) || {
+                        _release_fail "No matching published GitHub ZIPs found for $product"
+                        return 1
+                    }
+                    row="$(_select_github_release_asset "$product" "${assets[@]}")" || return 1
+                    printf 'github|%s|%s\n' "${row%%|*}" "${row#*|}"
+                    return 0
+                    ;;
+                3)
+                    row="$(_newest_local_package_for_project "$project")" || {
+                        _release_fail "No local ZIP found for $product in $(_package_store_dir) or its archive"
+                        return 1
+                    }
+                    printf 'local|%s|%s\n' "${row##*|}" "${row%%|*}"
+                    return 0
+                    ;;
+                4)
+                    row="$(_setup_select_product_zip "$project" "$product" "$(_package_archive_dir)/$project")" || return 1
+                    printf 'archive|%s|%s\n' "${row##*|}" "${row%%|*}"
+                    return 0
+                    ;;
+                5)
+                    while true; do
+                        printf '%sZIP path or directory [default: %s] (Q to cancel): %s' \
+                            "$_RL_UI_PROMPT" "$(_package_store_dir)" "$_RL_UI_INPUT" > /dev/tty
+                        IFS= read -r path < /dev/tty || return 1
+                        printf '%s' "$_RL_RESET" > /dev/tty
+                        [[ "${path^^}" == "Q" ]] && return 1
+                        [[ -n "$path" ]] || path="$(_package_store_dir)"
+                        if [[ "$path" == '~/'* ]]; then path="${HOME}/${path#\~/}"; fi
+                        if [[ -d "$path" ]]; then
+                            row="$(_setup_select_product_zip "$project" "$product" "$path")" || return 1
+                        elif [[ -f "$path" ]]; then
+                            row="$(_package_zip_record "$path")" || {
+                                _release_warn "Not a valid product release ZIP: $path"
+                                continue
+                            }
+                            package_project="${row#*|}"; package_project="${package_project%%|*}"
+                            [[ "$package_project" == "$project" ]] || {
+                                _release_warn "ZIP belongs to $package_project, not $project"
+                                continue
+                            }
+                        else
+                            _release_warn "No such ZIP or directory: $path"
+                            continue
+                        fi
+                        printf 'alternate|%s|%s\n' "${row##*|}" "${row%%|*}"
+                        return 0
+                    done
+                    ;;
+                Q) return 1 ;;
+                *) _release_warn "Select 1-5 or Q" ;;
+            esac
+        done
+    }
+
+    # fn: _setup_release_action - Describe an install relative to the actual installed build
+        # . Purpose
+        #   Name Install, Update, Reinstall, or Downgrade for the confirmation screen.
+        # . Returns
+        #   Action label on stdout.
+        # . Usage
+        #   ```bash
+        #   _setup_release_action "$installed" "$release"
+        #   ```
+    _setup_release_action() {
+        local installed="${1:-}" selected="${2:?missing selected release}"
+        if [[ -z "$installed" ]]; then printf 'Install\n'; return 0; fi
+        if [[ "$installed" == "$selected" ]]; then printf 'Reinstall\n'; return 0; fi
+        if [[ "$(printf '%s\n%s\n' "$installed" "$selected" | _release_sort | tail -n 1)" == "$selected" ]]; then
+            printf 'Update\n'
+        else
+            printf 'Downgrade\n'
+        fi
+    }
+
+    # fn: _setup_install_selected_products - Select packages, then hand them to the existing installer
+        # . Purpose
+        #   Select one or several products and a package source for each, confirm
+        #   the complete plan once, then reuse _install_product_package_zip unchanged.
+        # . Returns
+        #   0 after installation; nonzero on cancellation or installation failure.
+        # . Usage
+        #   ```bash
+        #   _setup_install_selected_products
+        #   ```
+    _setup_install_selected_products() {
+        local row="" project="" product="" url="" version="" build="" selected_zip=""
+        local choice="" source="" release="" location="" installed="" operation="" zip_path="" selected_text=""
+        local -a products=() selected=() plans=()
+        mapfile -t products < <(_product_catalog)
+        selected_text="$(_select_product_records "Install / Update products" "${products[@]}")" || return 1
+        [[ -n "$selected_text" ]] || return 1
+        mapfile -t selected <<< "$selected_text"
+        for row in "${selected[@]}"; do
+            IFS='|' read -r project product url version build <<< "$row"
+            choice="$(_setup_choose_install_package "$project" "$product")" || return 1
+            IFS='|' read -r source release location <<< "$choice"
+            [[ -n "$source" && -n "$release" && -n "$location" ]] || return 1
+            plans+=("$project|$product|$source|$release|$location")
+        done
+        printf '\n%sSelected packages%s\n' "$_RL_BRIGHT_WHITE" "$_RL_RESET"
+        _release_line "─"
+        for row in "${plans[@]}"; do
+            IFS='|' read -r project product source release location <<< "$row"
+            installed="$(_installed_product_release "$project" "$product" 2>/dev/null || true)"
+            operation="$(_setup_release_action "$installed" "$release")"
+            printf '  %-43s %-11s %-14s %s\n' "$product" "$operation"                 "$(_release_display_identity "$product" "$release")" "$source"
+            if [[ "$operation" == "Downgrade" ]]; then
+                _release_warn "Downgrade selected for $product: $(_release_display_identity "$product" "$installed") -> $(_release_display_identity "$product" "$release")"
+            fi
+        done
+        _release_ask_yesno "Proceed with ${#plans[@]} installation(s)?" "N" || return 1
+        for row in "${plans[@]}"; do
+            IFS='|' read -r project product source release location <<< "$row"
+            if [[ "$source" == "github" ]]; then
+                zip_path="$(_package_store_dir)/${location##*/}"
+                _release_run mkdir -p -- "$(_package_store_dir)" || return 1
+                if [[ ! -f "$zip_path" ]]; then
+                    _release_info "Downloading $product: ${location##*/}"
+                    _download_to "$location" "$zip_path" || return 1
+                fi
+            else
+                zip_path="$location"
+            fi
+            _install_product_package_zip "$zip_path" || return 1
+        done
+        _release_ok "Installation complete: ${#plans[@]} product(s)"
+    }
+
+    # fn: _setup_remove_selected_products - Multi-product removal using existing manifest routines
+        # . Purpose
+        #   Select installed products, confirm once, and remove MCM/SDK before Framework.
+        #   No change to manifest validation, file deletion, or archive handling.
+        # . Returns
+        #   0 when all selected products were removed; nonzero on cancellation/failure.
+        # . Usage
+        #   ```bash
+        #   _setup_remove_selected_products
+        #   ```
+    _setup_remove_selected_products() {
+        local row="" project="" product="" url="" version="" build="" installed="" manifest=""
+        local mode="" count=0 selected_text=""
+        local -a products=() installed_products=() selected=() early=() framework=() plans=()
+        mapfile -t products < <(_product_catalog)
+        for row in "${products[@]}"; do
+            IFS='|' read -r project product url version build <<< "$row"
+            installed="$(_installed_product_release "$project" "$product" 2>/dev/null || true)"
+            [[ -n "$installed" ]] && installed_products+=("$row")
+        done
+        (( ${#installed_products[@]} > 0 )) || {
+            _release_info "No installed products detected"
+            return 0
+        }
+        selected_text="$(_select_product_records "Remove installed products" "${installed_products[@]}")" || return 1
+        [[ -n "$selected_text" ]] || return 1
+        mapfile -t selected <<< "$selected_text"
+        for row in "${selected[@]}"; do
+            IFS='|' read -r project product url version build <<< "$row"
+            _set_project_context "$project" || return 1
+            installed="$(_installed_product_release "$project" "$product" 2>/dev/null || true)"
+            [[ -n "$installed" ]] || return 1
+            manifest="${VAL_ARCHIVE_ROOT%/}/${installed}/${installed}.manifest"
+            mode="manifest"
+            [[ -f "$manifest" ]] || mode="scan"
+            if [[ "$project" == "solidgroundux" ]]; then
+                framework+=("$project|$product|$installed|$mode|$manifest")
+            else
+                early+=("$project|$product|$installed|$mode|$manifest")
+            fi
+        done
+        plans=("${early[@]}" "${framework[@]}")
+        printf '\n%sProducts to remove%s\n' "$_RL_BRIGHT_WHITE" "$_RL_RESET"
+        _release_line "─"
+        for row in "${plans[@]}"; do
+            IFS='|' read -r project product installed mode manifest <<< "$row"
+            printf '  %-43s %-15s %s\n' "$product" "$(_release_display_identity "$product" "$installed")" "$mode"
+            if [[ "$mode" == "scan" ]]; then
+                _release_warn "No manifest for $product; fallback scans only header-owned text files"
+            fi
+        done
+        _release_ask_yesno "Remove ${#plans[@]} selected product(s)?" "N" || return 1
+        for row in "${plans[@]}"; do
+            IFS='|' read -r project product installed mode manifest <<< "$row"
+            _set_project_context "$project" || return 1
+            SGND_RELEASE_PRODUCT="$product"
+            if [[ "$mode" == "manifest" ]]; then
+                _remove_by_manifest "$manifest" || return 1
+                _move_all_archives_to_releases || return 1
+            else
+                _remove_by_product_scan "$product" || return 1
+            fi
+            count=$((count + 1))
+            _release_ok "Removed $product"
+        done
+        _release_ok "Removal complete: $count product(s)"
+    }
+
+    # fn: _interactive_menu - Run the simplified product setup menu
+        # . Purpose
+        #   Offer Install / Update, multi-product Remove and GitHub URL configuration.
         #
         # Returns:
         #   0 on normal exit.
@@ -4256,70 +4934,30 @@ EOF
         #   _interactive_menu
         #   ```
     _interactive_menu() {
-        local choice="" target="" product_row="" project="" product="" url="" version="" build=""
-        local -a products=() selected=()
+        local choice=""
         while true; do
             _release_clear
             _release_title
             _print_status
             _release_line "─"
-            printf '
-'
-            printf '    %s1)%s %sInstall latest GitHub release%s
-' "$_RL_UI_PROMPT" "$_RL_RESET" "$_RL_UI_TEXT" "$_RL_RESET"
-            printf '    %s2)%s %sInstall newest local release%s
-' "$_RL_UI_PROMPT" "$_RL_RESET" "$_RL_UI_TEXT" "$_RL_RESET"
-            printf '    %s3)%s %sInstall other release%s
-' "$_RL_UI_PROMPT" "$_RL_RESET" "$_RL_UI_TEXT" "$_RL_RESET"
-            printf '    %s4)%s %sInstall archived version%s
-' "$_RL_UI_PROMPT" "$_RL_RESET" "$_RL_UI_TEXT" "$_RL_RESET"
-            printf '    %s5)%s %sRemove product%s
-' "$_RL_UI_PROMPT" "$_RL_RESET" "$_RL_UI_TEXT" "$_RL_RESET"
-            printf '    %sQ)%s %sQuit%s
-
-' "$_RL_UI_PROMPT" "$_RL_RESET" "$_RL_UI_TEXT" "$_RL_RESET"
+            printf '\n'
+            printf '    %s1)%s %sInstall / Update product(s)%s\n' "$_RL_UI_PROMPT" "$_RL_RESET" "$_RL_UI_TEXT" "$_RL_RESET"
+            printf '    %s2)%s %sRemove product(s)%s\n' "$_RL_UI_PROMPT" "$_RL_RESET" "$_RL_UI_TEXT" "$_RL_RESET"
+            printf '    %s3)%s %sConfigure GitHub repositories%s\n' "$_RL_UI_PROMPT" "$_RL_RESET" "$_RL_UI_TEXT" "$_RL_RESET"
+            printf '    %sQ)%s %sQuit%s\n\n' "$_RL_UI_PROMPT" "$_RL_RESET" "$_RL_UI_TEXT" "$_RL_RESET"
             _release_line "─"
             printf '%sSelect option: %s' "$_RL_UI_PROMPT" "$_RL_UI_INPUT" > /dev/tty
-            read -r choice < /dev/tty
+            IFS= read -r choice < /dev/tty || return 0
             printf '%s' "$_RL_RESET" > /dev/tty
             case "${choice^^}" in
-                1) _action_install_latest_github_products; _pause ;;
-                2) _action_install_latest_local_packages; _pause ;;
-                3) _action_install_other_packages; _pause ;;
-                4)
-                    mapfile -t products < <(_product_catalog)
-                    mapfile -t selected < <(_select_product_records "Select product" "${products[@]}") || continue
-                    (( ${#selected[@]} == 1 )) || { _release_warn "Archived installation currently accepts one product at a time"; _pause; continue; }
-                    IFS='|' read -r project product url version build <<< "${selected[0]}"
-                    _set_project_context "$project" || { _pause; continue; }
-                    SGND_RELEASE_PRODUCT="$product"
-                    target="$(_select_archived_release 2>/dev/tty)" || continue
-                    _confirm "Install $target?" && _rollback_to_archived_release "$target"
-                    _pause
-                    ;;
-                5)
-                    mapfile -t products < <(_product_catalog)
-                    mapfile -t selected < <(_select_product_records "Select product" "${products[@]}") || continue
-                    (( ${#selected[@]} == 1 )) || { _release_warn "Removal currently accepts one product at a time"; _pause; continue; }
-                    IFS='|' read -r project product url version build <<< "${selected[0]}"
-                    _set_project_context "$project" || { _pause; continue; }
-                    SGND_RELEASE_PRODUCT="$product"
-                    target="$(_current_release 2>/dev/null || true)"
-                    if [[ -n "$target" && -f "${VAL_ARCHIVE_ROOT%/}/${target}/${target}.manifest" ]]; then
-                        # The active manifest covers assets and symlinks missing from header scans.
-                        _action_remove
-                    else
-                        # Recovery only: scans cannot find files without product headers.
-                        _release_warn "No active release manifest for $product; recovery removal is limited to header-owned text files"
-                        _confirm "Scan and remove header-owned files for $product?" && _remove_by_product_scan "$product"
-                    fi
-                    _pause
-                    ;;
+                1) _setup_install_selected_products; _pause ;;
+                2) _setup_remove_selected_products; _pause ;;
+                3) _setup_configure_github_repositories; _pause ;;
                 Q) return 0 ;;
+                *) _release_warn "Select 1-3 or Q"; _pause ;;
             esac
         done
     }
-
     # fn: _pause - Wait for Enter after an interactive operation
         # . Purpose
         #   Wait for Enter after an interactive operation.
@@ -4624,6 +5262,7 @@ EOF
         local selected_product="${SGND_RELEASE_PRODUCT:-}"
         _set_project_context "${VAL_PROJECT:-solidgroundux}" || return 1
         [[ -n "$selected_product" ]] && SGND_RELEASE_PRODUCT="$selected_product"
+        _release_load_project_repo "${VAL_PROJECT:-solidgroundux}" || true
 
         _require_command find || return 1
         _require_command sort || return 1
@@ -4676,10 +5315,16 @@ EOF
                     return 1
                     ;;
             esac
+        elif [[ "$SCRIPT_FILE" != "$CANONICAL_MANAGER_PATH" ]]; then
+            # Standalone copies offer installation at the canonical location.
+            # First-install packages were copied there automatically above.
+            if [[ -t 0 && -t 1 ]] && (( ! FLAG_AUTO )); then
+                _install_setup_self prompt || return 1
+            elif [[ -f "$CANONICAL_MANAGER_PATH" ]]; then
+                _install_release_manager || return 1
+            fi
         elif [[ -f "$CANONICAL_MANAGER_PATH" ]]; then
             _install_release_manager || return 1
-        elif [[ "$SCRIPT_FILE" != "$CANONICAL_MANAGER_PATH" ]]; then
-            _install_setup_self || return 1
         fi
 
         if [[ -z "$ACTION" ]]; then

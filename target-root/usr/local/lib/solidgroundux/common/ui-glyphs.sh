@@ -3,7 +3,7 @@
 # -------------------------------------------------------------------------------------
 # Metadata:
 #   Version     : 2.2
-#   Build       : 2630700
+#   Build       : 2631102
 #   Checksum    : 2c7a5af9e40620760da928c3d9446cc864d2c5ac6219b4b948031c72d54fa7b6
 #   Source      : ui-glyphs.sh
 #   Type        : library

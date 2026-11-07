@@ -3,7 +3,7 @@
 # -------------------------------------------------------------------------------------
 # Metadata:
 #   Version     : 2.2
-#   Build       : 2630700
+#   Build       : 2631102
 #   Checksum    : a777914b5c0a879ea16444b0b38d17782ec26d9f0a3b24da19b11858c67b97ca
 #   Source      : 00-style-default.sh
 #   Type        : library
