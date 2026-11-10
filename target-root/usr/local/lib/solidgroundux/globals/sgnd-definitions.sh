@@ -85,7 +85,7 @@ set -uo pipefail
     SGND_LICENSE="Testadura Non-Commercial License (TD-NC) v1.1."
     SGND_LICENSE_ACCEPTED=0
     SGND_RELEASE_URL="https://github.com/Testadura-Mark/SolidGroundUX/releases"    
-    SGND_ONLINE_DOC="https://testadura-consultancy.github.io/SolidGroundUX/"
+    SGND_ONLINE_DOC="https://www.solidgroundux.nl"
     SGND_DOCUMENTATION="$SGND_ONLINE_DOC"
     SGND_APPENDICES="attribution,glossary,integrity,globals,enums,license,changelog,install,canonical"
     # def$

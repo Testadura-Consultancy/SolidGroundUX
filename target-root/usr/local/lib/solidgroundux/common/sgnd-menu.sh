@@ -1299,6 +1299,14 @@ set -uo pipefail
         SGND_RENDER_LABEL_WIDTH="$(_sgnd_console_calc_label_width)"
 
         _sgnd_console_render_menu_title
+        # An optional caller-owned summary can appear between the title and groups.
+        # No global UI overrides or terminal cursor repositioning are required.
+        if [[ -n "${SGND_CONSOLE_PREAMBLE_HANDLER:-}" ]]; then
+            if ! declare -F "$SGND_CONSOLE_PREAMBLE_HANDLER" >/dev/null; then
+                return 1
+            fi
+            "$SGND_CONSOLE_PREAMBLE_HANDLER" || return $?
+        fi
         _sgnd_console_render_page_header
         _sgnd_console_render_menu_body_paged
 
@@ -1899,16 +1907,20 @@ set -uo pipefail
         # . Arguments
         #   - `$1` — TITLE - Menu title.
         #   - `$2` — DESC  - Optional menu description.
+        #   - `$3` — PREAMBLE_HANDLER - Optional function called after the title,
+        #     before the page header and groups. It may print Framework UI fields.
         # . Returns
         #   0 after resetting the menu model.
         #
         # . Usage
         #   ```bash
         #   sgnd_menu_create "Storage Management" "Manage disks and pools"
+        #   sgnd_menu_create "Publishing Profiles" " " print_selected_profile
         #   ```
     sgnd_menu_create() {
         SGND_CONSOLE_TITLE="${1:-${SGND_SCRIPT_TITLE:-SolidGroundUX}}"
         SGND_CONSOLE_DESC="${2:-${SGND_SCRIPT_DESC:-}}"
+        SGND_CONSOLE_PREAMBLE_HANDLER="${3:-}"
 
         SGND_GROUP_SCHEMA="key|label|desc|source|builtin|visible|ord"
         SGND_ITEM_SCHEMA="key|group|label|handler|desc|source|builtin|waitsecs|visible|indent|status"
@@ -2138,6 +2150,8 @@ set -uo pipefail
         #   - SGND_MENU_SHOW_TOGGLEBAR
         #   - 1 (default) renders the management-console status/legend bar.
         #   - 0 renders only the title, groups, items, and page header.
+        #   - SGND_CONSOLE_PREAMBLE_HANDLER (optional): a caller-owned function
+        #     that prints information just below the menu title, before groups.
         #
         # . Returns
         #   0 after rendering.
