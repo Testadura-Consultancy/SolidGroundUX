@@ -403,7 +403,10 @@ set -uo pipefail
         local width=80
         local line=""
 
+        # Give the horizontal rules a little more breathing room than the
+        # original terminal-width-based layout (12 additional columns).
         width="$(_release_terminal_width)"
+        width=$(( width + 12 ))
         printf -v line '%*s' "$width" ''
         line="${line// /$char}"
 
